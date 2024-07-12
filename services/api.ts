@@ -1,26 +1,35 @@
+import * as SecureStore from "expo-secure-store";
 import ky from "ky";
 
-const API_BASE_URL = "http://localhost:3000";
+const getToken = async (): Promise<string | null> => {
+  try {
+    return await SecureStore.getItemAsync("accessToken");
+  } catch (error) {
+    console.error("토큰 가져오기 실패:", error);
+    return null;
+  }
+};
 
 export const api = ky.create({
-  prefixUrl: API_BASE_URL,
+  prefixUrl: process.env.EXPO_PUBLIC_BASE_URL,
   timeout: 3000,
   headers: {
     "Content-Type": "application/json",
   },
   hooks: {
     beforeRequest: [
-      (request) => {
-        // const token = getToken();
-        // if (token) {
-        //   request.headers.set('Authorization', `Bearer ${token}`);
-        // }
+      async (request) => {
+        const token = await getToken();
+        if (token) {
+          request.headers.set("Authorization", `Bearer ${token}`);
+        }
       },
     ],
     afterResponse: [
       (request, options, response) => {
         if (response.status === 401) {
-          // 로그아웃 처리
+          console.log("401 Unauthorized - 토큰 만료 또는 무효");
+          // TODO: AuthContext의 logout 또는 refreshToken 호출
         }
         return response;
       },
