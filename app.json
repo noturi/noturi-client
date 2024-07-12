@@ -3,20 +3,23 @@
     "name": "noturi-client",
     "slug": "noturi-client",
     "version": "1.0.0",
+    "owner": "dokimion24",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "noturiclient",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.noturi.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.noturi.app"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +35,19 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-web-browser",
+        {
+          "experimentalLauncherActivity": true
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ]
     ],
