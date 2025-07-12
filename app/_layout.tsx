@@ -1,12 +1,13 @@
+import { AuthProvider } from "@/context/auth";
 import { config } from "@/tamagui.config";
 import { TamaguiProvider } from "@tamagui/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5,
@@ -37,11 +38,9 @@ export default function RootLayout() {
   return (
     <TamaguiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <AuthProvider>
+          <Slot />
+        </AuthProvider>
       </QueryClientProvider>
     </TamaguiProvider>
   );

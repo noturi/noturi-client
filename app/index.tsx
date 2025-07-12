@@ -1,16 +1,21 @@
-import { router } from "expo-router";
-import { useEffect } from "react";
-import { Text, YStack } from "tamagui";
+import { useAuth } from "@/context/auth";
+import { Redirect } from "expo-router";
+import { Spinner, YStack } from "tamagui";
 
-export default function IndexScreen() {
-  useEffect(() => {
-    // TODO: 로그인 상태 체크 로직 추가
-    router.replace("/(auth)/login");
-  }, []);
+export default function IndexPage() {
+  const { isAuthenticated, isInitialLoading } = useAuth();
 
-  return (
-    <YStack flex={1} justifyContent="center" alignItems="center">
-      <Text>로딩중...</Text>
-    </YStack>
-  );
+  if (isInitialLoading) {
+    return (
+      <YStack flex={1} justifyContent="center" alignItems="center">
+        <Spinner size="large" />
+      </YStack>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Redirect href="/(tabs)" />;
+  }
+
+  return <Redirect href="/(auth)/login" />;
 }
