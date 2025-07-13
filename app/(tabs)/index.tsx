@@ -12,23 +12,19 @@ export default function HomeScreen() {
       <Text
         fontSize="$8"
         fontWeight="bold"
-        color="$textPrimary" // 시맨틱 토큰
+        color="$textPrimary"
         marginBottom="$4"
       >
         노투리
       </Text>
 
-      <Text
-        fontSize="$4"
-        color="$textSecondary" // 시맨틱 토큰
-        marginBottom="$6"
-      >
+      <Text fontSize="$4" color="$textSecondary" marginBottom="$6">
         내 메모들
       </Text>
 
       <Button
         size="$4"
-        backgroundColor="$primary" // 시맨틱 토큰
+        backgroundColor="$primary"
         color="white"
         pressStyle={{
           backgroundColor: "$primaryHover",
