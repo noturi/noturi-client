@@ -1,8 +1,7 @@
-import { Button, Typography } from "@/components/ui";
-import { Ionicons } from "@expo/vector-icons";
-import { Card, ScrollView, XStack, YStack } from "tamagui";
+import { ScrollView, Separator, XStack, YStack } from "tamagui";
+import { CategoryButton, MemoItem, SortButton, type Category, type Memo, type SortOption } from "./_components";
 
-const categories = [
+const categories: Category[] = [
   { name: "전체", count: 24, active: false },
   { name: "일상", count: 8, active: true },
   { name: "업무", count: 6, active: false },
@@ -10,13 +9,13 @@ const categories = [
   { name: "여행", count: 3, active: false },
 ];
 
-const sortOptions = [
+const sortOptions: SortOption[] = [
   { name: "최신순", active: true },
   { name: "별점순", active: false },
   { name: "제목순", active: false },
 ];
 
-const memoList = [
+const memoList: Memo[] = [
   {
     id: 1,
     title: "오늘의 할 일",
@@ -55,157 +54,39 @@ const memoList = [
   },
 ];
 
-const StarRating = ({ rating }: { rating: number }) => (
-  <XStack space="$0.25">
-    {[...Array(5)].map((_, i) => (
-      <Typography
-        key={i}
-        variant="caption"
-        color={i < rating ? "$warning" : "$textMuted"}
-      >
-        ⭐
-      </Typography>
-    ))}
-  </XStack>
-);
-
-const CategoryButton = ({
-  category,
-}: {
-  category: { name: string; count: number; active: boolean };
-}) => (
-  <YStack
-    backgroundColor={category.active ? "$textPrimary" : "$surface"}
-    paddingHorizontal="$3"
-    paddingVertical="$1.5"
-    borderRadius="$5"
-    alignItems="center"
-    minWidth="$10"
-    borderWidth={1}
-    borderColor={category.active ? "$textPrimary" : "$border"}
-    pressStyle={{
-      scale: 0.95,
-      backgroundColor: category.active ? "$primaryActive" : "$surfaceHover",
-    }}
-  >
-    <Typography
-      variant="small"
-      fontWeight="$3"
-      color={category.active ? "$textOnPrimary" : "$textSecondary"}
-    >
-      {category.name}
-    </Typography>
-    <Typography
-      variant="title"
-      fontWeight="$4"
-      color={category.active ? "$textOnPrimary" : "$textPrimary"}
-    >
-      {category.count}
-    </Typography>
-  </YStack>
-);
-
-const SortButton = ({
-  option,
-}: {
-  option: { name: string; active: boolean };
-}) => (
-  <Button
-    size="sm"
-    variant={option.active ? undefined : "outlined"}
-    chromeless={!option.active}
-  >
-    <Typography
-      variant="caption"
-      color={option.active ? "$textOnPrimary" : "$textSecondary"}
-      fontWeight={option.active ? "$3" : "$2"}
-    >
-      {option.name}
-    </Typography>
-  </Button>
-);
-
-const MemoCard = ({ memo }: { memo: (typeof memoList)[0] }) => (
-  <Card
-    padding="$3"
-    backgroundColor="$surface"
-    borderRadius="$2"
-    borderColor="$border"
-    borderWidth={0.5}
-    shadowColor="$shadowColor"
-    shadowOffset={{ width: 0, height: 1 }}
-    shadowOpacity={0.02}
-    shadowRadius={2}
-    elevation={1}
-    pressStyle={{
-      scale: 0.98,
-      backgroundColor: "$surfaceHover",
-    }}
-  >
-    <XStack
-      justifyContent="space-between"
-      alignItems="flex-start"
-      marginBottom="$1.5"
-    >
-      <YStack flex={1}>
-        <Typography
-          as="h4"
-          variant="title"
-          color="$textPrimary"
-          marginBottom="$0.5"
-        >
-          {memo.title}
-        </Typography>
-        <Typography
-          as="span"
-          variant="caption"
-          color="$accent"
-          marginBottom="$2"
-        >
-          #{memo.category}
-        </Typography>
-      </YStack>
-      <XStack alignItems="center" space="$1.5">
-        <Typography as="span" variant="caption" color="$textMuted">
-          {memo.timeAgo}
-        </Typography>
-        <StarRating rating={memo.rating} />
-        <Button size="sm" chromeless>
-          <Ionicons name="ellipsis-vertical" size={12} color="$textSecondary" />
-        </Button>
-      </XStack>
-    </XStack>
-
-    <Typography as="p" variant="body" color="$textSecondary" numberOfLines={2}>
-      {memo.content}
-    </Typography>
-  </Card>
-);
-
 export default function HomeScreen() {
   return (
     <YStack flex={1} backgroundColor="$backgroundPrimary">
       {/* Category Filter */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack paddingHorizontal="$4" paddingBottom="$3" space="$1.5">
+        <XStack paddingHorizontal="$4" paddingVertical="$2" space="$1.5">
           {categories.map((category) => (
             <CategoryButton key={category.name} category={category} />
           ))}
         </XStack>
       </ScrollView>
 
+      <Separator borderColor="$border" />
+
       {/* Sort Options */}
-      <XStack paddingHorizontal="$4" paddingBottom="$3" space="$1.5">
+      <XStack paddingHorizontal="$4" paddingVertical="$2" space="$1.5">
         {sortOptions.map((option) => (
           <SortButton key={option.name} option={option} />
         ))}
       </XStack>
 
+      <Separator borderColor="$border" />
+
       {/* Memo List */}
       <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-        <YStack paddingHorizontal="$4" space="$2" paddingBottom="$6">
-          {memoList.map((memo) => (
-            <MemoCard key={memo.id} memo={memo} />
+        <YStack paddingBottom="$6">
+          {memoList.map((memo, index) => (
+            <YStack key={memo.id}>
+              <MemoItem memo={memo} />
+              {index < memoList.length - 1 && (
+                <Separator borderColor="$border" />
+              )}
+            </YStack>
           ))}
         </YStack>
       </ScrollView>
