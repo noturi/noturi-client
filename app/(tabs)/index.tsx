@@ -1,5 +1,12 @@
 import { ScrollView, Separator, XStack, YStack } from "tamagui";
-import { CategoryButton, MemoItem, SortButton, type Category, type Memo, type SortOption } from "./_components";
+import {
+  CategoryButton,
+  MemoItem,
+  SortButton,
+  type Category,
+  type Memo,
+  type SortOption,
+} from "./_components";
 
 const categories: Category[] = [
   { name: "전체", count: 24, active: false },
@@ -12,7 +19,6 @@ const categories: Category[] = [
 const sortOptions: SortOption[] = [
   { name: "최신순", active: true },
   { name: "별점순", active: false },
-  { name: "제목순", active: false },
 ];
 
 const memoList: Memo[] = [
@@ -58,18 +64,20 @@ export default function HomeScreen() {
   return (
     <YStack flex={1} backgroundColor="$backgroundPrimary">
       {/* Category Filter */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack paddingHorizontal="$4" paddingVertical="$2" space="$1.5">
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        maxHeight={48}
+      >
+        <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
           {categories.map((category) => (
             <CategoryButton key={category.name} category={category} />
           ))}
         </XStack>
       </ScrollView>
 
-      <Separator borderColor="$border" />
-
       {/* Sort Options */}
-      <XStack paddingHorizontal="$4" paddingVertical="$2" space="$1.5">
+      <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
         {sortOptions.map((option) => (
           <SortButton key={option.name} option={option} />
         ))}
