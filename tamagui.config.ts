@@ -88,15 +88,6 @@ const themes = createThemes({
     palette: { dark: darkPalette, light: lightPalette },
     extra: {
       light: {
-        // 기본 색상 토큰 (직접 사용 금지)
-        green9: "#22c55e",
-        green10: "#16a34a",
-        red9: "#ef4444",
-        red10: "#dc2626",
-        yellow9: "#f59e0b",
-        yellow10: "#d97706",
-        blue9: "#3b82f6",
-        blue10: "#2563eb",
         ...lightShadows,
         shadowColor: lightShadows.shadow1,
 
@@ -160,15 +151,6 @@ const themes = createThemes({
         backgroundOverlay: "rgba(0, 0, 0, 0.5)",
       },
       dark: {
-        // 기본 색상 토큰 (직접 사용 금지)
-        green9: "#22c55e",
-        green10: "#16a34a",
-        red9: "#ef4444",
-        red10: "#dc2626",
-        yellow9: "#f59e0b",
-        yellow10: "#d97706",
-        blue9: "#60a5fa",
-        blue10: "#3b82f6",
         ...darkShadows,
         shadowColor: darkShadows.shadow1,
 
