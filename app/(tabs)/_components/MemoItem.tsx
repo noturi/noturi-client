@@ -1,5 +1,4 @@
-import { Button, Typography } from "@/components/ui";
-import { Ionicons } from "@expo/vector-icons";
+import { Typography } from "@/components/ui";
 import { XStack, YStack } from "tamagui";
 import { StarRating } from "./StarRating";
 import { Memo } from "./types";
@@ -27,7 +26,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
           <Typography
             as="span"
             variant="caption"
-            color="$accent"
+            color="$textPrimary"
             fontWeight="$3"
           >
             #{memo.category}
@@ -48,9 +47,6 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
       </YStack>
       <XStack alignItems="center" space="$2">
         <StarRating rating={memo.rating} />
-        <Button size="sm" chromeless>
-          <Ionicons name="ellipsis-vertical" size={14} color="$textMuted" />
-        </Button>
       </XStack>
     </XStack>
 
