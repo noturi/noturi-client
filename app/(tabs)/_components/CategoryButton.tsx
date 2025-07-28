@@ -11,9 +11,8 @@ export const CategoryButton = ({ category }: CategoryButtonProps) => (
     backgroundColor={category.active ? "$textPrimary" : "$surface"}
     paddingHorizontal="$2.5"
     paddingVertical="$1"
-    borderRadius="$8"
+    borderRadius="$5"
     alignItems="center"
-    space="$1"
     borderWidth={1}
     borderColor={category.active ? "$textPrimary" : "$border"}
     pressStyle={{
