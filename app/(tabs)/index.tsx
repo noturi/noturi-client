@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ScrollView, Separator, XStack, YStack } from "tamagui";
 import {
   CategoryButton,
@@ -8,15 +9,15 @@ import {
   type SortOption,
 } from "./_components";
 
-const categories: Category[] = [
-  { name: "전체", count: 24, active: false },
-  { name: "일상", count: 8, active: true },
+const initialCategories: Category[] = [
+  { name: "전체", count: 24, active: true },
+  { name: "일상", count: 8, active: false },
   { name: "업무", count: 6, active: false },
   { name: "독서", count: 5, active: false },
   { name: "여행", count: 3, active: false },
 ];
 
-const sortOptions: SortOption[] = [
+const initialSortOptions: SortOption[] = [
   { name: "최신순", active: true },
   { name: "별점순", active: false },
 ];
@@ -61,6 +62,27 @@ const memoList: Memo[] = [
 ];
 
 export default function HomeScreen() {
+  const [categories, setCategories] = useState(initialCategories);
+  const [sortOptions, setSortOptions] = useState(initialSortOptions);
+
+  const handleCategoryPress = (selectedCategoryName: string) => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) => ({
+        ...category,
+        active: category.name === selectedCategoryName,
+      }))
+    );
+  };
+
+  const handleSortPress = (selectedSortName: string) => {
+    setSortOptions((prevSortOptions) =>
+      prevSortOptions.map((option) => ({
+        ...option,
+        active: option.name === selectedSortName,
+      }))
+    );
+  };
+
   return (
     <YStack flex={1} backgroundColor="$backgroundPrimary">
       {/* Category Filter */}
@@ -71,15 +93,23 @@ export default function HomeScreen() {
       >
         <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
           {categories.map((category) => (
-            <CategoryButton key={category.name} category={category} />
+            <CategoryButton
+              key={category.name}
+              category={category}
+              onPress={() => handleCategoryPress(category.name)}
+            />
           ))}
         </XStack>
       </ScrollView>
 
       {/* Sort Options */}
-      <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
+      <XStack paddingHorizontal="$4" paddingTop="$1.5" position="relative">
         {sortOptions.map((option) => (
-          <SortButton key={option.name} option={option} />
+          <SortButton
+            key={option.name}
+            option={option}
+            onPress={() => handleSortPress(option.name)}
+          />
         ))}
       </XStack>
 
