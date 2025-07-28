@@ -2,6 +2,7 @@ import { AuthProvider } from "@/context/auth";
 import { config } from "@/tamagui.config";
 import { TamaguiProvider } from "@tamagui/core";
 import { Check, Edit3 } from "@tamagui/lucide-icons";
+import { PortalProvider } from "@tamagui/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -40,71 +41,73 @@ export default function RootLayout() {
 
   return (
     <TamaguiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <Stack
-            screenOptions={{
-              headerStyle: {
-                backgroundColor: "#ffffff",
-              },
-              headerTintColor: "#111827",
-              headerTitleStyle: {
-                fontWeight: "600",
-                fontSize: 20,
-              },
-              headerShadowVisible: false,
-              headerBackTitle: "",
-            }}
-          >
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-            <Stack.Screen
-              name="create"
-              options={{
-                title: "메모 작성",
-                presentation: "modal",
-                headerRight: () => (
-                  <XStack paddingRight="$3">
-                    <Pressable
-                      onPress={() => console.log("저장")}
-                      style={{ padding: 8 }}
-                    >
-                      <Check size={20} color="#6b7280" />
-                    </Pressable>
-                  </XStack>
-                ),
+      <PortalProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Stack
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: "#ffffff",
+                },
+                headerTintColor: "#111827",
+                headerTitleStyle: {
+                  fontWeight: "600",
+                  fontSize: 20,
+                },
+                headerShadowVisible: false,
+                headerBackTitle: "",
               }}
-            />
+            >
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-            <Stack.Screen
-              name="settings"
-              options={{
-                title: "설정",
-                presentation: "modal",
-              }}
-            />
+              <Stack.Screen
+                name="create"
+                options={{
+                  title: "메모 작성",
+                  presentation: "modal",
+                  headerRight: () => (
+                    <XStack paddingRight="$3">
+                      <Pressable
+                        onPress={() => console.log("저장")}
+                        style={{ padding: 8 }}
+                      >
+                        <Check size={20} color="$textSecondary" />
+                      </Pressable>
+                    </XStack>
+                  ),
+                }}
+              />
 
-            <Stack.Screen
-              name="memo/[id]"
-              options={{
-                title: "메모",
-                headerRight: () => (
-                  <XStack paddingRight="$3">
-                    <Pressable
-                      onPress={() => console.log("편집")}
-                      style={{ padding: 8 }}
-                    >
-                      <Edit3 size={20} color="#6b7280" />
-                    </Pressable>
-                  </XStack>
-                ),
-              }}
-            />
-          </Stack>
-        </AuthProvider>
-      </QueryClientProvider>
+              <Stack.Screen
+                name="settings"
+                options={{
+                  title: "설정",
+                  presentation: "modal",
+                }}
+              />
+
+              <Stack.Screen
+                name="memo/[id]"
+                options={{
+                  title: "메모",
+                  headerRight: () => (
+                    <XStack paddingRight="$3">
+                      <Pressable
+                        onPress={() => console.log("편집")}
+                        style={{ padding: 8 }}
+                      >
+                        <Edit3 size={20} color="$textSecondary" />
+                      </Pressable>
+                    </XStack>
+                  ),
+                }}
+              />
+            </Stack>
+          </AuthProvider>
+        </QueryClientProvider>
+      </PortalProvider>
     </TamaguiProvider>
   );
 }
