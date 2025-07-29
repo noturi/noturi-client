@@ -212,166 +212,205 @@ export default function TabsLayout() {
         />
         <Sheet.Handle backgroundColor="$textPrimary" />
         <Sheet.Frame
-          padding="$0"
-          justifyContent="flex-start"
-          backgroundColor="$background"
+          flex={1}
+          backgroundColor="white"
           borderTopLeftRadius="$6"
           borderTopRightRadius="$6"
-          borderTopWidth={1}
-          borderLeftWidth={1}
-          borderRightWidth={1}
-          borderColor="$border"
+          padding="$0"
         >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <YStack padding="$4" gap="$4">
-              {/* 헤더 */}
-              <XStack justifyContent="space-between" alignItems="center">
-                <Typography variant="heading" color="$textPrimary">
-                  새 기록
-                </Typography>
-                <Button
-                  size="$3"
-                  variant="outlined"
-                  onPress={() => setIsSheetOpen(false)}
-                  color="$textSecondary"
-                >
-                  취소
-                </Button>
-              </XStack>
+          {/* Header */}
+          <XStack
+            justifyContent="space-between"
+            alignItems="center"
+            paddingHorizontal="$5"
+            paddingVertical="$4"
+            borderBottomWidth={1}
+            borderBottomColor="$border"
+          >
+            <Typography fontSize="$6" fontWeight="600" color="black">
+              새 기록
+            </Typography>
+            <Button
+              size="$3"
+              backgroundColor="$surface"
+              color="$textSecondary"
+              pressStyle={{ backgroundColor: "$surfaceHover" }}
+              borderRadius="$4"
+              onPress={() => setIsSheetOpen(false)}
+            >
+              취소
+            </Button>
+          </XStack>
 
-              {/* 메모 내용 */}
-              <YStack gap="$2">
-                <TextArea
-                  placeholder="무엇을 기록하고 싶나요?"
-                  value={memoContent}
-                  onChangeText={setMemoContent}
-                  minHeight={100}
-                  borderRadius="$4"
-                  backgroundColor="$background"
-                  borderColor="$border"
-                  borderWidth={1}
-                  fontSize="$4"
-                  multiline
-                />
-              </YStack>
+          {/* Content */}
+          <YStack flex={1}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 100 }}
+            >
+              <YStack padding="$5" gap="$6">
+                {/* Main Text Input */}
+                <YStack gap="$3">
+                  <TextArea
+                    placeholder="무엇을 기록하고 싶나요?"
+                    value={memoContent}
+                    onChangeText={setMemoContent}
+                    minHeight={120}
+                    backgroundColor="white"
+                    borderWidth={0}
+                    fontSize="$5"
+                    color="black"
+                    placeholderTextColor="#999"
+                    multiline
+                    padding="$0"
+                  />
+                </YStack>
 
-              {/* 카테고리 선택 */}
-              <YStack gap="$2">
-                <Typography variant="subtitle" color="$textPrimary">
-                  카테고리
-                </Typography>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <XStack gap="$2" paddingRight="$4">
-                    {categories.map((category) => (
+                {/* Category Selection */}
+                <YStack gap="$3">
+                  <Typography fontSize="$4" fontWeight="500" color="black">
+                    카테고리
+                  </Typography>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <XStack gap="$3">
+                      {categories.map((category) => (
+                        <Button
+                          key={category}
+                          size="$3"
+                          backgroundColor={
+                            selectedCategory === category
+                              ? "$textPrimary"
+                              : "$surface"
+                          }
+                          borderWidth={1}
+                          borderColor={
+                            selectedCategory === category
+                              ? "$textPrimary"
+                              : "$border"
+                          }
+                          color={
+                            selectedCategory === category
+                              ? "$textOnPrimary"
+                              : "$textPrimary"
+                          }
+                          borderRadius="$4"
+                          pressStyle={{
+                            backgroundColor:
+                              selectedCategory === category
+                                ? "$textPrimary"
+                                : "$surfaceHover",
+                          }}
+                          onPress={() => {
+                            setSelectedCategory(category);
+                            setNewCategory("");
+                          }}
+                        >
+                          {category}
+                        </Button>
+                      ))}
                       <Button
-                        key={category}
                         size="$3"
-                        backgroundColor={
-                          selectedCategory === category
-                            ? "$textPrimary"
-                            : "$background"
-                        }
+                        backgroundColor="white"
                         borderWidth={1}
-                        borderColor={
-                          selectedCategory === category
-                            ? "$textPrimary"
-                            : "$border"
-                        }
-                        color={
-                          selectedCategory === category
-                            ? "$background"
-                            : "$textSecondary"
-                        }
+                        borderColor="$border"
+                        borderStyle="dashed"
+                        color="$textSecondary"
+                        borderRadius="$4"
+                        pressStyle={{ backgroundColor: "$surfaceHover" }}
                         onPress={() => {
-                          setSelectedCategory(category);
-                          setNewCategory("");
+                          setSelectedCategory("");
                         }}
                       >
-                        {category}
+                        + 추가
                       </Button>
-                    ))}
-                    <Button
-                      size="$3"
-                      backgroundColor="$background"
+                    </XStack>
+                  </ScrollView>
+
+                  {!selectedCategory && (
+                    <Input
+                      placeholder="새 카테고리 입력"
+                      value={newCategory}
+                      onChangeText={setNewCategory}
+                      backgroundColor="white"
                       borderWidth={1}
                       borderColor="$border"
-                      borderStyle="dashed"
-                      color="$textSecondary"
-                      onPress={() => {
-                        setSelectedCategory("");
-                        // Focus on new category input
-                      }}
-                    >
-                      + 추가
-                    </Button>
-                  </XStack>
-                </ScrollView>
+                      borderRadius="$4"
+                      fontSize="$4"
+                      color="black"
+                      placeholderTextColor="#999"
+                      paddingHorizontal="$4"
+                      paddingVertical="$3"
+                    />
+                  )}
+                </YStack>
 
-                {!selectedCategory && (
-                  <Input
-                    placeholder="새 카테고리 입력"
-                    value={newCategory}
-                    onChangeText={setNewCategory}
-                    borderRadius="$3"
-                    backgroundColor="$background"
-                    borderColor="$border"
-                    fontSize="$3"
-                  />
-                )}
-              </YStack>
-
-              {/* 별점 */}
-              <YStack gap="$2">
-                <Typography variant="subtitle" color="$textPrimary">
-                  평점
-                </Typography>
-                <XStack alignItems="center" gap="$1">
-                  {renderStars()}
-                  <Typography
-                    variant="caption"
-                    color="$textSecondary"
-                    marginLeft="$2"
-                  >
-                    {rating > 0 ? `${rating}/5` : "평점을 선택하세요"}
+                {/* Rating */}
+                <YStack gap="$3">
+                  <Typography fontSize="$4" fontWeight="500" color="black">
+                    평점
                   </Typography>
-                </XStack>
-              </YStack>
+                  <XStack alignItems="center" gap="$3">
+                    {renderStars()}
+                    <Typography fontSize="$3" color="#666">
+                      {rating > 0 ? `${rating}/5` : "평점을 선택하세요"}
+                    </Typography>
+                  </XStack>
+                </YStack>
 
-              {/* 설명 */}
-              <YStack gap="$2">
-                <Typography variant="subtitle" color="$textPrimary">
-                  추가 설명
-                </Typography>
-                <TextArea
-                  placeholder="자세한 설명을 추가해보세요 (선택사항)"
-                  value={description}
-                  onChangeText={setDescription}
-                  minHeight={80}
-                  borderRadius="$4"
-                  backgroundColor="$background"
-                  borderColor="$border"
-                  borderWidth={1}
-                  fontSize="$3"
-                  multiline
-                />
+                {/* Description */}
+                <YStack gap="$3">
+                  <Typography fontSize="$4" fontWeight="500" color="black">
+                    추가 설명
+                  </Typography>
+                  <TextArea
+                    placeholder="자세한 설명을 추가해보세요 (선택사항)"
+                    value={description}
+                    onChangeText={setDescription}
+                    minHeight={80}
+                    backgroundColor="white"
+                    borderWidth={1}
+                    borderColor="$border"
+                    borderRadius="$4"
+                    fontSize="$4"
+                    color="black"
+                    placeholderTextColor="#999"
+                    multiline
+                    paddingHorizontal="$4"
+                    paddingVertical="$3"
+                  />
+                </YStack>
               </YStack>
+            </ScrollView>
+          </YStack>
 
-              {/* 등록 버튼 */}
-              <Button
-                backgroundColor="$primary"
-                borderRadius="$4"
-                height="$4"
-                fontSize="$4"
-                fontWeight="600"
-                marginTop="$2"
-                onPress={handleSaveMemo}
-                disabled={!memoContent.trim()}
-                opacity={!memoContent.trim() ? 0.5 : 1}
-              >
-                등록
-              </Button>
-            </YStack>
-          </ScrollView>
+          {/* Fixed Bottom Button */}
+          <YStack
+            backgroundColor="white"
+            paddingHorizontal="$5"
+            paddingVertical="$4"
+            borderTopWidth={1}
+            borderTopColor="$border"
+          >
+            <Button
+              backgroundColor={
+                !memoContent.trim() ? "$surface" : "$textPrimary"
+              }
+              color={!memoContent.trim() ? "$textSecondary" : "$textOnPrimary"}
+              borderRadius="$4"
+              height="$5"
+              fontSize="$5"
+              fontWeight="600"
+              pressStyle={{
+                backgroundColor: !memoContent.trim()
+                  ? "$surfaceHover"
+                  : "$textPrimary",
+              }}
+              onPress={handleSaveMemo}
+              disabled={!memoContent.trim()}
+            >
+              등록
+            </Button>
+          </YStack>
         </Sheet.Frame>
       </Sheet>
     </>
