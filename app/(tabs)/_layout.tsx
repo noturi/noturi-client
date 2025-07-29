@@ -208,8 +208,9 @@ export default function TabsLayout() {
           animation="quick"
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
+          backgroundColor="$backgroundOverlay"
         />
-        <Sheet.Handle />
+        <Sheet.Handle backgroundColor="$textPrimary" />
         <Sheet.Frame
           padding="$0"
           justifyContent="flex-start"
