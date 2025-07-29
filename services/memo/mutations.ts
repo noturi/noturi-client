@@ -7,10 +7,10 @@ import {
 
 import { memoApi } from "./apis";
 import {
-  CreateMemoDto,
-  UpdateMemoDto,
   BulkDeleteMemosDto,
+  CreateMemoDto,
   Memo,
+  UpdateMemoDto,
 } from "./types";
 
 // 메모 생성 뮤테이션
@@ -28,17 +28,28 @@ export function useCreateMemoMutation(
     mutationFn: (data: CreateMemoDto) => memoApi.createMemo(data),
     onMutate,
     onSuccess: async (newMemo, createData, context) => {
-      // 메모 목록 캐시 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memos"] });
+      // 메모 목록 캐시 무효화 - 파라미터 상관없이 모든 메모 쿼리 무효화
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memos"],
+        exact: false // 하위 키도 모두 무효화
+      });
       
-      // 새로운 메모를 캐시에 추가
+      // 새로 생성된 메모를 캐시에 저장
       queryClient.setQueryData(["memo", newMemo.id], newMemo);
       
-      // 카테고리 목록도 무효화 (새 카테고리가 추가될 수 있음)
-      await queryClient.invalidateQueries({ queryKey: ["memo-categories"] });
-      
-      // 통계 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-stats"] });
+      // 카테고리 관련 캐시 무효화
+      await queryClient.invalidateQueries({ 
+        queryKey: ["categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-stats"],
+        exact: false 
+      });
 
       await onSuccess?.(newMemo, createData, context);
     },
@@ -64,15 +75,26 @@ export function useUpdateMemoMutation(
     onSuccess: async (updatedMemo, updateData, context) => {
       // 특정 메모 캐시 업데이트
       queryClient.setQueryData(["memo", updatedMemo.id], updatedMemo);
-      
+
       // 메모 목록 캐시 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memos"] });
-      
-      // 카테고리가 변경되었을 수 있으므로 카테고리 목록도 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-categories"] });
-      
-      // 통계 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-stats"] });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memos"],
+        exact: false 
+      });
+
+      // 카테고리 관련 캐시 무효화
+      await queryClient.invalidateQueries({ 
+        queryKey: ["categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-stats"],
+        exact: false 
+      });
 
       await onSuccess?.(updatedMemo, updateData, context);
     },
@@ -98,15 +120,26 @@ export function useDeleteMemoMutation(
     onSuccess: async (_, deletedId, context) => {
       // 삭제된 메모의 캐시 제거
       queryClient.removeQueries({ queryKey: ["memo", deletedId] });
-      
+
       // 메모 목록 캐시 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memos"] });
-      
-      // 카테고리 목록도 무효화 (카테고리가 비어있을 수 있음)
-      await queryClient.invalidateQueries({ queryKey: ["memo-categories"] });
-      
-      // 통계 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-stats"] });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memos"],
+        exact: false 
+      });
+
+      // 카테고리 관련 캐시 무효화
+      await queryClient.invalidateQueries({ 
+        queryKey: ["categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-stats"],
+        exact: false 
+      });
 
       await onSuccess?.(_, deletedId, context);
     },
@@ -134,15 +167,26 @@ export function useBulkDeleteMemosMutation(
       deleteData.ids.forEach((id) => {
         queryClient.removeQueries({ queryKey: ["memo", id] });
       });
-      
+
       // 메모 목록 캐시 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memos"] });
-      
-      // 카테고리 목록도 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-categories"] });
-      
-      // 통계 무효화
-      await queryClient.invalidateQueries({ queryKey: ["memo-stats"] });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memos"],
+        exact: false 
+      });
+
+      // 카테고리 관련 캐시 무효화
+      await queryClient.invalidateQueries({ 
+        queryKey: ["categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-categories"],
+        exact: false 
+      });
+      await queryClient.invalidateQueries({ 
+        queryKey: ["memo-stats"],
+        exact: false 
+      });
 
       await onSuccess?.(_, deleteData, context);
     },

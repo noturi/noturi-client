@@ -1,5 +1,18 @@
 import { memoApi } from "./apis";
 import { Memo, CreateMemoDto, UpdateMemoDto } from "./types";
+import { formatTimeAgo } from "@/utils/formatTime";
+
+/**
+ * UI 메모 타입 정의
+ */
+export interface UIMemo {
+  id: string; // UUID 형태로 변경
+  title: string;
+  category: string;
+  content: string;
+  rating: number;
+  timeAgo: string;
+}
 
 /**
  * 메모 서비스 클래스
@@ -29,7 +42,7 @@ export class MemoService {
       ...data,
       title: data.title.trim(),
       content: data.content.trim(),
-      category: data.category.trim() || "기타",
+      categoryId: data.categoryId,
       description: data.description?.trim(),
     };
 
@@ -58,7 +71,7 @@ export class MemoService {
       ...data,
       title: data.title?.trim(),
       content: data.content?.trim(),
-      category: data.category?.trim(),
+      categoryId: data.categoryId,
       description: data.description?.trim(),
     };
 
@@ -114,6 +127,22 @@ export class MemoService {
     };
 
     return insights;
+  }
+
+  /**
+   * 백엔드 메모 데이터를 UI용 메모 데이터로 변환
+   */
+  static transformToUIMemos(backendMemos: Memo[] | undefined): UIMemo[] {
+    if (!backendMemos) return [];
+
+    return backendMemos.map((memo) => ({
+      id: memo.id,
+      title: memo.title,
+      category: typeof memo.category === 'object' ? memo.category?.name || "기타" : memo.category || "기타",
+      content: memo.content,
+      rating: memo.rating,
+      timeAgo: formatTimeAgo(memo.createdAt),
+    }));
   }
 
   /**

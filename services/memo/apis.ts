@@ -25,12 +25,22 @@ export class MemoApi {
       
       if (params.page) searchParams.append("page", params.page.toString());
       if (params.limit) searchParams.append("limit", params.limit.toString());
-      if (params.category) searchParams.append("category", params.category);
-      if (params.sort) searchParams.append("sort", params.sort);
+      if (params.categoryId) searchParams.append("categoryId", params.categoryId);
+      if (params.sortBy) searchParams.append("sortBy", params.sortBy);
+      if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
       if (params.search) searchParams.append("search", params.search);
+      if (params.startDate) searchParams.append("startDate", params.startDate);
+      if (params.endDate) searchParams.append("endDate", params.endDate);
 
-      const response = await this.api.get(`memos?${searchParams.toString()}`);
-      return response.json<MemoListResponseDto>();
+      const url = `memos?${searchParams.toString()}`;
+      console.log("📡 메모 API 호출 URL:", url);
+      console.log("📡 쿼리 파라미터:", params);
+      
+      const response = await this.api.get(url);
+      const data = await response.json<MemoListResponseDto>();
+      
+      console.log("📡 메모 API 응답:", data);
+      return data;
     } catch (error) {
       console.error("Get memos API error:", error);
       throw new Error("메모 목록을 불러오는데 실패했습니다.");

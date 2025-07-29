@@ -1,11 +1,14 @@
-// 메모 타입 정의
+// 메모 타입 정의 (백엔드 실제 응답에 맞춤)
 export interface Memo {
-  id: number;
+  id: string; // UUID 형태
   title: string;
   content: string;
-  category: string;
+  category: any; // 객체 형태로 오는 경우 대비
+  categoryId: string;
   rating: number;
   description?: string;
+  experienceDate?: string | null;
+  userId: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -14,36 +17,42 @@ export interface Memo {
 export interface CreateMemoDto {
   title: string;
   content: string;
-  category: string;
+  categoryId: string; // UUID 형태
   rating: number;
   description?: string;
 }
 
 // 메모 수정 요청
 export interface UpdateMemoDto extends Partial<CreateMemoDto> {
-  id: number;
+  id: string;
 }
 
-// 메모 목록 응답
+// 메모 목록 응답 (백엔드 실제 응답 구조에 맞춤)
 export interface MemoListResponseDto {
-  memos: Memo[];
-  total: number;
-  page: number;
-  limit: number;
+  data: Memo[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 // 메모 목록 조회 파라미터
 export interface MemoListParamsDto {
   page?: number;
   limit?: number;
-  category?: string;
-  sort?: "latest" | "rating" | "title";
+  categoryId?: string; // UUID 형태로 변경
+  sortBy?: "createdAt" | "rating" | "title";
+  sortOrder?: "asc" | "desc";
   search?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 // 메모 일괄 삭제 요청
 export interface BulkDeleteMemosDto {
-  ids: number[];
+  ids: string[];
 }
 
 // 카테고리 통계
