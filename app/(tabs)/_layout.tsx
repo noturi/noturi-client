@@ -1,5 +1,7 @@
 import { Typography } from "@/components/ui";
 import { useAuth } from "@/context/auth";
+import { activeCategoriesQuery } from "@/services/category";
+import { useCreateMemoMutation } from "@/services/memo";
 import {
   BarChart3,
   Home,
@@ -9,9 +11,10 @@ import {
   Settings,
   Star,
 } from "@tamagui/lucide-icons";
+import { useQuery } from "@tanstack/react-query";
 import { Redirect, Tabs, router } from "expo-router";
 import { useState } from "react";
-import { Pressable } from "react-native";
+import { Alert, Pressable } from "react-native";
 import {
   Button,
   Input,
@@ -32,7 +35,30 @@ export default function TabsLayout() {
   const [rating, setRating] = useState(0);
   const [description, setDescription] = useState("");
 
-  const categories = ["일상", "업무", "학습", "운동", "독서"];
+  // 카테고리 데이터 가져오기
+  const { data: categoriesData } = useQuery(activeCategoriesQuery());
+
+  const categories = categoriesData?.categories || [];
+
+  const createMemoMutation = useCreateMemoMutation({
+    onSuccess: (newMemo) => {
+      console.log("✅ 메모 생성 성공:", newMemo);
+
+      setMemoContent("");
+      setSelectedCategory("");
+      setNewCategory("");
+      setRating(0);
+      setDescription("");
+
+      setIsSheetOpen(false);
+
+      Alert.alert("성공", "메모가 성공적으로 저장되었습니다.");
+    },
+    onError: (error) => {
+      console.error("❌ 메모 생성 실패:", error);
+      Alert.alert("오류", "메모 저장에 실패했습니다. 다시 시도해주세요.");
+    },
+  });
 
   const renderStars = () => {
     const stars = [];
@@ -42,7 +68,6 @@ export default function TabsLayout() {
 
       stars.push(
         <XStack key={i} alignItems="center">
-          {/* 왼쪽 반쪽 (0.5점) */}
           <Pressable
             onPress={() => setRating(i - 0.5)}
             style={{ padding: 2, width: 12, height: 24, overflow: "hidden" }}
@@ -54,7 +79,7 @@ export default function TabsLayout() {
               style={{ marginLeft: 0 }}
             />
           </Pressable>
-          {/* 오른쪽 반쪽 (1점) */}
+
           <Pressable
             onPress={() => setRating(i)}
             style={{ padding: 2, width: 12, height: 24, overflow: "hidden" }}
@@ -90,19 +115,42 @@ export default function TabsLayout() {
   };
 
   const handleSaveMemo = () => {
-    // TODO: 메모 저장 로직 구현
-    console.log("Saving memo:", {
+    // 유효성 검사
+    if (!memoContent.trim()) {
+      Alert.alert("알림", "메모 내용을 입력해주세요.");
+      return;
+    }
+
+    let categoryId: string;
+
+    if (selectedCategory) {
+      const selectedCat = categories.find(
+        (cat) => cat.name === selectedCategory
+      );
+      if (!selectedCat) {
+        Alert.alert("오류", "선택된 카테고리를 찾을 수 없습니다.");
+        return;
+      }
+      categoryId = selectedCat.id;
+    } else if (newCategory.trim()) {
+      Alert.alert(
+        "알림",
+        "새 카테고리 생성은 아직 구현되지 않았습니다. 기존 카테고리를 선택해주세요."
+      );
+      return;
+    } else {
+      Alert.alert("알림", "카테고리를 선택해주세요.");
+      return;
+    }
+
+    // API 호출
+    createMemoMutation.mutate({
+      title: memoContent.split("\n")[0].substring(0, 50) || "제목 없음", // 첫 줄을 제목으로 사용
       content: memoContent,
-      category: selectedCategory || newCategory,
+      categoryId,
       rating,
       description,
     });
-    setMemoContent("");
-    setSelectedCategory("");
-    setNewCategory("");
-    setRating(0);
-    setDescription("");
-    setIsSheetOpen(false);
   };
 
   return (
@@ -275,37 +323,37 @@ export default function TabsLayout() {
                     <XStack gap="$3">
                       {categories.map((category) => (
                         <Button
-                          key={category}
+                          key={category.id}
                           size="$3"
                           backgroundColor={
-                            selectedCategory === category
+                            selectedCategory === category.name
                               ? "$textPrimary"
                               : "$surface"
                           }
                           borderWidth={1}
                           borderColor={
-                            selectedCategory === category
+                            selectedCategory === category.name
                               ? "$textPrimary"
                               : "$border"
                           }
                           color={
-                            selectedCategory === category
+                            selectedCategory === category.name
                               ? "$textOnPrimary"
                               : "$textPrimary"
                           }
                           borderRadius="$4"
                           pressStyle={{
                             backgroundColor:
-                              selectedCategory === category
+                              selectedCategory === category.name
                                 ? "$textPrimary"
                                 : "$surfaceHover",
                           }}
                           onPress={() => {
-                            setSelectedCategory(category);
+                            setSelectedCategory(category.name);
                             setNewCategory("");
                           }}
                         >
-                          {category}
+                          {category.name}
                         </Button>
                       ))}
                       <Button
@@ -393,22 +441,34 @@ export default function TabsLayout() {
           >
             <Button
               backgroundColor={
-                !memoContent.trim() ? "$surface" : "$textPrimary"
+                !memoContent.trim() || createMemoMutation.isPending
+                  ? "$surface"
+                  : "$textPrimary"
               }
-              color={!memoContent.trim() ? "$textSecondary" : "$textOnPrimary"}
+              color={
+                !memoContent.trim() || createMemoMutation.isPending
+                  ? "$textSecondary"
+                  : "$textOnPrimary"
+              }
               borderRadius="$4"
               height="$5"
               fontSize="$5"
               fontWeight="600"
               pressStyle={{
-                backgroundColor: !memoContent.trim()
-                  ? "$surfaceHover"
-                  : "$textPrimary",
+                backgroundColor:
+                  !memoContent.trim() || createMemoMutation.isPending
+                    ? "$surfaceHover"
+                    : "$textPrimary",
               }}
               onPress={handleSaveMemo}
-              disabled={!memoContent.trim()}
+              disabled={!memoContent.trim() || createMemoMutation.isPending}
+              icon={
+                createMemoMutation.isPending ? (
+                  <Spinner size="small" color="$textSecondary" />
+                ) : undefined
+              }
             >
-              등록
+              {createMemoMutation.isPending ? "저장 중..." : "등록"}
             </Button>
           </YStack>
         </Sheet.Frame>
