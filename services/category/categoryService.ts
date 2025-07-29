@@ -1,25 +1,33 @@
+import { CATEGORY_COLORS, CATEGORY_ICONS, DEFAULT_CATEGORIES } from "@/constants";
 import { categoryApi } from "./apis";
-import { Category, CreateCategoryDto, UpdateCategoryDto, MergeCategoriesDto } from "./types";
+import {
+  Category,
+  CreateCategoryDto,
+  MergeCategoriesDto,
+  UpdateCategoryDto,
+} from "./types";
+
+/**
+ * UI 카테고리 타입 정의
+ */
+export interface UICategory {
+  name: string;
+  count: number;
+  active: boolean;
+}
 
 /**
  * 카테고리 서비스 클래스
  * 카테고리 관련 비즈니스 로직과 데이터 변환을 담당
  */
 export class CategoryService {
-  
-  // 기본 카테고리 목록
-  private readonly DEFAULT_CATEGORIES = [
-    { name: "일상", color: "#3B82F6", icon: "home" },
-    { name: "업무", color: "#EF4444", icon: "briefcase" },
-    { name: "학습", color: "#10B981", icon: "book" },
-    { name: "운동", color: "#F59E0B", icon: "activity" },
-    { name: "독서", color: "#8B5CF6", icon: "book-open" },
-  ];
 
   /**
    * 카테고리 생성 전 데이터 검증 및 변환
    */
-  async createCategoryWithValidation(data: CreateCategoryDto): Promise<Category> {
+  async createCategoryWithValidation(
+    data: CreateCategoryDto
+  ): Promise<Category> {
     // 데이터 검증
     if (!data.name.trim()) {
       throw new Error("카테고리 이름은 필수입니다.");
@@ -36,7 +44,9 @@ export class CategoryService {
     }
 
     // 중복 확인
-    const existsResult = await categoryApi.checkCategoryExists(data.name.trim());
+    const existsResult = await categoryApi.checkCategoryExists(
+      data.name.trim()
+    );
     if (existsResult.exists) {
       throw new Error("이미 존재하는 카테고리 이름입니다.");
     }
@@ -56,7 +66,9 @@ export class CategoryService {
   /**
    * 카테고리 수정 전 데이터 검증 및 변환
    */
-  async updateCategoryWithValidation(data: UpdateCategoryDto): Promise<Category> {
+  async updateCategoryWithValidation(
+    data: UpdateCategoryDto
+  ): Promise<Category> {
     // 데이터 검증
     if (data.name && !data.name.trim()) {
       throw new Error("카테고리 이름은 빈 값일 수 없습니다.");
@@ -76,7 +88,9 @@ export class CategoryService {
 
     // 이름 변경 시 중복 확인
     if (data.name) {
-      const existsResult = await categoryApi.checkCategoryExists(data.name.trim());
+      const existsResult = await categoryApi.checkCategoryExists(
+        data.name.trim()
+      );
       if (existsResult.exists && existsResult.category?.id !== data.id) {
         throw new Error("이미 존재하는 카테고리 이름입니다.");
       }
@@ -95,11 +109,16 @@ export class CategoryService {
   /**
    * 카테고리 삭제 전 확인 및 처리
    */
-  async deleteCategoryWithValidation(id: number, moveMemosToCategory?: number): Promise<void> {
+  async deleteCategoryWithValidation(
+    id: string,
+    moveMemosToCategory?: string
+  ): Promise<void> {
     const category = await categoryApi.getCategory(id);
-    
+
     if (category.memoCount > 0 && !moveMemosToCategory) {
-      throw new Error("메모가 있는 카테고리는 삭제할 수 없습니다. 메모를 다른 카테고리로 이동하거나 삭제해주세요.");
+      throw new Error(
+        "메모가 있는 카테고리는 삭제할 수 없습니다. 메모를 다른 카테고리로 이동하거나 삭제해주세요."
+      );
     }
 
     // 메모를 다른 카테고리로 이동하는 경우
@@ -140,17 +159,22 @@ export class CategoryService {
   async createDefaultCategories(): Promise<Category[]> {
     const createdCategories: Category[] = [];
 
-    for (const defaultCategory of this.DEFAULT_CATEGORIES) {
+    for (const defaultCategory of DEFAULT_CATEGORIES) {
       try {
         // 이미 존재하는지 확인
-        const existsResult = await categoryApi.checkCategoryExists(defaultCategory.name);
-        
+        const existsResult = await categoryApi.checkCategoryExists(
+          defaultCategory.name
+        );
+
         if (!existsResult.exists) {
           const category = await categoryApi.createCategory(defaultCategory);
           createdCategories.push(category);
         }
       } catch (error) {
-        console.error(`기본 카테고리 '${defaultCategory.name}' 생성 실패:`, error);
+        console.error(
+          `기본 카테고리 '${defaultCategory.name}' 생성 실패:`,
+          error
+        );
       }
     }
 
@@ -171,8 +195,10 @@ export class CategoryService {
       distribution,
       insights: {
         mostPopular: distribution[0]?.categoryName || "없음",
-        leastPopular: distribution[distribution.length - 1]?.categoryName || "없음",
-        utilizationRate: stats.categoriesWithMemos / stats.totalCategories * 100,
+        leastPopular:
+          distribution[distribution.length - 1]?.categoryName || "없음",
+        utilizationRate:
+          (stats.categoriesWithMemos / stats.totalCategories) * 100,
         recommendation: this.generateUsageRecommendation(stats, distribution),
       },
     };
@@ -189,13 +215,13 @@ export class CategoryService {
       categoryApi.getCategoryDistribution(),
     ]);
 
-    const lowUsageCategories = distribution.filter(d => d.memoCount <= 2);
-    
+    const lowUsageCategories = distribution.filter((d) => d.memoCount <= 2);
+
     return {
       unusedCategories,
       lowUsageCategories,
       suggestions: {
-        toDelete: unusedCategories.map(c => c.name),
+        toDelete: unusedCategories.map((c) => c.name),
         toMerge: this.suggestMergeableCategories(distribution),
         toRename: this.suggestRenameableCategories(distribution),
       },
@@ -203,25 +229,67 @@ export class CategoryService {
   }
 
   /**
+   * 백엔드 카테고리 데이터를 UI용 카테고리 데이터로 변환
+   * "전체" 카테고리를 포함하여 반환
+   */
+  static transformToUICategories(
+    backendCategories: Category[] | undefined,
+    selectedCategory: string
+  ): UICategory[] {
+    if (!backendCategories) return [];
+
+    const totalCount = backendCategories.reduce(
+      (sum, cat) => sum + cat.memoCount,
+      0
+    );
+
+    return [
+      {
+        name: "전체",
+        count: totalCount,
+        active: selectedCategory === "전체",
+      },
+      ...backendCategories.map((cat) => ({
+        name: cat.name,
+        count: cat.memoCount,
+        active: selectedCategory === cat.name,
+      })),
+    ];
+  }
+
+  /**
+   * 선택된 카테고리명으로부터 카테고리 ID를 찾기
+   */
+  static getCategoryIdByName(
+    categoryName: string,
+    categories: Category[] | undefined
+  ): string | undefined {
+    if (categoryName === "전체") return undefined;
+    return categories?.find((cat) => cat.name === categoryName)?.id;
+  }
+
+  /**
+   * 정렬 옵션에서 정렬 타입 추출
+   */
+  static getSortTypeFromOptions(
+    sortOptions: { name: string; active: boolean }[]
+  ): "rating" | "createdAt" {
+    const activeSort = sortOptions.find((option) => option.active)?.name;
+    return activeSort === "별점순" ? "rating" : "createdAt";
+  }
+
+  /**
    * 랜덤 색상 생성
    */
   private getRandomColor(): string {
-    const colors = [
-      "#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6",
-      "#EC4899", "#14B8A6", "#F97316", "#6366F1", "#84CC16"
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
+    return CATEGORY_COLORS[Math.floor(Math.random() * CATEGORY_COLORS.length)];
   }
 
   /**
    * 랜덤 아이콘 생성
    */
   private getRandomIcon(): string {
-    const icons = [
-      "folder", "tag", "bookmark", "star", "heart",
-      "home", "briefcase", "book", "activity", "music"
-    ];
-    return icons[Math.floor(Math.random() * icons.length)];
+    return CATEGORY_ICONS[Math.floor(Math.random() * CATEGORY_ICONS.length)];
   }
 
   /**
@@ -236,7 +304,10 @@ export class CategoryService {
       return "사용하지 않는 카테고리가 많습니다. 정리를 고려해보세요.";
     }
 
-    if (distribution.length > 0 && distribution[0].memoCount > stats.averageMemosPerCategory * 3) {
+    if (
+      distribution.length > 0 &&
+      distribution[0].memoCount > stats.averageMemosPerCategory * 3
+    ) {
       return "특정 카테고리에 메모가 너무 집중되어 있습니다. 세분화를 고려해보세요.";
     }
 
@@ -246,10 +317,12 @@ export class CategoryService {
   /**
    * 병합 가능한 카테고리 제안
    */
-  private suggestMergeableCategories(distribution: any[]): Array<{source: string, target: string}> {
+  private suggestMergeableCategories(
+    distribution: any[]
+  ): { source: string; target: string }[] {
     // 간단한 로직: 유사한 이름이나 적은 사용량의 카테고리들
-    const lowUsage = distribution.filter(d => d.memoCount <= 3);
-    const suggestions: Array<{source: string, target: string}> = [];
+    const lowUsage = distribution.filter((d) => d.memoCount <= 3);
+    const suggestions: { source: string; target: string }[] = [];
 
     // 실제로는 더 복잡한 로직이 필요 (이름 유사도, 의미 분석 등)
     for (let i = 0; i < lowUsage.length - 1; i += 2) {
@@ -265,11 +338,13 @@ export class CategoryService {
   /**
    * 이름 변경 제안
    */
-  private suggestRenameableCategories(distribution: any[]): Array<{current: string, suggested: string}> {
+  private suggestRenameableCategories(
+    distribution: any[]
+  ): { current: string; suggested: string }[] {
     // 간단한 예시 로직
     return distribution
-      .filter(d => d.categoryName.length > 15)
-      .map(d => ({
+      .filter((d) => d.categoryName.length > 15)
+      .map((d) => ({
         current: d.categoryName,
         suggested: d.categoryName.substring(0, 10) + "...",
       }));

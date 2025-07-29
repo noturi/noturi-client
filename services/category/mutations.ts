@@ -85,7 +85,7 @@ export function useUpdateCategoryMutation(
 // 카테고리 삭제 뮤테이션
 export function useDeleteCategoryMutation(
   options: Pick<
-    UseMutationOptions<void, DefaultError, number>,
+    UseMutationOptions<void, DefaultError, string>,
     "mutationKey" | "onMutate" | "onSuccess" | "onError" | "onSettled"
   > = {}
 ) {
@@ -94,7 +94,7 @@ export function useDeleteCategoryMutation(
 
   return useMutation({
     mutationKey: ["category", "delete", ...mutationKey],
-    mutationFn: (id: number) => categoryApi.deleteCategory(id),
+    mutationFn: (id: string) => categoryApi.deleteCategory(id),
     onMutate,
     onSuccess: async (_, deletedId, context) => {
       // 삭제된 카테고리의 캐시 제거
