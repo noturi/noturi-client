@@ -1,11 +1,11 @@
 import { Typography } from "@/components/ui";
+import type { UICategory } from "@/services/category/categoryService";
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { XStack } from "tamagui";
-import { Category } from "./types";
 
 interface CategoryButtonProps {
-  category: Category;
+  category: UICategory;
   onPress?: () => void;
 }
 
