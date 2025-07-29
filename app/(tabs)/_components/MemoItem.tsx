@@ -1,11 +1,11 @@
 import { Typography } from "@/components/ui";
+import type { UIMemo } from "@/services/memo/memoService";
 import { router } from "expo-router";
 import { XStack, YStack } from "tamagui";
 import { StarRating } from "./StarRating";
-import { Memo } from "./types";
 
 interface MemoItemProps {
-  memo: Memo;
+  memo: UIMemo;
 }
 
 export const MemoItem = ({ memo }: MemoItemProps) => (
