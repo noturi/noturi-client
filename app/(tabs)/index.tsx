@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { ScrollView, Separator, XStack, YStack } from "tamagui";
+import { ScrollView, Separator, Spinner, XStack, YStack } from "tamagui";
+import { useQuery } from "@tanstack/react-query";
+import { activeCategoriesQuery } from "@/services/category";
 import {
   CategoryButton,
   MemoItem,
@@ -8,14 +10,6 @@ import {
   type Memo,
   type SortOption,
 } from "./_components";
-
-const initialCategories: Category[] = [
-  { name: "전체", count: 24, active: true },
-  { name: "일상", count: 8, active: false },
-  { name: "업무", count: 6, active: false },
-  { name: "독서", count: 5, active: false },
-  { name: "여행", count: 3, active: false },
-];
 
 const initialSortOptions: SortOption[] = [
   { name: "최신순", active: true },
@@ -62,16 +56,41 @@ const memoList: Memo[] = [
 ];
 
 export default function HomeScreen() {
-  const [categories, setCategories] = useState(initialCategories);
+  const [selectedCategory, setSelectedCategory] = useState("전체");
   const [sortOptions, setSortOptions] = useState(initialSortOptions);
+  
+  // 카테고리 데이터 가져오기
+  const { 
+    data: categoriesData, 
+    isLoading: categoriesLoading, 
+    error: categoriesError 
+  } = useQuery(activeCategoriesQuery());
+
+  // 에러 로깅 및 데이터 확인
+  if (categoriesError) {
+    console.error("카테고리 로딩 에러:", categoriesError);
+  }
+  
+  if (categoriesData) {
+    console.log("카테고리 API 응답:", categoriesData);
+  }
+
+  // API 데이터를 UI 형태로 변환
+  const categories: Category[] = [
+    { 
+      name: "전체", 
+      count: categoriesData?.categories?.reduce((sum, cat) => sum + cat.memoCount, 0) || 0, 
+      active: selectedCategory === "전체" 
+    },
+    ...(categoriesData?.categories?.map(cat => ({
+      name: cat.name,
+      count: cat.memoCount,
+      active: selectedCategory === cat.name,
+    })) || [])
+  ];
 
   const handleCategoryPress = (selectedCategoryName: string) => {
-    setCategories((prevCategories) =>
-      prevCategories.map((category) => ({
-        ...category,
-        active: category.name === selectedCategoryName,
-      }))
-    );
+    setSelectedCategory(selectedCategoryName);
   };
 
   const handleSortPress = (selectedSortName: string) => {
@@ -92,13 +111,19 @@ export default function HomeScreen() {
         maxHeight={48}
       >
         <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
-          {categories.map((category) => (
-            <CategoryButton
-              key={category.name}
-              category={category}
-              onPress={() => handleCategoryPress(category.name)}
-            />
-          ))}
+          {categoriesLoading ? (
+            <XStack alignItems="center" paddingHorizontal="$3">
+              <Spinner size="small" color="$textSecondary" />
+            </XStack>
+          ) : (
+            categories.map((category) => (
+              <CategoryButton
+                key={category.name}
+                category={category}
+                onPress={() => handleCategoryPress(category.name)}
+              />
+            ))
+          )}
         </XStack>
       </ScrollView>
 
