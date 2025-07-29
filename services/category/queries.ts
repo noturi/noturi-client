@@ -15,7 +15,7 @@ export const categoryListQuery = (params: CategoryListParamsDto = {}) =>
 export const categoryDetailQuery = (id: number) =>
   queryOptions({
     queryKey: ["category", id],
-    queryFn: () => categoryApi.getCategory(id),
+    queryFn: () => categoryApi.getCategory(String(id)),
     staleTime: 0,
     gcTime: 0,
     enabled: !!id, // id가 있을 때만 실행
