@@ -1,103 +1,62 @@
-import { useState } from "react";
-import { ScrollView, Separator, Spinner, XStack, YStack } from "tamagui";
-import { useQuery } from "@tanstack/react-query";
+import { Loading, Typography } from "@/components/ui";
+import { INITIAL_SORT_OPTIONS } from "@/constants";
 import { activeCategoriesQuery } from "@/services/category";
 import {
-  CategoryButton,
-  MemoItem,
-  SortButton,
-  type Category,
-  type Memo,
-  type SortOption,
-} from "./_components";
-
-const initialSortOptions: SortOption[] = [
-  { name: "최신순", active: true },
-  { name: "별점순", active: false },
-];
-
-const memoList: Memo[] = [
-  {
-    id: 1,
-    title: "오늘의 할 일",
-    category: "일상",
-    content:
-      "장보기, 운동하기, 책 읽기. 특히 운동은 꼭 해야겠다. 요즘 너무 앉아만 있어서 몸이 무거워지는 느낌이다.",
-    rating: 3,
-    timeAgo: "2시간 전",
-  },
-  {
-    id: 2,
-    title: "노투리 앱 개발 아이디어",
-    category: "업무",
-    content:
-      "React Native + Expo로 메모앱 만들기. 백엔드는 Node.js + Prisma 사용. 디자인은 심플하지만 깔끔하게 가고 싶다.",
-    rating: 5,
-    timeAgo: "6시간 전",
-  },
-  {
-    id: 3,
-    title: "독서 노트 - 클린 코드",
-    category: "독서",
-    content:
-      "함수는 한 가지 일만 해야 한다. 네이밍은 의도를 명확히 드러내야 한다. 주석보다는 코드로 설명하자.",
-    rating: 4,
-    timeAgo: "1일 전",
-  },
-  {
-    id: 4,
-    title: "부산 여행 계획",
-    category: "여행",
-    content:
-      "광안리 해변, 해운대, 감천문화마을 방문 예정. 돼지국밥과 밀면은 꼭 먹어봐야겠다.",
-    rating: 4,
-    timeAgo: "3일 전",
-  },
-];
+  CategoryService,
+  type UICategory,
+} from "@/services/category/categoryService";
+import { memoListQuery } from "@/services/memo";
+import { MemoService, type UIMemo } from "@/services/memo/memoService";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense, useMemo, useState } from "react";
+import { ScrollView, Separator, XStack, YStack } from "tamagui";
+import { CategoryButton, MemoItem, SortButton } from "./_components";
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
-  const [sortOptions, setSortOptions] = useState(initialSortOptions);
-  
-  // 카테고리 데이터 가져오기
-  const { 
-    data: categoriesData, 
-    isLoading: categoriesLoading, 
-    error: categoriesError 
-  } = useQuery(activeCategoriesQuery());
+  const [sortOptions, setSortOptions] = useState(INITIAL_SORT_OPTIONS);
 
-  // 에러 로깅 및 데이터 확인
-  if (categoriesError) {
-    console.error("카테고리 로딩 에러:", categoriesError);
-  }
-  
-  if (categoriesData) {
-    console.log("카테고리 API 응답:", categoriesData);
-  }
+  const { data: categoriesData } = useSuspenseQuery(activeCategoriesQuery());
 
-  // API 데이터를 UI 형태로 변환
-  const categories: Category[] = [
-    { 
-      name: "전체", 
-      count: categoriesData?.categories?.reduce((sum, cat) => sum + cat.memoCount, 0) || 0, 
-      active: selectedCategory === "전체" 
-    },
-    ...(categoriesData?.categories?.map(cat => ({
-      name: cat.name,
-      count: cat.memoCount,
-      active: selectedCategory === cat.name,
-    })) || [])
-  ];
+  const sortType = CategoryService.getSortTypeFromOptions(sortOptions);
+  const selectedCategoryId = CategoryService.getCategoryIdByName(
+    selectedCategory,
+    categoriesData?.categories
+  );
 
-  const handleCategoryPress = (selectedCategoryName: string) => {
-    setSelectedCategory(selectedCategoryName);
+  const memoQueryParams = {
+    page: 1,
+    limit: 20,
+    categoryId: selectedCategoryId,
+    sortBy: sortType,
+    sortOrder: "desc" as const,
   };
 
-  const handleSortPress = (selectedSortName: string) => {
-    setSortOptions((prevSortOptions) =>
-      prevSortOptions.map((option) => ({
+  const { data: memosData } = useSuspenseQuery(memoListQuery(memoQueryParams));
+
+  const categories: UICategory[] = useMemo(
+    () =>
+      CategoryService.transformToUICategories(
+        categoriesData?.categories,
+        selectedCategory
+      ),
+    [categoriesData?.categories, selectedCategory]
+  );
+
+  const transformedMemos: UIMemo[] = useMemo(() => {
+    const transformed = MemoService.transformToUIMemos(memosData?.data);
+    return transformed;
+  }, [memosData]);
+
+  const handleCategoryPress = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+  };
+
+  const handleSortPress = (sortName: string) => {
+    setSortOptions((prevOptions) =>
+      prevOptions.map((option) => ({
         ...option,
-        active: option.name === selectedSortName,
+        active: option.name === sortName,
       }))
     );
   };
@@ -111,19 +70,13 @@ export default function HomeScreen() {
         maxHeight={48}
       >
         <XStack paddingHorizontal="$4" paddingVertical="$1.5" gap="$1.5">
-          {categoriesLoading ? (
-            <XStack alignItems="center" paddingHorizontal="$3">
-              <Spinner size="small" color="$textSecondary" />
-            </XStack>
-          ) : (
-            categories.map((category) => (
-              <CategoryButton
-                key={category.name}
-                category={category}
-                onPress={() => handleCategoryPress(category.name)}
-              />
-            ))
-          )}
+          {categories.map((category) => (
+            <CategoryButton
+              key={category.name}
+              category={category}
+              onPress={() => handleCategoryPress(category.name)}
+            />
+          ))}
         </XStack>
       </ScrollView>
 
@@ -141,18 +94,28 @@ export default function HomeScreen() {
       <Separator borderColor="$border" />
 
       {/* Memo List */}
-      <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-        <YStack paddingBottom="$6">
-          {memoList.map((memo, index) => (
-            <YStack key={memo.id}>
-              <MemoItem memo={memo} />
-              {index < memoList.length - 1 && (
-                <Separator borderColor="$border" />
-              )}
-            </YStack>
-          ))}
-        </YStack>
-      </ScrollView>
+      <Suspense fallback={<Loading text="메모 로딩 중..." />}>
+        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <YStack paddingBottom="$6">
+            {transformedMemos.length > 0 ? (
+              transformedMemos.map((memo, index) => (
+                <YStack key={memo.id}>
+                  <MemoItem memo={memo} />
+                  {index < transformedMemos.length - 1 && (
+                    <Separator borderColor="$border" />
+                  )}
+                </YStack>
+              ))
+            ) : (
+              <YStack alignItems="center" paddingVertical="$6">
+                <Typography color="$textMuted">
+                  작성된 메모가 없습니다
+                </Typography>
+              </YStack>
+            )}
+          </YStack>
+        </ScrollView>
+      </Suspense>
     </YStack>
   );
 }
