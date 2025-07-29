@@ -5,6 +5,7 @@ import {
   LoginResponseDto,
   RefreshTokenDto,
   RefreshTokenResponseDto,
+  LogoutDto,
 } from "./types";
 
 export class AuthApi {
@@ -41,12 +42,16 @@ export class AuthApi {
   }
 
   // 로그아웃 (서버에서 토큰 무효화)
-  async logout(): Promise<void> {
+  async logout(data: LogoutDto): Promise<{ message: string }> {
     try {
-      await this.api.post("auth/logout");
+      const response = await this.api.post("auth/logout", {
+        json: data,
+      });
+      return response.json<{ message: string }>();
     } catch (error) {
       console.error("Logout API error:", error);
-      // 로그아웃은 실패해도 로컬에서 토큰 삭제
+      // 로그아웃은 실패해도 처리 필요
+      throw new Error("로그아웃에 실패했습니다.");
     }
   }
 
