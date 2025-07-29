@@ -1,6 +1,6 @@
 // 카테고리 타입 정의
 export interface Category {
-  id: number;
+  id: string; // UUID 형태로 변경
   name: string;
   color?: string;
   icon?: string;
@@ -20,7 +20,7 @@ export interface CreateCategoryDto {
 
 // 카테고리 수정 요청
 export interface UpdateCategoryDto extends Partial<CreateCategoryDto> {
-  id: number;
+  id: string;
 }
 
 // 카테고리 목록 응답
@@ -48,20 +48,20 @@ export interface CategoryStatsDto {
 // 카테고리 순서 변경 요청
 export interface ReorderCategoriesDto {
   categoryOrders: Array<{
-    id: number;
+    id: string;
     order: number;
   }>;
 }
 
 // 카테고리 병합 요청
 export interface MergeCategoriesDto {
-  sourceId: number;
-  targetId: number;
+  sourceId: string;
+  targetId: string;
 }
 
 // 카테고리별 메모 분포
 export interface CategoryDistributionDto {
-  categoryId: number;
+  categoryId: string;
   categoryName: string;
   memoCount: number;
   percentage: number;

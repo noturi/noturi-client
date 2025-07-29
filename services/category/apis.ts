@@ -19,6 +19,20 @@ export class CategoryApi {
     this.api = apiInstance;
   }
 
+  // 백엔드 응답 형태를 프론트엔드 타입으로 변환
+  private transformBackendCategory(backendCategory: any): Category {
+    return {
+      id: backendCategory.id, // UUID 그대로 사용
+      name: backendCategory.name,
+      color: backendCategory.color,
+      icon: backendCategory.icon,
+      description: backendCategory.description,
+      memoCount: backendCategory._count?.memos || 0,
+      createdAt: backendCategory.createdAt,
+      updatedAt: backendCategory.updatedAt,
+    };
+  }
+
   // 카테고리 목록 조회
   async getCategories(params: CategoryListParamsDto = {}): Promise<CategoryListResponseDto> {
     try {
@@ -30,8 +44,23 @@ export class CategoryApi {
       if (params.sortBy) searchParams.append("sortBy", params.sortBy);
       if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
 
-      const response = await this.api.get(`categories?${searchParams.toString()}`);
-      return response.json<CategoryListResponseDto>();
+      const url = `categories?${searchParams.toString()}`;
+      console.log("카테고리 API 요청:", url);
+      
+      const response = await this.api.get(url);
+      const backendData = await response.json<any[]>(); // 백엔드는 배열로 응답
+      
+      console.log("카테고리 API 원본 응답:", backendData);
+      
+      // 백엔드 응답을 프론트엔드 형태로 변환
+      const transformedData: CategoryListResponseDto = {
+        categories: backendData.map(item => this.transformBackendCategory(item)),
+        total: backendData.length,
+      };
+      
+      console.log("변환된 카테고리 데이터:", transformedData);
+      
+      return transformedData;
     } catch (error) {
       console.error("Get categories API error:", error);
       throw new Error("카테고리 목록을 불러오는데 실패했습니다.");
