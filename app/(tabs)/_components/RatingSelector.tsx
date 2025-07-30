@@ -12,47 +12,68 @@ export const RatingSelector = ({
   rating,
   onRatingChange,
 }: RatingSelectorProps) => {
-  const getStarColor = () => {
-    return "$warning"; // 선택할 때는 모두 같은 색상 (노랑)
-  };
-
   const renderStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       const isFilled = rating >= i;
       const isHalfFilled = rating === i - 0.5;
-
-      // 반쪽 별의 색상
-      const halfStarColor =
-        isFilled || isHalfFilled ? getStarColor() : "$border";
-      // 전체 별의 색상
-      const fullStarColor = isFilled ? getStarColor() : "$border";
+      const isEmpty = rating < i - 0.5;
 
       stars.push(
-        <XStack key={i} alignItems="center">
+        <XStack
+          key={i}
+          alignItems="center"
+          width={30}
+          height={30}
+          position="relative"
+        >
+          {/* 왼쪽 반쪽 클릭 영역 */}
           <Pressable
             onPress={() => onRatingChange(i - 0.5)}
-            style={{ padding: 2, width: 12, height: 24, overflow: "hidden" }}
-          >
-            <Star
-              size={24}
-              color={halfStarColor as any}
-              fill={(isFilled || isHalfFilled ? halfStarColor : "transparent") as any}
-              style={{ marginLeft: 0 }}
-            />
-          </Pressable>
+            style={{
+              position: "absolute",
+              left: 0,
+              width: 15,
+              height: 30,
+              zIndex: 2,
+            }}
+          />
 
+          {/* 오른쪽 반쪽 클릭 영역 */}
           <Pressable
             onPress={() => onRatingChange(i)}
-            style={{ padding: 2, width: 12, height: 24, overflow: "hidden" }}
-          >
-            <Star
-              size={24}
-              color={fullStarColor as any}
-              fill={(isFilled ? fullStarColor : "transparent") as any}
-              style={{ marginLeft: -12 }}
-            />
-          </Pressable>
+            style={{
+              position: "absolute",
+              right: 0,
+              width: 15,
+              height: 30,
+              zIndex: 2,
+            }}
+          />
+
+          {/* 완전 채워진 별 */}
+          {isFilled && <Star size={30} color="$rating2" fill="#f59e0b" />}
+
+          {/* 반쪽 채워진 별 */}
+          {isHalfFilled && (
+            <>
+              {/* 전체 배경 (연한 노란색) */}
+              <Star size={30} color="$rating2Light" fill="#fef3c7" />
+              {/* 왼쪽 반쪽 진한 채움 */}
+              <XStack
+                position="absolute"
+                width={15}
+                height={30}
+                left={0}
+                overflow="hidden"
+              >
+                <Star size={30} color="$rating2" fill="#f59e0b" />
+              </XStack>
+            </>
+          )}
+
+          {/* 빈 별 */}
+          {isEmpty && <Star size={30} color="$rating2Light" fill="#fef3c7" />}
         </XStack>
       );
     }
@@ -62,10 +83,10 @@ export const RatingSelector = ({
   return (
     <YStack gap="$3">
       <Typography variant="title">평점</Typography>
-      <XStack alignItems="center" gap="$3">
-        {renderStars()}
+      <XStack alignItems="center" gap="$2">
+        <XStack gap="$1">{renderStars()}</XStack>
         <Typography variant="small" color="$textMuted">
-          {rating > 0 ? `${rating}/5` : "평점을 선택하세요"}
+          {rating > 0 ? `${rating} / 5` : "평점을 선택하세요"}
         </Typography>
       </XStack>
     </YStack>
