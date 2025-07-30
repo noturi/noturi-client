@@ -7,8 +7,6 @@ export const categoryListQuery = (params: CategoryListParamsDto = {}) =>
   queryOptions({
     queryKey: ["categories", params],
     queryFn: () => categoryApi.getCategories(params),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 특정 카테고리 쿼리
@@ -16,8 +14,6 @@ export const categoryDetailQuery = (id: number) =>
   queryOptions({
     queryKey: ["category", id],
     queryFn: () => categoryApi.getCategory(String(id)),
-    staleTime: 0,
-    gcTime: 0,
     enabled: !!id, // id가 있을 때만 실행
   });
 
@@ -26,8 +22,6 @@ export const categoryStatsQuery = () =>
   queryOptions({
     queryKey: ["category-stats"],
     queryFn: () => categoryApi.getCategoryStats(),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 카테고리 분포 쿼리
@@ -35,8 +29,6 @@ export const categoryDistributionQuery = () =>
   queryOptions({
     queryKey: ["category-distribution"],
     queryFn: () => categoryApi.getCategoryDistribution(),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 사용하지 않는 카테고리 쿼리
@@ -44,8 +36,6 @@ export const unusedCategoriesQuery = () =>
   queryOptions({
     queryKey: ["categories", "unused"],
     queryFn: () => categoryApi.getUnusedCategories(),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 카테고리 검색 쿼리
@@ -54,8 +44,6 @@ export const searchCategoriesQuery = (query: string) =>
     queryKey: ["categories", "search", query],
     queryFn: () => categoryApi.searchCategories(query),
     enabled: query.length > 0, // 검색어가 있을 때만 실행
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 모든 카테고리 (메모 없는 것 포함) 쿼리
@@ -63,8 +51,6 @@ export const allCategoriesQuery = () =>
   queryOptions({
     queryKey: ["categories", "all"],
     queryFn: () => categoryApi.getCategories({ includeEmpty: true }),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 활성 카테고리만 (메모가 있는 것) 쿼리
@@ -72,8 +58,6 @@ export const activeCategoriesQuery = () =>
   queryOptions({
     queryKey: ["categories", "active"],
     queryFn: () => categoryApi.getCategories({ includeEmpty: false }),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 카테고리 이름 중복 확인 쿼리
@@ -82,8 +66,6 @@ export const checkCategoryExistsQuery = (name: string) =>
     queryKey: ["category", "check-exists", name],
     queryFn: () => categoryApi.checkCategoryExists(name),
     enabled: name.length > 0, // 이름이 있을 때만 실행
-    staleTime: 0,
-    gcTime: 0,
   });
 
 // 카테고리 별 정렬 쿼리들
@@ -95,8 +77,6 @@ export const categoriesByNameQuery = () =>
         sortBy: "name",
         sortOrder: "asc",
       }),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 export const categoriesByMemoCountQuery = () =>
@@ -107,8 +87,6 @@ export const categoriesByMemoCountQuery = () =>
         sortBy: "memoCount",
         sortOrder: "desc",
       }),
-    staleTime: 0,
-    gcTime: 0,
   });
 
 export const categoriesByCreatedDateQuery = () =>
@@ -119,6 +97,4 @@ export const categoriesByCreatedDateQuery = () =>
         sortBy: "createdAt",
         sortOrder: "desc",
       }),
-    staleTime: 0,
-    gcTime: 0,
   });
