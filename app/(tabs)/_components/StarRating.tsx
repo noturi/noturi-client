@@ -7,15 +7,16 @@ interface StarRatingProps {
 }
 
 const getStarColorKey = (rating: number) => {
-  // 점수 구간별 색상 키 결정
-  if (rating === 0) {
-    return "textMuted";
-  } else if (rating >= 0.1 && rating <= 2.5) {
-    return "error";
-  } else if (rating >= 2.6 && rating <= 4.5) {
-    return "warning";
-  } else {
-    return "success";
+  // 일의 자리 숫자에 따라 전용 별점 색상 사용
+  const integerPart = Math.floor(rating);
+  switch (integerPart) {
+    case 0: return "rating0"; // 0점대: 빨강 (최악)
+    case 1: return "rating1"; // 1점대: 주황 (나쁨)
+    case 2: return "rating2"; // 2점대: 노랑 (부족함)
+    case 3: return "rating3"; // 3점대: 연두 (보통)
+    case 4: return "rating4"; // 4점대: 초록 (좋음)
+    case 5: return "rating5"; // 5점대: 파랑 (최고)
+    default: return "textMuted";
   }
 };
 
