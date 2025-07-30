@@ -1,4 +1,8 @@
-import { CATEGORY_COLORS, CATEGORY_ICONS, DEFAULT_CATEGORIES } from "@/constants";
+import {
+  CATEGORY_COLORS,
+  CATEGORY_ICONS,
+  DEFAULT_CATEGORIES,
+} from "@/constants";
 import { categoryApi } from "./apis";
 import {
   Category,
@@ -11,6 +15,7 @@ import {
  * UI 카테고리 타입 정의
  */
 export interface UICategory {
+  id: string;
   name: string;
   count: number;
   active: boolean;
@@ -21,7 +26,6 @@ export interface UICategory {
  * 카테고리 관련 비즈니스 로직과 데이터 변환을 담당
  */
 export class CategoryService {
-
   /**
    * 카테고리 생성 전 데이터 검증 및 변환
    */
@@ -245,11 +249,13 @@ export class CategoryService {
 
     return [
       {
+        id: "all",
         name: "전체",
         count: totalCount,
         active: selectedCategory === "전체",
       },
       ...backendCategories.map((cat) => ({
+        id: cat.id,
         name: cat.name,
         count: cat.memoCount,
         active: selectedCategory === cat.name,
