@@ -120,6 +120,14 @@ const themes = createThemes({
         infoHover: "#4b5563",
         infoActive: "#374151",
 
+        // 별점 전용 색상 토큰
+        rating0: "#ef4444", // 0점대: 빨강 (최악)
+        rating1: "#f97316", // 1점대: 주황 (나쁨)
+        rating2: "#f59e0b", // 2점대: 노랑 (부족함)
+        rating3: "#84cc16", // 3점대: 연두 (보통)
+        rating4: "#22c55e", // 4점대: 초록 (좋음)
+        rating5: "#3b82f6", // 5점대: 파랑 (최고)
+
         surface: "#ffffff",
         surfaceHover: "#f9fafb",
         surfaceActive: "#f3f4f6",
@@ -149,6 +157,7 @@ const themes = createThemes({
         backgroundSecondary: "#f9fafb",
         backgroundTertiary: "#f3f4f6",
         backgroundOverlay: "rgba(0, 0, 0, 0.5)",
+        backgroundTransparent: "transparent",
       },
       dark: {
         ...darkShadows,
@@ -183,6 +192,14 @@ const themes = createThemes({
         infoHover: "#d1d5db",
         infoActive: "#e5e7eb",
 
+        // 별점 전용 색상 토큰 (다크모드)
+        rating0: "#f87171", // 0점대: 밝은 빨강 (최악)
+        rating1: "#fb923c", // 1점대: 밝은 주황 (나쁨)
+        rating2: "#fbbf24", // 2점대: 밝은 노랑 (부족함)
+        rating3: "#a3e635", // 3점대: 밝은 연두 (보통)
+        rating4: "#4ade80", // 4점대: 밝은 초록 (좋음)
+        rating5: "#60a5fa", // 5점대: 밝은 파랑 (최고)
+
         surface: "#1f2937",
         surfaceHover: "#374151",
         surfaceActive: "#4b5563",
@@ -212,6 +229,7 @@ const themes = createThemes({
         backgroundSecondary: "#1f2937",
         backgroundTertiary: "#374151",
         backgroundOverlay: "rgba(0, 0, 0, 0.8)",
+        backgroundTransparent: "transparent",
       },
     },
   },
