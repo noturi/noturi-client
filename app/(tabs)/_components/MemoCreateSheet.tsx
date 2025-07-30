@@ -1,11 +1,23 @@
 import { Typography } from "@/components/ui";
-import { activeCategoriesQuery } from "@/services/category";
+import {
+  activeCategoriesQuery,
+  useCreateCategoryMutation,
+} from "@/services/category";
 import { memoService } from "@/services/memo/memoService";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Platform } from "react-native";
-import { Button, ScrollView, Sheet, Spinner, TextArea, YStack } from "tamagui";
-import { CategorySelector } from "./CategorySelector";
+import {
+  Button,
+  Input,
+  ScrollView,
+  Sheet,
+  Spinner,
+  TextArea,
+  XStack,
+  YStack,
+} from "tamagui";
+import { CategoryButton } from "./CategoryButton";
 import { MEMO_ALERTS } from "./constants";
 import { useMemoForm } from "./hooks/useMemoForm";
 import { MemoFormHeader } from "./MemoFormHeader";
@@ -18,12 +30,25 @@ interface MemoCreateSheetProps {
 
 export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
   const { formData, updateField, resetForm, handleCategorySelect } =
     useMemoForm();
 
-  // 카테고리 데이터 가져오기
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
+
+  const createCategoryMutation = useCreateCategoryMutation({
+    onSuccess: (newCategory) => {
+      handleCategorySelect(newCategory.name);
+      setNewCategoryName("");
+      setShowAddCategory(false);
+      Alert.alert("성공", "새 카테고리가 생성되었습니다.");
+    },
+    onError: (error: any) => {
+      Alert.alert("오류", error.message || "카테고리 생성에 실패했습니다.");
+    },
+  });
 
   // 키보드 이벤트 처리
   useEffect(() => {
@@ -51,15 +76,23 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
 
   const [isCreating, setIsCreating] = useState(false);
 
-  const isDisabled = !formData.memoContent.trim() || isCreating;
+  const isDisabled =
+    (!formData.title.trim() && !formData.memoContent.trim()) || isCreating;
 
   const handleSaveMemo = async () => {
-    const { memoContent, selectedCategory, rating, description } = formData;
+    const { title, memoContent, selectedCategory, rating } = formData;
+
+    if (!title.trim()) {
+      Alert.alert("알림", "제목을 입력해주세요.");
+      return;
+    }
 
     // 카테고리 ID 찾기
     let categoryId: string;
     if (selectedCategory) {
-      const selectedCat = categories.find((cat) => cat.name === selectedCategory);
+      const selectedCat = categories.find(
+        (cat) => cat.name === selectedCategory
+      );
       if (!selectedCat) {
         Alert.alert("오류", "선택된 카테고리를 찾을 수 없습니다.");
         return;
@@ -72,24 +105,38 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
 
     setIsCreating(true);
     try {
-      // 서비스의 검증 포함 생성 메서드 사용
       await memoService.createMemoWithValidation({
-        title: memoContent.split("\n")[0].substring(0, 50) || "제목 없음",
+        title: title.trim(),
         content: memoContent,
         categoryId,
         rating,
-        description,
       });
 
       resetForm();
       onClose();
       Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
     } catch (error: any) {
-      // 에러는 이미 글로벌 핸들러에서 처리되지만, 특별한 경우 추가 처리 가능
       console.error("메모 생성 실패:", error);
     } finally {
       setIsCreating(false);
     }
+  };
+
+  const handleAddCategory = () => {
+    if (!newCategoryName.trim()) {
+      Alert.alert("알림", "카테고리 이름을 입력해주세요.");
+      return;
+    }
+
+    createCategoryMutation.mutate({
+      name: newCategoryName.trim(),
+      color: "#3b82f6",
+    });
+  };
+
+  const handleCancelAddCategory = () => {
+    setNewCategoryName("");
+    setShowAddCategory(false);
   };
 
   return (
@@ -118,7 +165,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
         <MemoFormHeader onClose={onClose} />
 
         {/* Content */}
-        <YStack flex={1}>
+        <YStack flex={1} onStartShouldSetResponder={() => true}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -127,44 +174,12 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
             }}
           >
             <YStack padding="$5" gap="$6">
-              {/* Main Text Input */}
-              <YStack gap="$3">
+              <YStack gap="$2">
+                <Typography variant="title">제목</Typography>
                 <TextArea
-                  placeholder="무엇을 기록하고 싶나요?"
-                  value={formData.memoContent}
-                  onChangeText={(text) => updateField("memoContent", text)}
-                  minHeight={120}
-                  backgroundColor="$backgroundTransparent"
-                  borderWidth={0}
-                  fontSize="$5"
-                  color="$textPrimary"
-                  placeholderTextColor="$textMuted"
-                  multiline
-                  padding="$0"
-                />
-              </YStack>
-
-              <CategorySelector
-                categories={categories}
-                selectedCategory={formData.selectedCategory}
-                newCategory={formData.newCategory}
-                onSelectCategory={handleCategorySelect}
-                onNewCategoryChange={(text) => updateField("newCategory", text)}
-              />
-
-              <RatingSelector
-                rating={formData.rating}
-                onRatingChange={(rating) => updateField("rating", rating)}
-              />
-
-              {/* Description */}
-              <YStack gap="$3">
-                <Typography variant="title">추가 설명</Typography>
-                <TextArea
-                  placeholder="자세한 설명을 추가해보세요 (선택사항)"
-                  value={formData.description}
-                  onChangeText={(text) => updateField("description", text)}
-                  minHeight={80}
+                  placeholder="제목을 입력하세요"
+                  value={formData.title}
+                  onChangeText={(text) => updateField("title", text)}
                   backgroundColor="$backgroundPrimary"
                   borderWidth={1}
                   borderColor="$border"
@@ -172,11 +187,117 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
                   fontSize="$4"
                   color="$textPrimary"
                   placeholderTextColor="$textMuted"
-                  multiline
-                  paddingHorizontal="$4"
-                  paddingVertical="$3"
+                  padding="$2"
                 />
               </YStack>
+              {/* Content Input */}
+              <YStack gap="$3">
+                <Typography variant="title">내용</Typography>
+                <TextArea
+                  placeholder="무엇을 기록하고 싶나요?"
+                  value={formData.memoContent}
+                  onChangeText={(text) => updateField("memoContent", text)}
+                  minHeight={120}
+                  backgroundColor="$backgroundTransparent"
+                  borderWidth={0}
+                  fontSize="$4"
+                  color="$textPrimary"
+                  placeholderTextColor="$textMuted"
+                  multiline
+                  padding="$0"
+                />
+              </YStack>
+              <YStack gap="$3">
+                <Typography variant="title">카테고리</Typography>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <XStack gap="$2">
+                    {categories.map((category) => (
+                      <CategoryButton
+                        key={category.id}
+                        category={{
+                          ...category,
+                          active: formData.selectedCategory === category.name,
+                          count: 0,
+                        }}
+                        onPress={() => handleCategorySelect(category.name)}
+                      />
+                    ))}
+                    {!showAddCategory && (
+                      <Button
+                        backgroundColor="$surface"
+                        borderWidth={1}
+                        borderColor="$border"
+                        borderStyle="dashed"
+                        color="$textSecondary"
+                        borderRadius="$5"
+                        fontSize="$3"
+                        paddingHorizontal="$3"
+                        paddingVertical="$2"
+                        minHeight={40}
+                        minWidth={60}
+                        pressStyle={{ backgroundColor: "$surfaceHover" }}
+                        onPress={() => setShowAddCategory(true)}
+                      >
+                        + 추가
+                      </Button>
+                    )}
+                  </XStack>
+                </ScrollView>
+
+                {showAddCategory && (
+                  <XStack gap="$2" alignItems="center">
+                    <Input
+                      flex={1}
+                      placeholder="새 카테고리 이름"
+                      value={newCategoryName}
+                      onChangeText={setNewCategoryName}
+                      backgroundColor="$surface"
+                      borderWidth={1}
+                      borderColor="$border"
+                      borderRadius="$4"
+                      fontSize="$4"
+                      color="$textPrimary"
+                      placeholderTextColor="$textMuted"
+                      paddingHorizontal="$3"
+                      paddingVertical="$3"
+                      maxLength={20}
+                    />
+                    <Button
+                      size="$3"
+                      height={48}
+                      backgroundColor="$accent"
+                      color="$textOnAccent"
+                      onPress={handleAddCategory}
+                      disabled={
+                        !newCategoryName.trim() ||
+                        createCategoryMutation.isPending
+                      }
+                      icon={
+                        createCategoryMutation.isPending ? (
+                          <Spinner size="small" color="$textOnAccent" />
+                        ) : undefined
+                      }
+                    >
+                      추가
+                    </Button>
+                    <Button
+                      size="$3"
+                      height={48}
+                      backgroundColor="$backgroundTransparent"
+                      color="$textSecondary"
+                      borderWidth={1}
+                      borderColor="$border"
+                      onPress={handleCancelAddCategory}
+                    >
+                      취소
+                    </Button>
+                  </XStack>
+                )}
+              </YStack>
+              <RatingSelector
+                rating={formData.rating}
+                onRatingChange={(rating) => updateField("rating", rating)}
+              />
             </YStack>
           </ScrollView>
         </YStack>
