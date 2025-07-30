@@ -3,7 +3,7 @@ import {
   activeCategoriesQuery,
   useCreateCategoryMutation,
 } from "@/services/category";
-import { memoService } from "@/services/memo/memoService";
+import { useCreateMemoMutation } from "@/services/memo";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Platform } from "react-native";
@@ -50,6 +50,18 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     },
   });
 
+  const createMemoMutation = useCreateMemoMutation({
+    onSuccess: () => {
+      resetForm();
+      onClose();
+      Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
+    },
+    onError: (error: any) => {
+      console.error("메모 생성 실패:", error);
+      Alert.alert("오류", error.message || "메모 생성에 실패했습니다.");
+    },
+  });
+
   // 키보드 이벤트 처리
   useEffect(() => {
     const showEvent =
@@ -74,16 +86,19 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     };
   }, []);
 
-  const [isCreating, setIsCreating] = useState(false);
-
   const isDisabled =
-    (!formData.title.trim() && !formData.memoContent.trim()) || isCreating;
+    (!formData.title.trim() && !formData.memoContent.trim()) || createMemoMutation.isPending;
 
   const handleSaveMemo = async () => {
     const { title, memoContent, selectedCategory, rating } = formData;
 
     if (!title.trim()) {
       Alert.alert("알림", "제목을 입력해주세요.");
+      return;
+    }
+
+    if (!memoContent.trim()) {
+      Alert.alert("알림", "내용을 입력해주세요.");
       return;
     }
 
@@ -103,23 +118,12 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
       return;
     }
 
-    setIsCreating(true);
-    try {
-      await memoService.createMemoWithValidation({
-        title: title.trim(),
-        content: memoContent,
-        categoryId,
-        rating,
-      });
-
-      resetForm();
-      onClose();
-      Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
-    } catch (error: any) {
-      console.error("메모 생성 실패:", error);
-    } finally {
-      setIsCreating(false);
-    }
+    createMemoMutation.mutate({
+      title: title.trim(),
+      content: memoContent.trim(),
+      categoryId,
+      rating,
+    });
   };
 
   const handleAddCategory = () => {
@@ -319,7 +323,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           onPress={handleSaveMemo}
           disabled={isDisabled}
           icon={
-            isCreating ? (
+            createMemoMutation.isPending ? (
               <Spinner
                 size="small"
                 color={isDisabled ? "$textMuted" : "$textOnAccent"}
@@ -328,7 +332,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           }
           animation="quick"
         >
-          {!isCreating && "등록"}
+          {!createMemoMutation.isPending && "등록"}
         </Button>
       </Sheet.Frame>
     </Sheet>
