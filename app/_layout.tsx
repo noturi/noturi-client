@@ -14,7 +14,8 @@ import { XStack } from "tamagui";
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 0,
+      gcTime: 0,
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
