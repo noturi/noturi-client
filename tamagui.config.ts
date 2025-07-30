@@ -82,6 +82,12 @@ const darkShadows = {
   shadow6: "rgba(0,0,0,0.48)",
 };
 
+const animations = createAnimations({
+  bouncy: { type: "spring", damping: 10, mass: 0.9, stiffness: 100 },
+  lazy: { type: "spring", damping: 20, stiffness: 60 },
+  quick: { type: "spring", damping: 20, mass: 1.2, stiffness: 250 },
+});
+
 const themes = createThemes({
   componentThemes: defaultComponentThemes,
   base: {
@@ -124,6 +130,7 @@ const themes = createThemes({
         rating0: "#ef4444", // 0점대: 빨강 (최악)
         rating1: "#f97316", // 1점대: 주황 (나쁨)
         rating2: "#f59e0b", // 2점대: 노랑 (부족함)
+        rating2Light: "#fef3c7", // 2점대 연한색
         rating3: "#84cc16", // 3점대: 연두 (보통)
         rating4: "#22c55e", // 4점대: 초록 (좋음)
         rating5: "#3b82f6", // 5점대: 파랑 (최고)
@@ -196,6 +203,7 @@ const themes = createThemes({
         rating0: "#f87171", // 0점대: 밝은 빨강 (최악)
         rating1: "#fb923c", // 1점대: 밝은 주황 (나쁨)
         rating2: "#fbbf24", // 2점대: 밝은 노랑 (부족함)
+        rating2Light: "#451a03", // 2점대 연한색 (다크모드)
         rating3: "#a3e635", // 3점대: 밝은 연두 (보통)
         rating4: "#4ade80", // 4점대: 밝은 초록 (좋음)
         rating5: "#60a5fa", // 5점대: 밝은 파랑 (최고)
@@ -304,19 +312,47 @@ const themes = createThemes({
   },
 });
 
-const animations = createAnimations({
-  bouncy: { type: "spring", damping: 10, mass: 0.9, stiffness: 100 },
-  lazy: { type: "spring", damping: 20, stiffness: 60 },
-  quick: { type: "spring", damping: 20, mass: 1.2, stiffness: 250 },
-});
-
 export const config = createTamagui({
   themes,
   animations,
   shorthands,
 
   tokens: {
-    color: {},
+    color: {
+      primary: "#1f2937",
+      primaryHover: "#374151",
+      primaryActive: "#111827",
+
+      secondary: "#6b7280",
+      secondaryHover: "#4b5563",
+      secondaryActive: "#374151",
+
+      accent: "#3b82f6",
+      accentHover: "#2563eb",
+      accentActive: "#1d4ed8",
+
+      success: "#22c55e",
+      successHover: "#16a34a",
+
+      error: "#ef4444",
+      errorHover: "#dc2626",
+
+      warning: "#f59e0b",
+      warningHover: "#d97706",
+
+      surface: "#ffffff",
+      surfaceHover: "#f9fafb",
+      surfaceDisabled: "#f3f4f6",
+
+      textPrimary: "#111827",
+      textSecondary: "#6b7280",
+      textMuted: "#9ca3af",
+      textOnAccent: "#ffffff",
+      textOnPrimary: "#ffffff",
+
+      border: "#e5e7eb",
+      borderHover: "#d1d5db",
+    },
     space: {
       0: 0,
       0.25: 1,
