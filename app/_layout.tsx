@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Pressable } from "react-native";
+import { Alert, Pressable } from "react-native";
 import { XStack } from "tamagui";
 
 export const queryClient = new QueryClient({
@@ -18,6 +18,14 @@ export const queryClient = new QueryClient({
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
+    },
+    mutations: {
+      onError: (error) => {
+        Alert.alert(
+          "오류",
+          error?.message || "작업 중 오류가 발생했습니다. 다시 시도해주세요."
+        );
+      },
     },
   },
 });
