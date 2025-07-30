@@ -47,9 +47,9 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
             ? "$textPrimary"
             : "$border"
         }
-        gap="$1"
-        minWidth={70}
+        gap="$2"
         minHeight={40}
+        flexShrink={0}
       >
         <Typography
           variant="subtitle"
