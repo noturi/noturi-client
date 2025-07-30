@@ -281,7 +281,7 @@ export class CategoryService {
     sortOptions: { name: string; active: boolean }[]
   ): "rating" | "createdAt" {
     const activeSort = sortOptions.find((option) => option.active)?.name;
-    return activeSort === "별점순" ? "rating" : "createdAt";
+    return activeSort === "평점" ? "rating" : "createdAt";
   }
 
   /**
