@@ -58,13 +58,15 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         >
           {category.name}
         </Typography>
-        <Typography
-          variant="subtitle"
-          color={category.active ? "$textOnPrimary" : "$textMuted"}
-          pointerEvents="none"
-        >
-          {category.count}
-        </Typography>
+        {category.count > 0 && (
+          <Typography
+            variant="subtitle"
+            color={category.active ? "$textOnPrimary" : "$textMuted"}
+            pointerEvents="none"
+          >
+            {category.count}
+          </Typography>
+        )}
       </XStack>
     </Pressable>
   );
