@@ -16,6 +16,8 @@ export const api = ky.create({
   headers: {
     "Content-Type": "application/json",
   },
+  retry: 0,
+  signal: undefined,
   hooks: {
     beforeRequest: [
       async (request) => {
