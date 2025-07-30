@@ -58,9 +58,10 @@ export const SortButton = ({ option, onPress }: SortButtonProps) => {
             height={2}
             backgroundColor="$textPrimary"
             position="absolute"
-            bottom={-2}
+            bottom={0}
             left={0}
             right={0}
+            borderRadius="$1"
           />
         )}
       </YStack>
