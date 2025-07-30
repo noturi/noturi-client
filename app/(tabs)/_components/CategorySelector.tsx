@@ -25,7 +25,7 @@ export const CategorySelector = ({
           {categories.map((category) => (
             <Button
               key={category.id}
-              size="$3"
+              size="$2"
               backgroundColor={
                 selectedCategory === category.name
                   ? "$textPrimary"
@@ -43,6 +43,8 @@ export const CategorySelector = ({
                   : "$textPrimary"
               }
               borderRadius="$4"
+              fontSize="$3"
+              paddingHorizontal="$3"
               pressStyle={{
                 backgroundColor:
                   selectedCategory === category.name
@@ -55,13 +57,15 @@ export const CategorySelector = ({
             </Button>
           ))}
           <Button
-            size="$3"
+            size="$2"
             backgroundColor="$backgroundPrimary"
             borderWidth={1}
             borderColor="$border"
             borderStyle="dashed"
             color="$textSecondary"
             borderRadius="$4"
+            fontSize="$3"
+            paddingHorizontal="$3"
             pressStyle={{ backgroundColor: "$surfaceHover" }}
             onPress={() => onSelectCategory("")}
           >
