@@ -8,11 +8,11 @@ import {
   Search,
   Settings,
 } from "@tamagui/lucide-icons";
-import { MemoCreateSheet } from "./_components";
 import { Redirect, Tabs, router } from "expo-router";
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { XStack } from "tamagui";
+import { MemoCreateSheet } from "./_components";
 
 export default function TabsLayout() {
   const { isAuthenticated, isInitialLoading } = useAuth();
@@ -25,7 +25,6 @@ export default function TabsLayout() {
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/login" />;
   }
-
 
   return (
     <>
@@ -57,7 +56,7 @@ export default function TabsLayout() {
           name="index"
           options={{
             title: "",
-            tabBarIcon: ({ color }) => <Home size={22} color={color as any} />,
+            tabBarIcon: ({ color }) => <Home size={20} />,
             headerRight: () => (
               <XStack paddingRight="$3">
                 <Pressable
@@ -75,9 +74,7 @@ export default function TabsLayout() {
           name="threads"
           options={{
             title: "메모 추가",
-            tabBarIcon: ({ color }) => (
-              <MessageSquare size={22} color={color as any} />
-            ),
+            tabBarIcon: ({ color }) => <MessageSquare size={20} />,
           }}
         />
 
@@ -85,7 +82,7 @@ export default function TabsLayout() {
           name="create"
           options={{
             title: "",
-            tabBarIcon: ({ color }) => <Plus size={22} color={color as any} />,
+            tabBarIcon: ({ color }) => <Plus size={20} />,
             headerShown: false,
           }}
           listeners={({ navigation }) => ({
@@ -100,9 +97,7 @@ export default function TabsLayout() {
           name="profile"
           options={{
             title: "프로필",
-            tabBarIcon: ({ color }) => (
-              <BarChart3 size={22} color={color as any} />
-            ),
+            tabBarIcon: ({ color }) => <BarChart3 size={20} />,
             headerRight: () => (
               <Pressable
                 onPress={() => router.push("/profile")}
@@ -115,9 +110,9 @@ export default function TabsLayout() {
         />
       </Tabs>
 
-      <MemoCreateSheet 
-        isOpen={isSheetOpen} 
-        onClose={() => setIsSheetOpen(false)} 
+      <MemoCreateSheet
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
       />
     </>
   );
