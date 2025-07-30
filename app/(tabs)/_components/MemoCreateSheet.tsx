@@ -1,6 +1,6 @@
 import { Typography } from "@/components/ui";
 import { activeCategoriesQuery } from "@/services/category";
-import { useCreateMemoMutation } from "@/services/memo";
+import { memoService } from "@/services/memo/memoService";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Platform } from "react-native";
@@ -10,7 +10,6 @@ import { MEMO_ALERTS } from "./constants";
 import { useMemoForm } from "./hooks/useMemoForm";
 import { MemoFormHeader } from "./MemoFormHeader";
 import { RatingSelector } from "./RatingSelector";
-import { validateMemoForm } from "./utils/memoValidation";
 
 interface MemoCreateSheetProps {
   isOpen: boolean;
@@ -50,32 +49,47 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     };
   }, []);
 
-  const createMemoMutation = useCreateMemoMutation({
-    onSuccess: (newMemo) => {
-      resetForm();
-      onClose();
-      Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
-    },
-  });
+  const [isCreating, setIsCreating] = useState(false);
 
-  const isDisabled =
-    !formData.memoContent.trim() || createMemoMutation.isPending;
+  const isDisabled = !formData.memoContent.trim() || isCreating;
 
-  const handleSaveMemo = () => {
-    const { memoContent, rating, description } = formData;
+  const handleSaveMemo = async () => {
+    const { memoContent, selectedCategory, rating, description } = formData;
 
-    const validation = validateMemoForm(formData, categories);
-    if (!validation.isValid) {
+    // 카테고리 ID 찾기
+    let categoryId: string;
+    if (selectedCategory) {
+      const selectedCat = categories.find((cat) => cat.name === selectedCategory);
+      if (!selectedCat) {
+        Alert.alert("오류", "선택된 카테고리를 찾을 수 없습니다.");
+        return;
+      }
+      categoryId = selectedCat.id;
+    } else {
+      Alert.alert("알림", "카테고리를 선택해주세요.");
       return;
     }
 
-    createMemoMutation.mutate({
-      title: memoContent.split("\n")[0].substring(0, 50) || "제목 없음",
-      content: memoContent,
-      categoryId: validation.categoryId!,
-      rating,
-      description,
-    });
+    setIsCreating(true);
+    try {
+      // 서비스의 검증 포함 생성 메서드 사용
+      await memoService.createMemoWithValidation({
+        title: memoContent.split("\n")[0].substring(0, 50) || "제목 없음",
+        content: memoContent,
+        categoryId,
+        rating,
+        description,
+      });
+
+      resetForm();
+      onClose();
+      Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
+    } catch (error: any) {
+      // 에러는 이미 글로벌 핸들러에서 처리되지만, 특별한 경우 추가 처리 가능
+      console.error("메모 생성 실패:", error);
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   return (
@@ -184,7 +198,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           onPress={handleSaveMemo}
           disabled={isDisabled}
           icon={
-            createMemoMutation.isPending ? (
+            isCreating ? (
               <Spinner
                 size="small"
                 color={isDisabled ? "$textMuted" : "$textOnAccent"}
@@ -193,7 +207,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           }
           animation="quick"
         >
-          {!createMemoMutation.isPending && "등록"}
+          {!isCreating && "등록"}
         </Button>
       </Sheet.Frame>
     </Sheet>
