@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, infiniteQueryOptions } from "@tanstack/react-query";
 import { memoApi } from "./apis";
 import { MemoListParamsDto } from "./types";
 
@@ -7,6 +7,21 @@ export const memoListQuery = (params: MemoListParamsDto = {}) =>
   queryOptions({
     queryKey: ["memos", params],
     queryFn: () => memoApi.getMemos(params),
+    staleTime: 1000 * 60, // 1분
+    gcTime: 1000 * 60 * 5, // 5분
+  });
+
+// 무한스크롤용 메모 목록 쿼리
+export const infiniteMemoListQuery = (params: Omit<MemoListParamsDto, 'page'> = {}) =>
+  infiniteQueryOptions({
+    queryKey: ["memos", "infinite", params],
+    queryFn: ({ pageParam = 1 }) => 
+      memoApi.getMemos({ ...params, page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const { page, totalPages } = lastPage.meta;
+      return page < totalPages ? page + 1 : undefined;
+    },
     staleTime: 1000 * 60, // 1분
     gcTime: 1000 * 60 * 5, // 5분
   });
