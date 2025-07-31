@@ -4,10 +4,10 @@ import { useAuth } from "@/context/auth";
 import {
   BarChart3,
   Home,
-  MessageSquare,
   Plus,
   Search,
   Settings,
+  User,
 } from "@tamagui/lucide-icons";
 import { Redirect, Tabs, router } from "expo-router";
 import { useState } from "react";
@@ -43,11 +43,11 @@ export default function TabsLayout() {
           headerTitleAlign: "left",
           tabBarShowLabel: false,
           tabBarStyle: {
-            height: 60,
-            paddingBottom: 8,
+            height: 80,
+            paddingBottom: 10,
             paddingTop: 8,
           },
-          tabBarActiveTintColor: "#0066CC",
+          tabBarActiveTintColor: "#000000",
           tabBarInactiveTintColor: "#6B7280",
         }}
       >
@@ -56,7 +56,7 @@ export default function TabsLayout() {
           name="index"
           options={{
             title: "",
-            tabBarIcon: ({ color }) => <Home size={20} />,
+            tabBarIcon: ({ color }) => <Home size={20} color={color as any} />,
             headerRight: () => (
               <XStack paddingRight="$3">
                 <Pressable
@@ -70,19 +70,12 @@ export default function TabsLayout() {
           }}
         />
 
-        <Tabs.Screen
-          name="threads"
-          options={{
-            title: "메모 추가",
-            tabBarIcon: ({ color }) => <MessageSquare size={20} />,
-          }}
-        />
 
         <Tabs.Screen
           name="create"
           options={{
             title: "",
-            tabBarIcon: ({ color }) => <Plus size={20} />,
+            tabBarIcon: ({ color }) => <Plus size={20} color={color as any} />,
             headerShown: false,
           }}
           listeners={({ navigation }) => ({
@@ -94,10 +87,20 @@ export default function TabsLayout() {
         />
 
         <Tabs.Screen
+          name="stats"
+          options={{
+            title: "통계",
+            tabBarIcon: ({ color }) => (
+              <BarChart3 size={20} color={color as any} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
           name="profile"
           options={{
             title: "프로필",
-            tabBarIcon: ({ color }) => <BarChart3 size={20} />,
+            tabBarIcon: ({ color }) => <User size={20} color={color as any} />,
             headerRight: () => (
               <Pressable
                 onPress={() => router.push("/profile")}
