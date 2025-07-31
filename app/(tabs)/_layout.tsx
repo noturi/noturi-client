@@ -1,3 +1,4 @@
+import { MemoCreateSheet } from "@/components/memo";
 import { Loading } from "@/components/ui";
 import { useAuth } from "@/context/auth";
 import {
@@ -12,7 +13,6 @@ import { Redirect, Tabs, router } from "expo-router";
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { XStack } from "tamagui";
-import { MemoCreateSheet } from "./_components";
 
 export default function TabsLayout() {
   const { isAuthenticated, isInitialLoading } = useAuth();

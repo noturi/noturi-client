@@ -11,7 +11,8 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { ScrollView, Separator, XStack, YStack } from "tamagui";
-import { CategoryButton, MemoItem, SortButton } from "./_components";
+import { CategoryButton, SortButton } from "@/components/category";
+import { MemoItem } from "@/components/memo";
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
