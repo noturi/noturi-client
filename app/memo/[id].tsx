@@ -1,7 +1,7 @@
 import { Typography } from "@/components/ui";
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, XStack, YStack } from "tamagui";
-import { StarRating } from "../(tabs)/_components/StarRating";
+import { StarRating } from "@/components/memo/StarRating";
 
 // 임시 데이터 - 실제로는 API나 상태 관리에서 가져와야 함
 const memoData = {

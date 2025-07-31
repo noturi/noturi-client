@@ -2,7 +2,7 @@ import { Typography } from "@/components/ui";
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { XStack, YStack } from "tamagui";
-import { SortOption } from "./types";
+import type { SortOption } from "@/lib/category/types";
 
 interface SortButtonProps {
   option: SortOption;

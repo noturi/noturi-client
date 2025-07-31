@@ -17,9 +17,9 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { CategoryButton } from "./CategoryButton";
-import { MEMO_ALERTS } from "./constants";
-import { useMemoForm } from "./hooks/useMemoForm";
+import { CategoryButton } from "@/components/category";
+import { MEMO_ALERTS } from "@/constants/memo";
+import { useMemoForm } from "@/lib/memo/hooks/useMemoForm";
 import { MemoFormHeader } from "./MemoFormHeader";
 import { RatingSelector } from "./RatingSelector";
 

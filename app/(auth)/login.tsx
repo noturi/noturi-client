@@ -1,4 +1,4 @@
-import { GoogleButton } from "@/components/GoogleButton";
+import { GoogleButton } from "@/components/ui/GoogleButton";
 import { Typography } from "@/components/ui/Typography";
 import { YStack } from "tamagui";
 
