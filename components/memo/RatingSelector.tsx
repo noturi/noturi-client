@@ -1,7 +1,7 @@
 import { Typography } from "@/components/ui";
 import { Star } from "@tamagui/lucide-icons";
 import { Pressable } from "react-native";
-import { XStack, YStack } from "tamagui";
+import { XStack } from "tamagui";
 
 interface RatingSelectorProps {
   rating: number;
@@ -81,14 +81,11 @@ export const RatingSelector = ({
   };
 
   return (
-    <YStack gap="$3">
-      <Typography variant="title">평점</Typography>
-      <XStack alignItems="center" gap="$2">
-        <XStack gap="$1">{renderStars()}</XStack>
-        <Typography variant="small" color="$textMuted">
-          {rating > 0 ? `${rating} / 5` : "평점을 선택하세요"}
-        </Typography>
-      </XStack>
-    </YStack>
+    <XStack alignItems="center" gap="$2">
+      <XStack gap="$1">{renderStars()}</XStack>
+      <Typography variant="small" color="$textMuted">
+        {rating > 0 ? `${rating} / 5` : "평점을 선택하세요"}
+      </Typography>
+    </XStack>
   );
 };
