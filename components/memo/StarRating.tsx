@@ -6,33 +6,40 @@ interface StarRatingProps {
   rating: number;
 }
 
-const getStarColorKey = (rating: number) => {
-  // 일의 자리 숫자에 따라 전용 별점 색상 사용
-  const integerPart = Math.floor(rating);
-  switch (integerPart) {
-    case 0: return "rating0"; // 0점대: 빨강 (최악)
-    case 1: return "rating1"; // 1점대: 주황 (나쁨)
-    case 2: return "rating2"; // 2점대: 노랑 (부족함)
-    case 3: return "rating3"; // 3점대: 연두 (보통)
-    case 4: return "rating4"; // 4점대: 초록 (좋음)
-    case 5: return "rating5"; // 5점대: 파랑 (최고)
-    default: return "textMuted";
-  }
+const RATING_CONFIG = {
+  0: { colorKey: "textMuted", bgColor: "$rating0Background" }, // 회색 (평가 안함)
+  1: { colorKey: "rating1", bgColor: "$rating1Background" }, // 주황 (나쁨)
+  2: { colorKey: "rating2", bgColor: "$rating2Background" }, // 노랑 (부족함)
+  3: { colorKey: "rating3", bgColor: "$rating3Background" }, // 연두 (보통)
+  4: { colorKey: "rating4", bgColor: "$rating4Background" }, // 초록 (좋음)
+  5: { colorKey: "rating5", bgColor: "$rating5Background" }, // 파랑 (최고)
+} as const;
+
+const getRatingConfig = (rating: number) => {
+  const integerPart = Math.floor(rating) as keyof typeof RATING_CONFIG;
+  return RATING_CONFIG[integerPart] || RATING_CONFIG[0];
 };
 
 export const StarRating = ({ rating }: StarRatingProps) => {
   const theme = useTheme();
-  const colorKey = getStarColorKey(rating);
-  const starColor = theme[colorKey as keyof typeof theme]?.get();
+  const config = getRatingConfig(rating);
+  const starColor = theme[config.colorKey as keyof typeof theme]?.get();
 
   return (
-    <XStack alignItems="center" space="$1">
+    <XStack 
+      alignItems="center" 
+      gap="$1"
+      backgroundColor={config.bgColor}
+      paddingHorizontal="$2"
+      paddingVertical="$1"
+      borderRadius="$3"
+    >
       <Star
         size={16}
         color={starColor}
-        fill={rating > 0 ? starColor : "transparent"}
+        fill={starColor}
       />
-      <Typography variant="small" color={`$${colorKey}`} fontWeight="$4">
+      <Typography variant="small" color={`$${config.colorKey}`} fontWeight="$4">
         {rating.toFixed(1)}
       </Typography>
     </XStack>
