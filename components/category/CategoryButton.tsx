@@ -20,7 +20,7 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
       hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
       style={({ pressed }) => ({
         transform: [{ scale: pressed ? 0.96 : 1 }],
-        opacity: pressed ? 0.8 : 1,
+        opacity: pressed ? 0.95 : 1,
       })}
     >
       <XStack
