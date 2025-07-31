@@ -23,7 +23,7 @@ export const infiniteMemoListQuery = (params: Omit<MemoListParamsDto, 'page'> = 
   });
 
 // 특정 메모 쿼리
-export const memoDetailQuery = (id: number) =>
+export const memoDetailQuery = (id: string) =>
   queryOptions({
     queryKey: ["memo", id],
     queryFn: () => memoApi.getMemo(id),

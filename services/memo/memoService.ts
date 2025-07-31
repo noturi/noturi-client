@@ -81,7 +81,7 @@ export class MemoService {
    * 메모 삭제 전 확인
    */
   async deleteMemoWithConfirmation(
-    id: number,
+    id: string,
     skipConfirmation: boolean = false
   ): Promise<void> {
     if (!skipConfirmation) {

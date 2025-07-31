@@ -106,7 +106,7 @@ export function useUpdateMemoMutation(
 // 메모 삭제 뮤테이션
 export function useDeleteMemoMutation(
   options: Pick<
-    UseMutationOptions<void, DefaultError, number>,
+    UseMutationOptions<void, DefaultError, string>,
     "mutationKey" | "onMutate" | "onSuccess" | "onError" | "onSettled"
   > = {}
 ) {
@@ -115,7 +115,7 @@ export function useDeleteMemoMutation(
 
   return useMutation({
     mutationKey: ["memo", "delete", ...mutationKey],
-    mutationFn: (id: number) => memoApi.deleteMemo(id),
+    mutationFn: (id: string) => memoApi.deleteMemo(id),
     onMutate,
     onSuccess: async (_, deletedId, context) => {
       // 삭제된 메모의 캐시 제거

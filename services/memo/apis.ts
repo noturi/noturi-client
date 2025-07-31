@@ -48,7 +48,7 @@ export class MemoApi {
   }
 
   // 특정 메모 조회
-  async getMemo(id: number): Promise<Memo> {
+  async getMemo(id: string): Promise<Memo> {
     try {
       const response = await this.api.get(`memos/${id}`);
       return response.json<Memo>();
@@ -86,7 +86,7 @@ export class MemoApi {
   }
 
   // 메모 삭제
-  async deleteMemo(id: number): Promise<void> {
+  async deleteMemo(id: string): Promise<void> {
     try {
       await this.api.delete(`memos/${id}`);
     } catch (error) {
