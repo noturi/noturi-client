@@ -1,4 +1,4 @@
-import type { SortOption } from "@/app/(tabs)/_components/types";
+import type { SortOption } from "@/lib/category/types";
 
 export const INITIAL_SORT_OPTIONS: SortOption[] = [
   { name: "최신", active: true },
