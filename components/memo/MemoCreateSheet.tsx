@@ -1,4 +1,7 @@
+import { CategoryButton } from "@/components/category";
 import { Typography } from "@/components/ui";
+import { MEMO_ALERTS } from "@/constants/memo";
+import { useMemoForm } from "@/lib/memo/hooks/useMemoForm";
 import {
   activeCategoriesQuery,
   useCreateCategoryMutation,
@@ -7,19 +10,7 @@ import { useCreateMemoMutation } from "@/services/memo";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Platform } from "react-native";
-import {
-  Button,
-  Input,
-  ScrollView,
-  Sheet,
-  Spinner,
-  TextArea,
-  XStack,
-  YStack,
-} from "tamagui";
-import { CategoryButton } from "@/components/category";
-import { MEMO_ALERTS } from "@/constants/memo";
-import { useMemoForm } from "@/lib/memo/hooks/useMemoForm";
+import { Button, ScrollView, Sheet, TextArea, XStack, YStack } from "tamagui";
 import { MemoFormHeader } from "./MemoFormHeader";
 import { RatingSelector } from "./RatingSelector";
 
@@ -54,7 +45,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     onSuccess: () => {
       resetForm();
       onClose();
-      Alert.alert(MEMO_ALERTS.SUCCESS.title, MEMO_ALERTS.SUCCESS.message);
+      Alert.alert("성공", MEMO_ALERTS.CREATE_SUCCESS);
     },
     onError: (error: any) => {
       console.error("메모 생성 실패:", error);
@@ -87,7 +78,8 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   }, []);
 
   const isDisabled =
-    (!formData.title.trim() && !formData.memoContent.trim()) || createMemoMutation.isPending;
+    (!formData.title.trim() && !formData.memoContent.trim()) ||
+    createMemoMutation.isPending;
 
   const handleSaveMemo = async () => {
     const { title, memoContent, selectedCategory, rating } = formData;
@@ -177,41 +169,43 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
               paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 20,
             }}
           >
-            <YStack padding="$5" gap="$6">
+            <YStack padding="$5" gap="$4">
               <YStack gap="$2">
                 <Typography variant="title">제목</Typography>
                 <TextArea
                   placeholder="제목을 입력하세요"
                   value={formData.title}
                   onChangeText={(text) => updateField("title", text)}
-                  backgroundColor="$backgroundPrimary"
-                  borderWidth={1}
-                  borderColor="$border"
-                  borderRadius="$4"
+                  backgroundColor="$backgroundSecondary"
+                  borderWidth={0}
+                  borderRadius="$6"
                   fontSize="$4"
                   color="$textPrimary"
                   placeholderTextColor="$textMuted"
-                  padding="$2"
+                  padding="$3"
+                  maxHeight={48}
+                  multiline={false}
                 />
               </YStack>
               {/* Content Input */}
-              <YStack gap="$3">
+              <YStack gap="$2">
                 <Typography variant="title">내용</Typography>
                 <TextArea
                   placeholder="무엇을 기록하고 싶나요?"
                   value={formData.memoContent}
                   onChangeText={(text) => updateField("memoContent", text)}
                   minHeight={120}
-                  backgroundColor="$backgroundTransparent"
+                  backgroundColor="$backgroundSecondary"
                   borderWidth={0}
+                  borderRadius="$6"
                   fontSize="$4"
                   color="$textPrimary"
                   placeholderTextColor="$textMuted"
                   multiline
-                  padding="$0"
+                  padding="$3"
                 />
               </YStack>
-              <YStack gap="$3">
+              <YStack gap="$2">
                 <Typography variant="title">카테고리</Typography>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <XStack gap="$2">
@@ -235,8 +229,6 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
                         color="$textSecondary"
                         borderRadius="$5"
                         fontSize="$3"
-                        paddingHorizontal="$3"
-                        paddingVertical="$2"
                         minHeight={40}
                         minWidth={60}
                         pressStyle={{ backgroundColor: "$surfaceHover" }}
@@ -249,59 +241,63 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
                 </ScrollView>
 
                 {showAddCategory && (
-                  <XStack gap="$2" alignItems="center">
-                    <Input
+                  <XStack gap="$4" alignItems="center">
+                    <TextArea
                       flex={1}
                       placeholder="새 카테고리 이름"
                       value={newCategoryName}
                       onChangeText={setNewCategoryName}
-                      backgroundColor="$surface"
-                      borderWidth={1}
-                      borderColor="$border"
-                      borderRadius="$4"
+                      backgroundColor="$backgroundSecondary"
+                      borderWidth={0}
+                      borderRadius="$6"
                       fontSize="$4"
                       color="$textPrimary"
                       placeholderTextColor="$textMuted"
-                      paddingHorizontal="$3"
-                      paddingVertical="$3"
+                      padding="$3"
                       maxLength={20}
+                      maxHeight={48}
+                      multiline={false}
                     />
-                    <Button
-                      size="$3"
-                      height={48}
-                      backgroundColor="$accent"
-                      color="$textOnAccent"
-                      onPress={handleAddCategory}
-                      disabled={
-                        !newCategoryName.trim() ||
-                        createCategoryMutation.isPending
-                      }
-                      icon={
-                        createCategoryMutation.isPending ? (
-                          <Spinner size="small" color="$textOnAccent" />
-                        ) : undefined
-                      }
-                    >
-                      추가
-                    </Button>
-                    <Button
-                      size="$3"
-                      height={48}
-                      backgroundColor="$backgroundTransparent"
-                      color="$textSecondary"
-                      borderWidth={1}
-                      borderColor="$border"
-                      onPress={handleCancelAddCategory}
-                    >
-                      취소
-                    </Button>
+                    <XStack gap="$2" alignItems="center">
+                      <Button
+                        backgroundColor="$textPrimary"
+                        color="$textOnPrimary"
+                        borderRadius="$6"
+                        onPress={handleAddCategory}
+                        disabled={
+                          !newCategoryName.trim() ||
+                          createCategoryMutation.isPending
+                        }
+                        minHeight={40}
+                        minWidth={60}
+                        fontSize="$3"
+                      >
+                        추가
+                      </Button>
+                      <Button
+                        backgroundColor="$surface"
+                        color="$textSecondary"
+                        borderWidth={1}
+                        borderRadius="$6"
+                        borderColor="$border"
+                        minHeight={40}
+                        minWidth={60}
+                        fontSize="$3"
+                        onPress={handleCancelAddCategory}
+                      >
+                        취소
+                      </Button>
+                    </XStack>
                   </XStack>
                 )}
               </YStack>
-              <RatingSelector
-                rating={formData.rating}
-                onRatingChange={(rating) => updateField("rating", rating)}
-              />
+              <YStack gap="$2">
+                <Typography variant="title">평점</Typography>
+                <RatingSelector
+                  rating={formData.rating}
+                  onRatingChange={(rating) => updateField("rating", rating)}
+                />
+              </YStack>
             </YStack>
           </ScrollView>
         </YStack>
@@ -311,28 +307,19 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           position="absolute"
           bottom={keyboardHeight > 0 ? keyboardHeight + 50 : 30}
           right={20}
-          width={60}
-          height={40}
-          backgroundColor={isDisabled ? "$surfaceDisabled" : "$accent"}
+          size="$5"
+          backgroundColor={isDisabled ? "$surfaceDisabled" : "$primary"}
           color={isDisabled ? "$textMuted" : "$textOnAccent"}
           borderRadius="$6"
           pressStyle={{
-            backgroundColor: isDisabled ? "$surfaceDisabled" : "$accentHover",
+            backgroundColor: isDisabled ? "$surfaceDisabled" : "$primaryHover",
             scale: 0.95,
           }}
           onPress={handleSaveMemo}
           disabled={isDisabled}
-          icon={
-            createMemoMutation.isPending ? (
-              <Spinner
-                size="small"
-                color={isDisabled ? "$textMuted" : "$textOnAccent"}
-              />
-            ) : undefined
-          }
           animation="quick"
         >
-          {!createMemoMutation.isPending && "등록"}
+          {createMemoMutation.isPending ? "등록중..." : "등록"}
         </Button>
       </Sheet.Frame>
     </Sheet>
