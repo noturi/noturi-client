@@ -97,10 +97,9 @@ const themes = createThemes({
         ...lightShadows,
         shadowColor: lightShadows.shadow1,
 
-        // 시맨틱 토큰 (실제 사용할 토큰들)
-        primary: "#1f2937",
-        primaryHover: "#374151",
-        primaryActive: "#111827",
+        primary: "#000000",
+        primaryHover: "#1e1e1e",
+        primaryActive: "#121212",
 
         secondary: "#6b7280",
         secondaryHover: "#4b5563",
@@ -135,12 +134,20 @@ const themes = createThemes({
         rating4: "#22c55e", // 4점대: 초록 (좋음)
         rating5: "#3b82f6", // 5점대: 파랑 (최고)
 
+        // 별점 배경색 토큰
+        rating0Background: "#f3f4f6", // 0점대: 연한 회색
+        rating1Background: "#fef3c7", // 1점대: 연한 주황
+        rating2Background: "#fef3c7", // 2점대: 연한 노랑
+        rating3Background: "#d1fae5", // 3점대: 연한 연두
+        rating4Background: "#d1fae5", // 4점대: 연한 초록
+        rating5Background: "#dbeafe", // 5점대: 연한 파랑
+
         surface: "#ffffff",
         surfaceHover: "#f9fafb",
         surfaceActive: "#f3f4f6",
         surfaceDisabled: "#f3f4f6",
 
-        textPrimary: "#111827",
+        textPrimary: "#212121",
         textSecondary: "#6b7280",
         textMuted: "#9ca3af",
         textDisabled: "#d1d5db",
@@ -207,6 +214,14 @@ const themes = createThemes({
         rating3: "#a3e635", // 3점대: 밝은 연두 (보통)
         rating4: "#4ade80", // 4점대: 밝은 초록 (좋음)
         rating5: "#60a5fa", // 5점대: 밝은 파랑 (최고)
+
+        // 별점 배경색 토큰 (다크모드)
+        rating0Background: "#374151", // 0점대: 어두운 회색
+        rating1Background: "#451a03", // 1점대: 어두운 주황
+        rating2Background: "#451a03", // 2점대: 어두운 노랑
+        rating3Background: "#14532d", // 3점대: 어두운 연두
+        rating4Background: "#14532d", // 4점대: 어두운 초록
+        rating5Background: "#1e3a8a", // 5점대: 어두운 파랑
 
         surface: "#1f2937",
         surfaceHover: "#374151",
