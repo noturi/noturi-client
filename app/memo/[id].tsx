@@ -1,84 +1,77 @@
 import { Typography } from "@/components/ui";
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, XStack, YStack } from "tamagui";
 import { StarRating } from "@/components/memo/StarRating";
-
-// 임시 데이터 - 실제로는 API나 상태 관리에서 가져와야 함
-const memoData = {
-  1: {
-    id: 1,
-    title: "오늘의 할 일",
-    category: "일상",
-    content:
-      "장보기, 운동하기, 책 읽기. 특히 운동은 꼭 해야겠다. 요즘 너무 앉아만 있어서 몸이 무거워지는 느낌이다. 내일부터는 아침에 30분씩이라도 산책을 하려고 한다.",
-    rating: 3,
-    timeAgo: "2시간 전",
-    createdAt: "2024-01-15 14:30",
-  },
-  2: {
-    id: 2,
-    title: "노투리 앱 개발 아이디어",
-    category: "업무",
-    content:
-      "React Native + Expo로 메모앱 만들기. 백엔드는 Node.js + Prisma 사용. 디자인은 심플하지만 깔끔하게 가고 싶다. 타마구이를 사용해서 일관된 디자인 시스템을 구축하자.",
-    rating: 5,
-    timeAgo: "6시간 전",
-    createdAt: "2024-01-15 10:15",
-  },
-  3: {
-    id: 3,
-    title: "독서 노트 - 클린 코드",
-    category: "독서",
-    content:
-      "함수는 한 가지 일만 해야 한다. 네이밍은 의도를 명확히 드러내야 한다. 주석보다는 코드로 설명하자. 가독성이 좋은 코드가 유지보수하기 쉬운 코드다.",
-    rating: 4,
-    timeAgo: "1일 전",
-    createdAt: "2024-01-14 20:45",
-  },
-  4: {
-    id: 4,
-    title: "부산 여행 계획",
-    category: "여행",
-    content:
-      "광안리 해변, 해운대, 감천문화마을 방문 예정. 돼지국밥과 밀면은 꼭 먹어봐야겠다. 자갈치시장도 가서 회도 먹어보자.",
-    rating: 4,
-    timeAgo: "3일 전",
-    createdAt: "2024-01-12 16:20",
-  },
-};
+import { memoDetailQuery } from "@/services/memo/queries";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import { ScrollView, Spinner, XStack, YStack } from "tamagui";
 
 export default function MemoDetailScreen() {
   const { id } = useLocalSearchParams();
-  const memoId = parseInt(id as string);
-  const memo = memoData[memoId as keyof typeof memoData];
+  const memoId = id as string;
+  
+  const { data: memo, isLoading, error } = useQuery(memoDetailQuery(memoId));
 
-  if (!memo) {
+  if (isLoading) {
     return (
       <YStack flex={1} justifyContent="center" alignItems="center" backgroundColor="$backgroundPrimary">
-        <Typography variant="title" color="$textPrimary">
-          메모를 찾을 수 없습니다
+        <Spinner size="large" color="$accent" />
+        <Typography variant="body" color="$textMuted" marginTop="$3">
+          메모를 불러오는 중...
         </Typography>
       </YStack>
     );
   }
 
+  if (error || !memo) {
+    return (
+      <YStack flex={1} justifyContent="center" alignItems="center" backgroundColor="$backgroundPrimary">
+        <Typography variant="title" color="$textPrimary">
+          메모를 찾을 수 없습니다
+        </Typography>
+        <Typography variant="body" color="$textMuted" marginTop="$2">
+          {error?.message || "요청한 메모가 존재하지 않습니다"}
+        </Typography>
+      </YStack>
+    );
+  }
+
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   return (
     <YStack flex={1} backgroundColor="$backgroundPrimary">
-      <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
         <YStack padding="$4" gap="$4">
           {/* 헤더 정보 */}
-          <YStack gap="$2">
+          <YStack gap="$3">
             <XStack justifyContent="space-between" alignItems="flex-start">
               <XStack alignItems="center" gap="$2" flex={1}>
-                <Typography
-                  variant="caption"
-                  color="$textPrimary"
-                  fontWeight="$3"
+                <YStack
+                  backgroundColor={memo.category.color}
+                  paddingHorizontal="$2"
+                  paddingVertical="$1"
+                  borderRadius="$3"
                 >
-                  #{memo.category}
-                </Typography>
+                  <Typography
+                    variant="caption"
+                    color="white"
+                    fontWeight="$4"
+                    fontSize="$2"
+                  >
+                    {memo.category.name}
+                  </Typography>
+                </YStack>
                 <Typography variant="caption" color="$textMuted">
-                  {memo.timeAgo}
+                  {formatDate(memo.createdAt)}
                 </Typography>
               </XStack>
               <StarRating rating={memo.rating} />
@@ -87,7 +80,6 @@ export default function MemoDetailScreen() {
             <Typography
               variant="heading"
               color="$textPrimary"
-              fontWeight="$6"
               lineHeight="$2"
             >
               {memo.title}
@@ -95,10 +87,10 @@ export default function MemoDetailScreen() {
           </YStack>
 
           {/* 메모 내용 */}
-          <YStack gap="$3">
+          <YStack gap="$3" marginTop="$2">
             <Typography
               variant="body"
-              color="$textSecondary"
+              color="$textPrimary"
               lineHeight="$4"
               fontSize="$4"
             >
@@ -107,10 +99,39 @@ export default function MemoDetailScreen() {
           </YStack>
 
           {/* 메타 정보 */}
-          <YStack gap="$2" paddingTop="$4" borderTopWidth={1} borderTopColor="$border">
-            <Typography variant="caption" color="$textMuted">
-              작성일: {memo.createdAt}
-            </Typography>
+          <YStack gap="$3" paddingTop="$4" borderTopWidth={1} borderTopColor="$border" marginTop="$4">
+            <XStack justifyContent="space-between">
+              <YStack gap="$1">
+                <Typography variant="caption" color="$textMuted">
+                  작성일
+                </Typography>
+                <Typography variant="small" color="$textSecondary">
+                  {formatDate(memo.createdAt)}
+                </Typography>
+              </YStack>
+              
+              {memo.experienceDate && (
+                <YStack gap="$1" alignItems="flex-end">
+                  <Typography variant="caption" color="$textMuted">
+                    경험일
+                  </Typography>
+                  <Typography variant="small" color="$textSecondary">
+                    {new Date(memo.experienceDate).toLocaleDateString('ko-KR')}
+                  </Typography>
+                </YStack>
+              )}
+            </XStack>
+            
+            {memo.updatedAt !== memo.createdAt && (
+              <YStack gap="$1">
+                <Typography variant="caption" color="$textMuted">
+                  수정일
+                </Typography>
+                <Typography variant="small" color="$textSecondary">
+                  {formatDate(memo.updatedAt)}
+                </Typography>
+              </YStack>
+            )}
           </YStack>
         </YStack>
       </ScrollView>
