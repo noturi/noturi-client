@@ -29,17 +29,29 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
       marginBottom="$2"
     >
       <YStack flex={1}>
-        <XStack alignItems="center" space="$2" marginBottom="$1">
+        <XStack alignItems="center" gap="$2" marginBottom="$2">
+          <YStack
+            backgroundColor={memo.category.color as any}
+            paddingHorizontal="$2"
+            paddingVertical="$1"
+            borderRadius="$3"
+          >
+            <Typography
+              variant="caption"
+              color="white"
+              fontWeight="$4"
+              fontSize="$2"
+              pointerEvents="none"
+            >
+              {memo.category.name}
+            </Typography>
+          </YStack>
           <Typography
             as="span"
             variant="caption"
-            color="$textPrimary"
-            fontWeight="$3"
+            color="$textMuted"
             pointerEvents="none"
           >
-            #{memo.category}
-          </Typography>
-          <Typography as="span" variant="caption" color="$textMuted" pointerEvents="none">
             {memo.timeAgo}
           </Typography>
         </XStack>
@@ -50,16 +62,24 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
           marginBottom="$2"
           fontWeight="$4"
           pointerEvents="none"
+          numberOfLines={1}
         >
           {memo.title}
         </Typography>
       </YStack>
-      <XStack alignItems="center" space="$2" pointerEvents="none">
+      <XStack alignItems="center" gap="$2" pointerEvents="none">
         <StarRating rating={memo.rating} />
       </XStack>
     </XStack>
 
-    <Typography as="p" variant="body" color="$textSecondary" lineHeight="$1" pointerEvents="none">
+    <Typography
+      as="p"
+      variant="body"
+      color="$textSecondary"
+      lineHeight="$1"
+      pointerEvents="none"
+      numberOfLines={2}
+    >
       {memo.content}
     </Typography>
   </YStack>
