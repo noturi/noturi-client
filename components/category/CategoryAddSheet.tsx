@@ -38,7 +38,7 @@ export const CategoryAddSheet = ({
 
     createCategoryMutation.mutate({
       name: categoryName.trim(),
-      color: "#3b82f6" // 기본 파란색
+      color: "#000000" // 기본 검정색
     });
   };
 
