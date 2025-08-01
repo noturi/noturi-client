@@ -42,7 +42,8 @@ export interface MemoListResponseDto {
 export interface MemoListParamsDto {
   page?: number;
   limit?: number;
-  categoryId?: string; // UUID 형태로 변경
+  categoryId?: string;
+  rating?: number;
   sortBy?: "createdAt" | "rating" | "title";
   sortOrder?: "asc" | "desc";
   search?: string;
