@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D66580AD5E87003D8A9579D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5160F3253F8CDCBEB79D28D8 /* ExpoModulesProvider.swift */; };
+		05964EDE249F53DE38D9ACE0 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40493F7E8C79F1CD511E0C /* ExpoModulesProvider.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		6AC8D44CAF362A7505F3DE4C /* libPods-noturiclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBD43026B47AF3163E28B1C9 /* libPods-noturiclient.a */; };
+		7ADE6C4AF0C23F322E930414 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4967DA4931FCB5DB29953806 /* PrivacyInfo.xcprivacy */; };
+		866C6566EA9826721CD4FF20 /* libPods-noturiclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF73505E661BFD858B135D19 /* libPods-noturiclient.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		E4EC3F1E45D9AC337712CB51 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6D064E19833092A8EFE1E1CA /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -20,16 +20,16 @@
 		13B07F961A680F5B00A75B9A /* noturiclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = noturiclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = noturiclient/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = noturiclient/Info.plist; sourceTree = "<group>"; };
-		5160F3253F8CDCBEB79D28D8 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-noturiclient/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		6D064E19833092A8EFE1E1CA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = noturiclient/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		8A6D3C4E7DECF40F94490C4D /* Pods-noturiclient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-noturiclient.debug.xcconfig"; path = "Target Support Files/Pods-noturiclient/Pods-noturiclient.debug.xcconfig"; sourceTree = "<group>"; };
+		4967DA4931FCB5DB29953806 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = noturiclient/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		85DAAEC04828C072894D0A83 /* Pods-noturiclient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-noturiclient.release.xcconfig"; path = "Target Support Files/Pods-noturiclient/Pods-noturiclient.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = noturiclient/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B88A63A1AAD4C539556BD0F7 /* Pods-noturiclient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-noturiclient.release.xcconfig"; path = "Target Support Files/Pods-noturiclient/Pods-noturiclient.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CBD43026B47AF3163E28B1C9 /* libPods-noturiclient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-noturiclient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D634CDA95CC25958EC981747 /* Pods-noturiclient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-noturiclient.debug.xcconfig"; path = "Target Support Files/Pods-noturiclient/Pods-noturiclient.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EF40493F7E8C79F1CD511E0C /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-noturiclient/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = noturiclient/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* noturiclient-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "noturiclient-Bridging-Header.h"; path = "noturiclient/noturiclient-Bridging-Header.h"; sourceTree = "<group>"; };
+		FF73505E661BFD858B135D19 /* libPods-noturiclient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-noturiclient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6AC8D44CAF362A7505F3DE4C /* libPods-noturiclient.a in Frameworks */,
+				866C6566EA9826721CD4FF20 /* libPods-noturiclient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,41 +53,33 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				6D064E19833092A8EFE1E1CA /* PrivacyInfo.xcprivacy */,
+				4967DA4931FCB5DB29953806 /* PrivacyInfo.xcprivacy */,
 			);
 			name = noturiclient;
+			sourceTree = "<group>";
+		};
+		208A466C1021D1E56240EED6 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				C4AF352CC6EBDCFD2125E674 /* noturiclient */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				CBD43026B47AF3163E28B1C9 /* libPods-noturiclient.a */,
+				FF73505E661BFD858B135D19 /* libPods-noturiclient.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E3C84F42E2A3B3E207988F3 /* noturiclient */ = {
+		3DB381AE7B361B55699F1FA2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5160F3253F8CDCBEB79D28D8 /* ExpoModulesProvider.swift */,
-			);
-			name = noturiclient;
-			sourceTree = "<group>";
-		};
-		606885BDC643F99F62457244 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				3E3C84F42E2A3B3E207988F3 /* noturiclient */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		82AE6B0BDE73689DCB45071A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				8A6D3C4E7DECF40F94490C4D /* Pods-noturiclient.debug.xcconfig */,
-				B88A63A1AAD4C539556BD0F7 /* Pods-noturiclient.release.xcconfig */,
+				D634CDA95CC25958EC981747 /* Pods-noturiclient.debug.xcconfig */,
+				85DAAEC04828C072894D0A83 /* Pods-noturiclient.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -107,8 +99,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				82AE6B0BDE73689DCB45071A /* Pods */,
-				606885BDC643F99F62457244 /* ExpoModulesProviders */,
+				3DB381AE7B361B55699F1FA2 /* Pods */,
+				208A466C1021D1E56240EED6 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -132,6 +124,14 @@
 			path = noturiclient/Supporting;
 			sourceTree = "<group>";
 		};
+		C4AF352CC6EBDCFD2125E674 /* noturiclient */ = {
+			isa = PBXGroup;
+			children = (
+				EF40493F7E8C79F1CD511E0C /* ExpoModulesProvider.swift */,
+			);
+			name = noturiclient;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "noturiclient" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				AE5BA57197B8950102B1BCAF /* [Expo] Configure project */,
+				06130880FD7CB089D719CC4B /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				0D7A2535B7D5E76B67899252 /* [CP] Embed Pods Frameworks */,
+				0DAB82C1F1AD4583A0567BBE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				E4EC3F1E45D9AC337712CB51 /* PrivacyInfo.xcprivacy in Resources */,
+				7ADE6C4AF0C23F322E930414 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +217,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
+		};
+		06130880FD7CB089D719CC4B /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-noturiclient/expo-configure-project.sh\"\n";
 		};
 		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -240,7 +259,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0D7A2535B7D5E76B67899252 /* [CP] Embed Pods Frameworks */ = {
+		0DAB82C1F1AD4583A0567BBE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -277,6 +296,7 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
@@ -297,6 +317,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleUtilities_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FBLPromises_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
@@ -308,25 +329,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-noturiclient/Pods-noturiclient-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AE5BA57197B8950102B1BCAF /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-noturiclient/expo-configure-project.sh\"\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -335,7 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				0D66580AD5E87003D8A9579D /* ExpoModulesProvider.swift in Sources */,
+				05964EDE249F53DE38D9ACE0 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +346,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A6D3C4E7DECF40F94490C4D /* Pods-noturiclient.debug.xcconfig */;
+			baseConfigurationReference = D634CDA95CC25958EC981747 /* Pods-noturiclient.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -380,7 +382,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B88A63A1AAD4C539556BD0F7 /* Pods-noturiclient.release.xcconfig */;
+			baseConfigurationReference = 85DAAEC04828C072894D0A83 /* Pods-noturiclient.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
