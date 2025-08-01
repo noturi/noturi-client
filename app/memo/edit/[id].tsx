@@ -1,6 +1,7 @@
 import { CategoryButton } from "@/components/category";
-import { Typography } from "@/components/ui";
+import { Typography, Loading } from "@/components/ui";
 import { RatingSelector } from "@/components/memo/RatingSelector";
+import { useToast } from "@/hooks";
 import {
   activeCategoriesQuery,
   useCreateCategoryMutation,
@@ -13,7 +14,6 @@ import { Alert, Keyboard, Platform } from "react-native";
 import {
   Button,
   ScrollView,
-  Spinner,
   TextArea,
   XStack,
   YStack,
@@ -22,6 +22,7 @@ import {
 export default function MemoEditScreen() {
   const { id } = useLocalSearchParams();
   const memoId = id as string;
+  const toast = useToast();
 
   const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId));
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -75,7 +76,7 @@ export default function MemoEditScreen() {
       setSelectedCategoryId(newCategory.id);
       setNewCategoryName("");
       setShowAddCategory(false);
-      Alert.alert("성공", "새 카테고리가 생성되었습니다.");
+      toast.showSuccess("새 카테고리가 생성되었습니다.");
     },
     onError: (error: any) => {
       Alert.alert("오류", error.message || "카테고리 생성에 실패했습니다.");
@@ -84,9 +85,8 @@ export default function MemoEditScreen() {
 
   const updateMemoMutation = useUpdateMemoMutation({
     onSuccess: () => {
-      Alert.alert("성공", "메모가 수정되었습니다.", [
-        { text: "확인", onPress: () => router.back() }
-      ]);
+      toast.showSuccess("메모가 수정되었습니다.");
+      router.back();
     },
     onError: (error: any) => {
       Alert.alert("오류", error.message || "메모 수정에 실패했습니다.");
@@ -126,17 +126,14 @@ export default function MemoEditScreen() {
 
     createCategoryMutation.mutate({
       name: newCategoryName.trim(),
-      color: "#3b82f6",
+      color: "#000000",
     });
   };
 
   if (isLoading) {
     return (
-      <YStack flex={1} justifyContent="center" alignItems="center" backgroundColor="$backgroundPrimary">
-        <Spinner size="large" color="$accent" />
-        <Typography variant="body" color="$textMuted" marginTop="$3">
-          메모를 불러오는 중...
-        </Typography>
+      <YStack flex={1} backgroundColor="$backgroundPrimary">
+        <Loading text="메모를 불러오는 중..." />
       </YStack>
     );
   }
