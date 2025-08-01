@@ -26,6 +26,7 @@ export class MemoApi {
       if (params.page) searchParams.append("page", params.page.toString());
       if (params.limit) searchParams.append("limit", params.limit.toString());
       if (params.categoryId) searchParams.append("categoryId", params.categoryId);
+      if (params.rating !== undefined) searchParams.append("rating", params.rating.toString());
       if (params.sortBy) searchParams.append("sortBy", params.sortBy);
       if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
       if (params.search) searchParams.append("search", params.search);
