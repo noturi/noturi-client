@@ -1,6 +1,7 @@
 import { CategoryButton } from "@/components/category";
 import { Typography } from "@/components/ui";
-import { MEMO_ALERTS } from "@/constants/memo";
+import { MESSAGES } from "@/constants/messages";
+import { useToast } from "@/hooks";
 import { useMemoForm } from "@/lib/memo/hooks/useMemoForm";
 import {
   activeCategoriesQuery,
@@ -25,6 +26,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const { formData, updateField, resetForm, handleCategorySelect } =
     useMemoForm();
+  const toast = useToast();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -34,22 +36,22 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
       handleCategorySelect(newCategory.name);
       setNewCategoryName("");
       setShowAddCategory(false);
-      Alert.alert("성공", "새 카테고리가 생성되었습니다.");
+      toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
     },
     onError: (error: any) => {
-      Alert.alert("오류", error.message || "카테고리 생성에 실패했습니다.");
+      Alert.alert("오류", error.message || MESSAGES.CATEGORY.CREATE_ERROR);
     },
   });
 
   const createMemoMutation = useCreateMemoMutation({
     onSuccess: () => {
+      toast.showSuccess(MESSAGES.MEMO.CREATE_SUCCESS);
       resetForm();
       onClose();
-      Alert.alert("성공", MEMO_ALERTS.CREATE_SUCCESS);
     },
     onError: (error: any) => {
       console.error("메모 생성 실패:", error);
-      Alert.alert("오류", error.message || "메모 생성에 실패했습니다.");
+      Alert.alert("오류", error.message || MESSAGES.MEMO.CREATE_ERROR);
     },
   });
 
@@ -126,7 +128,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
 
     createCategoryMutation.mutate({
       name: newCategoryName.trim(),
-      color: "#3b82f6",
+      color: "#000000",
     });
   };
 
