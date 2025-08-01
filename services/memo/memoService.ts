@@ -8,7 +8,11 @@ import { CreateMemoDto, Memo, UpdateMemoDto } from "./types";
 export interface UIMemo {
   id: string; // UUID 형태로 변경
   title: string;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+    color: string;
+  };
   content: string;
   rating: number;
   timeAgo: string;
@@ -142,10 +146,11 @@ export class MemoService {
     return backendMemos.map((memo) => ({
       id: memo.id,
       title: memo.title,
-      category:
-        typeof memo.category === "object"
-          ? memo.category?.name || "기타"
-          : memo.category || "기타",
+      category: memo.category || {
+        id: "default",
+        name: "기타",
+        color: "#6b7280",
+      },
       content: memo.content,
       rating: memo.rating,
       timeAgo: formatTimeAgo(memo.createdAt),
