@@ -25,7 +25,8 @@ export function formatTimeAgo(dateString: string): string {
     return `${diffInDays}일 전`;
   } else {
     return date.toLocaleDateString("ko-KR", {
-      month: "short",
+      year: "numeric",
+      month: "long",
       day: "numeric",
     });
   }
