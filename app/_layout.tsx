@@ -4,7 +4,6 @@ import { TamaguiProvider } from "@tamagui/core";
 import { Check, Edit3 } from "@tamagui/lucide-icons";
 import { PortalProvider } from "@tamagui/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useFonts } from "expo-font";
 import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -34,25 +33,15 @@ export const queryClient = new QueryClient({
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
-
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+    SplashScreen.hideAsync();
+  }, []);
 
   return (
     <TamaguiProvider config={config}>
       <PortalProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
             <Stack
               screenOptions={{
                 headerStyle: {
@@ -89,13 +78,6 @@ export default function RootLayout() {
                 }}
               />
 
-              <Stack.Screen
-                name="settings"
-                options={{
-                  title: "설정",
-                  presentation: "modal",
-                }}
-              />
 
               <Stack.Screen
                 name="memo/[id]"
@@ -120,6 +102,15 @@ export default function RootLayout() {
                 name="memo/edit/[id]"
                 options={{
                   title: "메모 수정",
+                  headerBackTitle: "",
+                  headerBackButtonMenuEnabled: false,
+                }}
+              />
+
+              <Stack.Screen
+                name="search"
+                options={{
+                  title: "검색",
                   headerBackTitle: "",
                   headerBackButtonMenuEnabled: false,
                 }}
