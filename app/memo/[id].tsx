@@ -1,9 +1,9 @@
-import { Typography } from "@/components/ui";
+import { Typography, Loading } from "@/components/ui";
 import { StarRating } from "@/components/memo/StarRating";
 import { memoDetailQuery } from "@/services/memo/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView, Spinner, XStack, YStack } from "tamagui";
+import { ScrollView, XStack, YStack } from "tamagui";
 
 export default function MemoDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -13,11 +13,8 @@ export default function MemoDetailScreen() {
 
   if (isLoading) {
     return (
-      <YStack flex={1} justifyContent="center" alignItems="center" backgroundColor="$backgroundPrimary">
-        <Spinner size="large" color="$accent" />
-        <Typography variant="body" color="$textMuted" marginTop="$3">
-          메모를 불러오는 중...
-        </Typography>
+      <YStack flex={1} backgroundColor="$backgroundPrimary">
+        <Loading text="메모를 불러오는 중..." />
       </YStack>
     );
   }
