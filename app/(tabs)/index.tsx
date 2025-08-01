@@ -1,3 +1,5 @@
+import { CategoryButton, SortButton } from "@/components/category";
+import { MemoItem } from "@/components/memo";
 import { ApiErrorBoundary, Loading, Typography } from "@/components/ui";
 import { INITIAL_SORT_OPTIONS } from "@/constants";
 import { activeCategoriesQuery } from "@/services/category";
@@ -11,8 +13,6 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { ScrollView, Separator, XStack, YStack } from "tamagui";
-import { CategoryButton, SortButton } from "@/components/category";
-import { MemoItem } from "@/components/memo";
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
@@ -39,7 +39,7 @@ export default function HomeScreen() {
 
   const {
     data: memosData,
-    isLoading: memosLoading,
+    isPending: memosPending,
     error: memosError,
     fetchNextPage,
     hasNextPage,
@@ -180,9 +180,9 @@ export default function HomeScreen() {
         <Separator borderColor="$border" />
 
         {/* Memo List */}
-        {memosLoading ? (
+        {memosPending ? (
           <YStack flex={1} alignItems="center" justifyContent="center">
-            <Loading text="메모 로딩 중..." />
+            <Loading />
           </YStack>
         ) : memosError ? (
           <YStack flex={1} alignItems="center" justifyContent="center">
