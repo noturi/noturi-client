@@ -1,6 +1,7 @@
 import { MemoCreateSheet } from "@/components/memo";
 import { Loading } from "@/components/ui";
 import { useAuth } from "@/context/auth";
+import { HREFS } from "@/constants/routes";
 import {
   BarChart3,
   Home,
@@ -60,7 +61,7 @@ export default function TabsLayout() {
             headerRight: () => (
               <XStack paddingRight="$3">
                 <Pressable
-                  onPress={() => router.push("/search")}
+                  onPress={() => router.push(HREFS.search())}
                   style={{ padding: 8 }}
                 >
                   <Search size={20} />
@@ -69,7 +70,6 @@ export default function TabsLayout() {
             ),
           }}
         />
-
 
         <Tabs.Screen
           name="create"
