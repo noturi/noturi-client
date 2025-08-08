@@ -10,6 +10,9 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
+    "lint:fix": "expo lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "jest --watchAll",
     "postinstall": "bash ./scripts/apply-patches.sh"
   },
@@ -63,10 +66,14 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@tamagui/babel-plugin": "^1.132.15",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/react": "~19.0.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "patch-package": "^8.0.0",
+    "prettier": "^3.6.2",
     "tailwindcss": "3",
     "typescript": "~5.8.3"
   },
