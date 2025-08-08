@@ -10,6 +10,7 @@ import { Alert, Platform } from 'react-native';
 
 import { router } from 'expo-router';
 
+import { ROUTES } from '@/constants/routes';
 import { useAuth } from '@/context/auth';
 import { useGoogleLoginMutation } from '@/services/auth';
 
@@ -36,7 +37,7 @@ export function GoogleButton() {
         user: loginResponse.user,
       });
 
-      router.replace('/(tabs)');
+      router.replace(ROUTES.home.path);
     },
     onError: (error) => {
       console.error('Backend error:', error);
