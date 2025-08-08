@@ -1,18 +1,17 @@
-import { ScrollView, Separator, XStack, YStack } from 'tamagui';
+import { Separator, YStack } from 'tamagui';
 
 import { useCallback, useMemo, useState } from 'react';
-import { FlatList } from 'react-native';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { CategoryButton, SortButton } from '@/components/category';
-import { MemoItem } from '@/components/memo';
 import { ApiErrorBoundary, Loading, Typography } from '@/components/ui';
 import { INITIAL_SORT_OPTIONS } from '@/constants';
 import { activeCategoriesQuery } from '@/services/category';
 import { CategoryService, type UICategory } from '@/services/category/categoryService';
 import { infiniteMemoListQuery } from '@/services/memo';
 import { MemoService, type UIMemo } from '@/services/memo/memoService';
+
+import { CategoryFilterBar, MemoListView, SortOptionsBar } from './_components';
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -70,30 +69,9 @@ export default function HomeScreen() {
     );
   };
 
-  const handleLoadMore = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const renderMemoItem = useCallback(
-    ({ item, index }: { item: UIMemo; index: number }) => (
-      <YStack key={item.id}>
-        <MemoItem memo={item} />
-        {index < transformedMemos.length - 1 && <Separator borderColor="$border" />}
-      </YStack>
-    ),
-    [transformedMemos.length],
-  );
-
-  const renderFooter = useCallback(() => {
-    if (!isFetchingNextPage) return null;
-    return (
-      <YStack alignItems="center" paddingVertical="$4">
-        <Loading />
-      </YStack>
-    );
-  }, [isFetchingNextPage]);
 
   // 에러 상태 처리
   if (categoriesError) {
@@ -124,68 +102,21 @@ export default function HomeScreen() {
   }
 
   // 로딩 상태 처리
-  if (categoriesLoading) {
-    return <Loading text="카테고리 로딩 중..." />;
-  }
+  if (categoriesLoading) return <Loading text="카테고리 로딩 중..." />;
 
   return (
     <ApiErrorBoundary>
       <YStack backgroundColor="$backgroundPrimary" flex={1}>
-        {/* Category Filter */}
-        <YStack height={65} justifyContent="center">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <XStack gap="$1.5" paddingHorizontal="$4" paddingVertical="$1.5">
-              {categories.map((category) => (
-                <CategoryButton
-                  key={category.name}
-                  category={category}
-                  onPress={() => handleCategoryPress(category.name)}
-                />
-              ))}
-            </XStack>
-          </ScrollView>
-        </YStack>
-
-        {/* Sort Options */}
-        <YStack height={45} justifyContent="center">
-          <XStack paddingHorizontal="$4" position="relative">
-            {sortOptions.map((option) => (
-              <SortButton
-                key={option.name}
-                option={option}
-                onPress={() => handleSortPress(option.name)}
-              />
-            ))}
-          </XStack>
-        </YStack>
-
+        <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
+        <SortOptionsBar options={sortOptions} onPress={handleSortPress} />
         <Separator borderColor="$border" />
-
-        {/* Memo List */}
-        {memosPending ? (
-          <YStack alignItems="center" flex={1} justifyContent="center">
-            <Loading />
-          </YStack>
-        ) : memosError ? (
-          <YStack alignItems="center" flex={1} justifyContent="center">
-            <Typography color="$textMuted">메모를 불러오는데 실패했습니다</Typography>
-          </YStack>
-        ) : transformedMemos.length > 0 ? (
-          <FlatList
-            contentContainerStyle={{ paddingBottom: 24 }}
-            data={transformedMemos}
-            keyExtractor={(item) => item.id}
-            ListFooterComponent={renderFooter}
-            renderItem={renderMemoItem}
-            showsVerticalScrollIndicator={false}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-          />
-        ) : (
-          <YStack alignItems="center" flex={1} justifyContent="center">
-            <Typography color="$textMuted">작성된 메모가 없습니다</Typography>
-          </YStack>
-        )}
+        <MemoListView
+          isError={Boolean(memosError)}
+          isFetchingNextPage={isFetchingNextPage}
+          isPending={memosPending}
+          memos={transformedMemos}
+          onEndReached={handleEndReached}
+        />
       </YStack>
     </ApiErrorBoundary>
   );
