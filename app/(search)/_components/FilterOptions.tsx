@@ -11,8 +11,8 @@ interface CategoryLite {
 interface FilterOptionsProps {
   show: boolean;
   categories: CategoryLite[];
-  selectedCategoryId: string;
-  setSelectedCategoryId: (id: string) => void;
+  selectedCategoryIds: string[];
+  toggleCategoryId: (id: string) => void;
   selectedRating: number | undefined;
   setSelectedRating: (rating: number | undefined) => void;
 }
@@ -20,19 +20,19 @@ interface FilterOptionsProps {
 export function FilterOptions({
   show,
   categories,
-  selectedCategoryId,
-  setSelectedCategoryId,
+  selectedCategoryIds,
+  toggleCategoryId,
   selectedRating,
   setSelectedRating,
 }: FilterOptionsProps) {
   if (!show) return null;
 
   return (
-    <YStack gap="$3" paddingTop="$3">
+    <YStack gap="$4">
       <CategoryChips
         categories={categories}
-        selectedCategoryId={selectedCategoryId}
-        onSelect={setSelectedCategoryId}
+        selectedCategoryIds={selectedCategoryIds}
+        onToggle={toggleCategoryId}
       />
       <RatingChips selectedRating={selectedRating} onSelect={setSelectedRating} />
     </YStack>
