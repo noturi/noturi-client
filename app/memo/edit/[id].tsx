@@ -67,18 +67,12 @@ export default function MemoEditScreen() {
       setShowAddCategory(false);
       toast.showSuccess('새 카테고리가 생성되었습니다.');
     },
-    onError: (error: any) => {
-      Alert.alert('오류', error.message || '카테고리 생성에 실패했습니다.');
-    },
   });
 
   const updateMemoMutation = useUpdateMemoMutation({
     onSuccess: () => {
       toast.showSuccess('메모가 수정되었습니다.');
       router.back();
-    },
-    onError: (error: any) => {
-      Alert.alert('오류', error.message || '메모 수정에 실패했습니다.');
     },
   });
 
