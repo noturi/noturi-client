@@ -39,7 +39,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
       toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
     },
     onError: (error: any) => {
-      Alert.alert('오류', error.message || MESSAGES.CATEGORY.CREATE_ERROR);
+      Alert.alert('오류', error?.message || MESSAGES.CATEGORY.CREATE_ERROR);
     },
   });
 
@@ -51,7 +51,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     },
     onError: (error: any) => {
       console.error('메모 생성 실패:', error);
-      Alert.alert('오류', error.message || MESSAGES.MEMO.CREATE_ERROR);
+      Alert.alert('오류', error?.message || MESSAGES.MEMO.CREATE_ERROR);
     },
   });
 
