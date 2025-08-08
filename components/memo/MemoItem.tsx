@@ -1,4 +1,5 @@
 import { Typography } from "@/components/ui";
+import { HREFS } from "@/constants";
 import type { UIMemo } from "@/services/memo/memoService";
 import { router } from "expo-router";
 import { XStack, YStack } from "tamagui";
@@ -18,8 +19,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
       opacity: 0.8,
     }}
     onPress={() => {
-      console.log("Memo clicked:", memo.id);
-      router.push(`/memo/${memo.id}`);
+      router.push(HREFS.memoDetail(memo.id));
     }}
     cursor="pointer"
   >
