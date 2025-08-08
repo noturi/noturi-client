@@ -1,4 +1,4 @@
-import { Button, XStack } from 'tamagui';
+import { Button } from 'tamagui';
 
 import { X } from '@tamagui/lucide-icons';
 
@@ -11,25 +11,22 @@ interface ActiveFilterChipProps {
 
 export function ActiveFilterChip({ label, onClear }: ActiveFilterChipProps) {
   return (
-    <XStack
+    <Button
+      unstyled
       alignItems="center"
-      backgroundColor="$primary"
-      borderRadius="$3"
-      gap="$1"
-      paddingHorizontal="$3"
+      backgroundColor="$backgroundTransparent"
+      borderColor="$border"
+      borderRadius="$7"
+      borderWidth={1}
+      flexDirection="row"
+      paddingHorizontal="$2"
       paddingVertical="$1"
+      onPress={onClear}
     >
-      <Typography color="$textOnPrimary" variant="caption">
+      <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
         {label}
       </Typography>
-      <Button
-        backgroundColor="$backgroundTransparent"
-        color="$textOnPrimary"
-        size="$1"
-        onPress={onClear}
-      >
-        <X size={12} />
-      </Button>
-    </XStack>
+      <X color="$textPrimary" size={12} />
+    </Button>
   );
 }
