@@ -24,9 +24,6 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
       onClose();
       Alert.alert('성공', '새 카테고리가 생성되었습니다.');
     },
-    onError: (error: any) => {
-      Alert.alert('오류', error.message || '카테고리 생성에 실패했습니다.');
-    },
   });
 
   const handleCreate = () => {
