@@ -1,2 +1,3 @@
 export * from "./categories";
-export * from "./sortOptions";
+export * from "./routes";
+export * from "./sort";
