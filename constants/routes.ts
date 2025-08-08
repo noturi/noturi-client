@@ -26,14 +26,14 @@ export const ROUTES = {
     label: '',
   },
   home: {
-    name: '(tabs)/(home)/home',
-    path: '/(tabs)/(home)/home',
-    href: '/(tabs)/(home)/home',
+    name: '(home)/home',
+    path: '/home',
+    href: '/(home)/home',
     label: '홈',
   },
   search: {
     name: '(search)/search',
-    path: '/(search)/search',
+    path: '/search',
     href: '/(search)/search',
     label: '검색',
   },
