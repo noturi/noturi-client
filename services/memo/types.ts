@@ -43,6 +43,7 @@ export interface MemoListParamsDto {
   page?: number;
   limit?: number;
   categoryId?: string;
+  categoryIds?: string[]; // 다중 카테고리 필터링 지원
   rating?: number;
   sortBy?: 'createdAt' | 'rating' | 'title';
   sortOrder?: 'asc' | 'desc';
