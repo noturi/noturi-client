@@ -73,7 +73,6 @@ export default function HomeScreen() {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 에러 상태 처리
   if (categoriesError) {
     const isNetworkError =
       categoriesError.message?.includes('Network request failed') ||
@@ -101,7 +100,6 @@ export default function HomeScreen() {
     );
   }
 
-  // 로딩 상태 처리
   if (categoriesLoading) return <Loading text="카테고리 로딩 중..." />;
 
   return (
