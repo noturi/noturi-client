@@ -9,7 +9,7 @@ import { BarChart3, Home, Plus, Search, Settings, User } from '@tamagui/lucide-i
 
 import { MemoCreateSheet } from '@/components/memo';
 import { Loading } from '@/components/ui';
-import { HREFS } from '@/constants/routes';
+import { HREFS, ROUTES } from '@/constants/routes';
 import { useAuth } from '@/context/auth';
 
 export default function TabsLayout() {
@@ -21,7 +21,7 @@ export default function TabsLayout() {
   }
 
   if (!isAuthenticated) {
-    return <Redirect href="/(auth)/login" />;
+    return <Redirect href={ROUTES.login.href} />;
   }
 
   return (
@@ -50,7 +50,7 @@ export default function TabsLayout() {
         }}
       >
         <Tabs.Screen
-          name="home/index"
+          name={ROUTES.home.name}
           options={{
             title: '',
             tabBarIcon: ({ color }) => <Home color={color as any} size={20} />,
