@@ -27,6 +27,9 @@ export class MemoApi {
       if (params.page) searchParams.append('page', params.page.toString());
       if (params.limit) searchParams.append('limit', params.limit.toString());
       if (params.categoryId) searchParams.append('categoryId', params.categoryId);
+      if (params.categoryIds && params.categoryIds.length > 0) {
+        for (const id of params.categoryIds) searchParams.append('categoryIds', id);
+      }
       if (params.rating !== undefined) searchParams.append('rating', params.rating.toString());
       if (params.sortBy) searchParams.append('sortBy', params.sortBy);
       if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
