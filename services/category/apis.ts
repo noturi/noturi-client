@@ -101,12 +101,7 @@ export class CategoryApi {
 
   // 카테고리 삭제
   async deleteCategory(id: string): Promise<void> {
-    try {
-      await this.api.delete(`categories/${id}`);
-    } catch (error) {
-      console.error('Delete category API error:', error);
-      throw new Error('카테고리 삭제에 실패했습니다.');
-    }
+    await this.api.delete(`categories/${id}`);
   }
 
   // 카테고리 통계 조회
