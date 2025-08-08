@@ -52,9 +52,6 @@ export default function SearchScreen() {
           searchText={filters.searchText}
           onChangeSearchText={filters.setSearchText}
           hasActiveFilters={filters.hasActiveFilters}
-          isSearchDisabled={
-            !filters.hasActiveFilters && !filters.searchText.trim()
-          }
           onPressSearch={handleSearch}
           onToggleFilters={filters.toggleFilters}
         />

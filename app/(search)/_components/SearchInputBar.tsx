@@ -1,11 +1,10 @@
-import { Filter, Search } from "@tamagui/lucide-icons";
+import { Filter } from "@tamagui/lucide-icons";
 import { Button, TextArea, XStack, YStack } from "tamagui";
 
 interface SearchInputBarProps {
   searchText: string;
   onChangeSearchText: (text: string) => void;
   hasActiveFilters: boolean;
-  isSearchDisabled: boolean;
   onPressSearch: () => void;
   onToggleFilters: () => void;
 }
@@ -14,7 +13,6 @@ export function SearchInputBar({
   searchText,
   onChangeSearchText,
   hasActiveFilters,
-  isSearchDisabled,
   onPressSearch,
   onToggleFilters,
 }: SearchInputBarProps) {
@@ -38,16 +36,7 @@ export function SearchInputBar({
           returnKeyType="search"
         />
       </YStack>
-      <Button
-        size="$4"
-        backgroundColor="$primary"
-        color="$textOnPrimary"
-        borderRadius="$6"
-        onPress={onPressSearch}
-        disabled={isSearchDisabled}
-      >
-        <Search size={16} />
-      </Button>
+
       <Button
         size="$4"
         backgroundColor={hasActiveFilters ? "$primary" : "$surface"}
