@@ -13,8 +13,8 @@ interface FiltersNamespace {
   // state
   searchText: string;
   setSearchText: (text: string) => void;
-  selectedCategoryId: string;
-  setSelectedCategoryId: (id: string) => void;
+  selectedCategoryIds: string[];
+  toggleCategoryId: (id: string) => void;
   selectedRating: number | undefined;
   setSelectedRating: (rating: number | undefined) => void;
   showFilters: boolean;
@@ -50,8 +50,8 @@ export function useMemoSearch(): UseMemoSearchReturn {
   const {
     searchText,
     setSearchText,
-    selectedCategoryId,
-    setSelectedCategoryId,
+    selectedCategoryIds,
+    toggleCategoryId,
     selectedRating,
     setSelectedRating,
     showFilters,
@@ -69,12 +69,7 @@ export function useMemoSearch(): UseMemoSearchReturn {
   const enabled = hasSearchQuery;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch } =
-    useInfiniteMemos({
-      debouncedSearchText,
-      selectedCategoryId,
-      selectedRating,
-      enabled,
-    });
+    useInfiniteMemos({ debouncedSearchText, selectedCategoryIds, selectedRating, enabled });
 
   const transformedMemos = useTransformMemos(data);
 
@@ -94,8 +89,8 @@ export function useMemoSearch(): UseMemoSearchReturn {
     filters: {
       searchText,
       setSearchText,
-      selectedCategoryId,
-      setSelectedCategoryId,
+      selectedCategoryIds,
+      toggleCategoryId,
       selectedRating,
       setSelectedRating,
       showFilters,
