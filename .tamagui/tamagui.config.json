@@ -52181,6 +52181,20 @@
           "val": 16,
           "variable": ""
         },
+        "7": {
+          "isVar": true,
+          "key": "$7",
+          "name": "c-radius-7",
+          "val": 20,
+          "variable": ""
+        },
+        "8": {
+          "isVar": true,
+          "key": "$8",
+          "name": "c-radius-8",
+          "val": 24,
+          "variable": ""
+        },
         "true": {
           "isVar": true,
           "key": "$true",
@@ -52863,6 +52877,20 @@
         "key": "$6",
         "name": "c-radius-6",
         "val": 16,
+        "variable": ""
+      },
+      "$radius.7": {
+        "isVar": true,
+        "key": "$7",
+        "name": "c-radius-7",
+        "val": 20,
+        "variable": ""
+      },
+      "$radius.8": {
+        "isVar": true,
+        "key": "$8",
+        "name": "c-radius-8",
+        "val": 24,
         "variable": ""
       },
       "$radius.true": {
