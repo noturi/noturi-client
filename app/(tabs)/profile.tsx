@@ -1,14 +1,17 @@
 import { Button, Separator, YStack } from 'tamagui';
 
+import { useState } from 'react';
 import { Alert } from 'react-native';
 
 import { router } from 'expo-router';
 
+import { CategoryManageSheet } from '@/components/category/CategoryManageSheet';
 import { Typography } from '@/components/ui';
 import { useAuth } from '@/context/auth';
 import { useLogoutMutation } from '@/services/auth';
 
 export default function ProfileScreen() {
+  const [openManage, setOpenManage] = useState(false);
   const { isAuthenticated } = useAuth();
 
   const logoutMutation = useLogoutMutation({
@@ -16,10 +19,6 @@ export default function ProfileScreen() {
       console.log('✅ 로그아웃 성공');
       // 로그인 화면으로 이동
       router.replace('/(auth)/login');
-    },
-    onError: (error) => {
-      console.error('❌ 로그아웃 실패:', error);
-      Alert.alert('오류', '로그아웃에 실패했습니다.');
     },
   });
 
@@ -42,46 +41,8 @@ export default function ProfileScreen() {
   return (
     <YStack backgroundColor="$backgroundPrimary" flex={1} padding="$4">
       <YStack gap="$4">
-        {/* 프로필 정보 영역 (추후 구현) */}
-        <YStack backgroundColor="$surface" borderRadius="$4" gap="$3" padding="$4">
-          <Typography color="$textPrimary" variant="heading">
-            프로필 정보
-          </Typography>
-          <Typography color="$textSecondary" variant="body">
-            사용자 정보가 여기에 표시됩니다.
-          </Typography>
-        </YStack>
-
-        <Separator borderColor="$border" />
-
-        {/* 설정 영역 */}
-        <YStack gap="$3">
-          <Typography color="$textPrimary" variant="subtitle">
-            계정 설정
-          </Typography>
-
-          {isAuthenticated && (
-            <Button
-              backgroundColor="$error"
-              borderRadius="$4"
-              color="white"
-              disabled={logoutMutation.isPending}
-              fontSize="$4"
-              fontWeight="600"
-              height="$4"
-              pressStyle={{
-                backgroundColor: '$errorHover',
-                opacity: 0.8,
-              }}
-              onPress={handleLogout}
-            >
-              {logoutMutation.isPending ? '로그아웃 중...' : '로그아웃'}
-            </Button>
-          )}
-        </YStack>
-
         {/* 앱 정보 영역 */}
-        <YStack gap="$3" marginTop="$6">
+        <YStack gap="$3">
           <Typography color="$textPrimary" variant="subtitle">
             앱 정보
           </Typography>
@@ -94,7 +55,30 @@ export default function ProfileScreen() {
             </Typography>
           </YStack>
         </YStack>
+
+        <Separator borderColor="$border" />
+        <YStack gap="$3">
+          {isAuthenticated && (
+            <Button unstyled onPress={() => setOpenManage(true)}>
+              <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
+                카테고리 관리
+              </Typography>
+            </Button>
+          )}
+        </YStack>
+
+        <Separator borderColor="$border" />
+        <YStack gap="$3">
+          {isAuthenticated && (
+            <Button unstyled onPress={handleLogout}>
+              <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
+                로그아웃
+              </Typography>
+            </Button>
+          )}
+        </YStack>
       </YStack>
+      <CategoryManageSheet isOpen={openManage} onClose={() => setOpenManage(false)} />
     </YStack>
   );
 }
