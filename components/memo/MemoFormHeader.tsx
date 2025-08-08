@@ -19,9 +19,9 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
         alignItems="center"
         borderBottomColor="$border"
         borderBottomWidth={1}
-        justifyContent="space-between"
         paddingHorizontal="$2"
         paddingVertical="$3"
+        position="relative"
       >
         <Button
           backgroundColor="$backgroundTransparent"
@@ -34,8 +34,10 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
         >
           취소
         </Button>
-        <Typography variant="subheading">새 기록</Typography>
-        <YStack width={60} />
+
+        <Typography left={0} position="absolute" right={0} textAlign="center" variant="subheading">
+          새 메모
+        </Typography>
       </XStack>
     </>
   );
