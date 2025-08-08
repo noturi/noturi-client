@@ -1,15 +1,7 @@
-import {
-  CATEGORY_COLORS,
-  CATEGORY_ICONS,
-  DEFAULT_CATEGORIES,
-} from "@/constants";
-import { categoryApi } from "./apis";
-import {
-  Category,
-  CreateCategoryDto,
-  MergeCategoriesDto,
-  UpdateCategoryDto,
-} from "./types";
+import { CATEGORY_COLORS, CATEGORY_ICONS, DEFAULT_CATEGORIES } from '@/constants';
+
+import { categoryApi } from './apis';
+import { Category, CreateCategoryDto, MergeCategoriesDto, UpdateCategoryDto } from './types';
 
 /**
  * UI 카테고리 타입 정의
@@ -29,30 +21,26 @@ export class CategoryService {
   /**
    * 카테고리 생성 전 데이터 검증 및 변환
    */
-  async createCategoryWithValidation(
-    data: CreateCategoryDto
-  ): Promise<Category> {
+  async createCategoryWithValidation(data: CreateCategoryDto): Promise<Category> {
     // 데이터 검증
     if (!data.name.trim()) {
-      throw new Error("카테고리 이름은 필수입니다.");
+      throw new Error('카테고리 이름은 필수입니다.');
     }
 
     if (data.name.trim().length > 20) {
-      throw new Error("카테고리 이름은 20자 이하여야 합니다.");
+      throw new Error('카테고리 이름은 20자 이하여야 합니다.');
     }
 
     // 특수문자 검증
     const invalidChars = /[<>:"/\\|?*]/g;
     if (invalidChars.test(data.name)) {
-      throw new Error("카테고리 이름에는 특수문자를 사용할 수 없습니다.");
+      throw new Error('카테고리 이름에는 특수문자를 사용할 수 없습니다.');
     }
 
     // 중복 확인
-    const existsResult = await categoryApi.checkCategoryExists(
-      data.name.trim()
-    );
+    const existsResult = await categoryApi.checkCategoryExists(data.name.trim());
     if (existsResult.exists) {
-      throw new Error("이미 존재하는 카테고리 이름입니다.");
+      throw new Error('이미 존재하는 카테고리 이름입니다.');
     }
 
     // 데이터 정제
@@ -70,33 +58,29 @@ export class CategoryService {
   /**
    * 카테고리 수정 전 데이터 검증 및 변환
    */
-  async updateCategoryWithValidation(
-    data: UpdateCategoryDto
-  ): Promise<Category> {
+  async updateCategoryWithValidation(data: UpdateCategoryDto): Promise<Category> {
     // 데이터 검증
     if (data.name && !data.name.trim()) {
-      throw new Error("카테고리 이름은 빈 값일 수 없습니다.");
+      throw new Error('카테고리 이름은 빈 값일 수 없습니다.');
     }
 
     if (data.name && data.name.trim().length > 20) {
-      throw new Error("카테고리 이름은 20자 이하여야 합니다.");
+      throw new Error('카테고리 이름은 20자 이하여야 합니다.');
     }
 
     // 특수문자 검증
     if (data.name) {
       const invalidChars = /[<>:"/\\|?*]/g;
       if (invalidChars.test(data.name)) {
-        throw new Error("카테고리 이름에는 특수문자를 사용할 수 없습니다.");
+        throw new Error('카테고리 이름에는 특수문자를 사용할 수 없습니다.');
       }
     }
 
     // 이름 변경 시 중복 확인
     if (data.name) {
-      const existsResult = await categoryApi.checkCategoryExists(
-        data.name.trim()
-      );
+      const existsResult = await categoryApi.checkCategoryExists(data.name.trim());
       if (existsResult.exists && existsResult.category?.id !== data.id) {
-        throw new Error("이미 존재하는 카테고리 이름입니다.");
+        throw new Error('이미 존재하는 카테고리 이름입니다.');
       }
     }
 
@@ -113,15 +97,12 @@ export class CategoryService {
   /**
    * 카테고리 삭제 전 확인 및 처리
    */
-  async deleteCategoryWithValidation(
-    id: string,
-    moveMemosToCategory?: string
-  ): Promise<void> {
+  async deleteCategoryWithValidation(id: string, moveMemosToCategory?: string): Promise<void> {
     const category = await categoryApi.getCategory(id);
 
     if (category.memoCount > 0 && !moveMemosToCategory) {
       throw new Error(
-        "메모가 있는 카테고리는 삭제할 수 없습니다. 메모를 다른 카테고리로 이동하거나 삭제해주세요."
+        '메모가 있는 카테고리는 삭제할 수 없습니다. 메모를 다른 카테고리로 이동하거나 삭제해주세요.',
       );
     }
 
@@ -141,7 +122,7 @@ export class CategoryService {
    */
   async mergeCategoriesWithValidation(data: MergeCategoriesDto): Promise<void> {
     if (data.sourceId === data.targetId) {
-      throw new Error("같은 카테고리끼리는 병합할 수 없습니다.");
+      throw new Error('같은 카테고리끼리는 병합할 수 없습니다.');
     }
 
     // 두 카테고리가 모두 존재하는지 확인
@@ -151,7 +132,7 @@ export class CategoryService {
     ]);
 
     if (!sourceCategory || !targetCategory) {
-      throw new Error("존재하지 않는 카테고리입니다.");
+      throw new Error('존재하지 않는 카테고리입니다.');
     }
 
     return await categoryApi.mergeCategories(data);
@@ -166,19 +147,14 @@ export class CategoryService {
     for (const defaultCategory of DEFAULT_CATEGORIES) {
       try {
         // 이미 존재하는지 확인
-        const existsResult = await categoryApi.checkCategoryExists(
-          defaultCategory.name
-        );
+        const existsResult = await categoryApi.checkCategoryExists(defaultCategory.name);
 
         if (!existsResult.exists) {
           const category = await categoryApi.createCategory(defaultCategory);
           createdCategories.push(category);
         }
       } catch (error) {
-        console.error(
-          `기본 카테고리 '${defaultCategory.name}' 생성 실패:`,
-          error
-        );
+        console.error(`기본 카테고리 '${defaultCategory.name}' 생성 실패:`, error);
       }
     }
 
@@ -198,11 +174,9 @@ export class CategoryService {
       ...stats,
       distribution,
       insights: {
-        mostPopular: distribution[0]?.categoryName || "없음",
-        leastPopular:
-          distribution[distribution.length - 1]?.categoryName || "없음",
-        utilizationRate:
-          (stats.categoriesWithMemos / stats.totalCategories) * 100,
+        mostPopular: distribution[0]?.categoryName || '없음',
+        leastPopular: distribution[distribution.length - 1]?.categoryName || '없음',
+        utilizationRate: (stats.categoriesWithMemos / stats.totalCategories) * 100,
         recommendation: this.generateUsageRecommendation(stats, distribution),
       },
     };
@@ -238,21 +212,18 @@ export class CategoryService {
    */
   static transformToUICategories(
     backendCategories: Category[] | undefined,
-    selectedCategory: string
+    selectedCategory: string,
   ): UICategory[] {
     if (!backendCategories) return [];
 
-    const totalCount = backendCategories.reduce(
-      (sum, cat) => sum + cat.memoCount,
-      0
-    );
+    const totalCount = backendCategories.reduce((sum, cat) => sum + cat.memoCount, 0);
 
     return [
       {
-        id: "all",
-        name: "전체",
+        id: 'all',
+        name: '전체',
         count: totalCount,
-        active: selectedCategory === "전체",
+        active: selectedCategory === '전체',
       },
       ...backendCategories.map((cat) => ({
         id: cat.id,
@@ -268,9 +239,9 @@ export class CategoryService {
    */
   static getCategoryIdByName(
     categoryName: string,
-    categories: Category[] | undefined
+    categories: Category[] | undefined,
   ): string | undefined {
-    if (categoryName === "전체") return undefined;
+    if (categoryName === '전체') return undefined;
     return categories?.find((cat) => cat.name === categoryName)?.id;
   }
 
@@ -278,10 +249,10 @@ export class CategoryService {
    * 정렬 옵션에서 정렬 타입 추출
    */
   static getSortTypeFromOptions(
-    sortOptions: { name: string; active: boolean }[]
-  ): "rating" | "createdAt" {
+    sortOptions: { name: string; active: boolean }[],
+  ): 'rating' | 'createdAt' {
     const activeSort = sortOptions.find((option) => option.active)?.name;
-    return activeSort === "평점" ? "rating" : "createdAt";
+    return activeSort === '평점' ? 'rating' : 'createdAt';
   }
 
   /**
@@ -303,29 +274,24 @@ export class CategoryService {
    */
   private generateUsageRecommendation(stats: any, distribution: any[]): string {
     if (stats.totalCategories === 0) {
-      return "카테고리를 생성하여 메모를 체계적으로 관리해보세요.";
+      return '카테고리를 생성하여 메모를 체계적으로 관리해보세요.';
     }
 
     if (stats.categoriesWithMemos / stats.totalCategories < 0.5) {
-      return "사용하지 않는 카테고리가 많습니다. 정리를 고려해보세요.";
+      return '사용하지 않는 카테고리가 많습니다. 정리를 고려해보세요.';
     }
 
-    if (
-      distribution.length > 0 &&
-      distribution[0].memoCount > stats.averageMemosPerCategory * 3
-    ) {
-      return "특정 카테고리에 메모가 너무 집중되어 있습니다. 세분화를 고려해보세요.";
+    if (distribution.length > 0 && distribution[0].memoCount > stats.averageMemosPerCategory * 3) {
+      return '특정 카테고리에 메모가 너무 집중되어 있습니다. 세분화를 고려해보세요.';
     }
 
-    return "카테고리가 적절히 활용되고 있습니다.";
+    return '카테고리가 적절히 활용되고 있습니다.';
   }
 
   /**
    * 병합 가능한 카테고리 제안
    */
-  private suggestMergeableCategories(
-    distribution: any[]
-  ): { source: string; target: string }[] {
+  private suggestMergeableCategories(distribution: any[]): { source: string; target: string }[] {
     // 간단한 로직: 유사한 이름이나 적은 사용량의 카테고리들
     const lowUsage = distribution.filter((d) => d.memoCount <= 3);
     const suggestions: { source: string; target: string }[] = [];
@@ -345,14 +311,14 @@ export class CategoryService {
    * 이름 변경 제안
    */
   private suggestRenameableCategories(
-    distribution: any[]
+    distribution: any[],
   ): { current: string; suggested: string }[] {
     // 간단한 예시 로직
     return distribution
       .filter((d) => d.categoryName.length > 15)
       .map((d) => ({
         current: d.categoryName,
-        suggested: d.categoryName.substring(0, 10) + "...",
+        suggested: d.categoryName.substring(0, 10) + '...',
       }));
   }
 }

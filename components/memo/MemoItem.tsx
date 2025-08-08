@@ -1,9 +1,12 @@
-import { Typography } from "@/components/ui";
-import { HREFS } from "@/constants";
-import type { UIMemo } from "@/services/memo/memoService";
-import { router } from "expo-router";
-import { XStack, YStack } from "tamagui";
-import { StarRating } from "./StarRating";
+import { XStack, YStack } from 'tamagui';
+
+import { router } from 'expo-router';
+
+import { Typography } from '@/components/ui';
+import { HREFS } from '@/constants';
+import type { UIMemo } from '@/services/memo/memoService';
+
+import { StarRating } from './StarRating';
 
 interface MemoItemProps {
   memo: UIMemo;
@@ -11,58 +14,49 @@ interface MemoItemProps {
 
 export const MemoItem = ({ memo }: MemoItemProps) => (
   <YStack
+    backgroundColor="$backgroundPrimary"
+    cursor="pointer"
     paddingHorizontal="$4"
     paddingVertical="$3"
-    backgroundColor="$backgroundPrimary"
     pressStyle={{
-      backgroundColor: "$surfaceHover",
+      backgroundColor: '$surfaceHover',
       opacity: 0.8,
     }}
     onPress={() => {
       router.push(HREFS.memoDetail(memo.id));
     }}
-    cursor="pointer"
   >
-    <XStack
-      justifyContent="space-between"
-      alignItems="flex-start"
-      marginBottom="$2"
-    >
+    <XStack alignItems="flex-start" justifyContent="space-between" marginBottom="$2">
       <YStack flex={1}>
         <XStack alignItems="center" gap="$2" marginBottom="$2">
           <YStack
             backgroundColor={memo.category.color as any}
+            borderRadius="$3"
             paddingHorizontal="$2"
             paddingVertical="$1"
-            borderRadius="$3"
           >
             <Typography
-              variant="caption"
               color="white"
-              fontWeight="$4"
               fontSize="$2"
+              fontWeight="$4"
               pointerEvents="none"
+              variant="caption"
             >
               {memo.category.name}
             </Typography>
           </YStack>
-          <Typography
-            as="span"
-            variant="caption"
-            color="$textMuted"
-            pointerEvents="none"
-          >
+          <Typography as="span" color="$textMuted" pointerEvents="none" variant="caption">
             {memo.timeAgo}
           </Typography>
         </XStack>
         <Typography
           as="h4"
-          variant="title"
           color="$textPrimary"
-          marginBottom="$2"
           fontWeight="$4"
-          pointerEvents="none"
+          marginBottom="$2"
           numberOfLines={1}
+          pointerEvents="none"
+          variant="title"
         >
           {memo.title}
         </Typography>
@@ -74,11 +68,11 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
 
     <Typography
       as="p"
-      variant="body"
       color="$textSecondary"
       lineHeight="$1"
-      pointerEvents="none"
       numberOfLines={2}
+      pointerEvents="none"
+      variant="body"
     >
       {memo.content}
     </Typography>

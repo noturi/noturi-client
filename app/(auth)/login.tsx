@@ -1,16 +1,17 @@
-import { GoogleButton } from "@/components/ui/GoogleButton";
-import { Typography } from "@/components/ui/Typography";
-import { YStack } from "tamagui";
+import { YStack } from 'tamagui';
+
+import { GoogleButton } from '@/components/ui/GoogleButton';
+import { Typography } from '@/components/ui/Typography';
 
 export default function LoginScreen() {
   return (
     <YStack
-      flex={1}
-      backgroundColor="$background"
       alignItems="center"
+      backgroundColor="$background"
+      flex={1}
+      gap="$12"
       justifyContent="center"
       padding="$6"
-      gap="$12"
     >
       <Typography variant="display">Noturi</Typography>
       <GoogleButton />

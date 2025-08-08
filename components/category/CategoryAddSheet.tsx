@@ -1,9 +1,12 @@
-import { Typography } from "@/components/ui";
-import { useCreateCategoryMutation } from "@/services/category";
-import { useState } from "react";
-import { Alert } from "react-native";
-import { Button, Input, Sheet, Spinner, XStack, YStack } from "tamagui";
-import { X } from "@tamagui/lucide-icons";
+import { Button, Input, Sheet, Spinner, XStack, YStack } from 'tamagui';
+
+import { useState } from 'react';
+import { Alert } from 'react-native';
+
+import { X } from '@tamagui/lucide-icons';
+
+import { Typography } from '@/components/ui';
+import { useCreateCategoryMutation } from '@/services/category';
 
 interface CategoryAddSheetProps {
   isOpen: boolean;
@@ -11,57 +14,53 @@ interface CategoryAddSheetProps {
   onSuccess?: (categoryName: string) => void;
 }
 
-export const CategoryAddSheet = ({ 
-  isOpen, 
-  onClose, 
-  onSuccess 
-}: CategoryAddSheetProps) => {
-  const [categoryName, setCategoryName] = useState("");
-  
+export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddSheetProps) => {
+  const [categoryName, setCategoryName] = useState('');
+
   const createCategoryMutation = useCreateCategoryMutation({
     onSuccess: (newCategory) => {
-      setCategoryName("");
+      setCategoryName('');
       onSuccess?.(newCategory.name);
       onClose();
-      Alert.alert("성공", "새 카테고리가 생성되었습니다.");
+      Alert.alert('성공', '새 카테고리가 생성되었습니다.');
     },
     onError: (error: any) => {
-      Alert.alert("오류", error.message || "카테고리 생성에 실패했습니다.");
-    }
+      Alert.alert('오류', error.message || '카테고리 생성에 실패했습니다.');
+    },
   });
 
   const handleCreate = () => {
     if (!categoryName.trim()) {
-      Alert.alert("알림", "카테고리 이름을 입력해주세요.");
+      Alert.alert('알림', '카테고리 이름을 입력해주세요.');
       return;
     }
 
     createCategoryMutation.mutate({
       name: categoryName.trim(),
-      color: "#000000" // 기본 검정색
+      color: '#000000', // 기본 검정색
     });
   };
 
   const handleClose = () => {
-    setCategoryName("");
+    setCategoryName('');
     onClose();
   };
 
   return (
     <Sheet
-      open={isOpen}
-      onOpenChange={handleClose}
-      snapPoints={[40]}
-      snapPointsMode="percent"
       dismissOnSnapToBottom
       modal
       animation="quick"
+      open={isOpen}
+      snapPoints={[40]}
+      snapPointsMode="percent"
+      onOpenChange={handleClose}
     >
       <Sheet.Overlay
         animation="quick"
+        backgroundColor="$backgroundOverlay"
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
-        backgroundColor="$backgroundOverlay"
       />
       <Sheet.Frame
         backgroundColor="$backgroundPrimary"
@@ -71,68 +70,62 @@ export const CategoryAddSheet = ({
       >
         {/* Header */}
         <XStack
-          justifyContent="space-between"
           alignItems="center"
+          borderBottomColor="$border"
+          borderBottomWidth={1}
+          justifyContent="space-between"
           paddingHorizontal="$5"
           paddingVertical="$4"
-          borderBottomWidth={1}
-          borderBottomColor="$border"
         >
           <Typography variant="title">새 카테고리 추가</Typography>
-          <Button
-            size="$3"
-            circular
-            chromeless
-            icon={<X size={20} />}
-            onPress={handleClose}
-          />
+          <Button chromeless circular icon={<X size={20} />} size="$3" onPress={handleClose} />
         </XStack>
 
         {/* Content */}
-        <YStack padding="$5" gap="$4">
+        <YStack gap="$4" padding="$5">
           <YStack gap="$2">
             <Typography variant="subtitle">카테고리 이름</Typography>
             <Input
-              placeholder="카테고리 이름을 입력하세요"
-              value={categoryName}
-              onChangeText={setCategoryName}
               backgroundColor="$backgroundPrimary"
-              borderWidth={1}
               borderColor="$border"
               borderRadius="$4"
-              fontSize="$4"
+              borderWidth={1}
               color="$textPrimary"
-              placeholderTextColor="$textMuted"
+              fontSize="$4"
+              maxLength={20}
               paddingHorizontal="$4"
               paddingVertical="$3"
-              maxLength={20}
+              placeholder="카테고리 이름을 입력하세요"
+              placeholderTextColor="$textMuted"
+              value={categoryName}
+              onChangeText={setCategoryName}
             />
           </YStack>
 
           <XStack gap="$3" marginTop="$2">
             <Button
-              flex={1}
               backgroundColor="$surface"
-              borderWidth={1}
               borderColor="$border"
+              borderWidth={1}
               color="$textSecondary"
+              flex={1}
               onPress={handleClose}
             >
               취소
             </Button>
             <Button
-              flex={1}
               backgroundColor="$accent"
               color="$textOnAccent"
-              onPress={handleCreate}
               disabled={!categoryName.trim() || createCategoryMutation.isPending}
+              flex={1}
               icon={
                 createCategoryMutation.isPending ? (
-                  <Spinner size="small" color="$textOnAccent" />
+                  <Spinner color="$textOnAccent" size="small" />
                 ) : undefined
               }
+              onPress={handleCreate}
             >
-              {createCategoryMutation.isPending ? "생성 중..." : "생성"}
+              {createCategoryMutation.isPending ? '생성 중...' : '생성'}
             </Button>
           </XStack>
         </YStack>

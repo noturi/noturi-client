@@ -32,8 +32,8 @@ export interface CategoryListResponseDto {
 // 카테고리 목록 조회 파라미터
 export interface CategoryListParamsDto {
   includeEmpty?: boolean; // 메모가 없는 카테고리 포함 여부
-  sortBy?: "name" | "memoCount" | "createdAt";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'name' | 'memoCount' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
 }
 
 // 카테고리 통계

@@ -16,23 +16,23 @@ export interface AuthTokens {
 export const isUser = (obj: any): obj is User => {
   return (
     obj &&
-    typeof obj === "object" &&
-    typeof obj.id === "string" &&
-    typeof obj.email === "string" &&
-    typeof obj.name === "string" &&
-    typeof obj.nickname === "string" &&
-    typeof obj.avatarUrl === "string"
+    typeof obj === 'object' &&
+    typeof obj.id === 'string' &&
+    typeof obj.email === 'string' &&
+    typeof obj.name === 'string' &&
+    typeof obj.nickname === 'string' &&
+    typeof obj.avatarUrl === 'string'
   );
 };
 
 export const parseUser = (userString: string | null): User | null => {
   if (!userString) return null;
-  
+
   try {
     const parsed = JSON.parse(userString);
     return isUser(parsed) ? parsed : null;
   } catch (error) {
-    console.error("사용자 정보 파싱 실패:", error);
+    console.error('사용자 정보 파싱 실패:', error);
     return null;
   }
 };

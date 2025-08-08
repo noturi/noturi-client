@@ -1,15 +1,13 @@
-import { Loading } from "@/components/ui";
-import { Search } from "@tamagui/lucide-icons";
-import { useCallback } from "react";
-import { YStack } from "tamagui";
-import {
-  ActiveFilters,
-  EmptyState,
-  FilterOptions,
-  MemoList,
-  SearchInputBar,
-} from "./_components";
-import { useMemoSearch } from "./_lib/hooks/useMemoSearch";
+import { YStack } from 'tamagui';
+
+import { useCallback } from 'react';
+
+import { Search } from '@tamagui/lucide-icons';
+
+import { Loading } from '@/components/ui';
+
+import { ActiveFilters, EmptyState, FilterOptions, MemoList, SearchInputBar } from './_components';
+import { useMemoSearch } from './_lib/hooks/useMemoSearch';
 
 export default function SearchScreen() {
   const { filters, categories, memos } = useMemoSearch();
@@ -34,55 +32,48 @@ export default function SearchScreen() {
 
   const isIdle = !filters.hasSearchQuery;
   const isLoading = filters.hasSearchQuery && memos.isLoading;
-  const hasResults =
-    filters.hasSearchQuery && !memos.isLoading && memos.list.length > 0;
-  const isEmpty =
-    filters.hasSearchQuery && !memos.isLoading && memos.list.length === 0;
+  const hasResults = filters.hasSearchQuery && !memos.isLoading && memos.list.length > 0;
+  const isEmpty = filters.hasSearchQuery && !memos.isLoading && memos.list.length === 0;
 
   return (
-    <YStack flex={1} backgroundColor="$backgroundPrimary">
+    <YStack backgroundColor="$backgroundPrimary" flex={1}>
       {/* 검색 입력 */}
-      <YStack
-        padding="$4"
-        gap="$3"
-        borderBottomWidth={1}
-        borderBottomColor="$border"
-      >
+      <YStack borderBottomColor="$border" borderBottomWidth={1} gap="$3" padding="$4">
         <SearchInputBar
+          hasActiveFilters={filters.hasActiveFilters}
           searchText={filters.searchText}
           onChangeSearchText={filters.setSearchText}
-          hasActiveFilters={filters.hasActiveFilters}
           onPressSearch={handleSearch}
           onToggleFilters={filters.toggleFilters}
         />
 
         {/* 활성 필터 표시 */}
         <ActiveFilters
+          categories={categories.list}
           selectedCategoryId={filters.selectedCategoryId}
           selectedRating={filters.selectedRating}
-          categories={categories.list}
-          onClearCategory={() => filters.setSelectedCategoryId("")}
-          onClearRating={() => filters.setSelectedRating(undefined)}
           onClearAll={handleClearSearch}
+          onClearCategory={() => filters.setSelectedCategoryId('')}
+          onClearRating={() => filters.setSelectedRating(undefined)}
         />
 
         {/* 필터 옵션 */}
         <FilterOptions
-          show={filters.showFilters}
           categories={categories.list}
           selectedCategoryId={filters.selectedCategoryId}
-          setSelectedCategoryId={filters.setSelectedCategoryId}
           selectedRating={filters.selectedRating}
+          setSelectedCategoryId={filters.setSelectedCategoryId}
           setSelectedRating={filters.setSelectedRating}
+          show={filters.showFilters}
         />
       </YStack>
 
       <YStack flex={1}>
         {isIdle && (
           <EmptyState
-            icon={<Search size={48} color="$textMuted" />}
-            title="검색어를 입력하거나 필터를 선택해주세요"
             description="제목과 내용에서 메모를 검색할 수 있습니다"
+            icon={<Search color="$textMuted" size={48} />}
+            title="검색어를 입력하거나 필터를 선택해주세요"
           />
         )}
 
@@ -90,16 +81,16 @@ export default function SearchScreen() {
 
         {hasResults && (
           <MemoList
+            isFetchingNextPage={memos.isFetchingNextPage}
             memos={memos.list}
             onEndReached={onEndReached}
-            isFetchingNextPage={memos.isFetchingNextPage}
           />
         )}
 
         {isEmpty && (
           <EmptyState
-            title="검색 결과가 없습니다"
             description="다른 검색어나 필터를 시도해보세요"
+            title="검색 결과가 없습니다"
           />
         )}
       </YStack>

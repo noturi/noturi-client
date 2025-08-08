@@ -1,5 +1,6 @@
-import { Filter } from "@tamagui/lucide-icons";
-import { Button, TextArea, XStack, YStack } from "tamagui";
+import { Button, TextArea, XStack, YStack } from 'tamagui';
+
+import { Filter } from '@tamagui/lucide-icons';
 
 interface SearchInputBarProps {
   searchText: string;
@@ -17,31 +18,31 @@ export function SearchInputBar({
   onToggleFilters,
 }: SearchInputBarProps) {
   return (
-    <XStack gap="$3" alignItems="center">
+    <XStack alignItems="center" gap="$3">
       <YStack flex={1}>
         <TextArea
-          placeholder="제목과 내용에서 검색..."
-          value={searchText}
-          onChangeText={onChangeSearchText}
           backgroundColor="$backgroundSecondary"
-          borderWidth={0}
           borderRadius="$6"
-          fontSize="$4"
+          borderWidth={0}
           color="$textPrimary"
-          placeholderTextColor="$textMuted"
-          padding="$3"
+          fontSize="$4"
           maxHeight={48}
           multiline={false}
-          onSubmitEditing={onPressSearch}
+          padding="$3"
+          placeholder="제목과 내용에서 검색..."
+          placeholderTextColor="$textMuted"
           returnKeyType="search"
+          value={searchText}
+          onChangeText={onChangeSearchText}
+          onSubmitEditing={onPressSearch}
         />
       </YStack>
 
       <Button
-        size="$4"
-        backgroundColor={hasActiveFilters ? "$primary" : "$surface"}
-        color={hasActiveFilters ? "$textOnPrimary" : "$textSecondary"}
+        backgroundColor={hasActiveFilters ? '$primary' : '$surface'}
         borderRadius="$6"
+        color={hasActiveFilters ? '$textOnPrimary' : '$textSecondary'}
+        size="$4"
         onPress={onToggleFilters}
       >
         <Filter size={16} />

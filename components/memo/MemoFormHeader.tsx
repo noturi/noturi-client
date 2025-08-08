@@ -1,5 +1,6 @@
-import { Typography } from "@/components/ui";
-import { Button, XStack, YStack } from "tamagui";
+import { Button, XStack, YStack } from 'tamagui';
+
+import { Typography } from '@/components/ui';
 
 interface MemoFormHeaderProps {
   onClose: () => void;
@@ -9,31 +10,26 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
   return (
     <>
       {/* Handle */}
-      <YStack alignItems="center" paddingTop="$2" paddingBottom="$1">
-        <YStack
-          width={36}
-          height={4}
-          backgroundColor="$textMuted"
-          borderRadius="$2"
-        />
+      <YStack alignItems="center" paddingBottom="$1" paddingTop="$2">
+        <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
       </YStack>
 
       {/* Header */}
       <XStack
-        justifyContent="space-between"
         alignItems="center"
+        borderBottomColor="$border"
+        borderBottomWidth={1}
+        justifyContent="space-between"
         paddingHorizontal="$2"
         paddingVertical="$3"
-        borderBottomWidth={1}
-        borderBottomColor="$border"
       >
         <Button
-          size="$3"
           backgroundColor="$backgroundTransparent"
-          color="$textSecondary"
-          borderWidth={0}
-          pressStyle={{ backgroundColor: "$backgroundTransparent" }}
           borderRadius="$4"
+          borderWidth={0}
+          color="$textSecondary"
+          pressStyle={{ backgroundColor: '$backgroundTransparent' }}
+          size="$3"
           onPress={onClose}
         >
           취소

@@ -1,10 +1,10 @@
-import * as Burnt from "burnt";
+import * as Burnt from 'burnt';
 
 export function useToast() {
   const showSuccess = (message: string) => {
     Burnt.toast({
       title: message,
-      preset: "done",
+      preset: 'done',
       layout: {
         iconSize: {
           height: 16,
@@ -17,7 +17,7 @@ export function useToast() {
   const showError = (message: string) => {
     Burnt.toast({
       title: message,
-      preset: "error",
+      preset: 'error',
       layout: {
         iconSize: {
           height: 16,

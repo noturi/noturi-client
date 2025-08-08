@@ -1,27 +1,24 @@
-import {
-  useMutation,
-  type DefaultError,
-  type UseMutationOptions,
-} from "@tanstack/react-query";
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { queryClient } from "@/app/_layout";
+import { queryClient } from '@/app/_layout';
+
 import {
-  authApi,
-  authService,
   type GoogleLoginDto,
   type LoginResponseDto,
-} from "../../services/auth";
+  authApi,
+  authService,
+} from '../../services/auth';
 
 export function useGoogleLoginMutation(
   options: Pick<
     UseMutationOptions<LoginResponseDto, DefaultError, GoogleLoginDto>,
-    "mutationKey" | "onMutate" | "onSuccess" | "onError" | "onSettled"
-  > = {}
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
 ) {
   const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
 
   return useMutation({
-    mutationKey: ["auth", "google-login", ...mutationKey],
+    mutationKey: ['auth', 'google-login', ...mutationKey],
     mutationFn: (dto: GoogleLoginDto) => {
       return authApi.googleLogin(dto);
     },
@@ -29,10 +26,10 @@ export function useGoogleLoginMutation(
     onSuccess: async (loginResponse, loginData, context) => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ["auth", "user"],
+          queryKey: ['auth', 'user'],
         }),
         queryClient.invalidateQueries({
-          queryKey: ["auth", "profile"],
+          queryKey: ['auth', 'profile'],
         }),
         onSuccess?.(loginResponse, loginData, context),
       ]);
@@ -45,13 +42,13 @@ export function useGoogleLoginMutation(
 export function useLogoutMutation(
   options: Pick<
     UseMutationOptions<void, DefaultError, void>,
-    "mutationKey" | "onMutate" | "onSuccess" | "onError" | "onSettled"
-  > = {}
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
 ) {
   const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
 
   return useMutation({
-    mutationKey: ["auth", "logout", ...mutationKey],
+    mutationKey: ['auth', 'logout', ...mutationKey],
     mutationFn: () => {
       return authService.logout();
     },
@@ -59,17 +56,17 @@ export function useLogoutMutation(
     onSuccess: async (_, __, context) => {
       // 모든 쿼리 캐시 클리어
       await queryClient.clear();
-      
+
       // 인증 관련 쿼리들 무효화
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ["auth"],
+          queryKey: ['auth'],
         }),
         queryClient.invalidateQueries({
-          queryKey: ["memos"],
+          queryKey: ['memos'],
         }),
         queryClient.invalidateQueries({
-          queryKey: ["categories"],
+          queryKey: ['categories'],
         }),
         onSuccess?.(_, __, context),
       ]);

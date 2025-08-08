@@ -1,8 +1,10 @@
-import { Typography } from "@/components/ui";
-import type { UICategory } from "@/services/category/categoryService";
-import { useState } from "react";
-import { Pressable } from "react-native";
-import { XStack } from "tamagui";
+import { XStack } from 'tamagui';
+
+import { useState } from 'react';
+import { Pressable } from 'react-native';
+
+import { Typography } from '@/components/ui';
+import type { UICategory } from '@/services/category/categoryService';
 
 interface CategoryButtonProps {
   category: UICategory;
@@ -14,53 +16,53 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
 
   return (
     <Pressable
-      onPress={onPress}
-      onPressIn={() => setIsHovered(true)}
-      onPressOut={() => setIsHovered(false)}
       hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
       style={({ pressed }) => ({
         transform: [{ scale: pressed ? 0.96 : 1 }],
         opacity: pressed ? 0.95 : 1,
       })}
+      onPress={onPress}
+      onPressIn={() => setIsHovered(true)}
+      onPressOut={() => setIsHovered(false)}
     >
       <XStack
+        alignItems="center"
         backgroundColor={
           isHovered
             ? category.active
-              ? "$primaryHover"
-              : "$surfaceHover"
+              ? '$primaryHover'
+              : '$surfaceHover'
             : category.active
-            ? "$textPrimary"
-            : "$surface"
+              ? '$textPrimary'
+              : '$surface'
         }
-        paddingHorizontal="$3"
-        paddingVertical="$2"
-        borderRadius="$7"
-        alignItems="center"
-        borderWidth={1}
         borderColor={
           isHovered
             ? category.active
-              ? "$primaryHover"
-              : "$borderHover"
+              ? '$primaryHover'
+              : '$borderHover'
             : category.active
-            ? "$textPrimary"
-            : "$border"
+              ? '$textPrimary'
+              : '$border'
         }
+        borderRadius="$7"
+        borderWidth={1}
         gap="$2"
+        paddingHorizontal="$3"
+        paddingVertical="$2"
       >
         <Typography
-          variant="subtitle"
-          color={category.active ? "$textOnPrimary" : "$textSecondary"}
+          color={category.active ? '$textOnPrimary' : '$textSecondary'}
           pointerEvents="none"
+          variant="subtitle"
         >
           {category.name}
         </Typography>
         {category.count > 0 && (
           <Typography
-            variant="subtitle"
-            color={category.active ? "$textOnPrimary" : "$textMuted"}
+            color={category.active ? '$textOnPrimary' : '$textMuted'}
             pointerEvents="none"
+            variant="subtitle"
           >
             {category.count}
           </Typography>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export interface MemoFormData {
   title: string;
@@ -9,14 +9,14 @@ export interface MemoFormData {
 
 export const useMemoForm = () => {
   const [formData, setFormData] = useState<MemoFormData>({
-    title: "",
-    memoContent: "",
+    title: '',
+    memoContent: '',
     rating: 0,
-    selectedCategory: "",
+    selectedCategory: '',
   });
 
   const updateField = (field: keyof MemoFormData, value: string | number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -24,10 +24,10 @@ export const useMemoForm = () => {
 
   const resetForm = () => {
     setFormData({
-      title: "",
-      memoContent: "",
+      title: '',
+      memoContent: '',
       rating: 0,
-      selectedCategory: "",
+      selectedCategory: '',
     });
   };
 
@@ -39,7 +39,7 @@ export const useMemoForm = () => {
   };
 
   const handleCategorySelect = (categoryName: string) => {
-    updateField("selectedCategory", categoryName);
+    updateField('selectedCategory', categoryName);
   };
 
   return {

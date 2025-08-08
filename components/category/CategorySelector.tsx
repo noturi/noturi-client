@@ -1,6 +1,7 @@
-import { Typography } from "@/components/ui";
-import { Category } from "@/services/category/types";
-import { Button, Input, ScrollView, XStack, YStack } from "tamagui";
+import { Button, Input, ScrollView, XStack, YStack } from 'tamagui';
+
+import { Typography } from '@/components/ui';
+import { Category } from '@/services/category/types';
 
 interface CategorySelectorProps {
   categories: Category[];
@@ -25,49 +26,35 @@ export const CategorySelector = ({
           {categories.map((category) => (
             <Button
               key={category.id}
-              size="$2"
-              backgroundColor={
-                selectedCategory === category.name
-                  ? "$textPrimary"
-                  : "$surface"
-              }
-              borderWidth={1}
-              borderColor={
-                selectedCategory === category.name
-                  ? "$textPrimary"
-                  : "$border"
-              }
-              color={
-                selectedCategory === category.name
-                  ? "$textOnPrimary"
-                  : "$textPrimary"
-              }
+              backgroundColor={selectedCategory === category.name ? '$textPrimary' : '$surface'}
+              borderColor={selectedCategory === category.name ? '$textPrimary' : '$border'}
               borderRadius="$4"
+              borderWidth={1}
+              color={selectedCategory === category.name ? '$textOnPrimary' : '$textPrimary'}
               fontSize="$3"
               paddingHorizontal="$3"
               pressStyle={{
                 backgroundColor:
-                  selectedCategory === category.name
-                    ? "$textPrimary"
-                    : "$surfaceHover",
+                  selectedCategory === category.name ? '$textPrimary' : '$surfaceHover',
               }}
+              size="$2"
               onPress={() => onSelectCategory(category.name)}
             >
               {category.name}
             </Button>
           ))}
           <Button
-            size="$2"
             backgroundColor="$backgroundPrimary"
-            borderWidth={1}
             borderColor="$border"
-            borderStyle="dashed"
-            color="$textSecondary"
             borderRadius="$4"
+            borderStyle="dashed"
+            borderWidth={1}
+            color="$textSecondary"
             fontSize="$3"
             paddingHorizontal="$3"
-            pressStyle={{ backgroundColor: "$surfaceHover" }}
-            onPress={() => onSelectCategory("")}
+            pressStyle={{ backgroundColor: '$surfaceHover' }}
+            size="$2"
+            onPress={() => onSelectCategory('')}
           >
             + 추가
           </Button>
@@ -76,18 +63,18 @@ export const CategorySelector = ({
 
       {!selectedCategory && (
         <Input
-          placeholder="새 카테고리 입력"
-          value={newCategory}
-          onChangeText={onNewCategoryChange}
           backgroundColor="$backgroundPrimary"
-          borderWidth={1}
           borderColor="$border"
           borderRadius="$4"
-          fontSize="$4"
+          borderWidth={1}
           color="$textPrimary"
-          placeholderTextColor="$textMuted"
+          fontSize="$4"
           paddingHorizontal="$4"
           paddingVertical="$3"
+          placeholder="새 카테고리 입력"
+          placeholderTextColor="$textMuted"
+          value={newCategory}
+          onChangeText={onNewCategoryChange}
         />
       )}
     </YStack>

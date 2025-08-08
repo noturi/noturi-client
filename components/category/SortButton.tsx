@@ -1,8 +1,10 @@
-import { Typography } from "@/components/ui";
-import { useState } from "react";
-import { Pressable } from "react-native";
-import { XStack, YStack } from "tamagui";
-import type { SortOption } from "@/lib/category/types";
+import { XStack, YStack } from 'tamagui';
+
+import { useState } from 'react';
+import { Pressable } from 'react-native';
+
+import { Typography } from '@/components/ui';
+import type { SortOption } from '@/lib/category/types';
 
 interface SortButtonProps {
   option: SortOption;
@@ -15,6 +17,7 @@ export const SortButton = ({ option, onPress }: SortButtonProps) => {
 
   return (
     <Pressable
+      hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
       onPress={onPress}
       onPressIn={() => {
         setIsHovered(true);
@@ -24,44 +27,41 @@ export const SortButton = ({ option, onPress }: SortButtonProps) => {
         setIsHovered(false);
         setIsPressed(false);
       }}
-      hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
     >
       <YStack position="relative">
         <XStack
-          backgroundColor={
-            isHovered && !isPressed ? "$surfaceHover" : undefined
-          }
+          alignItems="center"
+          backgroundColor={isHovered && !isPressed ? '$surfaceHover' : undefined}
+          justifyContent="center"
+          minHeight={48}
+          minWidth={60}
           paddingHorizontal="$2.5"
           paddingVertical="$2.5"
-          alignItems="center"
-          justifyContent="center"
-          minWidth={60}
-          minHeight={48}
           style={{
             transform: [{ scale: isPressed ? 0.96 : 1 }],
           }}
         >
           <Typography
-            variant="subtitle"
-            color={option.active ? "$textPrimary" : "$textSecondary"}
-            fontWeight={option.active ? "$4" : "$3"}
+            color={option.active ? '$textPrimary' : '$textSecondary'}
+            fontWeight={option.active ? '$4' : '$3'}
             pointerEvents="none"
             style={{
               opacity: isPressed ? 0.8 : 1,
             }}
+            variant="subtitle"
           >
             {option.name}
           </Typography>
         </XStack>
         {option.active && (
           <XStack
-            height={2}
             backgroundColor="$textPrimary"
-            position="absolute"
-            bottom={0}
-            left={0}
-            right={0}
             borderRadius="$1"
+            bottom={0}
+            height={2}
+            left={0}
+            position="absolute"
+            right={0}
           />
         )}
       </YStack>

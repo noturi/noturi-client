@@ -1,10 +1,13 @@
-import { activeCategoriesQuery } from "@/services/category";
-import type { UIMemo } from "@/services/memo/memoService";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback } from "react";
-import { useInfiniteMemos } from "./useInfiniteMemos";
-import { useSearchFilters } from "./useSearchFilters";
-import { useTransformMemos } from "./useTransformMemos";
+import { useCallback } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { activeCategoriesQuery } from '@/services/category';
+import type { UIMemo } from '@/services/memo/memoService';
+
+import { useInfiniteMemos } from './useInfiniteMemos';
+import { useSearchFilters } from './useSearchFilters';
+import { useTransformMemos } from './useTransformMemos';
 
 interface FiltersNamespace {
   // state
@@ -65,19 +68,13 @@ export function useMemoSearch(): UseMemoSearchReturn {
 
   const enabled = hasSearchQuery;
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    refetch,
-  } = useInfiniteMemos({
-    debouncedSearchText,
-    selectedCategoryId,
-    selectedRating,
-    enabled,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch } =
+    useInfiniteMemos({
+      debouncedSearchText,
+      selectedCategoryId,
+      selectedRating,
+      enabled,
+    });
 
   const transformedMemos = useTransformMemos(data);
 

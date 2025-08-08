@@ -1,6 +1,7 @@
-import { YStack } from "tamagui";
-import { CategoryChips } from "./CategoryChips";
-import { RatingChips } from "./RatingChips";
+import { YStack } from 'tamagui';
+
+import { CategoryChips } from './CategoryChips';
+import { RatingChips } from './RatingChips';
 
 interface CategoryLite {
   id: string;
@@ -33,10 +34,7 @@ export function FilterOptions({
         selectedCategoryId={selectedCategoryId}
         onSelect={setSelectedCategoryId}
       />
-      <RatingChips
-        selectedRating={selectedRating}
-        onSelect={setSelectedRating}
-      />
+      <RatingChips selectedRating={selectedRating} onSelect={setSelectedRating} />
     </YStack>
   );
 }

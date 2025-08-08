@@ -1,5 +1,6 @@
-import { useDebounce } from "@/hooks/useDebounce";
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
+
+import { useDebounce } from '@/hooks/useDebounce';
 
 export interface UseSearchFiltersReturn {
   // state
@@ -20,21 +21,20 @@ export interface UseSearchFiltersReturn {
 }
 
 export function useSearchFilters(): UseSearchFiltersReturn {
-  const [searchText, setSearchText] = useState<string>("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
   const [selectedRating, setSelectedRating] = useState<number | undefined>();
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
   const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), []);
   const clearAll = useCallback(() => {
-    setSearchText("");
-    setSelectedCategoryId("");
+    setSearchText('');
+    setSelectedCategoryId('');
     setSelectedRating(undefined);
   }, []);
 
   const debouncedSearchText = useDebounce(searchText, 500);
-  const hasActiveFilters =
-    selectedCategoryId !== "" || selectedRating !== undefined;
+  const hasActiveFilters = selectedCategoryId !== '' || selectedRating !== undefined;
   const hasSearchQuery = debouncedSearchText.length > 0 || hasActiveFilters;
 
   return {

@@ -44,8 +44,8 @@ export interface MemoListParamsDto {
   limit?: number;
   categoryId?: string;
   rating?: number;
-  sortBy?: "createdAt" | "rating" | "title";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'createdAt' | 'rating' | 'title';
+  sortOrder?: 'asc' | 'desc';
   search?: string;
   startDate?: string;
   endDate?: string;

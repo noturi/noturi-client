@@ -1,5 +1,6 @@
-import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
+
+import * as SecureStore from 'expo-secure-store';
 
 export interface TokenCache {
   getToken: (key: string) => Promise<string | null>;
@@ -47,14 +48,12 @@ const createNativeTokenCache = (): TokenCache => {
     },
 
     clearAllTokens: async () => {
-      const tokenKeys = ["accessToken", "refreshToken", "user"];
+      const tokenKeys = ['accessToken', 'refreshToken', 'user'];
       try {
-        await Promise.all(
-          tokenKeys.map((key) => SecureStore.deleteItemAsync(key))
-        );
-        console.log("모든 토큰 삭제 완료");
+        await Promise.all(tokenKeys.map((key) => SecureStore.deleteItemAsync(key)));
+        console.log('모든 토큰 삭제 완료');
       } catch (error) {
-        console.error("토큰 삭제 실패:", error);
+        console.error('토큰 삭제 실패:', error);
         throw error;
       }
     },
@@ -100,12 +99,12 @@ const createWebTokenCache = (): TokenCache => {
     },
 
     clearAllTokens: async () => {
-      const tokenKeys = ["accessToken", "refreshToken", "user"];
+      const tokenKeys = ['accessToken', 'refreshToken', 'user'];
       try {
         tokenKeys.forEach((key) => localStorage.removeItem(key));
-        console.log("🧹 모든 토큰 삭제 완료");
+        console.log('🧹 모든 토큰 삭제 완료');
       } catch (error) {
-        console.error("❌ 토큰 삭제 실패:", error);
+        console.error('❌ 토큰 삭제 실패:', error);
         throw error;
       }
     },
@@ -114,21 +113,17 @@ const createWebTokenCache = (): TokenCache => {
 
 // Native: SecureStore, Web: localStorage
 export const tokenCache: TokenCache =
-  Platform.OS !== "web" ? createNativeTokenCache() : createWebTokenCache();
+  Platform.OS !== 'web' ? createNativeTokenCache() : createWebTokenCache();
 
 export const TOKEN_KEYS = {
-  ACCESS_TOKEN: "accessToken",
-  REFRESH_TOKEN: "refreshToken",
-  USER: "user",
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+  USER: 'user',
 } as const;
 
 // 인증 토큰 전용 헬퍼 함수들
 export const authTokenCache = {
-  saveAuthTokens: async (tokens: {
-    accessToken: string;
-    refreshToken: string;
-    user: string;
-  }) => {
+  saveAuthTokens: async (tokens: { accessToken: string; refreshToken: string; user: string }) => {
     await Promise.all([
       tokenCache.saveToken(TOKEN_KEYS.ACCESS_TOKEN, tokens.accessToken),
       tokenCache.saveToken(TOKEN_KEYS.REFRESH_TOKEN, tokens.refreshToken),

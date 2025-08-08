@@ -1,5 +1,6 @@
-import { Button, XStack } from "tamagui";
-import { ActiveFilterChip } from "./ActiveFilterChip";
+import { Button, XStack } from 'tamagui';
+
+import { ActiveFilterChip } from './ActiveFilterChip';
 
 interface CategoryLite {
   id: string;
@@ -23,33 +24,27 @@ export function ActiveFilters({
   onClearRating,
   onClearAll,
 }: ActiveFiltersProps) {
-  const hasActiveFilters =
-    selectedCategoryId !== "" || selectedRating !== undefined;
+  const hasActiveFilters = selectedCategoryId !== '' || selectedRating !== undefined;
   if (!hasActiveFilters) return null;
 
   return (
-    <XStack gap="$2" alignItems="center" flexWrap="wrap">
+    <XStack alignItems="center" flexWrap="wrap" gap="$2">
       {selectedCategoryId && (
         <ActiveFilterChip
-          label={
-            categories.find((c) => c.id === selectedCategoryId)?.name ?? ""
-          }
+          label={categories.find((c) => c.id === selectedCategoryId)?.name ?? ''}
           onClear={onClearCategory}
         />
       )}
 
       {selectedRating !== undefined && (
-        <ActiveFilterChip
-          label={`★ ${selectedRating}+`}
-          onClear={onClearRating}
-        />
+        <ActiveFilterChip label={`★ ${selectedRating}+`} onClear={onClearRating} />
       )}
 
       <Button
-        size="$2"
         backgroundColor="$surface"
-        color="$textSecondary"
         borderRadius="$3"
+        color="$textSecondary"
+        size="$2"
         onPress={onClearAll}
       >
         모두 지우기

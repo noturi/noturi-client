@@ -1,6 +1,8 @@
-import { Typography } from "@/components/ui";
-import { ReactNode } from "react";
-import { YStack } from "tamagui";
+import { YStack } from 'tamagui';
+
+import { ReactNode } from 'react';
+
+import { Typography } from '@/components/ui';
 
 interface EmptyStateProps {
   icon?: ReactNode;
@@ -10,23 +12,16 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description }: EmptyStateProps) {
   return (
-    <YStack
-      flex={1}
-      alignItems="center"
-      justifyContent="center"
-      paddingHorizontal="$4"
-    >
+    <YStack alignItems="center" flex={1} justifyContent="center" paddingHorizontal="$4">
       {icon}
-      <Typography variant="title" color="$textMuted" textAlign="center" marginTop="$3">
+      <Typography color="$textMuted" marginTop="$3" textAlign="center" variant="title">
         {title}
       </Typography>
       {description ? (
-        <Typography variant="body" color="$textMuted" textAlign="center" marginTop="$2">
+        <Typography color="$textMuted" marginTop="$2" textAlign="center" variant="body">
           {description}
         </Typography>
       ) : null}
     </YStack>
   );
 }
-
-

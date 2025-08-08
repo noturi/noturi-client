@@ -40,10 +40,10 @@ export type Logout = {
   refreshToken: string;
 };
 
-export type GoogleLoginDto = Omit<GoogleLogin, "timestamp" | "deviceId">;
-export type LoginResponseDto = Omit<LoginResult, "expiresAt"> & {
-  user: Pick<User, "id" | "email" | "name" | "nickname" | "avatarUrl">;
+export type GoogleLoginDto = Omit<GoogleLogin, 'timestamp' | 'deviceId'>;
+export type LoginResponseDto = Omit<LoginResult, 'expiresAt'> & {
+  user: Pick<User, 'id' | 'email' | 'name' | 'nickname' | 'avatarUrl'>;
 };
-export type RefreshTokenDto = Pick<RefreshToken, "refreshToken">;
-export type RefreshTokenResponseDto = Omit<RefreshResult, "expiresAt">;
-export type LogoutDto = Pick<Logout, "refreshToken">;
+export type RefreshTokenDto = Pick<RefreshToken, 'refreshToken'>;
+export type RefreshTokenResponseDto = Omit<RefreshResult, 'expiresAt'>;
+export type LogoutDto = Pick<Logout, 'refreshToken'>;

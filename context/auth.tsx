@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useTokens } from "@/hooks/useTokens";
-import { authService } from "@/services/auth/authService";
-import { User } from "@/types/auth";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+
+import { useTokens } from '@/hooks/useTokens';
+import { authService } from '@/services/auth/authService';
+import { User } from '@/types/auth';
 
 interface AuthContextType {
   // 상태 조회 함수들
@@ -31,7 +32,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
@@ -48,25 +49,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 안전한 사용자 정보 조회
   const getUser = async (): Promise<User | null> => {
     const rawUser = await tokens.getUser();
-    return rawUser && typeof rawUser === "object" ? rawUser : null;
+    return rawUser && typeof rawUser === 'object' ? rawUser : null;
   };
 
   // 초기 인증 상태 확인
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        console.log("🔍 인증 상태 확인 중...");
+        console.log('🔍 인증 상태 확인 중...');
         const authenticated = await tokens.checkAuthStatus();
         setAuthState(authenticated);
-        
+
         if (authenticated) {
-          console.log("✅ 인증 상태 복원 완료");
+          console.log('✅ 인증 상태 복원 완료');
         } else {
-          console.log("❌ 유효한 인증 상태 없음");
+          console.log('❌ 유효한 인증 상태 없음');
         }
       } catch (error) {
-        console.error("인증 상태 확인 실패:", error);
-        setError("인증 상태 확인에 실패했습니다.");
+        console.error('인증 상태 확인 실패:', error);
+        setError('인증 상태 확인에 실패했습니다.');
         setAuthState(false);
       } finally {
         setIsInitialLoading(false);
@@ -86,10 +87,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setError(null);
       await tokens.saveAuthTokens(authTokens);
       setAuthState(true);
-      console.log("✅ 토큰 저장 완료");
+      console.log('✅ 토큰 저장 완료');
     } catch (error) {
-      console.error("토큰 저장 실패:", error);
-      setError("토큰 저장에 실패했습니다.");
+      console.error('토큰 저장 실패:', error);
+      setError('토큰 저장에 실패했습니다.');
       throw error;
     }
   };
@@ -101,8 +102,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await authService.logout();
       setAuthState(false);
     } catch (error) {
-      console.error("로그아웃 실패:", error);
-      setError("로그아웃에 실패했습니다.");
+      console.error('로그아웃 실패:', error);
+      setError('로그아웃에 실패했습니다.');
       // 에러가 있어도 상태는 로그아웃 상태로 변경
       setAuthState(false);
     }
@@ -113,18 +114,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setError(null);
       const result = await authService.refreshAccessToken();
-      
+
       if (result.success) {
         setAuthState(true);
         return true;
       } else {
-        setError(result.error || "세션이 만료되었습니다. 다시 로그인해주세요.");
+        setError(result.error || '세션이 만료되었습니다. 다시 로그인해주세요.');
         setAuthState(false);
         return false;
       }
     } catch (error) {
-      console.error("토큰 갱신 실패:", error);
-      setError("토큰 갱신에 실패했습니다.");
+      console.error('토큰 갱신 실패:', error);
+      setError('토큰 갱신에 실패했습니다.');
       setAuthState(false);
       return false;
     }

@@ -1,15 +1,20 @@
-import { ROUTES, HREFS } from "@/constants";
-import { AuthProvider } from "@/context/auth";
-import { config } from "@/tamagui.config";
-import { TamaguiProvider } from "@tamagui/core";
-import { Edit3 } from "@tamagui/lucide-icons";
-import { PortalProvider } from "@tamagui/portal";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack, router } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import { Alert, Pressable } from "react-native";
-import { XStack } from "tamagui";
+import { XStack } from 'tamagui';
+
+import { useEffect } from 'react';
+import { Alert, Pressable } from 'react-native';
+
+import { Stack, router } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+
+import { TamaguiProvider } from '@tamagui/core';
+import { Edit3 } from '@tamagui/lucide-icons';
+import { PortalProvider } from '@tamagui/portal';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { HREFS, ROUTES } from '@/constants';
+import { AuthProvider } from '@/context/auth';
+import { config } from '@/tamagui.config';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,10 +27,7 @@ export const queryClient = new QueryClient({
     },
     mutations: {
       onError: (error) => {
-        Alert.alert(
-          "오류",
-          error?.message || "작업 중 오류가 발생했습니다. 다시 시도해주세요."
-        );
+        Alert.alert('오류', error?.message || '작업 중 오류가 발생했습니다. 다시 시도해주세요.');
       },
     },
   },
@@ -46,53 +48,38 @@ export default function RootLayout() {
             <Stack
               screenOptions={{
                 headerStyle: {
-                  backgroundColor: "#ffffff",
+                  backgroundColor: '#ffffff',
                 },
-                headerTintColor: "#111827",
+                headerTintColor: '#111827',
                 headerTitleStyle: {
-                  fontWeight: "600",
+                  fontWeight: '600',
                   fontSize: 20,
                 },
                 headerShadowVisible: false,
-                headerBackTitle: "",
+                headerBackTitle: '',
               }}
             >
-              <Stack.Screen
-                name={ROUTES.root.name}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name={ROUTES.authGroup.name}
-                options={{ headerShown: false }}
-              />
+              <Stack.Screen name={ROUTES.root.name} options={{ headerShown: false }} />
+              <Stack.Screen name={ROUTES.authGroup.name} options={{ headerShown: false }} />
               <Stack.Screen
                 name={ROUTES.tabsGroup.name}
-                options={{ headerShown: false, title: "" }}
+                options={{ headerShown: false, title: '' }}
               />
 
-              <Stack.Screen
-                name={ROUTES.create.name}
-                options={{ presentation: "modal" }}
-              />
+              <Stack.Screen name={ROUTES.create.name} options={{ presentation: 'modal' }} />
 
               <Stack.Screen
                 name={ROUTES.memoDetail.name}
-                options={({
-                  route,
-                }: {
-                  route: { params?: { id?: string } };
-                }) => ({
+                options={({ route }: { route: { params?: { id?: string } } }) => ({
                   title: ROUTES.memoDetail.label,
-                  headerBackTitle: "",
+                  headerBackTitle: '',
                   headerBackButtonMenuEnabled: false,
                   headerRight: () => (
                     <XStack paddingRight="$3">
                       <Pressable
-                        onPress={() =>
-                          router.push(HREFS.memoEdit(String(route.params?.id ?? "")))
-                        }
+                        onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
                       >
-                        <Edit3 size={20} color="$textSecondary" />
+                        <Edit3 color="$textSecondary" size={20} />
                       </Pressable>
                     </XStack>
                   ),
@@ -103,7 +90,7 @@ export default function RootLayout() {
                 name={ROUTES.memoEdit.name}
                 options={{
                   title: ROUTES.memoEdit.label,
-                  headerBackTitle: "",
+                  headerBackTitle: '',
                   headerBackButtonMenuEnabled: false,
                 }}
               />
@@ -112,7 +99,7 @@ export default function RootLayout() {
                 name={ROUTES.search.name}
                 options={{
                   title: ROUTES.search.label,
-                  headerBackTitle: "",
+                  headerBackTitle: '',
                   headerBackButtonMenuEnabled: false,
                 }}
               />

@@ -14,9 +14,9 @@ export function formatTimeAgo(dateString: string): string {
   const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
   const diffInDays = Math.floor(diffInHours / 24);
-  
+
   if (diffInMinutes < 1) {
-    return "방금 전";
+    return '방금 전';
   } else if (diffInHours < 1) {
     return `${diffInMinutes}분 전`;
   } else if (diffInHours < 24) {
@@ -24,10 +24,10 @@ export function formatTimeAgo(dateString: string): string {
   } else if (diffInDays < 7) {
     return `${diffInDays}일 전`;
   } else {
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }
 }
@@ -39,11 +39,11 @@ export function formatTimeAgo(dateString: string): string {
  */
 export function formatAbsoluteTime(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }

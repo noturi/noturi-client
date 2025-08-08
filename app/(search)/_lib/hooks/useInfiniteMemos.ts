@@ -1,5 +1,6 @@
-import { memoApi, type MemoListResponseDto } from "@/services/memo";
-import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
+import { type InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+
+import { type MemoListResponseDto, memoApi } from '@/services/memo';
 
 interface Params {
   debouncedSearchText: string;
@@ -22,11 +23,11 @@ export function useInfiniteMemos({
     number
   >({
     queryKey: [
-      "memos",
-      "search",
+      'memos',
+      'search',
       debouncedSearchText,
       selectedCategoryId,
-      selectedRating?.toString() ?? "",
+      selectedRating?.toString() ?? '',
     ],
     queryFn: ({ pageParam }) =>
       memoApi.getMemos({
@@ -35,14 +36,12 @@ export function useInfiniteMemos({
         search: debouncedSearchText || undefined,
         categoryId: selectedCategoryId || undefined,
         rating: selectedRating,
-        sortBy: "createdAt",
-        sortOrder: "desc",
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
-      lastPage.meta.page < lastPage.meta.totalPages
-        ? lastPage.meta.page + 1
-        : undefined,
+      lastPage.meta.page < lastPage.meta.totalPages ? lastPage.meta.page + 1 : undefined,
     enabled,
   });
 }
