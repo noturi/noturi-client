@@ -49,9 +49,8 @@ export default function TabsLayout() {
           tabBarInactiveTintColor: '#6B7280',
         }}
       >
-        {/* 홈 - 기록 보기 */}
         <Tabs.Screen
-          name="index"
+          name="home/index"
           options={{
             title: '',
             tabBarIcon: ({ color }) => <Home color={color as any} size={20} />,
