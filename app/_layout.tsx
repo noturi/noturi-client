@@ -1,7 +1,8 @@
+import { ROUTES, HREFS } from "@/constants";
 import { AuthProvider } from "@/context/auth";
 import { config } from "@/tamagui.config";
 import { TamaguiProvider } from "@tamagui/core";
-import { Check, Edit3 } from "@tamagui/lucide-icons";
+import { Edit3 } from "@tamagui/lucide-icons";
 import { PortalProvider } from "@tamagui/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack, router } from "expo-router";
@@ -40,8 +41,8 @@ export default function RootLayout() {
   return (
     <TamaguiProvider config={config}>
       <PortalProvider>
-          <QueryClientProvider client={queryClient}>
-            <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
             <Stack
               screenOptions={{
                 headerStyle: {
@@ -56,40 +57,40 @@ export default function RootLayout() {
                 headerBackTitle: "",
               }}
             >
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
               <Stack.Screen
-                name="create"
-                options={{
-                  title: "메모 작성",
-                  presentation: "modal",
-                  headerRight: () => (
-                    <XStack paddingRight="$3">
-                      <Pressable
-                        onPress={() => console.log("저장")}
-                        style={{ padding: 8 }}
-                      >
-                        <Check size={20} color="$textSecondary" />
-                      </Pressable>
-                    </XStack>
-                  ),
-                }}
+                name={ROUTES.root.name}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={ROUTES.authGroup.name}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={ROUTES.tabsGroup.name}
+                options={{ headerShown: false, title: "" }}
               />
 
+              <Stack.Screen
+                name={ROUTES.create.name}
+                options={{ presentation: "modal" }}
+              />
 
               <Stack.Screen
-                name="memo/[id]"
-                options={({ route }: any) => ({
-                  title: "메모",
+                name={ROUTES.memoDetail.name}
+                options={({
+                  route,
+                }: {
+                  route: { params?: { id?: string } };
+                }) => ({
+                  title: ROUTES.memoDetail.label,
                   headerBackTitle: "",
                   headerBackButtonMenuEnabled: false,
                   headerRight: () => (
                     <XStack paddingRight="$3">
                       <Pressable
-                        onPress={() => router.push(`/memo/edit/${route.params?.id}`)}
-                        style={{ padding: 8 }}
+                        onPress={() =>
+                          router.push(HREFS.memoEdit(String(route.params?.id ?? "")))
+                        }
                       >
                         <Edit3 size={20} color="$textSecondary" />
                       </Pressable>
@@ -97,20 +98,20 @@ export default function RootLayout() {
                   ),
                 })}
               />
-              
+
               <Stack.Screen
-                name="memo/edit/[id]"
+                name={ROUTES.memoEdit.name}
                 options={{
-                  title: "메모 수정",
+                  title: ROUTES.memoEdit.label,
                   headerBackTitle: "",
                   headerBackButtonMenuEnabled: false,
                 }}
               />
 
               <Stack.Screen
-                name="search"
+                name={ROUTES.search.name}
                 options={{
-                  title: "검색",
+                  title: ROUTES.search.label,
                   headerBackTitle: "",
                   headerBackButtonMenuEnabled: false,
                 }}
