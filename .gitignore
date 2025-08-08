@@ -40,4 +40,15 @@ app-example
 
 
 android/
+ios/
+
+# VS Code: ignore all but shared project configs
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Tamagui cache/build outputs
+.tamagui/
 
