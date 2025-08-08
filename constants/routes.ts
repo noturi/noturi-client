@@ -7,17 +7,29 @@ export const ROUTES = {
     href: '/',
     label: '',
   },
-  authGroup: {
+  auth: {
     name: '(auth)',
     path: '/(auth)',
     href: '/(auth)',
     label: '',
   },
-  tabsGroup: {
+  login: {
+    name: '(auth)/login',
+    path: '/(auth)/login',
+    href: '/(auth)/login',
+    label: '로그인',
+  },
+  tabs: {
     name: '(tabs)',
     path: '/(tabs)',
     href: '/(tabs)',
     label: '',
+  },
+  home: {
+    name: '(tabs)/(home)/home',
+    path: '/(tabs)/(home)/home',
+    href: '/(tabs)/(home)/home',
+    label: '홈',
   },
   search: {
     name: '(search)/search',
