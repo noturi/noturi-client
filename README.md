@@ -48,3 +48,13 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## License and Usage
+
+This repository is proprietary. All rights reserved.
+
+- Not allowed: use, distribution, modification, or commercial/production use without written permission.
+- Allowed: read-only evaluation by explicitly authorized reviewers (e.g., recruiters) when shared by the owner.
+- For permission/licensing inquiries: business@noturi.app
+
+See `LICENSE` and `NOTICE` for details.
