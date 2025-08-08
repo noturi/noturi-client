@@ -7,7 +7,7 @@ import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { TamaguiProvider } from '@tamagui/core';
-import { Edit3 } from '@tamagui/lucide-icons';
+import { ChevronLeft, Edit3 } from '@tamagui/lucide-icons';
 import { PortalProvider } from '@tamagui/portal';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -60,12 +60,8 @@ export default function RootLayout() {
               }}
             >
               <Stack.Screen name={ROUTES.root.name} options={{ headerShown: false }} />
-              <Stack.Screen name={ROUTES.authGroup.name} options={{ headerShown: false }} />
-              <Stack.Screen
-                name={ROUTES.tabsGroup.name}
-                options={{ headerShown: false, title: '' }}
-              />
-
+              <Stack.Screen name={ROUTES.auth.name} options={{ headerShown: false }} />
+              <Stack.Screen name={ROUTES.tabs.name} options={{ headerShown: false, title: '' }} />
               <Stack.Screen name={ROUTES.create.name} options={{ presentation: 'modal' }} />
 
               <Stack.Screen
@@ -99,8 +95,15 @@ export default function RootLayout() {
                 name={ROUTES.search.name}
                 options={{
                   title: ROUTES.search.label,
+                  headerTitle: '',
                   headerBackTitle: '',
+                  headerBackVisible: false,
                   headerBackButtonMenuEnabled: false,
+                  headerLeft: () => (
+                    <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
+                      <ChevronLeft color="$primary" size={20} />
+                    </Pressable>
+                  ),
                 }}
               />
             </Stack>
