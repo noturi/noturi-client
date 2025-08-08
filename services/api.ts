@@ -29,10 +29,37 @@ export const api = ky.create({
       },
     ],
     afterResponse: [
-      (request, options, response) => {
+      async (_request, _options, response) => {
         if (response.status === 401) {
           console.log('401 Unauthorized - 토큰 만료 또는 무효');
           // TODO: AuthContext의 logout 또는 refreshToken 호출
+        }
+        if (!response.ok) {
+          try {
+            const body = await response
+              .clone()
+              .json()
+              .catch(() => undefined);
+            const appCode = body?.code as number | undefined;
+            const message = body?.message || '요청 처리 중 오류가 발생했습니다.';
+            const details = body?.details;
+            const error = new Error(message) as Error & {
+              status?: number;
+              code?: number;
+              details?: unknown;
+            };
+            error.status = response.status;
+            error.code = appCode;
+            error.details = details;
+            throw error;
+          } catch (e) {
+            // JSON 파싱 불가 시 상태코드 기반 기본 메시지
+            const error = new Error('요청 처리 중 오류가 발생했습니다.') as Error & {
+              status?: number;
+            };
+            error.status = response.status;
+            throw error;
+          }
         }
         return response;
       },
