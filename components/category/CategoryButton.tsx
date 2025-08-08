@@ -35,7 +35,7 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         }
         paddingHorizontal="$3"
         paddingVertical="$2"
-        borderRadius="$5"
+        borderRadius="$7"
         alignItems="center"
         borderWidth={1}
         borderColor={
@@ -48,8 +48,6 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
             : "$border"
         }
         gap="$2"
-        minHeight={40}
-        flexShrink={0}
       >
         <Typography
           variant="subtitle"
