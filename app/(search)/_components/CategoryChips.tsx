@@ -9,37 +9,34 @@ interface CategoryLite {
 
 interface CategoryChipsProps {
   categories: CategoryLite[];
-  selectedCategoryId: string;
-  onSelect: (id: string) => void;
+  selectedCategoryIds?: string[];
+  onToggle: (id: string) => void;
 }
 
-export function CategoryChips({ categories, selectedCategoryId, onSelect }: CategoryChipsProps) {
+export function CategoryChips({
+  categories,
+  selectedCategoryIds = [],
+  onToggle,
+}: CategoryChipsProps) {
   return (
     <YStack gap="$2">
-      <Typography fontSize="$3" variant="title">
-        카테고리
-      </Typography>
+      <Typography variant="subtitle">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <XStack gap="$2">
-          <Button
-            backgroundColor={selectedCategoryId === '' ? '$primary' : '$surface'}
-            borderRadius="$5"
-            color={selectedCategoryId === '' ? '$textOnPrimary' : '$textSecondary'}
-            size="$3"
-            onPress={() => onSelect('')}
-          >
-            전체
-          </Button>
-          {categories.map((c) => (
+          {categories.map((category) => (
             <Button
-              key={c.id}
-              backgroundColor={selectedCategoryId === c.id ? '$primary' : '$surface'}
-              borderRadius="$5"
-              color={selectedCategoryId === c.id ? '$textOnPrimary' : '$textSecondary'}
-              size="$3"
-              onPress={() => onSelect(c.id)}
+              key={category.id}
+              backgroundColor={selectedCategoryIds.includes(category.id) ? '$primary' : '$surface'}
+              borderRadius="$3"
+              color={
+                selectedCategoryIds.includes(category.id) ? '$textOnPrimary' : '$textSecondary'
+              }
+              height={32}
+              justifyContent="center"
+              paddingHorizontal="$2"
+              onPress={() => onToggle(category.id)}
             >
-              {c.name}
+              {category.name}
             </Button>
           ))}
         </XStack>
