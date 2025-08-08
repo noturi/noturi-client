@@ -4,14 +4,14 @@ import { type MemoListResponseDto, memoApi } from '@/services/memo';
 
 interface Params {
   debouncedSearchText: string;
-  selectedCategoryId: string;
+  selectedCategoryIds: string[];
   selectedRating: number | undefined;
   enabled: boolean;
 }
 
 export function useInfiniteMemos({
   debouncedSearchText,
-  selectedCategoryId,
+  selectedCategoryIds,
   selectedRating,
   enabled,
 }: Params) {
@@ -26,7 +26,7 @@ export function useInfiniteMemos({
       'memos',
       'search',
       debouncedSearchText,
-      selectedCategoryId,
+      selectedCategoryIds.sort().join(','),
       selectedRating?.toString() ?? '',
     ],
     queryFn: ({ pageParam }) =>
@@ -34,7 +34,7 @@ export function useInfiniteMemos({
         page: pageParam,
         limit: 20,
         search: debouncedSearchText || undefined,
-        categoryId: selectedCategoryId || undefined,
+        categoryIds: selectedCategoryIds,
         rating: selectedRating,
         sortBy: 'createdAt',
         sortOrder: 'desc',
