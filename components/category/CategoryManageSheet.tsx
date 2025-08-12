@@ -1,9 +1,10 @@
-import { Button, ScrollView, Sheet, TextArea, XStack, YStack } from 'tamagui';
+import { Button, Sheet, TextArea, XStack, YStack } from 'tamagui';
 
-import { useEffect, useState } from 'react';
-import { Alert, Keyboard, Platform } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import type { TextInput } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 
-import { Trash } from '@tamagui/lucide-icons';
+import { X } from '@tamagui/lucide-icons';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,6 +20,7 @@ interface CategoryManageSheetProps {
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const textAreaRef = useRef<TextInput | null>(null);
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -35,7 +37,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
 
     const showListener = Keyboard.addListener(showEvent, (e) => {
-      const height = Platform.OS === 'ios' ? e.endCoordinates.height - 34 : e.endCoordinates.height;
+      const height = Platform.OS === 'ios' ? e.endCoordinates.height : e.endCoordinates.height + 20;
       setKeyboardHeight(height);
     });
     const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
@@ -71,7 +73,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       modal
       animation="quick"
       open={isOpen}
-      snapPoints={[50, 50]}
+      snapPoints={keyboardHeight > 0 ? [70] : [50]}
       snapPointsMode="percent"
       onOpenChange={onClose}
     >
@@ -109,7 +111,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
             size="$3"
             onPress={onClose}
           >
-            닫기
+            취소
           </Button>
           <Typography
             left={0}
@@ -123,72 +125,114 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         </XStack>
 
         {/* Content */}
-        <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
-          {/* Add new category */}
-          <XStack alignItems="center" gap="$2" marginBottom="$3">
-            <TextArea
-              backgroundColor="$backgroundSecondary"
-              borderRadius="$6"
-              borderWidth={0}
-              color="$textPrimary"
-              flex={1}
-              fontSize="$4"
-              maxHeight={48}
-              maxLength={20}
-              multiline={false}
-              padding="$3"
-              placeholder="새 카테고리 이름"
-              placeholderTextColor="$textMuted"
-              value={newCategoryName}
-              onChangeText={setNewCategoryName}
-            />
-            <Button
-              backgroundColor="$textPrimary"
-              borderRadius="$6"
-              color="$textOnPrimary"
-              disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
-              fontSize="$3"
-              minHeight={40}
-              minWidth={60}
-              onPress={handleAddCategory}
-            >
-              추가
-            </Button>
-          </XStack>
-
-          {/* Category list */}
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 20 }}
-            showsVerticalScrollIndicator={false}
-          >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
             <YStack gap="$2">
-              {categories.map((category) => (
-                <XStack
-                  key={category.id}
-                  alignItems="center"
-                  backgroundColor="$surface"
-                  borderRadius="$4"
-                  justifyContent="space-between"
-                  padding="$3"
-                >
-                  <Typography color="$textPrimary" variant="body">
-                    {category.name}
-                  </Typography>
+              <XStack alignItems="center" justifyContent="space-between">
+                <Typography variant="title">카테고리</Typography>
+                {!newCategoryName && (
                   <Button
                     backgroundColor="$surface"
-                    borderRadius="$4"
-                    color="$error"
+                    borderRadius="$7"
+                    borderWidth={0}
+                    color="$textSecondary"
+                    fontSize="$3"
+                    minHeight={36}
+                    minWidth={60}
+                    paddingHorizontal="$3"
+                    paddingVertical="$2"
                     pressStyle={{ backgroundColor: '$surfaceHover' }}
-                    size="$2"
+                    onPress={() => {
+                      setNewCategoryName(' ');
+                      setTimeout(() => {
+                        textAreaRef.current?.focus();
+                      }, 100);
+                    }}
+                  >
+                    + 추가
+                  </Button>
+                )}
+              </XStack>
+
+              {newCategoryName && (
+                <XStack alignItems="center" gap="$4" marginTop="$2">
+                  <TextArea
+                    ref={textAreaRef}
+                    backgroundColor="$backgroundSecondary"
+                    borderRadius="$6"
+                    borderWidth={0}
+                    color="$textPrimary"
+                    flex={1}
+                    fontSize="$4"
+                    maxHeight={48}
+                    maxLength={20}
+                    multiline={false}
+                    padding="$3"
+                    placeholder="새 카테고리 이름"
+                    placeholderTextColor="$textMuted"
+                    value={newCategoryName.trim()}
+                    onChangeText={setNewCategoryName}
+                  />
+                  <XStack alignItems="center" gap="$2">
+                    <Button
+                      backgroundColor="$textPrimary"
+                      borderRadius="$6"
+                      color="$textOnPrimary"
+                      disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
+                      fontSize="$3"
+                      minHeight={40}
+                      minWidth={60}
+                      onPress={handleAddCategory}
+                    >
+                      추가
+                    </Button>
+                    <Button
+                      backgroundColor="$surface"
+                      borderColor="$border"
+                      borderRadius="$6"
+                      borderWidth={1}
+                      color="$textSecondary"
+                      fontSize="$3"
+                      minHeight={40}
+                      minWidth={60}
+                      onPress={() => setNewCategoryName('')}
+                    >
+                      취소
+                    </Button>
+                  </XStack>
+                </XStack>
+              )}
+
+              <XStack flexWrap="wrap" gap="$2">
+                {categories.map((category) => (
+                  <Button
+                    key={category.id}
+                    backgroundColor="$surface"
+                    borderColor="$border"
+                    borderRadius="$7"
+                    borderWidth={1}
+                    minHeight={36}
+                    minWidth={60}
+                    paddingHorizontal="$3"
+                    paddingVertical="$2"
+                    pressStyle={{ backgroundColor: '$surfaceHover' }}
                     onPress={() => handleDeleteCategory(category.id, category.name)}
                   >
-                    <Trash color="$error" size={16} />
+                    <XStack alignItems="center" gap="$2">
+                      <Typography color="$textSecondary" variant="subtitle">
+                        {category.name}
+                      </Typography>
+                      <X color="$textPrimary" size={12} />
+                    </XStack>
                   </Button>
-                </XStack>
-              ))}
+                ))}
+              </XStack>
             </YStack>
-          </ScrollView>
-        </YStack>
+          </YStack>
+        </KeyboardAvoidingView>
       </Sheet.Frame>
     </Sheet>
   );
