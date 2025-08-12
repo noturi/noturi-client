@@ -1,7 +1,7 @@
 import { XStack } from 'tamagui';
 
 import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { Alert, Pressable } from 'react-native';
 
 import { Redirect, Tabs, router } from 'expo-router';
 
@@ -80,6 +80,12 @@ export default function TabsLayout() {
         />
 
         <Tabs.Screen
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              e.preventDefault();
+              Alert.alert('준비중', '통계 기능은 현재 준비 중입니다.');
+            },
+          })}
           name="stats"
           options={{
             title: '통계',
