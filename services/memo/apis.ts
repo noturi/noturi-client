@@ -26,7 +26,7 @@ export class MemoApi {
 
       if (params.page) searchParams.append('page', params.page.toString());
       if (params.limit) searchParams.append('limit', params.limit.toString());
-      if (params.categoryId) searchParams.append('categoryId', params.categoryId);
+      if (params.categoryId) searchParams.append('categoryIds', params.categoryId);
       if (params.categoryIds && params.categoryIds.length > 0) {
         for (const id of params.categoryIds) searchParams.append('categoryIds', id);
       }
