@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "noturi-client",
+    "name": "Noturi",
     "slug": "noturi-client",
     "version": "1.0.0",
     "owner": "dokimion24",
@@ -11,7 +11,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.noturi.app"
+      "bundleIdentifier": "com.noturi.app",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -59,6 +62,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f1469043-19f5-4185-9ada-7f09a682c8a5"
+      }
     }
   }
 }
