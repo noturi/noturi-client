@@ -10,28 +10,12 @@ import { TamaguiProvider } from '@tamagui/core';
 import { ChevronLeft, Edit3 } from '@tamagui/lucide-icons';
 import { PortalProvider } from '@tamagui/portal';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 import { HREFS, ROUTES } from '@/constants';
 import { AuthProvider } from '@/context/auth';
+import { queryClient } from '@/services/queryClient';
 import { config } from '@/tamagui.config';
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 0,
-      gcTime: 0,
-      retry: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-    mutations: {
-      onError: (error) => {
-        Alert.alert('오류', error?.message || '작업 중 오류가 발생했습니다. 다시 시도해주세요.');
-      },
-    },
-  },
-});
 
 SplashScreen.preventAutoHideAsync();
 
