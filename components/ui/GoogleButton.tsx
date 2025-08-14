@@ -39,10 +39,6 @@ export function GoogleButton() {
 
       router.replace(ROUTES.home.path);
     },
-    onError: (error) => {
-      console.error('Backend error:', error);
-      Alert.alert('로그인 실패', '서버 오류가 발생했습니다.');
-    },
   });
 
   useEffect(() => {
