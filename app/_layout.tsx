@@ -1,7 +1,7 @@
 import { XStack } from 'tamagui';
 
 import { useEffect } from 'react';
-import { Alert, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 
 import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
