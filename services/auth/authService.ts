@@ -1,4 +1,5 @@
 import { authTokenCache } from '@/utils/cache';
+import Logger from '@/utils/logger';
 
 import { authApi } from './apis';
 
@@ -30,10 +31,9 @@ export class AuthService {
         user: currentUser || '',
       });
 
-      console.log('✅ 토큰 갱신 완료');
       return { success: true };
     } catch (error) {
-      console.error('토큰 갱신 실패:', error);
+      Logger.error('토큰 갱신 실패:', error);
 
       // 토큰 갱신 실패 시 모든 토큰 삭제
       await this.clearAuthData();
@@ -61,7 +61,6 @@ export class AuthService {
     } finally {
       // 로컬 토큰 삭제
       await this.clearAuthData();
-      console.log('✅ 로그아웃 완료');
     }
   }
 

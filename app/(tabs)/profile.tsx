@@ -16,7 +16,6 @@ export default function ProfileScreen() {
 
   const logoutMutation = useLogoutMutation({
     onSuccess: () => {
-      console.log('✅ 로그아웃 성공');
       // 로그인 화면으로 이동
       router.replace('/(auth)/login');
     },

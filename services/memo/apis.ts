@@ -38,13 +38,10 @@ export class MemoApi {
       if (params.endDate) searchParams.append('endDate', params.endDate);
 
       const url = `memos?${searchParams.toString()}`;
-      console.log('📡 메모 API 호출 URL:', url);
-      console.log('📡 쿼리 파라미터:', params);
 
       const response = await this.api.get(url);
       const data = await response.json<MemoListResponseDto>();
 
-      console.log('📡 메모 API 응답:', data);
       return data;
     } catch (error) {
       console.error('Get memos API error:', error);

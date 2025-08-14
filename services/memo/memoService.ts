@@ -87,8 +87,6 @@ export class MemoService {
    */
   async deleteMemoWithConfirmation(id: string, skipConfirmation: boolean = false): Promise<void> {
     if (!skipConfirmation) {
-      // 실제 앱에서는 사용자 확인 모달을 띄우거나 다른 확인 로직을 구현
-      console.log(`메모 ${id} 삭제 요청`);
     }
 
     return await memoApi.deleteMemo(id);

@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useTokens } from '@/hooks/useTokens';
 import { authService } from '@/services/auth/authService';
 import { User } from '@/types/auth';
+import Logger from '@/utils/logger';
 
 interface AuthContextType {
   // 상태 조회 함수들
@@ -56,17 +57,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        console.log('🔍 인증 상태 확인 중...');
         const authenticated = await tokens.checkAuthStatus();
         setAuthState(authenticated);
-
-        if (authenticated) {
-          console.log('✅ 인증 상태 복원 완료');
-        } else {
-          console.log('❌ 유효한 인증 상태 없음');
-        }
       } catch (error) {
-        console.error('인증 상태 확인 실패:', error);
+        Logger.error('인증 상태 확인 실패:', error);
         setError('인증 상태 확인에 실패했습니다.');
         setAuthState(false);
       } finally {
@@ -87,7 +81,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setError(null);
       await tokens.saveAuthTokens(authTokens);
       setAuthState(true);
-      console.log('✅ 토큰 저장 완료');
     } catch (error) {
       console.error('토큰 저장 실패:', error);
       setError('토큰 저장에 실패했습니다.');

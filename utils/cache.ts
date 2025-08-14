@@ -2,6 +2,8 @@ import { Platform } from 'react-native';
 
 import * as SecureStore from 'expo-secure-store';
 
+import Logger from './logger';
+
 export interface TokenCache {
   getToken: (key: string) => Promise<string | null>;
   saveToken: (key: string, token: string) => Promise<void>;
@@ -14,11 +16,6 @@ const createNativeTokenCache = (): TokenCache => {
     getToken: async (key: string) => {
       try {
         const item = await SecureStore.getItemAsync(key);
-        if (item) {
-          console.log(`토큰 조회: ${key}`);
-        } else {
-          console.log(`토큰 없음: ${key}`);
-        }
         return item;
       } catch (error) {
         console.error(`토큰 조회 실패 ${key}:`, error);
@@ -30,9 +27,8 @@ const createNativeTokenCache = (): TokenCache => {
     saveToken: async (key: string, token: string) => {
       try {
         await SecureStore.setItemAsync(key, token);
-        console.log(`토큰 저장: ${key}`);
       } catch (error) {
-        console.error(`토큰 저장 실패 ${key}:`, error);
+        Logger.error(`토큰 저장 실패 ${key}:`, error);
         throw error;
       }
     },
@@ -40,7 +36,6 @@ const createNativeTokenCache = (): TokenCache => {
     deleteToken: async (key: string) => {
       try {
         await SecureStore.deleteItemAsync(key);
-        console.log(`토큰 삭제: ${key}`);
       } catch (error) {
         console.error(`토큰 삭제 실패 ${key}:`, error);
         throw error;
@@ -51,7 +46,6 @@ const createNativeTokenCache = (): TokenCache => {
       const tokenKeys = ['accessToken', 'refreshToken', 'user'];
       try {
         await Promise.all(tokenKeys.map((key) => SecureStore.deleteItemAsync(key)));
-        console.log('모든 토큰 삭제 완료');
       } catch (error) {
         console.error('토큰 삭제 실패:', error);
         throw error;
@@ -65,11 +59,6 @@ const createWebTokenCache = (): TokenCache => {
     getToken: async (key: string) => {
       try {
         const item = localStorage.getItem(key);
-        if (item) {
-          console.log(`🔐 토큰 조회: ${key}`);
-        } else {
-          console.log(`🔍 토큰 없음: ${key}`);
-        }
         return item;
       } catch (error) {
         console.error(`❌ 토큰 조회 실패 ${key}:`, error);
@@ -81,7 +70,6 @@ const createWebTokenCache = (): TokenCache => {
     saveToken: async (key: string, token: string) => {
       try {
         localStorage.setItem(key, token);
-        console.log(`💾 토큰 저장: ${key}`);
       } catch (error) {
         console.error(`❌ 토큰 저장 실패 ${key}:`, error);
         throw error;
@@ -91,7 +79,6 @@ const createWebTokenCache = (): TokenCache => {
     deleteToken: async (key: string) => {
       try {
         localStorage.removeItem(key);
-        console.log(`🗑️ 토큰 삭제: ${key}`);
       } catch (error) {
         console.error(`❌ 토큰 삭제 실패 ${key}:`, error);
         throw error;
@@ -102,7 +89,6 @@ const createWebTokenCache = (): TokenCache => {
       const tokenKeys = ['accessToken', 'refreshToken', 'user'];
       try {
         tokenKeys.forEach((key) => localStorage.removeItem(key));
-        console.log('🧹 모든 토큰 삭제 완료');
       } catch (error) {
         console.error('❌ 토큰 삭제 실패:', error);
         throw error;
