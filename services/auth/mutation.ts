@@ -1,6 +1,6 @@
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { queryClient } from '@/app/_layout';
+import { queryClient } from '@/services/queryClient';
 
 import {
   type GoogleLoginDto,
