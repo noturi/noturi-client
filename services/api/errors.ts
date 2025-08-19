@@ -14,7 +14,6 @@ export const getErrorMessage = (body: ErrorResponseBody | undefined): string => 
   return body.message || ERROR_MESSAGES.DEFAULT;
 };
 
-
 export const handleErrorResponse = async (request: Request, response: Response) => {
   await logErrorResponse(request, response);
 
@@ -37,7 +36,6 @@ export const handleErrorResponse = async (request: Request, response: Response) 
 
   throw new ApiError(body);
 };
-
 
 export const ERROR_MESSAGES = {
   DEFAULT: '요청 처리 중 오류가 발생했습니다.',
