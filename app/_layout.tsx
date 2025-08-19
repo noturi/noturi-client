@@ -26,8 +26,8 @@ export default function RootLayout() {
 
   return (
     <TamaguiProvider config={config}>
-      <PortalProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <PortalProvider>
           <AuthProvider>
             <Stack
               screenOptions={{
@@ -92,8 +92,8 @@ export default function RootLayout() {
               />
             </Stack>
           </AuthProvider>
-        </QueryClientProvider>
-      </PortalProvider>
+        </PortalProvider>
+      </QueryClientProvider>
     </TamaguiProvider>
   );
 }
