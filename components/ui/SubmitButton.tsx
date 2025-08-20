@@ -8,7 +8,6 @@ interface SubmitButtonProps {
   onPress: () => void;
   loadingText?: string;
   position?: 'fixed' | 'static';
-  variant?: 'primary' | 'secondary' | 'danger';
 }
 
 export const SubmitButton = ({
