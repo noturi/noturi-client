@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { CategoryButton } from '@/components/category';
-import { Form, Input, TextArea } from '@/components/ui';
+import { Form, Input, SubmitButton, TextArea } from '@/components/ui';
 import { DEFAULT_COLORS } from '@/constants/colors';
 import { MESSAGES } from '@/constants/messages';
 import { useForm, useToast } from '@/hooks';
@@ -69,7 +69,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
       setShowAddCategory(false);
       toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
     },
-    onError: (error) => {
+    onError: () => {
       categoryForm.setError('name', {
         message: '카테고리 생성 중 오류가 발생했습니다.',
         type: 'server',
@@ -83,7 +83,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
       memoForm.reset();
       onSuccess?.();
     },
-    onError: (error) => {
+    onError: () => {
       memoForm.setError('title', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
     },
   });
@@ -104,6 +104,10 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
     memoForm.setValue('selectedCategory', categoryName);
   };
 
+  const shouldShowTitleError =
+    memoForm.errors.title && memoForm.values.title.length === 0 && memoForm.touched.title;
+  const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
+
   return (
     <>
       <YStack flex={1} onStartShouldSetResponder={() => true}>
@@ -115,13 +119,10 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
           showsVerticalScrollIndicator={false}
         >
           <Form>
-            <Form.Field
-              required
-              error={memoForm.shouldShowError('title') ? memoForm.errors.title : undefined}
-              label="제목"
-            >
+            <Form.Field required error={titleError} label="제목">
               <Input
-                hasError={!!memoForm.shouldShowError('title')}
+                autoFocus
+                hasError={!!shouldShowTitleError}
                 placeholder="제목을 입력하세요"
                 value={memoForm.values.title}
                 onBlur={() => memoForm.setTouched('title')}
@@ -247,18 +248,14 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
         </ScrollView>
       </YStack>
 
-      <Button
-        animation="quick"
-        borderRadius="$6"
-        bottom={keyboardHeight > 0 ? keyboardHeight + 50 : 30}
-        disabled={createMemoMutation.isPending}
-        position="absolute"
-        right={20}
-        size="$5"
+      <SubmitButton
+        isLoading={createMemoMutation.isPending}
+        keyboardHeight={keyboardHeight}
+        loadingText="등록중..."
         onPress={memoForm.handleSubmit}
       >
-        {createMemoMutation.isPending ? '등록중...' : '등록'}
-      </Button>
+        등록
+      </SubmitButton>
     </>
   );
 };
