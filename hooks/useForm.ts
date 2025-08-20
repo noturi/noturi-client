@@ -78,7 +78,7 @@ function formReducer<T extends Record<string, any>>(
         touched: {},
         isDirty: false,
         isSubmitted: false,
-        isValid: true,
+        isValid: false,
         isSubmitting: false,
       };
     case 'SET_ERRORS': {
@@ -214,7 +214,8 @@ export function useForm<T extends Record<string, any>>({
 
   const reset = useCallback(
     (values?: T) => {
-      dispatch({ type: 'RESET', values: values || initialValues });
+      const resetValues = values || initialValues;
+      dispatch({ type: 'RESET', values: resetValues });
     },
     [initialValues],
   );
