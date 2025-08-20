@@ -1,14 +1,14 @@
 import { Input as TamaguiInput, styled } from 'tamagui';
 
 export const Input = styled(TamaguiInput, {
-  // 기본 스타일
   backgroundColor: '$backgroundSecondary',
   borderRadius: '$6',
   borderWidth: 0,
   color: '$textPrimary',
   fontSize: 13,
-  padding: '$3',
+
   placeholderTextColor: '$textMuted',
+  textAlignVertical: 'center',
 
   focusStyle: {
     borderWidth: 1,
@@ -33,7 +33,7 @@ export const Input = styled(TamaguiInput, {
         fontSize: '$2',
       },
       md: {
-        height: 40,
+        height: 42,
         paddingHorizontal: '$3',
         fontSize: 13,
       },
