@@ -40,23 +40,22 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
               fontSize="$2"
               fontWeight="$4"
               pointerEvents="none"
-              variant="caption"
+              variant="caption1"
             >
               {memo.category.name}
             </Typography>
           </YStack>
-          <Typography as="span" color="$textMuted" pointerEvents="none" variant="caption">
+          <Typography as="span" color="$textMuted" pointerEvents="none" variant="caption1">
             {memo.timeAgo}
           </Typography>
         </XStack>
         <Typography
-          as="h4"
           color="$textPrimary"
           fontWeight="$4"
           marginBottom="$2"
           numberOfLines={1}
           pointerEvents="none"
-          variant="title"
+          variant="subtitle"
         >
           {memo.title}
         </Typography>
@@ -67,12 +66,11 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
     </XStack>
 
     <Typography
-      as="p"
       color="$textSecondary"
       lineHeight="$1"
       numberOfLines={2}
       pointerEvents="none"
-      variant="body"
+      variant="caption1"
     >
       {memo.content}
     </Typography>
