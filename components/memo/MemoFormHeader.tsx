@@ -35,7 +35,7 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
           취소
         </Button>
 
-        <Typography left={0} position="absolute" right={0} textAlign="center" variant="subheading">
+        <Typography left={0} position="absolute" right={0} textAlign="center" variant="title">
           새 메모
         </Typography>
       </XStack>
