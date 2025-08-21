@@ -8,28 +8,32 @@ export type TypographyVariant =
   | 'subheading'
   | 'title'
   | 'subtitle'
-  | 'body'
-  | 'small'
-  | 'caption'
+  | 'body1'
+  | 'body2'
+  | 'body3'
+  | 'caption1'
+  | 'caption2'
   | 'link'
   | 'label';
 
 const getComponentByVariant = (variant: TypographyVariant) => {
   switch (variant) {
     case 'display':
-      return H1; // 가장 큰 제목 → h1
+      return H1;
     case 'heading':
-      return H2; // 페이지 제목 → h2
+      return H2;
     case 'subheading':
-      return H3; // 섹션 제목 → h3
+      return H3;
     case 'title':
-      return H4; // 카드 제목 → h4
+      return H4;
     case 'subtitle':
-      return H5; // 작은 제목 → h5
-    case 'body':
-      return Paragraph; // 본문 → p
-    case 'small':
-    case 'caption':
+      return H5;
+    case 'body1':
+    case 'body2':
+    case 'body3':
+      return Paragraph;
+    case 'caption1':
+    case 'caption2':
     case 'link':
     case 'label':
     default:
@@ -37,67 +41,83 @@ const getComponentByVariant = (variant: TypographyVariant) => {
   }
 };
 
-// 스타일 맵핑
 const variantStyles = {
   display: {
-    fontSize: '$8', // 24px
-    fontWeight: '$5', // 700
-    lineHeight: '$8',
+    fontSize: '$8', // 28px
+    fontWeight: '$5', // 600
+    lineHeight: '$8', // 34px
     color: '$textPrimary',
   },
   heading: {
-    fontSize: '$7', // 20px
-    fontWeight: '$4', // 600
-    lineHeight: '$7',
+    fontSize: '$7', // 24px
+    fontWeight: '$4', // 500
+    lineHeight: '$7', // 30px
     color: '$textPrimary',
   },
   subheading: {
-    fontSize: '$5', // 16px
-    fontWeight: '$4', // 600
-    lineHeight: '$5',
+    fontSize: '$6', // 20px
+    fontWeight: '$4', // 500
+    lineHeight: '$6', // 26px
     color: '$textPrimary',
   },
   title: {
-    fontSize: '$4', // 14px
-    fontWeight: '$4', // 600
-    lineHeight: '$4',
+    fontSize: '$5', // 18px
+    fontWeight: '$4', // 500
+    lineHeight: '$5', // 24px
     color: '$textPrimary',
   },
   subtitle: {
-    fontSize: '$3', // 13px
-    fontWeight: '$3', // 500
-    lineHeight: '$3',
+    fontSize: '$4', // 16px
+    fontWeight: '$4',
+    lineHeight: '$4', // 22px
     color: '$textPrimary',
   },
-  body: {
-    fontSize: '$3', // 13px
-    fontWeight: '$2', // 400
-    lineHeight: '$3',
+
+  body1: {
+    fontSize: '$5', // 18px
+    fontWeight: '$3', // 300
+    lineHeight: '$5', // 24px
     color: '$textPrimary',
   },
-  small: {
-    fontSize: '$2', // 12px
-    fontWeight: '$2', // 400
-    lineHeight: '$2',
+  body2: {
+    fontSize: '$4', // 16px
+    fontWeight: '$3', // 300
+    lineHeight: '$4', // 22px
+    color: '$textPrimary',
+  },
+  body3: {
+    fontSize: '$3', // 14px
+    fontWeight: '$3', // 300
+    lineHeight: '$3', // 20px
+    color: '$textPrimary',
+  },
+
+  // 작은 텍스트들
+  caption1: {
+    fontSize: '$3', // 14px
+    fontWeight: '$3', // 300
+    lineHeight: '$3', // 20px
     color: '$textSecondary',
   },
-  caption: {
-    fontSize: '$1', // 11px
-    fontWeight: '$2', // 400
-    lineHeight: '$1',
+  caption2: {
+    fontSize: '$2', // 12px
+    fontWeight: '$3', // 300
+    lineHeight: '$2', // 18px
     color: '$textMuted',
   },
+
+  // 특수 용도
   link: {
-    fontSize: '$3', // 13px
-    fontWeight: '$2', // 400
-    lineHeight: '$3',
+    fontSize: '$3', // 14px
+    fontWeight: '$3', // 300
+    lineHeight: '$3', // 20px
     color: '$accent',
     textDecorationLine: 'none',
   },
   label: {
     fontSize: '$2', // 12px
-    fontWeight: '$3', // 500
-    lineHeight: '$2',
+    fontWeight: '$3', // 400
+    lineHeight: '$2', // 18px
     color: '$textPrimary',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -110,14 +130,14 @@ export interface TypographyProps {
   [key: string]: any;
 }
 
-export const Typography = ({ variant = 'body', children, ...props }: TypographyProps) => {
+export const Typography = ({ variant = 'body1', children, ...props }: TypographyProps) => {
   const Component = getComponentByVariant(variant);
   const styles = variantStyles[variant];
 
   return (
     <Component
       {...styles}
-      margin={variant === 'body' ? 0 : undefined}
+      margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
       {...props}
     >
