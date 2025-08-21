@@ -37,7 +37,7 @@ export const StarRating = ({ rating }: StarRatingProps) => {
       paddingVertical="$1"
     >
       <Star color={starColor} fill={starColor} size={16} />
-      <Typography color={`$${config.colorKey}`} fontWeight="$4" variant="small">
+      <Typography color={`$${config.colorKey}`} fontWeight="$4" variant="caption1">
         {rating.toFixed(1)}
       </Typography>
     </XStack>
