@@ -48,7 +48,7 @@ export const SortButton = ({ option, onPress }: SortButtonProps) => {
             style={{
               opacity: isPressed ? 0.8 : 1,
             }}
-            variant="subtitle"
+            variant="caption1"
           >
             {option.name}
           </Typography>
