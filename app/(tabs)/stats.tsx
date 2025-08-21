@@ -48,7 +48,7 @@ export default function StatsScreen() {
                 <Typography color="$textPrimary" fontWeight="$6" variant="title">
                   {stats.totalMemos}
                 </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption">
+                <Typography color="$textMuted" textAlign="center" variant="caption2">
                   총 메모
                 </Typography>
               </YStack>
@@ -66,7 +66,7 @@ export default function StatsScreen() {
                 <Typography color="$textPrimary" fontWeight="$6" variant="title">
                   {stats.thisMonth}
                 </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption">
+                <Typography color="$textMuted" textAlign="center" variant="caption2">
                   이번 달
                 </Typography>
               </YStack>
@@ -86,7 +86,7 @@ export default function StatsScreen() {
                 <Typography color="$textPrimary" fontWeight="$6" variant="title">
                   {stats.avgRating}
                 </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption">
+                <Typography color="$textMuted" textAlign="center" variant="caption2">
                   평균 평점
                 </Typography>
               </YStack>
@@ -104,7 +104,7 @@ export default function StatsScreen() {
                 <Typography color="$textPrimary" fontWeight="$6" variant="title">
                   {stats.categories.length}
                 </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption">
+                <Typography color="$textMuted" textAlign="center" variant="caption2">
                   카테고리
                 </Typography>
               </YStack>
@@ -121,10 +121,10 @@ export default function StatsScreen() {
               {stats.categories.map((category, index) => (
                 <YStack key={category.name} gap="$2">
                   <XStack alignItems="center" justifyContent="space-between">
-                    <Typography color="$textPrimary" variant="body">
+                    <Typography color="$textPrimary" variant="body1">
                       {category.name}
                     </Typography>
-                    <Typography color="$textSecondary" fontWeight="$6" variant="body">
+                    <Typography color="$textSecondary" fontWeight="$6" variant="body1">
                       {category.count}개
                     </Typography>
                   </XStack>
@@ -162,10 +162,10 @@ export default function StatsScreen() {
               minHeight={100}
               padding="$4"
             >
-              <Typography color="$textSecondary" textAlign="center" variant="body">
+              <Typography color="$textSecondary" textAlign="center" variant="body1">
                 지난 7일간의 기록 활동
               </Typography>
-              <Typography color="$textMuted" marginTop="$1" textAlign="center" variant="caption">
+              <Typography color="$textMuted" marginTop="$1" textAlign="center" variant="caption2">
                 데이터 시각화 준비 중
               </Typography>
             </YStack>
