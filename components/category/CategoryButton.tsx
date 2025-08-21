@@ -54,7 +54,7 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         <Typography
           color={category.active ? '$textOnPrimary' : '$textSecondary'}
           pointerEvents="none"
-          variant="subtitle"
+          variant="caption1"
         >
           {category.name}
         </Typography>
@@ -62,7 +62,7 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
           <Typography
             color={category.active ? '$textOnPrimary' : '$textMuted'}
             pointerEvents="none"
-            variant="subtitle"
+            variant="caption1"
           >
             {category.count}
           </Typography>
