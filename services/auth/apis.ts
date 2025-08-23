@@ -2,6 +2,7 @@ import { KyInstance } from 'ky';
 
 import { api } from '../api';
 import {
+  AppleLoginDto,
   GoogleLoginDto,
   LoginResponseDto,
   LogoutDto,
@@ -26,6 +27,19 @@ export class AuthApi {
     } catch (error) {
       console.error('Google login API error:', error);
       throw new Error('Google 로그인에 실패했습니다.');
+    }
+  }
+
+  // Apple 네이티브 로그인
+  async appleLogin(data: AppleLoginDto): Promise<LoginResponseDto> {
+    try {
+      const response = await this.api.post('auth/apple/native', {
+        json: data,
+      });
+      return response.json<LoginResponseDto>();
+    } catch (error) {
+      console.error('Apple login API error:', error);
+      throw new Error('Apple 로그인에 실패했습니다.');
     }
   }
 
