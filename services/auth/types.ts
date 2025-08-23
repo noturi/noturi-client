@@ -18,6 +18,14 @@ export type GoogleLogin = {
   timestamp: Date;
 };
 
+export type AppleLogin = {
+  appleId: string;
+  email: string;
+  name?: string;
+  deviceId?: string;
+  timestamp: Date;
+};
+
 export type LoginResult = {
   accessToken: string;
   refreshToken: string;
@@ -41,6 +49,7 @@ export type Logout = {
 };
 
 export type GoogleLoginDto = Omit<GoogleLogin, 'timestamp' | 'deviceId'>;
+export type AppleLoginDto = Omit<AppleLogin, 'timestamp' | 'deviceId'>;
 export type LoginResponseDto = Omit<LoginResult, 'expiresAt'> & {
   user: Pick<User, 'id' | 'email' | 'name' | 'nickname' | 'avatarUrl'>;
 };
