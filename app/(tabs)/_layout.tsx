@@ -47,6 +47,12 @@ export default function TabsLayout() {
           },
           tabBarActiveTintColor: '#000000',
           tabBarInactiveTintColor: '#6B7280',
+          tabBarItemStyle: {
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            minHeight: 60,
+            minWidth: 60,
+          },
         }}
       >
         <Tabs.Screen
@@ -54,6 +60,22 @@ export default function TabsLayout() {
           options={{
             title: '',
             tabBarIcon: ({ color }) => <Home color={color as any} size={20} />,
+            tabBarButton: (props) => (
+              <Pressable
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 20,
+                  },
+                ]}
+                onPress={props.onPress}
+              >
+                {props.children}
+              </Pressable>
+            ),
             headerRight: () => (
               <XStack paddingRight="$3">
                 <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
@@ -75,6 +97,22 @@ export default function TabsLayout() {
           options={{
             title: '',
             tabBarIcon: ({ color }) => <Plus color={color as any} size={20} />,
+            tabBarButton: (props) => (
+              <Pressable
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 20,
+                  },
+                ]}
+                onPress={props.onPress}
+              >
+                {props.children}
+              </Pressable>
+            ),
             headerShown: false,
           }}
         />
@@ -90,6 +128,22 @@ export default function TabsLayout() {
           options={{
             title: '통계',
             tabBarIcon: ({ color }) => <BarChart3 color={color as any} size={20} />,
+            tabBarButton: (props) => (
+              <Pressable
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 20,
+                  },
+                ]}
+                onPress={props.onPress}
+              >
+                {props.children}
+              </Pressable>
+            ),
           }}
         />
 
@@ -98,6 +152,22 @@ export default function TabsLayout() {
           options={{
             title: '프로필',
             tabBarIcon: ({ color }) => <User color={color as any} size={20} />,
+            tabBarButton: (props) => (
+              <Pressable
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 12,
+                    paddingHorizontal: 20,
+                  },
+                ]}
+                onPress={props.onPress}
+              >
+                {props.children}
+              </Pressable>
+            ),
             headerRight: () => (
               <Pressable
                 style={{ padding: 8, marginRight: 12 }}
