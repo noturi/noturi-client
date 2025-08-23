@@ -1,5 +1,6 @@
-import { YStack } from 'tamagui';
+import { XStack, YStack } from 'tamagui';
 
+import { AppleButton } from '@/components/ui/AppleButton';
 import { GoogleButton } from '@/components/ui/GoogleButton';
 import { Typography } from '@/components/ui/Typography';
 
@@ -14,7 +15,10 @@ export default function LoginScreen() {
       padding="$6"
     >
       <Typography variant="display">Noturi</Typography>
-      <GoogleButton />
+      <XStack gap="$4">
+        <GoogleButton />
+        <AppleButton />
+      </XStack>
     </YStack>
   );
 }
