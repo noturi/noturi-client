@@ -6,25 +6,24 @@ import { User } from '@/types/auth';
 import Logger from '@/utils/logger';
 
 interface AuthContextType {
-  // 상태 조회 함수들
   getUser: () => Promise<User | null>;
   getAccessToken: () => Promise<string | null>;
   getRefreshToken: () => Promise<string | null>;
-  // 동기적 상태
+
   isAuthenticated: boolean;
   isInitialLoading: boolean;
   error: string | null;
-  // 토큰 저장
+
   saveAuthTokens: (tokens: {
     accessToken: string;
     refreshToken: string;
     user: User;
   }) => Promise<void>;
-  // 로그아웃
+
   logout: () => Promise<void>;
-  // 토큰 갱신
+
   refreshAccessToken: () => Promise<boolean>;
-  // 에러 관리
+
   clearError: () => void;
 }
 
