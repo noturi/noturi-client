@@ -3,6 +3,7 @@ import { type DefaultError, type UseMutationOptions, useMutation } from '@tansta
 import { queryClient } from '@/services/queryClient';
 
 import {
+  type AppleLoginDto,
   type GoogleLoginDto,
   type LoginResponseDto,
   authApi,
@@ -21,6 +22,36 @@ export function useGoogleLoginMutation(
     mutationKey: ['auth', 'google-login', ...mutationKey],
     mutationFn: (dto: GoogleLoginDto) => {
       return authApi.googleLogin(dto);
+    },
+    onMutate,
+    onSuccess: async (loginResponse, loginData, context) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['auth', 'user'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['auth', 'profile'],
+        }),
+        onSuccess?.(loginResponse, loginData, context),
+      ]);
+    },
+    onError,
+    onSettled,
+  });
+}
+
+export function useAppleLoginMutation(
+  options: Pick<
+    UseMutationOptions<LoginResponseDto, DefaultError, AppleLoginDto>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+
+  return useMutation({
+    mutationKey: ['auth', 'apple-login', ...mutationKey],
+    mutationFn: (dto: AppleLoginDto) => {
+      return authApi.appleLogin(dto);
     },
     onMutate,
     onSuccess: async (loginResponse, loginData, context) => {
