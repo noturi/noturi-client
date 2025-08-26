@@ -5,17 +5,25 @@ import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/lib';
 import { infiniteMemoListQuery } from '~/features/memo-crud/api';
 import { MemoService } from '~/features/memo-crud/lib';
-import { INITIAL_SORT_OPTIONS } from '~/shared/constants';
+import Logger from '~/shared/lib/logger';
 import { ApiErrorBoundary, Loading, Typography } from '~/shared/ui';
-import { CategoryFilterBar, MemoListView, SortOptionsBar } from '~/widgets/memo-list/ui';
+import {
+  CategoryFilterBar,
+  MemoRatingGroupView,
+  MemoSimpleView,
+  MemoViewToggle,
+  type MemoViewType,
+} from '~/widgets/memo-list/ui';
 
 import { useCallback, useMemo, useState } from 'react';
+
+import { router } from 'expo-router';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [sortOptions, setSortOptions] = useState(INITIAL_SORT_OPTIONS);
+  const [selectedView, setSelectedView] = useState<MemoViewType>('rating');
 
   const {
     data: categoriesData,
@@ -23,7 +31,6 @@ export default function HomeScreen() {
     error: categoriesError,
   } = useQuery(activeCategoriesQuery());
 
-  const sortType = CategoryService.getSortTypeFromOptions(sortOptions);
   const selectedCategoryId = CategoryService.getCategoryIdByName(
     selectedCategory,
     categoriesData?.categories,
@@ -31,8 +38,9 @@ export default function HomeScreen() {
 
   const memoQueryParams = {
     limit: 20,
-    categoryId: selectedCategoryId,
-    sortBy: sortType,
+    // 간단메모일 때는 카테고리 필터링 안함
+    categoryId: selectedView === 'rating' ? selectedCategoryId : undefined,
+    sortBy: 'createdAt' as const,
     sortOrder: 'desc' as const,
   };
 
@@ -40,9 +48,6 @@ export default function HomeScreen() {
     data: memosData,
     isPending: memosPending,
     error: memosError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
   } = useInfiniteQuery(infiniteMemoListQuery(memoQueryParams));
 
   const categories: UICategory[] = useMemo(
@@ -53,25 +58,35 @@ export default function HomeScreen() {
   const transformedMemos: UIMemo[] = useMemo(() => {
     if (!memosData?.pages) return [];
     const allMemos = memosData.pages.flatMap((page) => page.data);
-    return MemoService.transformToUIMemos(allMemos);
-  }, [memosData]);
+    const transformed = MemoService.transformToUIMemos(allMemos);
+    Logger.debug('HomeScreen', `메모 변환 완료: ${transformed.length}개`, {
+      selectedView,
+      selectedCategory,
+      selectedCategoryId,
+      transformed: transformed.slice(0, 3), // 처음 3개만 로그
+    });
+    return transformed;
+  }, [memosData, selectedView, selectedCategory, selectedCategoryId]);
 
   const handleCategoryPress = (categoryName: string) => {
+    Logger.info('HomeScreen', `카테고리 선택: ${categoryName}`);
     setSelectedCategory(categoryName);
   };
 
-  const handleSortPress = (sortName: string) => {
-    setSortOptions((prevOptions) =>
-      prevOptions.map((option) => ({
-        ...option,
-        active: option.name === sortName,
-      })),
-    );
-  };
+  const handleMemoPress = useCallback((memo: UIMemo) => {
+    Logger.info('HomeScreen', `메모 선택: ${memo.title} (${memo.id})`);
+    router.push(`/memo/${memo.id}`);
+  }, []);
 
-  const handleEndReached = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const handleViewChange = useCallback((view: MemoViewType) => {
+    Logger.info('HomeScreen', `보기 방식 변경: ${view}`);
+    setSelectedView(view);
+
+    // 간단메모로 변경시 카테고리를 전체로 초기화
+    if (view === 'simple') {
+      setSelectedCategory('전체');
+    }
+  }, []);
 
   if (categoriesError) {
     const isNetworkError =
@@ -105,16 +120,34 @@ export default function HomeScreen() {
   return (
     <ApiErrorBoundary>
       <YStack backgroundColor="$backgroundPrimary" flex={1}>
-        <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
-        <SortOptionsBar options={sortOptions} onPress={handleSortPress} />
-        <Separator borderColor="$border" />
-        <MemoListView
-          isError={Boolean(memosError)}
-          isFetchingNextPage={isFetchingNextPage}
-          isPending={memosPending}
-          memos={transformedMemos}
-          onEndReached={handleEndReached}
-        />
+        <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
+
+        {/* 별점메모 선택시에만 카테고리 필터바 표시 */}
+        {selectedView === 'rating' && (
+          <>
+            <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
+            <Separator borderColor="$border" />
+          </>
+        )}
+
+        {/* 조건부 렌더링: 선택된 보기 방식에 따라 */}
+        {selectedView === 'rating' ? (
+          <YStack padding="$4">
+            <MemoRatingGroupView
+              isError={Boolean(memosError)}
+              isPending={memosPending}
+              memos={transformedMemos}
+              onMemoPress={handleMemoPress}
+            />
+          </YStack>
+        ) : (
+          <MemoSimpleView
+            isError={Boolean(memosError)}
+            isPending={memosPending}
+            memos={transformedMemos}
+            onMemoPress={handleMemoPress}
+          />
+        )}
       </YStack>
     </ApiErrorBoundary>
   );
