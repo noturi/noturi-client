@@ -4,6 +4,7 @@ import {
   Memo,
   UpdateMemoDto,
 } from '~/entities/memo/model/types';
+import { QUERY_KEYS } from '~/shared/lib';
 
 import {
   type DefaultError,
@@ -31,24 +32,24 @@ export function useCreateMemoMutation(
     onSuccess: async (newMemo, createData, context) => {
       // 메모 목록 캐시 무효화 - 파라미터 상관없이 모든 메모 쿼리 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['memos'],
+        queryKey: QUERY_KEYS.memos,
         exact: false, // 하위 키도 모두 무효화
       });
 
       // 새로 생성된 메모를 캐시에 저장
-      queryClient.setQueryData(['memo', newMemo.id], newMemo);
+      queryClient.setQueryData(QUERY_KEYS.memo(newMemo.id), newMemo);
 
       // 카테고리 관련 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['categories'],
+        queryKey: QUERY_KEYS.categories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-categories'],
+        queryKey: QUERY_KEYS.memoCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-stats'],
+        queryKey: QUERY_KEYS.memoStats,
         exact: false,
       });
 
@@ -75,25 +76,25 @@ export function useUpdateMemoMutation(
     onMutate,
     onSuccess: async (updatedMemo, updateData, context) => {
       // 특정 메모 캐시 업데이트
-      queryClient.setQueryData(['memo', updatedMemo.id], updatedMemo);
+      queryClient.setQueryData(QUERY_KEYS.memo(updatedMemo.id), updatedMemo);
 
       // 메모 목록 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['memos'],
+        queryKey: QUERY_KEYS.memos,
         exact: false,
       });
 
       // 카테고리 관련 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['categories'],
+        queryKey: QUERY_KEYS.categories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-categories'],
+        queryKey: QUERY_KEYS.memoCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-stats'],
+        queryKey: QUERY_KEYS.memoStats,
         exact: false,
       });
 
@@ -120,25 +121,25 @@ export function useDeleteMemoMutation(
     onMutate,
     onSuccess: async (_, deletedId, context) => {
       // 삭제된 메모의 캐시 제거
-      queryClient.removeQueries({ queryKey: ['memo', deletedId] });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(deletedId) });
 
       // 메모 목록 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['memos'],
+        queryKey: QUERY_KEYS.memos,
         exact: false,
       });
 
       // 카테고리 관련 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['categories'],
+        queryKey: QUERY_KEYS.categories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-categories'],
+        queryKey: QUERY_KEYS.memoCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-stats'],
+        queryKey: QUERY_KEYS.memoStats,
         exact: false,
       });
 
@@ -166,26 +167,26 @@ export function useBulkDeleteMemosMutation(
     onSuccess: async (_, deleteData, context) => {
       // 삭제된 메모들의 캐시 제거
       deleteData.ids.forEach((id) => {
-        queryClient.removeQueries({ queryKey: ['memo', id] });
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(id) });
       });
 
       // 메모 목록 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['memos'],
+        queryKey: QUERY_KEYS.memos,
         exact: false,
       });
 
       // 카테고리 관련 캐시 무효화
       await queryClient.invalidateQueries({
-        queryKey: ['categories'],
+        queryKey: QUERY_KEYS.categories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-categories'],
+        queryKey: QUERY_KEYS.memoCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['memo-stats'],
+        queryKey: QUERY_KEYS.memoStats,
         exact: false,
       });
 
