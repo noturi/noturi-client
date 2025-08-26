@@ -35,7 +35,7 @@ export function GoogleButton() {
         user: loginResponse.user,
       });
 
-      router.replace(ROUTES.home.path);
+      router.replace(ROUTES.tabs.href);
     },
   });
 

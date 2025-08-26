@@ -21,7 +21,7 @@ export const ROUTES = {
   },
   home: {
     name: '(home)',
-    path: '/home',
+    path: '/(tabs)/(home)',
     href: '/(tabs)',
     label: '홈',
   },
