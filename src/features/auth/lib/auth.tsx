@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearError = () => setError(null);
 
-  // 안전한 사용자 정보 조회
   const getUser = async (): Promise<User | null> => {
     const rawUser = await tokens.getUser();
     return rawUser && typeof rawUser === 'object' ? rawUser : null;
