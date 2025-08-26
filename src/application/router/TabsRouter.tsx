@@ -56,7 +56,7 @@ export function TabsRouter() {
         }}
       >
         <Tabs.Screen
-          name="(home)"
+          name="index"
           options={{
             title: '',
             tabBarIcon: ({ color }) => <Home color={color as any} size={20} />,
