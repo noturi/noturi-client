@@ -10,7 +10,6 @@ import {
   ReorderCategoriesDto,
   UpdateCategoryDto,
 } from '~/entities/category/model/types';
-
 import { api } from '~/shared/api';
 
 export class CategoryApi {
