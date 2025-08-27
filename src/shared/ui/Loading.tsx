@@ -16,9 +16,9 @@ export function Loading({ text = '로딩 중...', size = 'large', flex = true }:
     <YStack
       alignItems="center"
       flex={flex ? 1 : undefined}
-      gap="$3"
+      gap="$xl"
       justifyContent="center"
-      paddingVertical="$6"
+      paddingVertical="$6xl"
     >
       <Spinner color="$textSecondary" size={size} />
       {text && (

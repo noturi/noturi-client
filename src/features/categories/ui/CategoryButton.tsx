@@ -44,11 +44,11 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
               ? '$textPrimary'
               : '$border'
         }
-        borderRadius="$7"
+        borderRadius="$lg"
         borderWidth={1}
-        gap="$2"
-        paddingHorizontal="$3"
-        paddingVertical="$2"
+        gap="$sm"
+        paddingHorizontal="$md"
+        paddingVertical="$sm"
       >
         <Typography
           color={category.active ? '$textOnPrimary' : '$textSecondary'}

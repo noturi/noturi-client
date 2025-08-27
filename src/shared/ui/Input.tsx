@@ -2,7 +2,7 @@ import { Input as TamaguiInput, styled } from 'tamagui';
 
 export const Input = styled(TamaguiInput, {
   backgroundColor: '$backgroundSecondary',
-  borderRadius: '$6',
+  borderRadius: '$xl',
   borderWidth: 0,
   color: '$textPrimary',
   fontSize: 13,
@@ -29,17 +29,17 @@ export const Input = styled(TamaguiInput, {
     size: {
       sm: {
         height: 32,
-        paddingHorizontal: '$2.5',
+        paddingHorizontal: '$lg',
         fontSize: '$2',
       },
       md: {
         height: 42,
-        paddingHorizontal: '$3',
+        paddingHorizontal: '$xl',
         fontSize: 13,
       },
       lg: {
         height: 48,
-        paddingHorizontal: '$4',
+        paddingHorizontal: '$2xl',
         fontSize: 13,
       },
     },

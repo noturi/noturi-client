@@ -1,4 +1,4 @@
-import { Separator, YStack } from 'tamagui';
+import { ScrollView, YStack } from 'tamagui';
 import type { UICategory } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
@@ -6,7 +6,7 @@ import { CategoryService } from '~/features/categories/lib';
 import { infiniteMemoListQuery } from '~/features/memo-crud/api';
 import { MemoService } from '~/features/memo-crud/lib';
 import Logger from '~/shared/lib/logger';
-import { ApiErrorBoundary, Loading, Typography } from '~/shared/ui';
+import { ApiErrorBoundary, Card, Loading, Typography } from '~/shared/ui';
 import {
   CategoryFilterBar,
   MemoRatingGroupView,
@@ -58,15 +58,8 @@ export default function HomeScreen() {
   const transformedMemos: UIMemo[] = useMemo(() => {
     if (!memosData?.pages) return [];
     const allMemos = memosData.pages.flatMap((page) => page.data);
-    const transformed = MemoService.transformToUIMemos(allMemos);
-    Logger.debug('HomeScreen', `메모 변환 완료: ${transformed.length}개`, {
-      selectedView,
-      selectedCategory,
-      selectedCategoryId,
-      transformed: transformed.slice(0, 3), // 처음 3개만 로그
-    });
-    return transformed;
-  }, [memosData, selectedView, selectedCategory, selectedCategoryId]);
+    return MemoService.transformToUIMemos(allMemos);
+  }, [memosData]);
 
   const handleCategoryPress = (categoryName: string) => {
     Logger.info('HomeScreen', `카테고리 선택: ${categoryName}`);
@@ -98,9 +91,9 @@ export default function HomeScreen() {
         alignItems="center"
         backgroundColor="$backgroundPrimary"
         flex={1}
-        gap="$4"
+        gap="$sm"
         justifyContent="center"
-        padding="$4"
+        padding="$sm"
       >
         <Typography color="$textPrimary" fontSize="$6" fontWeight="600" textAlign="center">
           {isNetworkError ? '서버 연결 실패' : '오류가 발생했습니다'}
@@ -119,36 +112,37 @@ export default function HomeScreen() {
 
   return (
     <ApiErrorBoundary>
-      <YStack backgroundColor="$backgroundPrimary" flex={1}>
-        <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
+      <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
+        <YStack gap="$2xl" paddingHorizontal="$lg">
+          <Card>
+            <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
+          </Card>
 
-        {/* 별점메모 선택시에만 카테고리 필터바 표시 */}
-        {selectedView === 'rating' && (
-          <>
-            <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
-            <Separator borderColor="$border" />
-          </>
-        )}
+          {/* 별점메모 선택시에만 카테고리 필터바 표시 */}
+          {selectedView === 'rating' && (
+            <Card>
+              <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
+            </Card>
+          )}
 
-        {/* 조건부 렌더링: 선택된 보기 방식에 따라 */}
-        {selectedView === 'rating' ? (
-          <YStack padding="$4">
+          {/* 조건부 렌더링: 선택된 보기 방식에 따라 */}
+          {selectedView === 'rating' ? (
             <MemoRatingGroupView
               isError={Boolean(memosError)}
               isPending={memosPending}
               memos={transformedMemos}
               onMemoPress={handleMemoPress}
             />
-          </YStack>
-        ) : (
-          <MemoSimpleView
-            isError={Boolean(memosError)}
-            isPending={memosPending}
-            memos={transformedMemos}
-            onMemoPress={handleMemoPress}
-          />
-        )}
-      </YStack>
+          ) : (
+            <MemoSimpleView
+              isError={Boolean(memosError)}
+              isPending={memosPending}
+              memos={transformedMemos}
+              onMemoPress={handleMemoPress}
+            />
+          )}
+        </YStack>
+      </ScrollView>
     </ApiErrorBoundary>
   );
 }
