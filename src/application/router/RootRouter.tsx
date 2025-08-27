@@ -1,4 +1,4 @@
-import { XStack } from 'tamagui';
+import { XStack, useTheme } from 'tamagui';
 
 import { Pressable } from 'react-native';
 
@@ -9,13 +9,15 @@ import { ChevronLeft, Edit3 } from '@tamagui/lucide-icons';
 import { HREFS, ROUTES } from '../../shared/constants';
 
 export function RootRouter() {
+  const theme = useTheme();
+  
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: theme.backgroundSecondary.val,
         },
-        headerTintColor: '#111827',
+        headerTintColor: theme.textPrimary.val,
         headerTitleStyle: {
           fontWeight: '600',
           fontSize: 18,
@@ -35,7 +37,7 @@ export function RootRouter() {
           headerBackTitle: '',
           headerBackButtonMenuEnabled: false,
           headerRight: () => (
-            <XStack paddingRight="$3">
+            <XStack paddingRight="$md">
               <Pressable
                 onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
               >

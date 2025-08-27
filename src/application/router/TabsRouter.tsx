@@ -1,4 +1,4 @@
-import { XStack } from 'tamagui';
+import { XStack, useTheme } from 'tamagui';
 
 import { useState } from 'react';
 import { Alert, Pressable } from 'react-native';
@@ -15,6 +15,7 @@ import { Loading } from '../../shared/ui';
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const theme = useTheme();
 
   if (isInitialLoading) {
     return <Loading />;
@@ -30,9 +31,9 @@ export function TabsRouter() {
         screenOptions={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: '#ffffff',
+            backgroundColor: theme.backgroundSecondary.val,
           },
-          headerTintColor: '#111827',
+          headerTintColor: theme.textPrimary.val,
           headerTitleStyle: {
             fontWeight: '600',
             fontSize: 16,
@@ -45,8 +46,8 @@ export function TabsRouter() {
             paddingBottom: 10,
             paddingTop: 8,
           },
-          tabBarActiveTintColor: '#000000',
-          tabBarInactiveTintColor: '#6B7280',
+          tabBarActiveTintColor: theme.primary.val,
+          tabBarInactiveTintColor: theme.textMuted.val,
           tabBarItemStyle: {
             paddingVertical: 8,
             paddingHorizontal: 16,
