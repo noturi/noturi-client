@@ -10,25 +10,27 @@ const animations = createAnimations({
 
 const themes = {
   light: {
-    primary: '#000000',
-    secondary: '#6b7280',
-    accent: '#3b82f6',
-    success: '#22c55e',
-    error: '#ef4444',
-    warning: '#f59e0b',
+    primary: '#1d1d1d',
+    secondary: '#71767b',
+    accent: '#ffc107',
+    success: '#4caf50',
+    error: '#f44336',
+    warning: '#ff9800',
+
+    star: '#ebd759',
 
     textPrimary: '#212121',
-    textSecondary: '#6b7280',
-    textMuted: '#9ca3af',
-    textOnAccent: '#ffffff',
+    textSecondary: '#757575',
+    textMuted: '#9e9e9e',
+    textOnAccent: '#000000',
     textOnPrimary: '#ffffff',
 
     backgroundPrimary: '#ffffff',
-    backgroundSecondary: '#f9fafb',
+    backgroundSecondary: '#f5f5f5',
     backgroundTransparent: 'transparent',
 
-    border: '#e5e7eb',
-    borderFocus: '#3b82f6',
+    border: '#e0e0e0',
+    borderFocus: '#ffc107',
 
     surface: '#ffffff',
   },
@@ -41,39 +43,45 @@ export const config = createTamagui({
 
   tokens: {
     color: {
-      primary: '#1f2937',
-      primaryHover: '#374151',
-      primaryActive: '#111827',
+      primary: '#1d1d1d',
+      primaryHover: '#2a2a2a',
+      primaryActive: '#404040',
 
-      secondary: '#6b7280',
-      secondaryHover: '#4b5563',
-      secondaryActive: '#374151',
+      secondary: '#71767b',
+      secondaryHover: '#8b9199',
+      secondaryActive: '#a1a8b0',
 
-      accent: '#3b82f6',
-      accentHover: '#2563eb',
-      accentActive: '#1d4ed8',
+      accent: '#ffc107',
+      accentHover: '#ffb300',
+      accentActive: '#ffa000',
 
-      success: '#22c55e',
-      successHover: '#16a34a',
+      success: '#4caf50',
+      successHover: '#43a047',
 
-      error: '#ef4444',
-      errorHover: '#dc2626',
+      error: '#f44336',
+      errorHover: '#e53935',
 
-      warning: '#f59e0b',
-      warningHover: '#d97706',
+      star: '#ebd759',
+
+      warning: '#ff9800',
+      warningHover: '#fb8c00',
 
       surface: '#ffffff',
-      surfaceHover: '#f9fafb',
-      surfaceDisabled: '#f3f4f6',
+      surfaceHover: '#f5f5f5',
+      surfaceDisabled: '#eeeeee',
 
-      textPrimary: '#111827',
-      textSecondary: '#6b7280',
-      textMuted: '#9ca3af',
-      textOnAccent: '#ffffff',
+      textPrimary: '#212121',
+      textSecondary: '#757575',
+      textMuted: '#9e9e9e',
+      textOnAccent: '#000000',
       textOnPrimary: '#ffffff',
 
-      border: '#e5e7eb',
-      borderHover: '#d1d5db',
+      border: '#e0e0e0',
+      borderHover: '#bdbdbd',
+
+      backgroundTransparent: 'transparent',
+      backgroundPrimary: '#ffffff',
+      backgroundSecondary: '#f5f5f5',
     },
     space: {
       none: 0,
