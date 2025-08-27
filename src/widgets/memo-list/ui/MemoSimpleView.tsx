@@ -35,15 +35,15 @@ export function MemoSimpleView({ memos, isPending, isError, onMemoPress }: MemoS
   }
 
   return (
-    <YStack gap="$2" padding="$4">
+    <YStack gap="$sm" padding="$lg">
       {memos.map((memo) => (
         <Typography
           key={memo.id}
           pressable
-          color="black"
-          paddingVertical="$1"
+          color="$textPrimary"
+          paddingVertical="$xs"
           pointerEvents="box-only"
-          size="$3"
+          size="$md"
           onPress={() => onMemoPress?.(memo)}
         >
           • {memo.title}
