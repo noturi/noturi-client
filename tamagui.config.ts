@@ -17,7 +17,7 @@ const themes = {
     error: '#f44336',
     warning: '#ff9800',
 
-    star: '#ebd759',
+    star: '#ff0',
 
     textPrimary: '#212121',
     textSecondary: '#757575',
@@ -28,6 +28,7 @@ const themes = {
     backgroundPrimary: '#ffffff',
     backgroundSecondary: '#f5f5f5',
     backgroundTransparent: 'transparent',
+    backgroundOverlay: 'rgba(0,0,0,0.5)',
 
     border: '#e0e0e0',
     borderFocus: '#ffc107',
@@ -61,7 +62,7 @@ export const config = createTamagui({
       error: '#f44336',
       errorHover: '#e53935',
 
-      star: '#ebd759',
+      star: '#ffd700',
 
       warning: '#ff9800',
       warningHover: '#fb8c00',
@@ -76,12 +77,13 @@ export const config = createTamagui({
       textOnAccent: '#000000',
       textOnPrimary: '#ffffff',
 
-      border: '#e0e0e0',
+      border: '#fafafa',
       borderHover: '#bdbdbd',
 
       backgroundTransparent: 'transparent',
       backgroundPrimary: '#ffffff',
       backgroundSecondary: '#f5f5f5',
+      backgroundOverlay: 'rgba(0,0,0,0.5)',
     },
     space: {
       none: 0,
@@ -104,15 +106,24 @@ export const config = createTamagui({
       xs: 4,
       sm: 8,
       md: 16,
-      lg: 24,
-      xl: 32,
-      '2xl': 48,
-      '3xl': 64,
-      '4xl': 88,
-      '5xl': 120,
-      '6xl': 150,
+      lg: 20,
+      xl: 24,
+      '2xl': 32,
+      '3xl': 48,
+      '4xl': 64,
+      '5xl': 88,
+      '6xl': 120,
+      '7xl': 150,
       full: '100%',
       true: 16,
+      false: 0,
+    },
+    borderWidth: {
+      0: 0,
+      1: 1,
+      2: 2,
+      4: 4,
+      true: 1,
       false: 0,
     },
     radius: {
