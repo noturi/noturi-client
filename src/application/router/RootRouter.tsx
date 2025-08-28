@@ -10,7 +10,7 @@ import { HREFS, ROUTES } from '../../shared/constants';
 
 export function RootRouter() {
   const theme = useTheme();
-  
+
   return (
     <Stack
       screenOptions={{
