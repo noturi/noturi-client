@@ -1,10 +1,10 @@
-import { Separator, XStack, YStack } from 'tamagui';
+import { Separator, XStack, YStack, useTheme } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { Card, Loading, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import { ChevronDown, ChevronUp, Star } from '@tamagui/lucide-icons';
 
 type MemoRatingGroupViewProps = {
   memos: UIMemo[];
@@ -28,12 +28,12 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
 };
 
 function RatingStars({ rating }: { rating: number }) {
+  const theme = useTheme();
+
   return (
     <XStack alignItems="center" gap="$xs" pointerEvents="none">
       {Array.from({ length: rating }, (_, i) => (
-        <Typography key={i} color="$star" pointerEvents="none" variant="caption1">
-          ★
-        </Typography>
+        <Star key={i} color="$star" fill={theme.star.val} size="$md" />
       ))}
     </XStack>
   );
@@ -72,18 +72,19 @@ function RatingGroupCard({ group, isExpanded, onToggle, onMemoPress }: RatingGro
       {isExpanded && (
         <>
           <Separator borderColor="$border" />
-          <YStack gap="$xs" padding="$md">
+          <YStack gap="$none" padding="$md">
             {group.memos.map((memo) => (
-              <Typography
+              <XStack
                 key={memo.id}
-                pressable
-                color="$textPrimary"
+                alignSelf="flex-start"
+                paddingVertical="$xs"
                 pressStyle={{ opacity: 0.7 }}
-                variant="body2"
                 onPress={() => onMemoPress?.(memo)}
               >
-                {memo.title}
-              </Typography>
+                <Typography color="$textPrimary" variant="body2">
+                  {memo.title}
+                </Typography>
+              </XStack>
             ))}
           </YStack>
         </>
@@ -103,7 +104,8 @@ export function MemoRatingGroupView({
   const ratingGroups = groupMemosByRating(memos);
 
   useEffect(() => {
-    const newExpandedGroups = ratingGroups.reduce(
+    const groups = groupMemosByRating(memos);
+    const newExpandedGroups = groups.reduce(
       (acc, group) => ({
         ...acc,
         [group.rating]: true,
