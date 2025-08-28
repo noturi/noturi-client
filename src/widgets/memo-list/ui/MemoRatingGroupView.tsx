@@ -152,7 +152,7 @@ export function MemoRatingGroupView({
       <Typography color="$textPrimary" paddingLeft="$md" variant="subheading">
         메모
       </Typography>
-      <YStack gap="$lg">
+      <YStack gap="$lg" marginBottom="$xl">
         {ratingGroups.map((group) => (
           <RatingGroupCard
             key={group.rating}
