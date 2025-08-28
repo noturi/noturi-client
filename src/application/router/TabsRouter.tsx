@@ -1,11 +1,11 @@
 import { XStack, useTheme } from 'tamagui';
 
 import { useState } from 'react';
-import { Alert, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 
-import { Redirect, Tabs, router } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 
-import { BarChart3, Home, Plus, Search, User } from '@tamagui/lucide-icons';
+import { Home, Plus, User } from '@tamagui/lucide-icons';
 
 import { useAuth } from '../../features/auth';
 import { MemoCreateSheet } from '../../features/memo-crud';
@@ -42,17 +42,17 @@ export function TabsRouter() {
           headerTitleAlign: 'left',
           tabBarShowLabel: false,
           tabBarStyle: {
-            height: 80,
-            paddingBottom: 10,
-            paddingTop: 8,
+            height: 83,
+            paddingBottom: 30,
+            paddingTop: 5,
           },
           tabBarActiveTintColor: theme.primary.val,
           tabBarInactiveTintColor: theme.textMuted.val,
           tabBarItemStyle: {
-            paddingVertical: 8,
+            paddingVertical: 4,
             paddingHorizontal: 16,
-            minHeight: 60,
-            minWidth: 60,
+            minHeight: 35,
+            minWidth: 35,
           },
         }}
       >
@@ -60,7 +60,9 @@ export function TabsRouter() {
           name="index"
           options={{
             title: '',
-            tabBarIcon: ({ color }) => <Home color={color as any} size="$lg" />,
+            tabBarIcon: ({ color, focused }) => (
+              <Home color={color as any} fill={focused ? color : 'none'} size="$xl" />
+            ),
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -68,8 +70,7 @@ export function TabsRouter() {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 20,
+                    padding: 8,
                   },
                 ]}
                 onPress={props.onPress}
@@ -77,13 +78,13 @@ export function TabsRouter() {
                 {props.children}
               </Pressable>
             ),
-            headerRight: () => (
-              <XStack paddingRight="$md">
-                <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
-                  <Search size="$lg" />
-                </Pressable>
-              </XStack>
-            ),
+            // headerRight: () => (
+            //   <XStack paddingRight="$md">
+            //     <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
+            //       <Search size="$lg" />
+            //     </Pressable>
+            //   </XStack>
+            // ),
           }}
         />
 
@@ -97,7 +98,11 @@ export function TabsRouter() {
           name="create"
           options={{
             title: '',
-            tabBarIcon: ({ color }) => <Plus color={color as any} size="$lg" />,
+            tabBarIcon: ({ color, focused }) => (
+              <XStack backgroundColor={'$backgroundSecondary'} borderRadius="$xl" padding="$sm">
+                <Plus color={focused ? 'white' : (color as any)} size="$xl" />
+              </XStack>
+            ),
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -105,8 +110,7 @@ export function TabsRouter() {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 20,
+                    padding: 8,
                   },
                 ]}
                 onPress={props.onPress}
@@ -118,7 +122,7 @@ export function TabsRouter() {
           }}
         />
 
-        <Tabs.Screen
+        {/* <Tabs.Screen
           listeners={({ navigation }) => ({
             tabPress: (e) => {
               e.preventDefault();
@@ -146,13 +150,15 @@ export function TabsRouter() {
               </Pressable>
             ),
           }}
-        />
+        /> */}
 
         <Tabs.Screen
           name="profile"
           options={{
             title: '프로필',
-            tabBarIcon: ({ color }) => <User color={color as any} size="$lg" />,
+            tabBarIcon: ({ color, focused }) => (
+              <User color={color as any} fill={focused ? color : 'none'} size="$xl" />
+            ),
             tabBarButton: (props) => (
               <Pressable
                 style={[
