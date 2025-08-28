@@ -29,7 +29,7 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
             onPress={() => onSelect(selectedRating === rating ? undefined : rating)}
           >
             <XStack alignItems="center" gap="$1">
-              <Star color={starColor} fill={starColor} size={16} />
+              <Star color={starColor} fill={starColor} size="$md" />
               <Typography
                 color={selectedRating === rating ? '$textOnPrimary' : '$textPrimary'}
                 pointerEvents="none"

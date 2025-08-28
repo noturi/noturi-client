@@ -19,7 +19,7 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
         borderBottomColor="$border"
         borderBottomWidth={1}
         paddingHorizontal="$2"
-        paddingVertical="$3"
+        paddingVertical="$sm"
         position="relative"
       >
         <Button
@@ -28,7 +28,7 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
           borderWidth={0}
           color="$textSecondary"
           pressStyle={{ backgroundColor: '$backgroundTransparent' }}
-          size="$3"
+          size="$sm"
           onPress={onClose}
         >
           취소

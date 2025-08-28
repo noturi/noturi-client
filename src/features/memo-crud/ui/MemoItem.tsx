@@ -16,7 +16,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
     backgroundColor="$backgroundPrimary"
     cursor="pointer"
     paddingHorizontal="$4"
-    paddingVertical="$3"
+    paddingVertical="$sm"
     pressStyle={{
       backgroundColor: '$surfaceHover',
       opacity: 0.8,
@@ -30,14 +30,14 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
         <XStack alignItems="center" gap="$2" marginBottom="$2">
           <YStack
             backgroundColor={memo.category.color as any}
-            borderRadius="$3"
+            borderRadius="$sm"
             paddingHorizontal="$2"
             paddingVertical="$1"
           >
             <Typography
               color="white"
-              fontSize="$2"
-              fontWeight="$4"
+              fontSize="$sm"
+              fontWeight="$medium"
               pointerEvents="none"
               variant="caption1"
             >
@@ -50,7 +50,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
         </XStack>
         <Typography
           color="$textPrimary"
-          fontWeight="$4"
+          fontWeight="$medium"
           marginBottom="$2"
           numberOfLines={1}
           pointerEvents="none"

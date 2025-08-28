@@ -27,6 +27,15 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
   const [isFormVisible, setIsFormVisible] = useState(false);
   const textAreaRef = useRef<TextInput | null>(null);
 
+  const handleClose = () => {
+    // 바텀시트 닫을 때 모든 상태 리셋
+    setIsFormVisible(false);
+    form.reset();
+    form.clearError('categoryName');
+    form.clearError('categoryDeleteError');
+    onClose();
+  };
+
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
@@ -44,7 +53,28 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       form.clearError('categoryDeleteError');
     },
     onError: (error) => {
-      handleCategoryFormError(error, form);
+      console.log('삭제 에러 발생:', error);
+      console.log('폼 에러 설정 전:', form.errors);
+      // 모든 에러 상태 초기화 후 삭제 관련 에러만 설정
+      form.clearError('categoryName');
+      form.clearError('categoryDeleteError');
+      setTimeout(() => {
+        console.log('handleCategoryFormError 호출 전 에러:', error);
+        handleCategoryFormError(error, form);
+        console.log('폼 에러 설정 후:', form.errors);
+        console.log('shouldShowError:', form.shouldShowError('categoryDeleteError'));
+
+        // 직접 에러 설정도 시도해보기
+        form.setError('categoryDeleteError', {
+          message: '메모가 있는 카테고리는 삭제할 수 없습니다',
+        });
+        form.setTouched('categoryDeleteError');
+        console.log('직접 설정 후 폼 에러:', form.errors);
+        console.log(
+          'touched 설정 후 shouldShowError:',
+          form.shouldShowError('categoryDeleteError'),
+        );
+      }, 0);
     },
   });
 
@@ -89,7 +119,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       open={isOpen}
       snapPoints={keyboardHeight > 0 ? [70] : [50]}
       snapPointsMode="percent"
-      onOpenChange={onClose}
+      onOpenChange={handleClose}
     >
       <Sheet.Overlay
         animation="quick"
@@ -122,7 +152,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
             paddingHorizontal="$md"
             paddingVertical="$sm"
             pressStyle={{ opacity: 0.7 }}
-            onPress={onClose}
+            onPress={handleClose}
           >
             <X color="$textSecondary" size="$lg" />
           </XStack>
@@ -165,68 +195,73 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
 
               <Form>
                 {isFormVisible && (
-                  <Form.Field label="카테고리 이름">
-                    <XStack alignItems="center" gap="$sm">
-                      <Input
-                        ref={textAreaRef}
-                        flex={1}
-                        maxLength={20}
-                        placeholder="새 카테고리 이름"
-                        value={form.values.categoryName}
-                        onBlur={() => form.setTouched('categoryName')}
-                        onChangeText={(text) => form.setValue('categoryName', text)}
-                      />
-                      <Button
-                        disabled={!form.values.categoryName.trim() || form.isSubmitting}
-                        size="md"
-                        onPress={form.handleSubmit}
+                  <YStack>
+                    <Form.Field label="카테고리 이름">
+                      <XStack alignItems="center" gap="$sm">
+                        <Input
+                          ref={textAreaRef}
+                          flex={1}
+                          maxLength={20}
+                          placeholder="새 카테고리 이름"
+                          value={form.values.categoryName}
+                          onBlur={() => form.setTouched('categoryName')}
+                          onChangeText={(text) => form.setValue('categoryName', text)}
+                        />
+                        <Button
+                          disabled={!form.values.categoryName.trim() || form.isSubmitting}
+                          size="md"
+                          onPress={form.handleSubmit}
+                        >
+                          + 추가
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onPress={() => {
+                            setIsFormVisible(false);
+                            form.setValue('categoryName', '');
+                            form.clearError('categoryName');
+                          }}
+                        >
+                          취소
+                        </Button>
+                      </XStack>
+                    </Form.Field>
+
+                    {form.shouldShowError('categoryName') && (
+                      <Form.Error>{form.errors.categoryName?.message}</Form.Error>
+                    )}
+                  </YStack>
+                )}
+
+                <YStack>
+                  {form.shouldShowError('categoryDeleteError') && (
+                    <Form.Error>{form.errors.categoryDeleteError?.message}</Form.Error>
+                  )}
+
+                  <XStack flexWrap="wrap" gap="$md">
+                    {categories.map((category) => (
+                      <XStack
+                        key={category.id}
+                        alignItems="center"
+                        backgroundColor="$surface"
+                        borderColor="$border"
+                        borderRadius="$2xl"
+                        borderWidth={1}
+                        flexShrink={0}
+                        gap="$md"
+                        paddingHorizontal="$md"
+                        paddingVertical="$md"
+                        pressStyle={{ backgroundColor: '$surfaceHover' }}
+                        onPress={() => handleDeleteCategory(category.id)}
                       >
-                        + 추가
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        onPress={() => {
-                          setIsFormVisible(false);
-                          form.reset();
-                        }}
-                      >
-                        취소
-                      </Button>
-                    </XStack>
-                  </Form.Field>
-                )}
-
-                {form.shouldShowError('categoryName') && (
-                  <Form.Error>{form.errors.categoryName?.message}</Form.Error>
-                )}
-
-                {form.shouldShowError('categoryDeleteError') && (
-                  <Form.Error>{form.errors.categoryDeleteError?.message}</Form.Error>
-                )}
-
-                <XStack flexWrap="wrap" gap="$md">
-                  {categories.map((category) => (
-                    <XStack
-                      key={category.id}
-                      alignItems="center"
-                      backgroundColor="$surface"
-                      borderColor="$border"
-                      borderRadius="$2xl"
-                      borderWidth={1}
-                      flexShrink={0}
-                      gap="$md"
-                      paddingHorizontal="$md"
-                      paddingVertical="$md"
-                      pressStyle={{ backgroundColor: '$surfaceHover' }}
-                      onPress={() => handleDeleteCategory(category.id)}
-                    >
-                      <Typography color="$textSecondary" flexShrink={0} variant="caption1">
-                        {category.name}
-                      </Typography>
-                      <X color="$textPrimary" size="$md" />
-                    </XStack>
-                  ))}
-                </XStack>
+                        <Typography color="$textSecondary" flexShrink={0} variant="caption1">
+                          {category.name}
+                        </Typography>
+                        <X color="$textPrimary" size="$md" />
+                      </XStack>
+                    ))}
+                  </XStack>
+                </YStack>
               </Form>
             </YStack>
           </YStack>

@@ -40,7 +40,7 @@ export default function SearchScreen() {
   return (
     <YStack backgroundColor="$backgroundPrimary" flex={1}>
       <YStack borderBottomColor="$border" borderBottomWidth={1}>
-        <YStack gap="$4" paddingHorizontal="$4" paddingVertical="$3">
+        <YStack gap="$4" paddingHorizontal="$4" paddingVertical="$sm">
           <SearchInputBar
             hasActiveFilters={filters.hasActiveFilters}
             searchText={filters.searchText}
@@ -99,7 +99,7 @@ export default function SearchScreen() {
       <YStack flex={1}>
         {isIdle && (
           <EmptyState
-            icon={<Search color="$textMuted" size={24} />}
+            icon={<Search color="$textMuted" size="$xl" />}
             title="검색어를 입력하거나 필터를 선택해주세요"
           />
         )}

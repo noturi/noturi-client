@@ -25,7 +25,7 @@ export function ActiveFilterChip({ label, onClear }: ActiveFilterChipProps) {
       <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
         {label}
       </Typography>
-      <X color="$textPrimary" size={12} />
+      <X color="$textPrimary" size="$sm" />
     </Button>
   );
 }

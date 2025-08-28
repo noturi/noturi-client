@@ -41,7 +41,7 @@ export function ActiveFilters({
         <ActiveFilterChip label={`★ ${selectedRating}`} onClear={onClearRating} />
       )}
 
-      {/* <Button borderRadius="$3" color="$textSecondary" size="$2" onPress={onClearAll}>
+      {/* <Button borderRadius="$sm" color="$textSecondary" size="$2" onPress={onClearAll}>
         모두 지우기
       </Button> */}
     </XStack>

@@ -6,7 +6,8 @@ export const TextArea = styled(TamaguiTextArea, {
   borderRadius: '$xl',
   borderWidth: 0,
   color: '$textPrimary',
-  fontSize: '$4',
+  fontFamily: '$body',
+  fontSize: '$md',
   padding: '$xl',
   placeholderTextColor: '$textMuted',
 
@@ -20,9 +21,9 @@ export const TextArea = styled(TamaguiTextArea, {
     hasError: {
       true: {
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '$error',
         focusStyle: {
-          borderColor: 'red',
+          borderColor: '$error',
         },
       },
     },
@@ -31,18 +32,18 @@ export const TextArea = styled(TamaguiTextArea, {
       sm: {
         minHeight: 80,
         paddingHorizontal: '$lg',
-        fontSize: '$2',
+        fontSize: '$sm',
       },
       md: {
         minHeight: 120,
         paddingHorizontal: '$xl',
         paddingVertical: '$sm',
-        fontSize: 13,
+        fontSize: '$sm',
       },
       lg: {
         minHeight: 160,
         paddingHorizontal: '$2xl',
-        fontSize: '$5',
+        fontSize: '$lg',
       },
     },
 

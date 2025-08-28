@@ -12,7 +12,7 @@ export interface FormProps {
 }
 
 const FormRoot = styled(View, {
-  gap: '$sm',
+  gap: '$lg',
 } as const);
 
 // Form Field Component

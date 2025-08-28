@@ -177,7 +177,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
                       borderStyle="dashed"
                       borderWidth={1}
                       color="$textSecondary"
-                      fontSize="$3"
+                      fontSize="$md"
                       minHeight={40}
                       minWidth={60}
                       pressStyle={{ backgroundColor: '$surfaceHover' }}
@@ -190,7 +190,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
               </ScrollView>
 
               {showAddCategory && (
-                <XStack alignItems="center" gap="$4" marginTop="$3">
+                <XStack alignItems="center" gap="$4" marginTop="$sm">
                   <YStack flex={1}>
                     <Form.Field
                       error={
@@ -213,7 +213,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
                       borderRadius="$6"
                       color="$textOnPrimary"
                       disabled={!categoryForm.isValid || createCategoryMutation.isPending}
-                      fontSize="$3"
+                      fontSize="$md"
                       minHeight={40}
                       minWidth={60}
                       onPress={handleAddCategory}
@@ -226,7 +226,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
                       borderRadius="$6"
                       borderWidth={1}
                       color="$textSecondary"
-                      fontSize="$3"
+                      fontSize="$md"
                       minHeight={40}
                       minWidth={60}
                       onPress={handleCancelAddCategory}

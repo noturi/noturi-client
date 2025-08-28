@@ -43,81 +43,81 @@ const getComponentByVariant = (variant: TypographyVariant) => {
 
 const variantStyles = {
   display: {
-    fontSize: '$8', // 28px
-    fontWeight: '$5', // 600
-    lineHeight: '$8', // 34px
+    fontSize: '$3xl', // 24px
+    fontWeight: '$semibold', // 600
+    lineHeight: '$3xl', // 28px
     color: '$textPrimary',
   },
   heading: {
-    fontSize: '$7', // 24px
-    fontWeight: '$4', // 500
-    lineHeight: '$7', // 30px
+    fontSize: '$3xl', // 24px
+    fontWeight: '$medium', // 500
+    lineHeight: '$3xl', // 28px
     color: '$textPrimary',
   },
   subheading: {
-    fontSize: '$6', // 20px
-    fontWeight: '$4', // 500
-    lineHeight: '$6', // 26px
+    fontSize: '$2xl', // 20px
+    fontWeight: '$medium', // 500
+    lineHeight: '$2xl', // 24px
     color: '$textPrimary',
   },
   title: {
-    fontSize: '$5', // 18px
-    fontWeight: '$4', // 500
-    lineHeight: '$5', // 24px
+    fontSize: '$xl', // 18px
+    fontWeight: '$medium', // 500
+    lineHeight: '$xl', // 20px
     color: '$textPrimary',
   },
   subtitle: {
-    fontSize: '$4', // 16px
-    fontWeight: '$4',
-    lineHeight: '$4', // 22px
+    fontSize: '$lg', // 16px
+    fontWeight: '$medium',
+    lineHeight: '$lg', // 18px
     color: '$textPrimary',
   },
 
   body1: {
-    fontSize: '$5', // 18px
-    fontWeight: '$3', // 300
-    lineHeight: '$5', // 24px
+    fontSize: '$xl', // 18px
+    fontWeight: '$light', // 300
+    lineHeight: '$xl', // 20px
     color: '$textPrimary',
   },
   body2: {
-    fontSize: '$4', // 16px
-    fontWeight: '$3', // 300
-    lineHeight: '$4', // 22px
+    fontSize: '$lg', // 16px
+    fontWeight: '$light', // 300
+    lineHeight: '$lg', // 18px
     color: '$textPrimary',
   },
   body3: {
-    fontSize: '$3', // 14px
-    fontWeight: '$3', // 300
-    lineHeight: '$3', // 20px
+    fontSize: '$md', // 14px
+    fontWeight: '$light', // 300
+    lineHeight: '$md', // 16px
     color: '$textPrimary',
   },
 
   // 작은 텍스트들
   caption1: {
-    fontSize: '$3', // 14px
-    fontWeight: '$3', // 300
-    lineHeight: '$3', // 20px
+    fontSize: '$md', // 14px
+    fontWeight: '$light', // 300
+    lineHeight: '$md', // 16px
     color: '$textSecondary',
   },
   caption2: {
-    fontSize: '$2', // 12px
-    fontWeight: '$3', // 300
-    lineHeight: '$2', // 18px
+    fontSize: '$sm', // 12px
+    fontWeight: '$light', // 300
+    lineHeight: '$sm', // 14px
     color: '$textMuted',
   },
 
   // 특수 용도
   link: {
-    fontSize: '$3', // 14px
-    fontWeight: '$3', // 300
-    lineHeight: '$3', // 20px
+    fontSize: '$md', // 14px
+    fontWeight: '$light', // 300
+    lineHeight: '$md', // 16px
     color: '$accent',
     textDecorationLine: 'none',
   },
   label: {
-    fontSize: '$2', // 12px
-    fontWeight: '$3', // 400
-    lineHeight: '$2', // 18px
+    fontSize: '$sm', // 12px
+    fontWeight: '$regular', // 400
+    lineHeight: '$sm', // 14px
     color: '$textPrimary',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -137,6 +137,7 @@ export const Typography = ({ variant = 'body1', children, ...props }: Typography
   return (
     <Component
       {...styles}
+      fontFamily="$body"
       margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
       pointerEvents="none"
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}

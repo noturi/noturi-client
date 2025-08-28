@@ -55,16 +55,16 @@ export default function MemoDetailScreen() {
     <YStack backgroundColor="$backgroundPrimary" flex={1}>
       <ScrollView flex={1} showsVerticalScrollIndicator={false}>
         <YStack gap="$4" padding="$4">
-          <YStack gap="$3">
+          <YStack gap="$sm">
             <XStack alignItems="flex-start" justifyContent="space-between">
               <XStack alignItems="center" flex={1} gap="$2">
                 <YStack
                   backgroundColor={memo.category.color}
-                  borderRadius="$3"
+                  borderRadius="$sm"
                   paddingHorizontal="$2"
                   paddingVertical="$1"
                 >
-                  <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
+                  <Typography color="white" fontSize="$sm" fontWeight="$medium" variant="caption2">
                     {memo.category.name}
                   </Typography>
                 </YStack>
@@ -80,7 +80,7 @@ export default function MemoDetailScreen() {
             </Typography>
           </YStack>
 
-          <YStack gap="$3" marginTop="$2">
+          <YStack gap="$sm" marginTop="$2">
             <Typography color="$textPrimary" variant="body2">
               {memo.content}
             </Typography>

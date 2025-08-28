@@ -41,7 +41,7 @@ export function RootRouter() {
               <Pressable
                 onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
               >
-                <Edit3 color="$textSecondary" size={20} />
+                <Edit3 color="$textSecondary" size="$lg" />
               </Pressable>
             </XStack>
           ),
@@ -67,7 +67,7 @@ export function RootRouter() {
           headerBackButtonMenuEnabled: false,
           headerLeft: () => (
             <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
-              <ChevronLeft color="$primary" size={20} />
+              <ChevronLeft color="$primary" size="$lg" />
             </Pressable>
           ),
         }}

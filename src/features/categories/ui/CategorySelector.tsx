@@ -18,10 +18,10 @@ export const CategorySelector = ({
   onNewCategoryChange,
 }: CategorySelectorProps) => {
   return (
-    <YStack gap="$3">
+    <YStack gap="$sm">
       <Typography variant="title">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$3">
+        <XStack gap="$sm">
           {categories.map((category) => (
             <Button
               key={category.id}
@@ -30,8 +30,8 @@ export const CategorySelector = ({
               borderRadius="$4"
               borderWidth={1}
               color={selectedCategory === category.name ? '$textOnPrimary' : '$textPrimary'}
-              fontSize="$3"
-              paddingHorizontal="$3"
+              fontSize="$md"
+              paddingHorizontal="$sm"
               pressStyle={{
                 backgroundColor:
                   selectedCategory === category.name ? '$textPrimary' : '$surfaceHover',
@@ -49,8 +49,8 @@ export const CategorySelector = ({
             borderStyle="dashed"
             borderWidth={1}
             color="$textSecondary"
-            fontSize="$3"
-            paddingHorizontal="$3"
+            fontSize="$md"
+            paddingHorizontal="$sm"
             pressStyle={{ backgroundColor: '$surfaceHover' }}
             size="$2"
             onPress={() => onSelectCategory('')}
@@ -67,9 +67,9 @@ export const CategorySelector = ({
           borderRadius="$4"
           borderWidth={1}
           color="$textPrimary"
-          fontSize="$4"
+          fontSize="$md"
           paddingHorizontal="$4"
-          paddingVertical="$3"
+          paddingVertical="$sm"
           placeholder="새 카테고리 입력"
           placeholderTextColor="$textMuted"
           value={newCategory}

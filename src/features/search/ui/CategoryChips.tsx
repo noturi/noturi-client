@@ -26,7 +26,7 @@ export function CategoryChips({
             <Button
               key={category.id}
               backgroundColor={selectedCategoryIds.includes(category.id) ? '$primary' : '$surface'}
-              borderRadius="$3"
+              borderRadius="$sm"
               color={
                 selectedCategoryIds.includes(category.id) ? '$textOnPrimary' : '$textSecondary'
               }

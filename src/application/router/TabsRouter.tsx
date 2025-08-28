@@ -60,7 +60,7 @@ export function TabsRouter() {
           name="index"
           options={{
             title: '',
-            tabBarIcon: ({ color }) => <Home color={color as any} size={20} />,
+            tabBarIcon: ({ color }) => <Home color={color as any} size="$lg" />,
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -80,7 +80,7 @@ export function TabsRouter() {
             headerRight: () => (
               <XStack paddingRight="$md">
                 <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
-                  <Search size={20} />
+                  <Search size="$lg" />
                 </Pressable>
               </XStack>
             ),
@@ -97,7 +97,7 @@ export function TabsRouter() {
           name="create"
           options={{
             title: '',
-            tabBarIcon: ({ color }) => <Plus color={color as any} size={20} />,
+            tabBarIcon: ({ color }) => <Plus color={color as any} size="$lg" />,
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -128,7 +128,7 @@ export function TabsRouter() {
           name="stats"
           options={{
             title: '통계',
-            tabBarIcon: ({ color }) => <BarChart3 color={color as any} size={20} />,
+            tabBarIcon: ({ color }) => <BarChart3 color={color as any} size="$lg" />,
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -152,7 +152,7 @@ export function TabsRouter() {
           name="profile"
           options={{
             title: '프로필',
-            tabBarIcon: ({ color }) => <User color={color as any} size={20} />,
+            tabBarIcon: ({ color }) => <User color={color as any} size="$lg" />,
             tabBarButton: (props) => (
               <Pressable
                 style={[
