@@ -36,7 +36,7 @@ export function TabsRouter() {
           headerTintColor: theme.textPrimary.val,
           headerTitleStyle: {
             fontWeight: '600',
-            fontSize: 16,
+            fontSize: 20,
           },
           headerShadowVisible: false,
           headerTitleAlign: 'left',
@@ -78,7 +78,7 @@ export function TabsRouter() {
               </Pressable>
             ),
             headerRight: () => (
-              <XStack paddingRight="$3">
+              <XStack paddingRight="$md">
                 <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
                   <Search size={20} />
                 </Pressable>
