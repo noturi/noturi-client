@@ -1,6 +1,6 @@
 import { createAnimations } from '@tamagui/animations-react-native';
+import { config as configBase } from '@tamagui/config/v3';
 import { createFont, createTamagui, createTokens } from '@tamagui/core';
-import { shorthands } from '@tamagui/shorthands';
 
 const animations = createAnimations({
   bouncy: { type: 'spring', damping: 10, mass: 0.9, stiffness: 100 },
@@ -113,6 +113,11 @@ const headingFont = createFont({
     3: '500',
     4: '600',
     5: '700',
+    light: '300',
+    regular: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
     true: '600',
   },
   letterSpacing: {
@@ -228,21 +233,29 @@ const tokens = createTokens({
   zIndex: { 0: 0, 1: 100, 2: 200, 3: 300, 4: 400, 5: 500 },
 });
 
-const fonts = {
-  body: bodyFont,
-  heading: headingFont,
-};
+
 
 export const config = createTamagui({
+  ...configBase,
   themes,
-  fonts,
-  animations,
-  shorthands,
-  tokens,
-  defaultFont: 'body',
-  settings: {
-    allowedStyleValues: 'strict',
+  fonts: {
+    ...configBase.fonts,
+    body: {
+      ...configBase.fonts.body,
+      size: {
+        ...configBase.fonts.body.size,
+        xs: 10,
+        sm: 12,
+        md: 14,
+        lg: 16,
+        xl: 18,
+        '2xl': 20,
+        '3xl': 24,
+      },
+    },
   },
+  animations,
+  tokens,
 });
 
 export type AppConfig = typeof config;
