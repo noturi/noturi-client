@@ -10,14 +10,14 @@ export const logRequest = (request: Request, response: Response) => {
 export const logErrorResponse = async (request: Request, response: Response) => {
   try {
     const responseText = await response.clone().text();
-    Logger.error('API Error Response', {
+    Logger.warn('API Error Response', {
       method: request.method,
       url: request.url,
       status: response.status,
       responseBody: responseText,
     });
   } catch {
-    Logger.error('API Error - Could not read response body', {
+    Logger.warn('API Error - Could not read response body', {
       method: request.method,
       url: request.url,
       status: response.status,
