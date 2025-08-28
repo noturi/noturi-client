@@ -73,15 +73,10 @@ export class CategoryApi {
 
   // 카테고리 생성
   async createCategory(data: CreateCategoryDto): Promise<Category> {
-    try {
-      const response = await this.api.post('categories', {
-        json: data,
-      });
-      return response.json<Category>();
-    } catch (error) {
-      console.error('Create category API error:', error);
-      throw new Error('카테고리 생성에 실패했습니다.');
-    }
+    const response = await this.api.post('categories', {
+      json: data,
+    });
+    return response.json<Category>();
   }
 
   // 카테고리 수정
