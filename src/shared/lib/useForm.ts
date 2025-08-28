@@ -245,6 +245,10 @@ export function useForm<T extends Record<string, any>>({
     dispatch({ type: 'SET_ERROR', name, error });
   }, []);
 
+  const clearError = useCallback(<K extends keyof T>(name: K) => {
+    dispatch({ type: 'CLEAR_ERROR', name });
+  }, []);
+
   // 실시간으로 isValid 계산 (에러 표시와는 별개)
   const isValid = useMemo(() => {
     return validateWithValues(state.values).isValid;
@@ -257,6 +261,7 @@ export function useForm<T extends Record<string, any>>({
       setValue,
       setTouched,
       setError,
+      clearError,
       onValueChange,
       handleSubmit,
       reset,
@@ -269,6 +274,7 @@ export function useForm<T extends Record<string, any>>({
       setValue,
       setTouched,
       setError,
+      clearError,
       onValueChange,
       handleSubmit,
       reset,
