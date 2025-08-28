@@ -1,8 +1,8 @@
 import { View, styled } from 'tamagui';
+import type { FormFieldError } from '~/shared/lib/useForm';
 
 import React from 'react';
 
-import type { FormFieldError } from '../../hooks/useForm';
 import { Typography } from './Typography';
 
 // Form Root Component
@@ -12,9 +12,7 @@ export interface FormProps {
 }
 
 const FormRoot = styled(View, {
-  gap: '$xl',
-  padding: '$2xl',
-  flex: 1,
+  gap: '$sm',
 } as const);
 
 // Form Field Component
@@ -27,7 +25,6 @@ export interface FormFieldProps {
 
 const FormFieldWrapper = styled(View, {
   gap: '$sm',
-  flex: 1,
 });
 
 function FormField({ children, error, label, required }: FormFieldProps) {
