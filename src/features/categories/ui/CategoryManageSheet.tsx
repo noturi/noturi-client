@@ -1,18 +1,21 @@
-import { Button, Sheet, TextArea, XStack, YStack } from 'tamagui';
+import { Sheet, XStack, YStack } from 'tamagui';
 import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
 } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { Typography } from '~/shared/ui';
+import { useForm } from '~/shared/lib/useForm';
+import { Button, Form, Input, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { Alert, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { X } from '@tamagui/lucide-icons';
 
 import { useQuery } from '@tanstack/react-query';
+
+import { handleCategoryFormError } from '../lib/form-error-handler';
 
 interface CategoryManageSheetProps {
   isOpen: boolean;
@@ -21,7 +24,7 @@ interface CategoryManageSheetProps {
 
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const textAreaRef = useRef<TextInput | null>(null);
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -29,10 +32,34 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
 
   const createCategoryMutation = useCreateCategoryMutation({
     onSuccess: () => {
-      setNewCategoryName('');
+      form.reset();
+      setIsFormVisible(false);
+    },
+    onError: (error) => {
+      handleCategoryFormError(error, form);
     },
   });
-  const deleteCategoryMutation = useDeleteCategoryMutation();
+  const deleteCategoryMutation = useDeleteCategoryMutation({
+    onSuccess: () => {
+      form.clearError('categoryDeleteError');
+    },
+    onError: (error) => {
+      handleCategoryFormError(error, form);
+    },
+  });
+
+  const form = useForm({
+    initialValues: {
+      categoryName: '',
+      categoryDeleteError: '', // 카테고리 삭제 에러 전용 필드
+    },
+    onSubmit: async (values) => {
+      await createCategoryMutation.mutateAsync({
+        name: values.categoryName.trim(),
+        color: '#1d1d1d',
+      });
+    },
+  });
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -50,23 +77,8 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
     };
   }, []);
 
-  const handleAddCategory = () => {
-    if (!newCategoryName.trim()) {
-      Alert.alert('알림', '카테고리 이름을 입력해주세요.');
-      return;
-    }
-    createCategoryMutation.mutate({ name: newCategoryName.trim(), color: '#000000' });
-  };
-
-  const handleDeleteCategory = (id: string, name: string) => {
-    Alert.alert('삭제', `카테고리 "${name}" 을(를) 삭제하시겠습니까?`, [
-      { text: '취소', style: 'cancel' },
-      {
-        text: '삭제',
-        style: 'destructive',
-        onPress: () => deleteCategoryMutation.mutate(id),
-      },
-    ]);
+  const handleDeleteCategory = (id: string) => {
+    deleteCategoryMutation.mutate(id);
   };
 
   return (
@@ -87,12 +99,12 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       />
       <Sheet.Frame
         backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$6"
-        borderTopRightRadius="$6"
+        borderTopLeftRadius="$2xl"
+        borderTopRightRadius="$2xl"
       >
         {/* Handle */}
-        <YStack alignItems="center" paddingBottom="$1" paddingTop="$2">
-          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
+        <YStack alignItems="center" paddingBottom="$sm" paddingTop="$sm">
+          <YStack backgroundColor="$textMuted" borderRadius="$sm" height={4} width={36} />
         </YStack>
 
         {/* Header */}
@@ -100,21 +112,20 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
           alignItems="center"
           borderBottomColor="$border"
           borderBottomWidth={1}
-          paddingHorizontal="$2"
-          paddingVertical="$3"
+          paddingHorizontal="$sm"
+          paddingVertical="$md"
           position="relative"
         >
-          <Button
+          <XStack
             backgroundColor="$backgroundTransparent"
-            borderRadius="$4"
-            borderWidth={0}
-            color="$textSecondary"
-            pressStyle={{ backgroundColor: '$backgroundTransparent' }}
-            size="$3"
+            borderRadius="$lg"
+            paddingHorizontal="$md"
+            paddingVertical="$sm"
+            pressStyle={{ opacity: 0.7 }}
             onPress={onClose}
           >
-            취소
-          </Button>
+            <X color="$textSecondary" size="$lg" />
+          </XStack>
           <Typography
             left={0}
             position="absolute"
@@ -131,107 +142,92 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
         >
-          <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
-            <YStack gap="$2">
+          <YStack flex={1} padding="$xl" onStartShouldSetResponder={() => true}>
+            <YStack gap="$2xl">
               <XStack alignItems="center" justifyContent="space-between">
                 <Typography variant="title">카테고리</Typography>
-                {!newCategoryName && (
-                  <Button
-                    backgroundColor="$surface"
-                    borderRadius="$7"
-                    borderWidth={0}
-                    color="$textSecondary"
-                    fontSize="$3"
-                    minHeight={36}
-                    minWidth={60}
-                    paddingHorizontal="$3"
-                    paddingVertical="$2"
-                    pressStyle={{ backgroundColor: '$surfaceHover' }}
-                    onPress={() => {
-                      setNewCategoryName(' ');
-                      setTimeout(() => {
-                        textAreaRef.current?.focus();
-                      }, 100);
-                    }}
-                  >
-                    + 추가
-                  </Button>
-                )}
+                <XStack alignItems="center" minHeight={36}>
+                  {!isFormVisible && (
+                    <Button
+                      size="md"
+                      onPress={() => {
+                        setIsFormVisible(true);
+                        setTimeout(() => {
+                          textAreaRef.current?.focus();
+                        }, 100);
+                      }}
+                    >
+                      + 추가
+                    </Button>
+                  )}
+                </XStack>
               </XStack>
 
-              {newCategoryName && (
-                <XStack alignItems="center" gap="$4" marginTop="$2">
-                  <TextArea
-                    ref={textAreaRef}
-                    backgroundColor="$backgroundSecondary"
-                    borderRadius="$6"
-                    borderWidth={0}
-                    color="$textPrimary"
-                    flex={1}
-                    fontSize="$4"
-                    maxHeight={48}
-                    maxLength={20}
-                    multiline={false}
-                    padding="$3"
-                    placeholder="새 카테고리 이름"
-                    placeholderTextColor="$textMuted"
-                    value={newCategoryName.trim()}
-                    onChangeText={setNewCategoryName}
-                  />
-                  <XStack alignItems="center" gap="$2">
-                    <Button
-                      backgroundColor="$textPrimary"
-                      borderRadius="$6"
-                      color="$textOnPrimary"
-                      disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
-                      fontSize="$3"
-                      minHeight={40}
-                      minWidth={60}
-                      onPress={handleAddCategory}
-                    >
-                      추가
-                    </Button>
-                    <Button
+              <Form>
+                {isFormVisible && (
+                  <Form.Field label="카테고리 이름">
+                    <XStack alignItems="center" gap="$sm">
+                      <Input
+                        ref={textAreaRef}
+                        flex={1}
+                        maxLength={20}
+                        placeholder="새 카테고리 이름"
+                        value={form.values.categoryName}
+                        onBlur={() => form.setTouched('categoryName')}
+                        onChangeText={(text) => form.setValue('categoryName', text)}
+                      />
+                      <Button
+                        disabled={!form.values.categoryName.trim() || form.isSubmitting}
+                        size="md"
+                        onPress={form.handleSubmit}
+                      >
+                        + 추가
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onPress={() => {
+                          setIsFormVisible(false);
+                          form.reset();
+                        }}
+                      >
+                        취소
+                      </Button>
+                    </XStack>
+                  </Form.Field>
+                )}
+
+                {form.shouldShowError('categoryName') && (
+                  <Form.Error>{form.errors.categoryName?.message}</Form.Error>
+                )}
+
+                {form.shouldShowError('categoryDeleteError') && (
+                  <Form.Error>{form.errors.categoryDeleteError?.message}</Form.Error>
+                )}
+
+                <XStack flexWrap="wrap" gap="$md">
+                  {categories.map((category) => (
+                    <XStack
+                      key={category.id}
+                      alignItems="center"
                       backgroundColor="$surface"
                       borderColor="$border"
-                      borderRadius="$6"
+                      borderRadius="$2xl"
                       borderWidth={1}
-                      color="$textSecondary"
-                      fontSize="$3"
-                      minHeight={40}
-                      minWidth={60}
-                      onPress={() => setNewCategoryName('')}
+                      flexShrink={0}
+                      gap="$md"
+                      paddingHorizontal="$md"
+                      paddingVertical="$md"
+                      pressStyle={{ backgroundColor: '$surfaceHover' }}
+                      onPress={() => handleDeleteCategory(category.id)}
                     >
-                      취소
-                    </Button>
-                  </XStack>
-                </XStack>
-              )}
-
-              <XStack flexWrap="wrap" gap="$2">
-                {categories.map((category) => (
-                  <Button
-                    key={category.id}
-                    backgroundColor="$surface"
-                    borderColor="$border"
-                    borderRadius="$7"
-                    borderWidth={1}
-                    minHeight={36}
-                    minWidth={60}
-                    paddingHorizontal="$3"
-                    paddingVertical="$2"
-                    pressStyle={{ backgroundColor: '$surfaceHover' }}
-                    onPress={() => handleDeleteCategory(category.id, category.name)}
-                  >
-                    <XStack alignItems="center" gap="$2">
-                      <Typography color="$textSecondary" variant="subtitle">
+                      <Typography color="$textSecondary" flexShrink={0} variant="caption1">
                         {category.name}
                       </Typography>
-                      <X color="$textPrimary" size={12} />
+                      <X color="$textPrimary" size="$md" />
                     </XStack>
-                  </Button>
-                ))}
-              </XStack>
+                  ))}
+                </XStack>
+              </Form>
             </YStack>
           </YStack>
         </KeyboardAvoidingView>
