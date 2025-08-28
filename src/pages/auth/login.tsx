@@ -7,14 +7,14 @@ export default function LoginScreen() {
   return (
     <YStack
       alignItems="center"
-      backgroundColor="$background"
+      backgroundColor="$backgroundPrimary"
       flex={1}
-      gap="$12"
+      gap="$3xl"
       justifyContent="center"
-      padding="$6"
+      padding="$xl"
     >
       <Typography variant="display">Noturi</Typography>
-      <XStack gap="$4">
+      <XStack gap="$xl">
         <GoogleButton />
         <AppleButton />
       </XStack>
