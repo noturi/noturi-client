@@ -11,7 +11,7 @@ interface LoadingProps {
 /**
  * 로딩 상태를 표시하는 공용 컴포넌트
  */
-export function Loading({ text = '로딩 중...', size = 'large', flex = true }: LoadingProps) {
+export function Loading({ text = '', size = 'small', flex = true }: LoadingProps) {
   return (
     <YStack
       alignItems="center"
@@ -22,7 +22,7 @@ export function Loading({ text = '로딩 중...', size = 'large', flex = true }:
     >
       <Spinner color="$textSecondary" size={size} />
       {text && (
-        <Typography color="$textSecondary" variant="body1">
+        <Typography color="$textSecondary" variant="caption1">
           {text}
         </Typography>
       )}
