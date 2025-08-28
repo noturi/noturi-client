@@ -5,7 +5,9 @@ export const Input = styled(TamaguiInput, {
   borderRadius: '$xl',
   borderWidth: 0,
   color: '$textPrimary',
-  fontSize: 13,
+  fontSize: 14,
+  fontWeight: '500',
+  height: 36,
 
   placeholderTextColor: '$textMuted',
   textAlignVertical: 'center',
@@ -19,28 +21,28 @@ export const Input = styled(TamaguiInput, {
     hasError: {
       true: {
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '$error',
         focusStyle: {
-          borderColor: 'red',
+          borderColor: '$error',
         },
       },
     },
 
     size: {
       sm: {
-        height: 32,
-        paddingHorizontal: '$lg',
-        fontSize: '$2',
+        height: 28,
+        paddingHorizontal: '$md',
+        fontSize: 12,
       },
       md: {
-        height: 42,
-        paddingHorizontal: '$xl',
-        fontSize: 13,
+        height: 36,
+        paddingHorizontal: '$lg',
+        fontSize: 14,
       },
       lg: {
-        height: 48,
-        paddingHorizontal: '$2xl',
-        fontSize: 13,
+        height: 44,
+        paddingHorizontal: '$xl',
+        fontSize: 16,
       },
     },
 
@@ -50,9 +52,9 @@ export const Input = styled(TamaguiInput, {
         borderWidth: 0,
       },
       outlined: {
-        backgroundColor: '$background',
+        backgroundColor: '$backgroundTransparent',
         borderWidth: 1,
-        borderColor: '$borderColor',
+        borderColor: '$border',
       },
     },
   } as const,
