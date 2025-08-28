@@ -1,13 +1,16 @@
-import { Button, Separator, YStack } from 'tamagui';
+import { Separator, XStack, YStack } from 'tamagui';
 import { useLogoutMutation } from '~/features/auth/api/mutation';
 import { useAuth } from '~/features/auth/lib/auth';
 import { CategoryManageSheet } from '~/features/categories/ui/CategoryManageSheet';
-import { Typography } from '~/shared/ui';
+import { HREFS } from '~/shared/constants/routes';
+import { Card, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
 import { router } from 'expo-router';
+
+import { LogOut, Settings } from '@tamagui/lucide-icons';
 
 export default function ProfileScreen() {
   const [openManage, setOpenManage] = useState(false);
@@ -15,8 +18,7 @@ export default function ProfileScreen() {
 
   const logoutMutation = useLogoutMutation({
     onSuccess: () => {
-      // 로그인 화면으로 이동
-      router.replace('/(auth)/login');
+      router.replace(HREFS.login());
     },
   });
 
@@ -37,45 +39,61 @@ export default function ProfileScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundPrimary" flex={1} padding="$4">
-      <YStack gap="$4">
-        {/* 앱 정보 영역 */}
-        <YStack gap="$3">
-          <Typography color="$textPrimary" variant="subtitle">
+    <YStack backgroundColor="$backgroundSecondary" flex={1} gap="$lg" padding="$lg">
+      {isAuthenticated && (
+        <Card>
+          <YStack gap="$sm">
+            <XStack
+              alignItems="center"
+              borderRadius="$xl"
+              gap="$md"
+              paddingHorizontal="$lg"
+              paddingVertical="$md"
+              pressStyle={{ backgroundColor: '$backgroundSecondary' }}
+              onPress={() => setOpenManage(true)}
+            >
+              <Settings color="$textSecondary" size="$md" />
+              <Typography color="$textPrimary" flex={1} variant="body2">
+                카테고리 관리
+              </Typography>
+            </XStack>
+
+            <Separator borderColor="$border" />
+
+            <XStack
+              alignItems="center"
+              borderRadius="$xl"
+              gap="$md"
+              paddingHorizontal="$lg"
+              paddingVertical="$md"
+              pressStyle={{ backgroundColor: '$backgroundSecondary' }}
+              onPress={handleLogout}
+            >
+              <LogOut color="$textPrimary" size="$md" />
+              <Typography color="$textPrimary" flex={1} variant="body2">
+                로그아웃
+              </Typography>
+            </XStack>
+          </YStack>
+        </Card>
+      )}
+
+      <Card>
+        <YStack gap="$md" padding="$lg">
+          <Typography color="$textPrimary" variant="subheading">
             앱 정보
           </Typography>
-          <YStack gap="$2">
-            <Typography color="$textSecondary" variant="body1">
-              버전: 1.0.0
+          <YStack gap="$sm">
+            <Typography color="$textSecondary" variant="body2">
+              버전 1.0.0
             </Typography>
-            <Typography color="$textSecondary" variant="body1">
-              개발자: Noturi Team
+            <Typography color="$textSecondary" variant="body2">
+              Noturi Team
             </Typography>
           </YStack>
         </YStack>
+      </Card>
 
-        <Separator borderColor="$border" />
-        <YStack gap="$3">
-          {isAuthenticated && (
-            <Button unstyled onPress={() => setOpenManage(true)}>
-              <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
-                카테고리 관리
-              </Typography>
-            </Button>
-          )}
-        </YStack>
-
-        <Separator borderColor="$border" />
-        <YStack gap="$3">
-          {isAuthenticated && (
-            <Button unstyled onPress={handleLogout}>
-              <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
-                로그아웃
-              </Typography>
-            </Button>
-          )}
-        </YStack>
-      </YStack>
       <CategoryManageSheet isOpen={openManage} onClose={() => setOpenManage(false)} />
     </YStack>
   );
