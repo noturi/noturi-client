@@ -33,7 +33,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
 
     createCategoryMutation.mutate({
       name: categoryName.trim(),
-      color: '#000000', // 기본 검정색
+      color: '$primary',
     });
   };
 
@@ -60,9 +60,8 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
       />
       <Sheet.Frame
         backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$6"
-        borderTopRightRadius="$6"
-        padding="$0"
+        borderTopLeftRadius="$2xl"
+        borderTopRightRadius="$2xl"
       >
         {/* Header */}
         <XStack
@@ -70,27 +69,33 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
           borderBottomColor="$border"
           borderBottomWidth={1}
           justifyContent="space-between"
-          paddingHorizontal="$5"
-          paddingVertical="$4"
+          paddingHorizontal="$xl"
+          paddingVertical="$lg"
         >
           <Typography variant="title">새 카테고리 추가</Typography>
-          <Button chromeless circular icon={<X size={20} />} size="$3" onPress={handleClose} />
+          <Button
+            backgroundColor="$backgroundTransparent"
+            color="$textSecondary"
+            onPress={handleClose}
+          >
+            취소
+          </Button>
         </XStack>
 
         {/* Content */}
-        <YStack gap="$4" padding="$5">
-          <YStack gap="$2">
+        <YStack gap="$lg" padding="$xl">
+          <YStack gap="$sm">
             <Typography variant="subtitle">카테고리 이름</Typography>
             <Input
               backgroundColor="$backgroundPrimary"
               borderColor="$border"
-              borderRadius="$4"
+              borderRadius="$lg"
               borderWidth={1}
               color="$textPrimary"
               fontSize="$4"
               maxLength={20}
-              paddingHorizontal="$4"
-              paddingVertical="$3"
+              paddingHorizontal="$lg"
+              paddingVertical="$md"
               placeholder="카테고리 이름을 입력하세요"
               placeholderTextColor="$textMuted"
               value={categoryName}
@@ -98,17 +103,16 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
             />
           </YStack>
 
-          <XStack gap="$3" marginTop="$2">
+          <XStack gap="$md" marginTop="$sm">
             <Button
               backgroundColor="$surface"
               borderColor="$border"
               borderWidth={1}
               color="$textSecondary"
               flex={1}
+              icon={<X size="$md" />}
               onPress={handleClose}
-            >
-              취소
-            </Button>
+            />
             <Button
               backgroundColor="$accent"
               color="$textOnAccent"
