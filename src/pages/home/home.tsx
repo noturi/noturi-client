@@ -118,14 +118,12 @@ export default function HomeScreen() {
             <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
           </Card>
 
-          {/* 별점메모 선택시에만 카테고리 필터바 표시 */}
           {selectedView === 'rating' && (
             <Card>
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
             </Card>
           )}
 
-          {/* 조건부 렌더링: 선택된 보기 방식에 따라 */}
           {selectedView === 'rating' ? (
             <MemoRatingGroupView
               isError={Boolean(memosError)}
