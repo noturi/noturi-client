@@ -1,21 +1,14 @@
-import { Separator, XStack, YStack, useTheme } from 'tamagui';
+import { YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { Card, Loading, Typography } from '~/shared/ui';
+import { Loading, type RatingGroup, RatingGroupCard, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useState } from 'react';
-
-import { ChevronDown, ChevronUp, Star } from '@tamagui/lucide-icons';
 
 type MemoRatingGroupViewProps = {
   memos: UIMemo[];
   isPending: boolean;
   isError: boolean;
   onMemoPress?: (memo: UIMemo) => void;
-};
-
-type RatingGroup = {
-  rating: number;
-  memos: UIMemo[];
 };
 
 const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
@@ -26,72 +19,6 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
     }))
     .filter((group) => group.memos.length > 0);
 };
-
-function RatingStars({ rating }: { rating: number }) {
-  const theme = useTheme();
-
-  return (
-    <XStack alignItems="center" gap="$xs" pointerEvents="none">
-      {Array.from({ length: rating }, (_, i) => (
-        <Star key={i} color="$star" fill={theme.star.val} size="$md" />
-      ))}
-    </XStack>
-  );
-}
-
-type RatingGroupCardProps = {
-  group: RatingGroup;
-  isExpanded: boolean;
-  onToggle: () => void;
-  onMemoPress?: (memo: UIMemo) => void;
-};
-
-function RatingGroupCard({ group, isExpanded, onToggle, onMemoPress }: RatingGroupCardProps) {
-  return (
-    <Card padding="$lg">
-      <XStack
-        alignItems="center"
-        gap="$sm"
-        padding="$md"
-        pressStyle={{ opacity: 0.7 }}
-        onPress={onToggle}
-      >
-        <XStack alignItems="center" flex={1} gap="$sm">
-          <RatingStars rating={group.rating} />
-          <Typography color="$textMuted" variant="caption1">
-            ({group.memos.length}개)
-          </Typography>
-        </XStack>
-        {isExpanded ? (
-          <ChevronUp color="$textMuted" size="$md" />
-        ) : (
-          <ChevronDown color="$textMuted" size="$md" />
-        )}
-      </XStack>
-
-      {isExpanded && (
-        <>
-          <Separator borderColor="$border" />
-          <YStack gap="$none" padding="$md">
-            {group.memos.map((memo) => (
-              <XStack
-                key={memo.id}
-                alignSelf="flex-start"
-                paddingVertical="$xs"
-                pressStyle={{ opacity: 0.7 }}
-                onPress={() => onMemoPress?.(memo)}
-              >
-                <Typography color="$textPrimary" variant="body2">
-                  {memo.title}
-                </Typography>
-              </XStack>
-            ))}
-          </YStack>
-        </>
-      )}
-    </Card>
-  );
-}
 
 export function MemoRatingGroupView({
   memos,
@@ -149,7 +76,7 @@ export function MemoRatingGroupView({
 
   return (
     <YStack gap="$md">
-      <Typography color="$textPrimary" paddingLeft="$md" variant="subheading">
+      <Typography paddingLeft="$md" variant="subheading">
         메모
       </Typography>
       <YStack gap="$lg" marginBottom="$xl">
