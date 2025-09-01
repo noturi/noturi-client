@@ -1,11 +1,9 @@
 import { XStack, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { HREFS } from '~/shared/constants';
-import { Typography } from '~/shared/ui';
+import { StarRating, Typography } from '~/shared/ui';
 
 import { router } from 'expo-router';
-
-import { StarRating } from './StarRating';
 
 interface MemoItemProps {
   memo: UIMemo;
@@ -31,16 +29,10 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
           <YStack
             backgroundColor={memo.category.color as any}
             borderRadius="$sm"
-            paddingHorizontal="$2"
-            paddingVertical="$1"
+            paddingHorizontal="$sm"
+            paddingVertical="$sm"
           >
-            <Typography
-              color="white"
-              fontSize="$sm"
-              fontWeight="$medium"
-              pointerEvents="none"
-              variant="caption1"
-            >
+            <Typography fontWeight="$medium" pointerEvents="none" variant="caption1">
               {memo.category.name}
             </Typography>
           </YStack>
