@@ -62,7 +62,7 @@ const variantStyles = {
   },
   title: {
     fontSize: '$xl', // 18px
-    fontWeight: '$medium', // 500
+    fontWeight: '$bold', // bold
     lineHeight: '$xl', // 20px
     color: '$textPrimary',
   },
@@ -86,17 +86,17 @@ const variantStyles = {
     color: '$textPrimary',
   },
   body3: {
-    fontSize: '$md', // 14px
+    fontSize: 14, // 14px
     fontWeight: '$light', // 300
-    lineHeight: '$md', // 16px
+    lineHeight: 16, // 16px
     color: '$textPrimary',
   },
 
   // 작은 텍스트들
   caption1: {
-    fontSize: '$md', // 14px
+    fontSize: 14, // 14px
     fontWeight: '$light', // 300
-    lineHeight: '$md', // 16px
+    lineHeight: 16, // 16px
     color: '$textSecondary',
   },
   caption2: {
@@ -108,9 +108,9 @@ const variantStyles = {
 
   // 특수 용도
   link: {
-    fontSize: '$md', // 14px
+    fontSize: 14, // 14px
     fontWeight: '$light', // 300
-    lineHeight: '$md', // 16px
+    lineHeight: 16, // 16px
     color: '$accent',
     textDecorationLine: 'none',
   },
@@ -137,7 +137,6 @@ export const Typography = ({ variant = 'body1', children, ...props }: Typography
   return (
     <Component
       {...styles}
-      fontFamily="$body"
       margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
       pointerEvents="none"
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
