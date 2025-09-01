@@ -1,4 +1,4 @@
-import { XStack, YStack } from 'tamagui';
+import { Separator, XStack, YStack } from 'tamagui';
 import { CategoryStatsResponse } from '~/entities/statistics';
 import { Card, StarRating, Typography } from '~/shared/ui';
 
@@ -24,27 +24,21 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
       <YStack>
         {categories?.map((category) => {
           return (
-            <XStack
-              key={category.name}
-              alignItems="center"
-              justifyContent="space-between"
-              padding="$lg"
-            >
-              <XStack alignItems="center" gap="$3">
-                <YStack>
-                  <Typography color="$textPrimary" fontWeight="$semibold" variant="body1">
-                    {category.name}
-                  </Typography>
-                </YStack>
-              </XStack>
-
-              <XStack alignItems="center" gap="$lg">
-                <Typography fontWeight="$semibold" variant="subtitle">
-                  {category.count}개
+            <YStack key={category.id} padding="$sm">
+              <XStack alignItems="center" justifyContent="space-between" padding="$sm">
+                <Typography color="$textPrimary" fontWeight="$semibold" variant="body1">
+                  {category.categoryName}
                 </Typography>
-                <StarRating rating={category.avgRating} />
+
+                <XStack alignItems="center" gap="$lg">
+                  <Typography fontWeight="$semibold" variant="subtitle">
+                    {category.count}개
+                  </Typography>
+                  <StarRating rating={category.avgRating} />
+                </XStack>
               </XStack>
-            </XStack>
+              <Separator borderColor="$border" />
+            </YStack>
           );
         })}
       </YStack>
