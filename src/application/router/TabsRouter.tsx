@@ -5,7 +5,7 @@ import { Pressable } from 'react-native';
 
 import { Redirect, Tabs } from 'expo-router';
 
-import { Home, Plus, User } from '@tamagui/lucide-icons';
+import { BarChart3, Home, Plus, User } from '@tamagui/lucide-icons';
 
 import { useAuth } from '../../features/auth';
 import { MemoCreateSheet } from '../../features/memo-crud';
@@ -122,17 +122,13 @@ export function TabsRouter() {
           }}
         />
 
-        {/* <Tabs.Screen
-          listeners={({ navigation }) => ({
-            tabPress: (e) => {
-              e.preventDefault();
-              Alert.alert('준비중', '통계 기능은 현재 준비 중입니다.');
-            },
-          })}
+        <Tabs.Screen
           name="stats"
           options={{
             title: '통계',
-            tabBarIcon: ({ color }) => <BarChart3 color={color as any} size="$lg" />,
+            tabBarIcon: ({ color, focused }) => (
+              <BarChart3 color={color as any} fill={focused ? color : 'none'} size="$xl" />
+            ),
             tabBarButton: (props) => (
               <Pressable
                 style={[
@@ -140,8 +136,7 @@ export function TabsRouter() {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 20,
+                    padding: 8,
                   },
                 ]}
                 onPress={props.onPress}
@@ -150,7 +145,7 @@ export function TabsRouter() {
               </Pressable>
             ),
           }}
-        /> */}
+        />
 
         <Tabs.Screen
           name="profile"
