@@ -1,176 +1,75 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
+import { ScrollView, YStack } from 'tamagui';
+import { categoryStatsQuery, overallStatsQuery } from '~/features/statistics';
+import { Loading, Typography } from '~/shared/ui';
+import { CategoryStatsView, OverallStatsView } from '~/widgets/statistics';
 
-import { BarChart3, BookOpen, Calendar, Star } from '@tamagui/lucide-icons';
+import { useQuery } from '@tanstack/react-query';
 
 export default function StatsScreen() {
-  // 임시 통계 데이터
-  const stats = {
-    totalMemos: 124,
-    thisMonth: 23,
-    avgRating: 4.2,
-    categories: [
-      { name: '일상', count: 45, color: '#3B82F6' },
-      { name: '업무', count: 32, color: '#10B981' },
-      { name: '독서', count: 28, color: '#F59E0B' },
-      { name: '여행', count: 19, color: '#EF4444' },
-    ],
-    streakDays: 7,
-    lastMonthMemos: 18,
-    mostActiveTime: '오후 2-4시',
-    favoriteCategory: '일상',
-  };
+  const {
+    data: overallStats,
+    isLoading: overallLoading,
+    error: overallError,
+  } = useQuery(overallStatsQuery());
 
-  // 개인화 인사이트는 후에 데이터 연동 시 표시 예정
+  const {
+    data: categoryStats,
+    isLoading: categoryLoading,
+    error: categoryError,
+  } = useQuery(categoryStatsQuery());
+
+  // 디버깅 로그
+  console.log('Stats Debug:', {
+    overallStats,
+    categoryStats,
+    overallLoading,
+    categoryLoading,
+    overallError,
+    categoryError,
+  });
+
+  if (overallLoading || categoryLoading) {
+    return <Loading text="통계 로딩 중..." />;
+  }
+
+  if (overallError || categoryError) {
+    return (
+      <YStack
+        alignItems="center"
+        backgroundColor="$backgroundPrimary"
+        flex={1}
+        gap="$sm"
+        justifyContent="center"
+        padding="$sm"
+      >
+        <Typography color="$textPrimary" fontSize="$xl" fontWeight="$semibold" textAlign="center">
+          통계 조회 실패
+        </Typography>
+        <Typography color="$textMuted" fontSize="$md" textAlign="center">
+          통계 데이터를 불러오는데 실패했습니다.{'\n'}잠시 후 다시 시도해주세요.
+        </Typography>
+      </YStack>
+    );
+  }
 
   return (
-    <YStack backgroundColor="$backgroundPrimary" flex={1}>
-      <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-        <YStack gap="$6" padding="$4">
-          {/* 전체 통계 카드들 */}
-          <YStack gap="$4">
-            <Typography color="$textPrimary" fontWeight="$semibold" variant="heading">
-              나의 기록 통계
-            </Typography>
-
-            <XStack gap="$sm">
-              {/* 총 메모 수 */}
-              <YStack
-                alignItems="center"
-                backgroundColor="$surface"
-                borderRadius="$4"
-                flex={1}
-                gap="$2"
-                padding="$4"
-              >
-                <BookOpen color="$accent" size="$xl" />
-                <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-                  {stats.totalMemos}
-                </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption2">
-                  총 메모
-                </Typography>
-              </YStack>
-
-              {/* 이번 달 메모 */}
-              <YStack
-                alignItems="center"
-                backgroundColor="$surface"
-                borderRadius="$4"
-                flex={1}
-                gap="$2"
-                padding="$4"
-              >
-                <Calendar color="$accent" size="$xl" />
-                <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-                  {stats.thisMonth}
-                </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption2">
-                  이번 달
-                </Typography>
-              </YStack>
-            </XStack>
-
-            <XStack gap="$sm">
-              {/* 평균 평점 */}
-              <YStack
-                alignItems="center"
-                backgroundColor="$surface"
-                borderRadius="$4"
-                flex={1}
-                gap="$2"
-                padding="$4"
-              >
-                <Star color="$accent" size="$xl" />
-                <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-                  {stats.avgRating}
-                </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption2">
-                  평균 평점
-                </Typography>
-              </YStack>
-
-              {/* 활성 카테고리 */}
-              <YStack
-                alignItems="center"
-                backgroundColor="$surface"
-                borderRadius="$4"
-                flex={1}
-                gap="$2"
-                padding="$4"
-              >
-                <BarChart3 color="$accent" size="$xl" />
-                <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-                  {stats.categories.length}
-                </Typography>
-                <Typography color="$textMuted" textAlign="center" variant="caption2">
-                  카테고리
-                </Typography>
-              </YStack>
-            </XStack>
+    <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
+      <YStack gap="$2xl" paddingHorizontal="$lg">
+        {overallStats && (
+          <YStack gap="$md">
+            <OverallStatsView stats={overallStats} />
           </YStack>
+        )}
 
-          {/* 카테고리별 통계 */}
-          <YStack gap="$4">
-            <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-              카테고리별 메모 수
+        {categoryStats && (
+          <YStack gap="$md">
+            <Typography paddingLeft="$md" variant="subheading">
+              카테고리별 통계
             </Typography>
-
-            <YStack gap="$sm">
-              {stats.categories.map((category, index) => (
-                <YStack key={category.name} gap="$2">
-                  <XStack alignItems="center" justifyContent="space-between">
-                    <Typography color="$textPrimary" variant="body1">
-                      {category.name}
-                    </Typography>
-                    <Typography color="$textSecondary" fontWeight="$semibold" variant="body1">
-                      {category.count}개
-                    </Typography>
-                  </XStack>
-
-                  {/* 프로그레스 바 */}
-                  <YStack
-                    backgroundColor="$backgroundSecondary"
-                    borderRadius="$2"
-                    height={8}
-                    overflow="hidden"
-                  >
-                    <YStack
-                      backgroundColor={category.color as any}
-                      borderRadius="$2"
-                      height={20}
-                      width={`${(category.count / stats.totalMemos) * 100}%` as any}
-                    />
-                  </YStack>
-                </YStack>
-              ))}
-            </YStack>
+            <CategoryStatsView categories={categoryStats} />
           </YStack>
-
-          {/* 최근 활동 요약 */}
-          <YStack gap="$4">
-            <Typography color="$textPrimary" fontWeight="$semibold" variant="title">
-              최근 활동
-            </Typography>
-
-            <YStack
-              alignItems="center"
-              backgroundColor="$surface"
-              borderRadius="$4"
-              justifyContent="center"
-              minHeight={100}
-              padding="$4"
-            >
-              <Typography color="$textSecondary" textAlign="center" variant="body1">
-                지난 7일간의 기록 활동
-              </Typography>
-              <Typography color="$textMuted" marginTop="$1" textAlign="center" variant="caption2">
-                데이터 시각화 준비 중
-              </Typography>
-            </YStack>
-          </YStack>
-        </YStack>
-      </ScrollView>
-    </YStack>
+        )}
+      </YStack>
+    </ScrollView>
   );
 }
