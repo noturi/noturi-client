@@ -121,14 +121,21 @@ import { LocalComponent } from './LocalComponent';
 features/
 ├── auth/
 │   ├── api/                      # API 관련
-│   │   ├── apis.ts              # API 클래스
+│   │   ├── apis.ts              # API 클래스 (순수 데이터 조회만)
 │   │   ├── mutations.ts         # React Query mutations
 │   │   ├── queries.ts           # React Query queries
 │   │   └── index.ts             # export 정리
-│   ├── lib/                     # 비즈니스 로직
-│   ├── ui/                      # UI 컴포넌트 (선택적)
+│   ├── lib/                     # 비즈니스 로직 & Service Layer
+│   │   ├── AuthService.ts       # 데이터 변환, 비즈니스 로직
+│   │   └── index.ts             # service export
 │   └── index.ts                 # feature 전체 export
 ```
+
+### 📋 레이어별 역할 분리
+
+- **API Layer** (`apis.ts`): 순수하게 서버 데이터만 조회
+- **Service Layer** (`lib/`): 데이터 변환, 비즈니스 로직 처리
+- **Query Layer** (`queries.ts`): API + Service 조합, 캐싱
 
 ### Types 위치
 
