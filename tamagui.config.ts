@@ -17,7 +17,7 @@ const themes = {
     error: '#f44336',
     warning: '#ff9800',
 
-    star: '#ff0',
+    star: '#ffd700',
 
     textPrimary: '#212121',
     textSecondary: '#757575',
@@ -34,21 +34,36 @@ const themes = {
     borderFocus: '#ffc107',
 
     surface: '#ffffff',
+
+    // Rating colors and backgrounds
+    rating0Background: '#f5f5f5',
+    rating1: '#ff6b35',
+    rating1Background: '#fff2ed',
+    rating2: '#ffa726',
+    rating2Background: '#fff8e1',
+    rating3: '#66bb6a',
+    rating3Background: '#f1f8e9',
+    rating4: '#42a5f5',
+    rating4Background: '#e3f2fd',
+    rating5: '#7e57c2',
+    rating5Background: '#f3e5f5',
   },
+};
+
+const fontSize = {
+  xs: 10,
+  sm: 12,
+  base: 14, // md 대신 base 사용
+  lg: 16,
+  xl: 18,
+  '2xl': 20,
+  '3xl': 24,
+  true: 14,
 };
 
 const bodyFont = createFont({
   family: 'System',
-  size: {
-    xs: 10,
-    sm: 12,
-    md: 14,
-    lg: 16,
-    xl: 18,
-    '2xl': 20,
-    '3xl': 24,
-    true: 14,
-  },
+  size: fontSize,
   lineHeight: {
     xs: 12,
     sm: 14,
@@ -67,52 +82,35 @@ const bodyFont = createFont({
     true: '400',
   },
   letterSpacing: {
-    1: 0,
-    2: -0.5,
+    normal: 0,
+    tight: -0.5,
   },
   face: {
-    300: { normal: 'System' },
-    400: { normal: 'System' },
-    500: { normal: 'System' },
-    600: { normal: 'System' },
-    700: { normal: 'System' },
+    light: { normal: 'System', italic: 'System' },
+    regular: { normal: 'System', italic: 'System' },
+    medium: { normal: 'System', italic: 'System' },
+    semibold: { normal: 'System', italic: 'System' },
+    bold: { normal: 'System', italic: 'System' },
   },
 });
 
 const headingFont = createFont({
   family: 'System',
-  size: {
-    1: 10,
-    2: 11,
-    3: 12,
-    4: 14,
-    5: 16,
-    6: 18,
-    7: 20,
-    8: 24,
-    9: 28,
-    10: 32,
-    true: 16,
-  },
+  size: fontSize,
   lineHeight: {
-    1: 14,
-    2: 16,
-    3: 18,
-    4: 20,
-    5: 22,
-    6: 24,
-    7: 26,
-    8: 30,
-    9: 34,
-    10: 38,
+    xs: 14,
+    sm: 16,
+    md: 18,
+    lg: 20,
+    xl: 22,
+    '2xl': 24,
+    '3xl': 26,
+    '4xl': 30,
+    '5xl': 34,
+    '6xl': 38,
     true: 22,
   },
   weight: {
-    1: '300',
-    2: '400',
-    3: '500',
-    4: '600',
-    5: '700',
     light: '300',
     regular: '400',
     medium: '500',
@@ -121,15 +119,15 @@ const headingFont = createFont({
     true: '600',
   },
   letterSpacing: {
-    1: 0,
-    2: -0.5,
+    normal: 0,
+    tight: -0.5,
   },
   face: {
-    300: { normal: 'System' },
-    400: { normal: 'System' },
-    500: { normal: 'System' },
-    600: { normal: 'System' },
-    700: { normal: 'System' },
+    light: { normal: 'System', italic: 'System' },
+    regular: { normal: 'System', italic: 'System' },
+    medium: { normal: 'System', italic: 'System' },
+    semibold: { normal: 'System', italic: 'System' },
+    bold: { normal: 'System', italic: 'System' },
   },
 });
 
@@ -175,12 +173,50 @@ const tokens = createTokens({
     backgroundPrimary: '#ffffff',
     backgroundSecondary: '#f5f5f5',
     backgroundOverlay: 'rgba(0,0,0,0.5)',
+
+    // Rating colors and backgrounds
+    rating0Background: '#f5f5f5',
+    rating1: '#ff6b35',
+    rating1Background: '#fff2ed',
+    rating2: '#ffa726',
+    rating2Background: '#fff8e1',
+    rating3: '#66bb6a',
+    rating3Background: '#f1f8e9',
+    rating4: '#42a5f5',
+    rating4Background: '#e3f2fd',
+    rating5: '#7e57c2',
+    rating5Background: '#f3e5f5',
+  },
+  fontWeight: {
+    light: '300',
+    regular: '400', 
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
+  lineHeight: {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+    xl: 20,
+    '2xl': 24,
+    '3xl': 28,
+  },
+  fontSize: {
+    xs: 10,
+    sm: 12,
+    md: 14,
+    lg: 16,
+    xl: 18,
+    '2xl': 20,
+    '3xl': 24,
   },
   space: {
     none: 0,
     xs: 2,
     sm: 4,
-    md: 8,
+    md: 14,
     lg: 12,
     xl: 16,
     '2xl': 24,
@@ -189,6 +225,12 @@ const tokens = createTokens({
     '5xl': 64,
     '6xl': 88,
     '7xl': 120,
+    // 폰트 사이즈용
+    textXs: 10,
+    textSm: 12, 
+    textMd: 14,
+    textLg: 16,
+    textXl: 18,
     true: 8,
     false: 0,
   },
@@ -210,10 +252,10 @@ const tokens = createTokens({
     false: 0,
   },
   borderWidth: {
-    0: 0,
-    1: 1,
-    2: 2,
-    4: 4,
+    none: 0,
+    thin: 1,
+    medium: 2,
+    thick: 4,
     true: 1,
     false: 0,
   },
@@ -230,32 +272,22 @@ const tokens = createTokens({
     true: 4,
     false: 0,
   },
-  zIndex: { 0: 0, 1: 100, 2: 200, 3: 300, 4: 400, 5: 500 },
+  zIndex: { base: 0, low: 100, medium: 200, high: 300, higher: 400, highest: 500 },
 });
-
-
 
 export const config = createTamagui({
   ...configBase,
   themes,
   fonts: {
     ...configBase.fonts,
-    body: {
-      ...configBase.fonts.body,
-      size: {
-        ...configBase.fonts.body.size,
-        xs: 10,
-        sm: 12,
-        md: 14,
-        lg: 16,
-        xl: 18,
-        '2xl': 20,
-        '3xl': 24,
-      },
-    },
+    body: bodyFont,
+    heading: headingFont,
   },
   animations,
-  tokens,
+  tokens: {
+    ...configBase.tokens,
+    ...tokens,
+  },
 });
 
 export type AppConfig = typeof config;
