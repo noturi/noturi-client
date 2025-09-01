@@ -1,7 +1,6 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/features/memo-crud/api/queries';
-import { StarRating } from '~/features/memo-crud/ui/StarRating';
-import { Loading, Typography } from '~/shared/ui';
+import { Loading, StarRating, Typography } from '~/shared/ui';
 
 import { useLocalSearchParams } from 'expo-router';
 
