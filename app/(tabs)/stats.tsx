@@ -1,3 +1,3 @@
-// import StatsScreen from '../../src/pages/stats/stats';
+import StatsScreen from '../../src/pages/stats/stats';
 
-// export default StatsScreen;
+export default StatsScreen;
