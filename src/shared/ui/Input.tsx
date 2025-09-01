@@ -5,8 +5,7 @@ export const Input = styled(TamaguiInput, {
   borderRadius: '$xl',
   borderWidth: 0,
   color: '$textPrimary',
-  fontFamily: '$body',
-  fontSize: '$md',
+  fontSize: 14,
   fontWeight: '$medium',
   height: 36,
 
@@ -38,7 +37,7 @@ export const Input = styled(TamaguiInput, {
       md: {
         height: 36,
         paddingHorizontal: '$lg',
-        fontSize: '$md',
+        fontSize: 14,
       },
       lg: {
         height: 44,
