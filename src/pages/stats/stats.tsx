@@ -18,16 +18,6 @@ export default function StatsScreen() {
     error: categoryError,
   } = useQuery(categoryStatsQuery());
 
-  // 디버깅 로그
-  console.log('Stats Debug:', {
-    overallStats,
-    categoryStats,
-    overallLoading,
-    categoryLoading,
-    overallError,
-    categoryError,
-  });
-
   if (overallLoading || categoryLoading) {
     return <Loading text="통계 로딩 중..." />;
   }
@@ -55,11 +45,7 @@ export default function StatsScreen() {
   return (
     <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
       <YStack gap="$2xl" paddingHorizontal="$lg">
-        {overallStats && (
-          <YStack gap="$md">
-            <OverallStatsView stats={overallStats} />
-          </YStack>
-        )}
+        {overallStats && <OverallStatsView stats={overallStats} />}
 
         {categoryStats && (
           <YStack gap="$md">
