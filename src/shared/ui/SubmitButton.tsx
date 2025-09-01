@@ -28,7 +28,6 @@ export const SubmitButton = ({
         borderRadius="$xl"
         bottom={keyboardHeight > 0 ? keyboardHeight + 40 : 30}
         color={disabled ? '$textMuted' : '$textOnAccent'}
-        fontFamily="$body"
         fontSize="$lg"
         fontWeight="$semibold"
         height="$6xl"
@@ -48,7 +47,6 @@ export const SubmitButton = ({
     <Button
       backgroundColor={disabled ? '$surfaceDisabled' : '$primary'}
       color={disabled ? '$textMuted' : '$textOnAccent'}
-      fontFamily="$body"
       fontSize="$lg"
       height="$5xl"
       paddingHorizontal="$5xl"
