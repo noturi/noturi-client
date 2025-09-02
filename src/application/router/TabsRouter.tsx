@@ -5,7 +5,7 @@ import { Pressable } from 'react-native';
 
 import { Redirect, Tabs } from 'expo-router';
 
-import { BarChart3, Home, Plus, User } from '@tamagui/lucide-icons';
+import { FileChartColumn, Home, Plus, User } from '@tamagui/lucide-icons';
 
 import { useAuth } from '../../features/auth';
 import { MemoCreateSheet } from '../../features/memo-crud';
@@ -127,7 +127,7 @@ export function TabsRouter() {
           options={{
             title: '통계',
             tabBarIcon: ({ color, focused }) => (
-              <BarChart3 color={color as any} fill={focused ? color : 'none'} size="$xl" />
+              <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$xl" />
             ),
             tabBarButton: (props) => (
               <Pressable
