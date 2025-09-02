@@ -133,90 +133,15 @@ const headingFont = createFont({
 
 const tokens = createTokens({
   color: {
-    primary: '#1d1d1d',
-    primaryHover: '#2a2a2a',
-    primaryActive: '#404040',
-
-    secondary: '#71767b',
-    secondaryHover: '#8b9199',
-    secondaryActive: '#a1a8b0',
-
-    accent: '#ffc107',
-    accentHover: '#ffb300',
-    accentActive: '#ffa000',
-
-    success: '#4caf50',
-    successHover: '#43a047',
-
-    error: '#f44336',
-    errorHover: '#e53935',
-
-    star: '#ffd700',
-
-    warning: '#ff9800',
-    warningHover: '#fb8c00',
-
-    surface: '#ffffff',
-    surfaceHover: '#f5f5f5',
-    surfaceDisabled: '#eeeeee',
-
-    textPrimary: '#212121',
-    textSecondary: '#757575',
-    textMuted: '#9e9e9e',
-    textOnAccent: '#000000',
-    textOnPrimary: '#ffffff',
-
-    border: '#fafafa',
-    borderHover: '#bdbdbd',
-
-    backgroundTransparent: 'transparent',
-    backgroundPrimary: '#ffffff',
-    backgroundSecondary: '#f5f5f5',
-    backgroundOverlay: 'rgba(0,0,0,0.5)',
-
-    // Rating colors and backgrounds
-    rating0Background: '#f5f5f5',
-    rating1: '#ff6b35',
-    rating1Background: '#fff2ed',
-    rating2: '#ffa726',
-    rating2Background: '#fff8e1',
-    rating3: '#66bb6a',
-    rating3Background: '#f1f8e9',
-    rating4: '#42a5f5',
-    rating4Background: '#e3f2fd',
-    rating5: '#7e57c2',
-    rating5Background: '#f3e5f5',
-  },
-  fontWeight: {
-    light: '300',
-    regular: '400', 
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-  },
-  lineHeight: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    '2xl': 24,
-    '3xl': 28,
-  },
-  fontSize: {
-    xs: 10,
-    sm: 12,
-    md: 14,
-    lg: 16,
-    xl: 18,
-    '2xl': 20,
-    '3xl': 24,
+    white: '#ffffff',
+    black: '#000000',
+    transparent: 'transparent',
   },
   space: {
     none: 0,
     xs: 2,
     sm: 4,
-    md: 14,
+    md: 8,
     lg: 12,
     xl: 16,
     '2xl': 24,
@@ -225,12 +150,6 @@ const tokens = createTokens({
     '5xl': 64,
     '6xl': 88,
     '7xl': 120,
-    // 폰트 사이즈용
-    textXs: 10,
-    textSm: 12, 
-    textMd: 14,
-    textLg: 16,
-    textXl: 18,
     true: 8,
     false: 0,
   },
