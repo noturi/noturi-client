@@ -19,6 +19,7 @@ export const infiniteMemoListQuery = (params: Omit<MemoListParamsDto, 'page'> = 
     queryFn: ({ pageParam = 1 }) => memoApi.getMemos({ ...params, page: pageParam }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
+      if (!lastPage?.meta) return undefined;
       const { page, totalPages } = lastPage.meta;
       return page < totalPages ? page + 1 : undefined;
     },
