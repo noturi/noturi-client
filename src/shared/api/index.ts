@@ -4,7 +4,7 @@ import { afterResponseHook, beforeRequestHook } from './hooks';
 
 // API Instance
 export const api = ky.create({
-  prefixUrl: process.env.EXPO_PUBLIC_BASE_URL,
+  prefixUrl: process.env.EXPO_PUBLIC_BASE_URL + '/client',
   timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
