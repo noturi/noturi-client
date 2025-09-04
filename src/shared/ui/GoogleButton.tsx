@@ -30,8 +30,8 @@ export function GoogleButton() {
       console.log('Login successful:', loginResponse);
 
       await saveAuthTokens({
-        accessToken: loginResponse.accessToken,
-        refreshToken: loginResponse.refreshToken,
+        accessToken: loginResponse.tokens.accessToken,
+        refreshToken: loginResponse.tokens.refreshToken,
         user: loginResponse.user,
       });
 
@@ -76,11 +76,17 @@ export function GoogleButton() {
 
     const user = response.data;
 
+    if (!user.idToken) {
+      Alert.alert('로그인 오류', 'Google 인증 토큰을 받을 수 없습니다.');
+      return;
+    }
+
     googleLoginMutation.mutate({
       googleId: user.user.id,
       email: user.user.email,
       name: user.user.name,
       photo: user.user.photo,
+      idToken: user.idToken,
     });
   };
 

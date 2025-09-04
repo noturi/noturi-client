@@ -15,8 +15,8 @@ export function AppleButton() {
       console.log('Apple Login successful:', loginResponse);
 
       await saveAuthTokens({
-        accessToken: loginResponse.accessToken,
-        refreshToken: loginResponse.refreshToken,
+        accessToken: loginResponse.tokens.accessToken,
+        refreshToken: loginResponse.tokens.refreshToken,
         user: loginResponse.user,
       });
 
