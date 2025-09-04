@@ -5,8 +5,6 @@ export type User = {
   name: string;
   nickname: string;
   avatarUrl: string;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 export type GoogleLogin = {
@@ -14,6 +12,7 @@ export type GoogleLogin = {
   email: string;
   name: string | null;
   photo: string | null;
+  idToken: string;
   deviceId?: string;
   timestamp: Date;
 };
@@ -50,7 +49,11 @@ export type Logout = {
 
 export type GoogleLoginDto = Omit<GoogleLogin, 'timestamp' | 'deviceId'>;
 export type AppleLoginDto = Omit<AppleLogin, 'timestamp' | 'deviceId'>;
-export type LoginResponseDto = Omit<LoginResult, 'expiresAt'> & {
+export type LoginResponseDto = {
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
   user: Pick<User, 'id' | 'email' | 'name' | 'nickname' | 'avatarUrl'>;
 };
 export type RefreshTokenDto = Pick<RefreshToken, 'refreshToken'>;
