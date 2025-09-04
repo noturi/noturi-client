@@ -23,8 +23,18 @@ const getRatingConfig = (rating: number) => {
 };
 
 export function StarRating({ rating }: StarRatingProps) {
+  // 모든 가능한 케이스를 처리하여 안전한 숫자로 변환
+  let safeRating = 0;
+
+  if (typeof rating === 'number' && !isNaN(rating)) {
+    safeRating = rating;
+  } else if (typeof rating === 'string') {
+    const parsed = parseFloat(rating);
+    safeRating = !isNaN(parsed) ? parsed : 0;
+  }
+
   const theme = useTheme();
-  const config = getRatingConfig(rating);
+  const config = getRatingConfig(safeRating);
   const starColor = theme[config.colorKey as keyof typeof theme]?.val;
 
   return (
@@ -38,7 +48,7 @@ export function StarRating({ rating }: StarRatingProps) {
     >
       <Star color={starColor} fill={starColor} size="$md" />
       <Typography color={`$${config.colorKey}`} variant="caption1">
-        {rating.toFixed(1)}
+        {safeRating.toFixed(1)}
       </Typography>
     </XStack>
   );
