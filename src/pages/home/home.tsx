@@ -3,8 +3,8 @@ import type { UICategory } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/lib';
-import { infiniteMemoListQuery } from '~/features/memo-crud/api';
-import { MemoService } from '~/features/memo-crud/lib';
+import { infiniteMemoListQuery } from '~/features/memo/api';
+import { MemoService } from '~/features/memo/lib';
 import Logger from '~/shared/lib/logger';
 import { ApiErrorBoundary, Card, Loading, Typography } from '~/shared/ui';
 import {

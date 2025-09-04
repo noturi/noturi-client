@@ -4,7 +4,7 @@ import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schema
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { CategoryButton } from '~/features/categories/ui/CategoryButton';
-import { useCreateMemoMutation } from '~/features/memo-crud/api/mutations';
+import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/constants/colors';
 import { MESSAGES } from '~/shared/constants/messages';
 import { useForm, useToast } from '~/shared/lib';

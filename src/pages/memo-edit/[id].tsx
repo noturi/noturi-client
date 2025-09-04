@@ -3,8 +3,8 @@ import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schem
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/categories/api';
 import { CategoryButton } from '~/features/categories/ui';
-import { memoDetailQuery, useUpdateMemoMutation } from '~/features/memo-crud/api';
-import { RatingSelector } from '~/features/memo-crud/ui';
+import { memoDetailQuery, useUpdateMemoMutation } from '~/features/memo/api';
+import { RatingSelector } from '~/features/memo/ui';
 import { DEFAULT_COLORS, MESSAGES } from '~/shared/constants';
 import { useForm, useToast } from '~/shared/lib';
 import { Form, Input, Loading, SubmitButton, TextArea } from '~/shared/ui';

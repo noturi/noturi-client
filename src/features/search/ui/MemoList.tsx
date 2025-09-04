@@ -1,6 +1,6 @@
 import { Separator, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { MemoItem } from '~/features/memo-crud/ui/MemoItem';
+import { MemoItem } from '~/features/memo/ui/MemoItem';
 import { Loading } from '~/shared/ui';
 
 import { useCallback } from 'react';
