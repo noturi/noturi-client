@@ -1,4 +1,4 @@
-import { User, parseUser } from '~/entities/user';
+import { User, parseUser } from '~/entities/user/model/auth';
 
 import { useCallback } from 'react';
 
