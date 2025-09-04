@@ -57,7 +57,7 @@ export default function HomeScreen() {
 
   const transformedMemos: UIMemo[] = useMemo(() => {
     if (!memosData?.pages) return [];
-    const allMemos = memosData.pages.flatMap((page) => page.data);
+    const allMemos = memosData.pages.flatMap((page) => page?.data || []);
     return MemoService.transformToUIMemos(allMemos);
   }, [memosData]);
 
