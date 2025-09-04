@@ -41,8 +41,10 @@ export function useInfiniteMemos({
         sortOrder: 'desc',
       }),
     initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage.meta.page < lastPage.meta.totalPages ? lastPage.meta.page + 1 : undefined,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.meta) return undefined;
+      return lastPage.meta.page < lastPage.meta.totalPages ? lastPage.meta.page + 1 : undefined;
+    },
     enabled,
   });
 }
