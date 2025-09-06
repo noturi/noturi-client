@@ -21,6 +21,8 @@ export type AppleLogin = {
   appleId: string;
   email: string;
   name?: string;
+  identityToken: string;
+  user: string;
   deviceId?: string;
   timestamp: Date;
 };
