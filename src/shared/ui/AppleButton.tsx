@@ -60,14 +60,28 @@ export function AppleButton() {
 
       console.log('Apple 로그인 응답:', credential);
 
-      // Apple에서 받은 정보로 서버에 로그인 요청
-      appleLoginMutation.mutate({
+      let email = credential.email;
+      if (!email && credential.identityToken) {
+        try {
+          const tokenPayload = JSON.parse(atob(credential.identityToken.split('.')[1]));
+          email = tokenPayload.email;
+        } catch (error) {
+          console.warn('identityToken 파싱 실패:', error);
+        }
+      }
+
+      const requestData = {
         appleId: credential.user,
-        email: credential.email || '',
+        email: email || '',
         name: credential.fullName
           ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim()
           : undefined,
-      });
+        identityToken: credential.identityToken || '',
+        user: credential.user,
+      };
+
+      console.log('서버로 전송할 Apple 로그인 데이터:', requestData);
+      appleLoginMutation.mutate(requestData);
     } catch (error: any) {
       console.error('Apple 로그인 오류:', error);
 
