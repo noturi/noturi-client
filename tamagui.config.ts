@@ -62,7 +62,7 @@ const fontSize = {
 };
 
 const bodyFont = createFont({
-  family: 'System',
+  family: 'Arial, Helvetica, sans-serif',
   size: fontSize,
   lineHeight: {
     $1: 12,
@@ -74,30 +74,30 @@ const bodyFont = createFont({
     $7: 28,
   },
   weight: {
-    $1: 200,
-    $2: 300,
-    $3: 400,
-    $4: 500,
-    $5: 600,
-    $6: 700,
-    true: 400,
+    $1: '200',
+    $2: '300',
+    $3: '400',
+    $4: '500',
+    $5: '600',
+    $6: '700',
+    true: '400',
   },
   letterSpacing: {
     normal: 0,
     tight: -0.5,
   },
   face: {
-    $1: { normal: 'System', italic: 'System' },
-    $2: { normal: 'System', italic: 'System' },
-    $3: { normal: 'System', italic: 'System' },
-    $4: { normal: 'System', italic: 'System' },
-    $5: { normal: 'System', italic: 'System' },
-    $6: { normal: 'System', italic: 'System' },
+    200: { normal: 'System', italic: 'System' },
+    300: { normal: 'System', italic: 'System' },
+    400: { normal: 'System', italic: 'System' },
+    500: { normal: 'System', italic: 'System' },
+    600: { normal: 'System', italic: 'System' },
+    700: { normal: 'System', italic: 'System' },
   },
 });
 
 const headingFont = createFont({
-  family: 'System',
+  family: 'Arial, Helvetica, sans-serif',
   size: fontSize,
   lineHeight: {
     $1: 14,
@@ -113,25 +113,25 @@ const headingFont = createFont({
     true: 22,
   },
   weight: {
-    $1: 200,
-    $2: 300,
-    $3: 400,
-    $4: 500,
-    $5: 600,
-    $6: 700,
-    true: 600,
+    $1: '200',
+    $2: '300',
+    $3: '400',
+    $4: '500',
+    $5: '600',
+    $6: '700',
+    true: '600',
   },
   letterSpacing: {
     normal: 0,
     tight: -0.5,
   },
   face: {
-    $1: { normal: 'System', italic: 'System' },
-    $2: { normal: 'System', italic: 'System' },
-    $3: { normal: 'System', italic: 'System' },
-    $4: { normal: 'System', italic: 'System' },
-    $5: { normal: 'System', italic: 'System' },
-    $6: { normal: 'System', italic: 'System' },
+    200: { normal: 'System', italic: 'System' },
+    300: { normal: 'System', italic: 'System' },
+    400: { normal: 'System', italic: 'System' },
+    500: { normal: 'System', italic: 'System' },
+    600: { normal: 'System', italic: 'System' },
+    700: { normal: 'System', italic: 'System' },
   },
 });
 
@@ -188,12 +188,12 @@ const tokens = createTokens({
     $8: 9999,
   },
   fontWeight: {
-    $1: 200,
-    $2: 300,
-    $3: 400,
-    $4: 500,
-    $5: 600,
-    $6: 700,
+    $1: '200',
+    $2: '300',
+    $3: '400',
+    $4: '500',
+    $5: '600',
+    $6: '700',
   },
   zIndex: {
     $1: 0,
