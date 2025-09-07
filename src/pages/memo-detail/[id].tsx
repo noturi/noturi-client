@@ -31,7 +31,7 @@ export default function MemoDetailScreen() {
         <Typography color="$textPrimary" variant="body1">
           메모를 찾을 수 없습니다
         </Typography>
-        <Typography color="$textMuted" marginTop="$2" variant="body3">
+        <Typography color="$textMuted" marginTop="$1" variant="body3">
           {error?.message || '요청한 메모가 존재하지 않습니다'}
         </Typography>
       </YStack>
@@ -53,17 +53,17 @@ export default function MemoDetailScreen() {
   return (
     <YStack backgroundColor="$backgroundPrimary" flex={1}>
       <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-        <YStack gap="$4" padding="$4">
-          <YStack gap="$sm">
+        <YStack gap="$1" padding="$1">
+          <YStack gap="$2">
             <XStack alignItems="flex-start" justifyContent="space-between">
-              <XStack alignItems="center" flex={1} gap="$2">
+              <XStack alignItems="center" flex={1} gap="$1">
                 <YStack
                   backgroundColor={memo.category.color}
-                  borderRadius="$sm"
-                  paddingHorizontal="$2"
-                  paddingVertical="$1"
+                  borderRadius="$2"
+                  paddingHorizontal="$1"
+                  paddingVertical="$0"
                 >
-                  <Typography color="white" fontSize="$sm" fontWeight="$medium" variant="caption2">
+                  <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
                     {memo.category.name}
                   </Typography>
                 </YStack>
@@ -79,7 +79,7 @@ export default function MemoDetailScreen() {
             </Typography>
           </YStack>
 
-          <YStack gap="$sm" marginTop="$2">
+          <YStack gap="$2" marginTop="$1">
             <Typography color="$textPrimary" variant="body2">
               {memo.content}
             </Typography>

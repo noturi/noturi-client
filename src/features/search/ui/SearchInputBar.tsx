@@ -18,24 +18,24 @@ export function SearchInputBar({
   onToggleFilters,
 }: SearchInputBarProps) {
   return (
-    <XStack alignItems="center" gap="$4">
+    <XStack alignItems="center" gap="$1">
       <YStack flex={1}>
         <XStack
           alignItems="center"
           backgroundColor="$backgroundSecondary"
           borderRadius="$6"
-          gap="$2"
+          gap="$1"
           height={48}
-          paddingHorizontal="$sm"
+          paddingHorizontal="$2"
         >
-          <Search color="$textMuted" size="$lg" />
+          <Search color="$textMuted" size="$4" />
           <TextArea
             autoFocus
             backgroundColor="$backgroundTransparent"
             borderWidth={0}
             color="$textPrimary"
             flex={1}
-            fontSize="$lg"
+            fontSize="$4"
             multiline={false}
             placeholder="제목 및 내용 검색"
             placeholderTextColor="$textMuted"
@@ -48,7 +48,7 @@ export function SearchInputBar({
       </YStack>
 
       <Button circular color="$textOnPrimary" onPress={onToggleFilters}>
-        <Filter color="$textSecondary" size="$lg" />
+        <Filter color="$textSecondary" size="$4" />
       </Button>
     </XStack>
   );

@@ -1,4 +1,4 @@
-import { Sheet } from 'tamagui';
+import { Sheet, YStack } from 'tamagui';
 
 import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
@@ -14,21 +14,19 @@ interface MemoCreateSheetProps {
 export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  // 키보드 이벤트 처리
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
 
-    const keyboardDidShowListener = Keyboard.addListener(showEvent, (e) => {
-      const keyboardHeight =
-        Platform.OS === 'ios' ? e.endCoordinates.height - 34 : e.endCoordinates.height;
-      setKeyboardHeight(keyboardHeight);
+    const showListener = Keyboard.addListener(showEvent, (e) => {
+      const height = Platform.OS === 'ios' ? e.endCoordinates.height : e.endCoordinates.height + 20;
+      setKeyboardHeight(height);
     });
-    const keyboardDidHideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
+    const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
 
     return () => {
-      keyboardDidShowListener?.remove();
-      keyboardDidHideListener?.remove();
+      showListener?.remove();
+      hideListener?.remove();
     };
   }, []);
 
@@ -38,7 +36,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
       modal
       animation="quick"
       open={isOpen}
-      snapPoints={[85, 50]}
+      snapPoints={keyboardHeight > 0 ? [85] : [85, 50]}
       snapPointsMode="percent"
       onOpenChange={onClose}
     >
@@ -52,9 +50,11 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
         backgroundColor="$backgroundPrimary"
         borderTopLeftRadius="$6"
         borderTopRightRadius="$6"
-        flex={1}
-        padding="$0"
       >
+        <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
+          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
+        </YStack>
+
         <MemoFormHeader onClose={onClose} />
         <MemoFormContent keyboardHeight={keyboardHeight} onSuccess={onClose} />
       </Sheet.Frame>

@@ -13,8 +13,8 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
   <YStack
     backgroundColor="$backgroundPrimary"
     cursor="pointer"
-    paddingHorizontal="$4"
-    paddingVertical="$sm"
+    paddingHorizontal="$1"
+    paddingVertical="$2"
     pressStyle={{
       backgroundColor: '$surfaceHover',
       opacity: 0.8,
@@ -23,16 +23,16 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
       router.push(HREFS.memoDetail(memo.id));
     }}
   >
-    <XStack alignItems="flex-start" justifyContent="space-between" marginBottom="$2">
+    <XStack alignItems="flex-start" justifyContent="space-between" marginBottom="$1">
       <YStack flex={1}>
-        <XStack alignItems="center" gap="$2" marginBottom="$2">
+        <XStack alignItems="center" gap="$1" marginBottom="$1">
           <YStack
             backgroundColor={memo.category.color as any}
-            borderRadius="$sm"
-            paddingHorizontal="$sm"
-            paddingVertical="$sm"
+            borderRadius="$2"
+            paddingHorizontal="$2"
+            paddingVertical="$2"
           >
-            <Typography fontWeight="$medium" pointerEvents="none" variant="caption1">
+            <Typography fontWeight="$4" pointerEvents="none" variant="caption1">
               {memo.category.name}
             </Typography>
           </YStack>
@@ -42,8 +42,8 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
         </XStack>
         <Typography
           color="$textPrimary"
-          fontWeight="$medium"
-          marginBottom="$2"
+          fontWeight="$4"
+          marginBottom="$1"
           numberOfLines={1}
           pointerEvents="none"
           variant="subtitle"
@@ -51,14 +51,14 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
           {memo.title}
         </Typography>
       </YStack>
-      <XStack alignItems="center" gap="$2" pointerEvents="none">
+      <XStack alignItems="center" gap="$1" pointerEvents="none">
         <StarRating rating={memo.rating} />
       </XStack>
     </XStack>
 
     <Typography
       color="$textSecondary"
-      lineHeight="$1"
+      lineHeight="$0"
       numberOfLines={2}
       pointerEvents="none"
       variant="caption1"

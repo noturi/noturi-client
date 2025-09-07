@@ -39,20 +39,20 @@ export default function ProfileScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1} gap="$lg" padding="$lg">
+    <YStack backgroundColor="$backgroundSecondary" flex={1} gap="$4" padding="$4">
       {isAuthenticated && (
         <Card>
-          <YStack gap="$sm">
+          <YStack gap="$2">
             <XStack
               alignItems="center"
-              borderRadius="$xl"
-              gap="$md"
-              paddingHorizontal="$lg"
-              paddingVertical="$md"
+              borderRadius="$5"
+              gap="$3"
+              paddingHorizontal="$4"
+              paddingVertical="$3"
               pressStyle={{ backgroundColor: '$backgroundSecondary' }}
               onPress={() => setOpenManage(true)}
             >
-              <Settings color="$textSecondary" size="$md" />
+              <Settings color="$textSecondary" size="$3" />
               <Typography color="$textPrimary" flex={1} variant="body2">
                 카테고리 관리
               </Typography>
@@ -62,14 +62,14 @@ export default function ProfileScreen() {
 
             <XStack
               alignItems="center"
-              borderRadius="$xl"
-              gap="$md"
-              paddingHorizontal="$lg"
-              paddingVertical="$md"
+              borderRadius="$5"
+              gap="$3"
+              paddingHorizontal="$4"
+              paddingVertical="$3"
               pressStyle={{ backgroundColor: '$backgroundSecondary' }}
               onPress={handleLogout}
             >
-              <LogOut color="$textPrimary" size="$md" />
+              <LogOut color="$textPrimary" size="$3" />
               <Typography color="$textPrimary" flex={1} variant="body2">
                 로그아웃
               </Typography>
@@ -79,11 +79,11 @@ export default function ProfileScreen() {
       )}
 
       <Card>
-        <YStack gap="$md" padding="$lg">
+        <YStack gap="$3" padding="$4">
           <Typography color="$textPrimary" variant="subheading">
             앱 정보
           </Typography>
-          <YStack gap="$sm">
+          <YStack gap="$2">
             <Typography color="$textSecondary" variant="body2">
               버전 1.0.0
             </Typography>

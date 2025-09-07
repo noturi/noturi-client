@@ -48,22 +48,22 @@ export class ApiErrorBoundary extends Component<Props, State> {
           alignItems="center"
           backgroundColor="$backgroundPrimary"
           flex={1}
-          gap="$md"
+          gap="$3"
           justifyContent="center"
-          padding="$md"
+          padding="$3"
         >
-          <Typography color="$textPrimary" fontSize="$xl" fontWeight="$semibold" textAlign="center">
+          <Typography color="$textPrimary" fontSize="$5" fontWeight="$5" textAlign="center">
             {isNetworkError ? '서버 연결 실패' : '오류가 발생했습니다'}
           </Typography>
 
-          <Typography color="$textMuted" fontSize="$md" maxWidth={300} textAlign="center">
+          <Typography color="$textMuted" fontSize="$3" maxWidth={300} textAlign="center">
             {isNetworkError
               ? '서버에 연결할 수 없습니다.\n네트워크 상태를 확인하거나 잠시 후 다시 시도해주세요.'
               : '예상치 못한 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.'}
           </Typography>
 
           <Button variant="outlined" onPress={this.handleRetry}>
-            <Typography color="white" fontWeight="$semibold">
+            <Typography color="white" fontWeight="$5">
               다시 시도
             </Typography>
           </Button>

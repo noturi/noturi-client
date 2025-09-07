@@ -1,9 +1,9 @@
 import { Button as TamaguiButton, styled } from 'tamagui';
 
 export const Button = styled(TamaguiButton, {
-  borderRadius: '$xl',
+  borderRadius: '$5',
   fontSize: 14,
-  fontWeight: '$medium',
+  fontWeight: '$4',
   height: 36,
 
   animation: 'quick',
@@ -51,17 +51,17 @@ export const Button = styled(TamaguiButton, {
     size: {
       sm: {
         height: 28,
-        paddingHorizontal: '$md',
+        paddingHorizontal: '$3',
         fontSize: 12,
       },
       md: {
         height: 36,
-        paddingHorizontal: '$lg',
+        paddingHorizontal: '$4',
         fontSize: 14,
       },
       lg: {
         height: 44,
-        paddingHorizontal: '$xl',
+        paddingHorizontal: '$5',
         fontSize: 16,
       },
     },

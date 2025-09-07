@@ -43,51 +43,51 @@ const getComponentByVariant = (variant: TypographyVariant) => {
 
 const variantStyles = {
   display: {
-    fontSize: '$3xl', // 24px
-    fontWeight: '$semibold', // 600
-    lineHeight: '$3xl', // 28px
+    fontSize: '$7', // 24px
+    fontWeight: 600, // semibold
+    lineHeight: '$7', // 28px
     color: '$textPrimary',
   },
   heading: {
-    fontSize: '$3xl', // 24px
-    fontWeight: '$medium', // 500
-    lineHeight: '$3xl', // 28px
+    fontSize: '$7', // 24px
+    fontWeight: 500, // medium
+    lineHeight: '$7', // 28px
     color: '$textPrimary',
   },
   subheading: {
-    fontSize: '$2xl', // 20px
-    fontWeight: '$medium', // 500
-    lineHeight: '$2xl', // 24px
+    fontSize: '$6', // 20px
+    fontWeight: 600, // semibold
+    lineHeight: '$6', // 24px
     color: '$textPrimary',
   },
   title: {
-    fontSize: '$xl', // 18px
-    fontWeight: '$bold', // bold
-    lineHeight: '$xl', // 20px
+    fontSize: '$5', // 18px
+    fontWeight: 700, // bold
+    lineHeight: '$5', // 20px
     color: '$textPrimary',
   },
   subtitle: {
-    fontSize: '$lg', // 16px
-    fontWeight: '$medium',
-    lineHeight: '$lg', // 18px
+    fontSize: '$4', // 16px
+    fontWeight: 500, // medium
+    lineHeight: '$4', // 18px
     color: '$textPrimary',
   },
 
   body1: {
-    fontSize: '$xl', // 18px
-    fontWeight: '$light', // 300
-    lineHeight: '$xl', // 20px
+    fontSize: '$5', // 18px
+    fontWeight: 300, // light
+    lineHeight: '$5', // 20px
     color: '$textPrimary',
   },
   body2: {
-    fontSize: '$lg', // 16px
-    fontWeight: '$light', // 300
-    lineHeight: '$lg', // 18px
+    fontSize: '$4', // 16px
+    fontWeight: 300, // light
+    lineHeight: '$4', // 18px
     color: '$textPrimary',
   },
   body3: {
     fontSize: 14, // 14px
-    fontWeight: '$light', // 300
+    fontWeight: 300, // light
     lineHeight: 16, // 16px
     color: '$textPrimary',
   },
@@ -95,29 +95,29 @@ const variantStyles = {
   // 작은 텍스트들
   caption1: {
     fontSize: 14, // 14px
-    fontWeight: '$light', // 300
+    fontWeight: 300, // light
     lineHeight: 16, // 16px
     color: '$textSecondary',
   },
   caption2: {
-    fontSize: '$sm', // 12px
-    fontWeight: '$light', // 300
-    lineHeight: '$sm', // 14px
+    fontSize: '$2', // 12px
+    fontWeight: 300, // light
+    lineHeight: '$2', // 14px
     color: '$textMuted',
   },
 
   // 특수 용도
   link: {
     fontSize: 14, // 14px
-    fontWeight: '$light', // 300
+    fontWeight: 300, // light
     lineHeight: 16, // 16px
     color: '$accent',
     textDecorationLine: 'none',
   },
   label: {
-    fontSize: '$sm', // 12px
-    fontWeight: '$regular', // 400
-    lineHeight: '$sm', // 14px
+    fontSize: '$2', // 12px
+    fontWeight: 400, // regular
+    lineHeight: '$2', // 14px
     color: '$textPrimary',
     textTransform: 'uppercase',
     letterSpacing: 0.5,

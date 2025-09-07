@@ -95,11 +95,11 @@ export default function HomeScreen() {
         justifyContent="center"
         padding="$sm"
       >
-        <Typography color="$textPrimary" fontSize="$xl" fontWeight="$semibold" textAlign="center">
+        <Typography color="$textPrimary" fontSize="$5" fontWeight="$5" textAlign="center">
           {isNetworkError ? '서버 연결 실패' : '오류가 발생했습니다'}
         </Typography>
 
-        <Typography color="$textMuted" fontSize="$md" maxWidth={300} textAlign="center">
+        <Typography color="$textMuted" fontSize="$3" maxWidth={300} textAlign="center">
           {isNetworkError
             ? '서버에 연결할 수 없습니다.\n네트워크 상태를 확인하거나 잠시 후 다시 시도해주세요.'
             : '예상치 못한 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.'}
@@ -113,7 +113,7 @@ export default function HomeScreen() {
   return (
     <ApiErrorBoundary>
       <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
-        <YStack gap="$2xl" paddingHorizontal="$lg">
+        <YStack gap="$6" paddingHorizontal="$4">
           <Card>
             <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
           </Card>

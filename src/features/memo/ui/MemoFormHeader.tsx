@@ -1,5 +1,7 @@
-import { Button, XStack, YStack } from 'tamagui';
+import { XStack } from 'tamagui';
 import { Typography } from '~/shared/ui';
+
+import { X } from '@tamagui/lucide-icons';
 
 interface MemoFormHeaderProps {
   onClose: () => void;
@@ -7,37 +9,27 @@ interface MemoFormHeaderProps {
 
 export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
   return (
-    <>
-      {/* Handle */}
-      <YStack alignItems="center" paddingBottom="$1" paddingTop="$2">
-        <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
-      </YStack>
-
-      {/* Header */}
+    <XStack
+      alignItems="center"
+      borderBottomColor="$border"
+      borderBottomWidth={1}
+      paddingHorizontal="$2"
+      paddingVertical="$3"
+      position="relative"
+    >
       <XStack
-        alignItems="center"
-        borderBottomColor="$border"
-        borderBottomWidth={1}
-        paddingHorizontal="$2"
-        paddingVertical="$sm"
-        position="relative"
+        backgroundColor="$backgroundTransparent"
+        borderRadius="$4"
+        paddingHorizontal="$3"
+        paddingVertical="$2"
+        pressStyle={{ opacity: 0.7 }}
+        onPress={onClose}
       >
-        <Button
-          backgroundColor="$backgroundTransparent"
-          borderRadius="$4"
-          borderWidth={0}
-          color="$textSecondary"
-          pressStyle={{ backgroundColor: '$backgroundTransparent' }}
-          size="$sm"
-          onPress={onClose}
-        >
-          취소
-        </Button>
-
-        <Typography left={0} position="absolute" right={0} textAlign="center" variant="title">
-          새 메모
-        </Typography>
+        <X color="$textSecondary" size="$4" />
       </XStack>
-    </>
+      <Typography left={0} position="absolute" right={0} textAlign="center" variant="subheading">
+        새 메모
+      </Typography>
+    </XStack>
   );
 };

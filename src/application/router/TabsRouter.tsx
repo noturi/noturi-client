@@ -61,7 +61,7 @@ export function TabsRouter() {
           options={{
             title: '',
             tabBarIcon: ({ color, focused }) => (
-              <Home color={color as any} fill={focused ? color : 'none'} size="$xl" />
+              <Home color={color as any} fill={focused ? color : 'none'} size="$5" />
             ),
             tabBarButton: (props) => (
               <Pressable
@@ -99,8 +99,8 @@ export function TabsRouter() {
           options={{
             title: '',
             tabBarIcon: ({ color, focused }) => (
-              <XStack backgroundColor={'$backgroundSecondary'} borderRadius="$xl" padding="$sm">
-                <Plus color={focused ? 'white' : (color as any)} size="$xl" />
+              <XStack backgroundColor={'$backgroundSecondary'} borderRadius="$5" padding="$2">
+                <Plus color={focused ? 'white' : (color as any)} size="$5" />
               </XStack>
             ),
             tabBarButton: (props) => (
@@ -127,7 +127,7 @@ export function TabsRouter() {
           options={{
             title: '통계',
             tabBarIcon: ({ color, focused }) => (
-              <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$xl" />
+              <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$5" />
             ),
             tabBarButton: (props) => (
               <Pressable
@@ -152,7 +152,7 @@ export function TabsRouter() {
           options={{
             title: '프로필',
             tabBarIcon: ({ color, focused }) => (
-              <User color={color as any} fill={focused ? color : 'none'} size="$xl" />
+              <User color={color as any} fill={focused ? color : 'none'} size="$5" />
             ),
             tabBarButton: (props) => (
               <Pressable

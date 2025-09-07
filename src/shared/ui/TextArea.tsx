@@ -3,11 +3,11 @@ import { TextArea as TamaguiTextArea, styled } from 'tamagui';
 export const TextArea = styled(TamaguiTextArea, {
   // 기본 스타일
   backgroundColor: '$backgroundSecondary',
-  borderRadius: '$xl',
+  borderRadius: '$5',
   borderWidth: 0,
   color: '$textPrimary',
   fontSize: 14,
-  padding: '$xl',
+  padding: '$5',
   placeholderTextColor: '$textMuted',
 
   // 포커스 스타일
@@ -30,19 +30,19 @@ export const TextArea = styled(TamaguiTextArea, {
     size: {
       sm: {
         minHeight: 80,
-        paddingHorizontal: '$lg',
-        fontSize: '$sm',
+        paddingHorizontal: '$4',
+        fontSize: '$2',
       },
       md: {
         minHeight: 120,
-        paddingHorizontal: '$xl',
-        paddingVertical: '$sm',
-        fontSize: '$sm',
+        paddingHorizontal: '$5',
+        paddingVertical: '$2',
+        fontSize: '$2',
       },
       lg: {
         minHeight: 160,
-        paddingHorizontal: '$2xl',
-        fontSize: '$lg',
+        paddingHorizontal: '$6',
+        fontSize: '$4',
       },
     },
 

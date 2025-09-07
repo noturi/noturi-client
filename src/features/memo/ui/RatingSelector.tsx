@@ -45,22 +45,22 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
           />
 
           {/* 완전 채워진 별 */}
-          {isFilled && <Star color="$rating2" fill="#f59e0b" size="$2xl" />}
+          {isFilled && <Star color="$rating2" fill="#f59e0b" size="$6" />}
 
           {/* 반쪽 채워진 별 */}
           {isHalfFilled && (
             <>
               {/* 전체 배경 (연한 노란색) */}
-              <Star color="$rating2Light" fill="#fef3c7" size="$2xl" />
+              <Star color="$rating2Light" fill="#fef3c7" size="$6" />
               {/* 왼쪽 반쪽 진한 채움 */}
               <XStack height={30} left={0} overflow="hidden" position="absolute" width={15}>
-                <Star color="$rating2" fill="#f59e0b" size="$2xl" />
+                <Star color="$rating2" fill="#f59e0b" size="$6" />
               </XStack>
             </>
           )}
 
           {/* 빈 별 */}
-          {isEmpty && <Star color="$rating2Light" fill="#fef3c7" size="$2xl" />}
+          {isEmpty && <Star color="$rating2Light" fill="#fef3c7" size="$6" />}
         </XStack>,
       );
     }
@@ -68,8 +68,8 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
   };
 
   return (
-    <XStack alignItems="center" gap="$2">
-      <XStack gap="$1">{renderStars()}</XStack>
+    <XStack alignItems="center" gap="$1">
+      <XStack gap="$0">{renderStars()}</XStack>
       <Typography color="$textMuted" variant="caption2">
         {rating > 0 ? `${rating} / 5` : '평점을 선택하세요'}
       </Typography>

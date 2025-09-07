@@ -133,8 +133,8 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         borderTopRightRadius="$2xl"
       >
         {/* Handle */}
-        <YStack alignItems="center" paddingBottom="$sm" paddingTop="$sm">
-          <YStack backgroundColor="$textMuted" borderRadius="$sm" height={4} width={36} />
+        <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
+          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
         </YStack>
 
         {/* Header */}
@@ -142,13 +142,13 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
           alignItems="center"
           borderBottomColor="$border"
           borderBottomWidth={1}
-          paddingHorizontal="$sm"
-          paddingVertical="$md"
+          paddingHorizontal="$2"
+          paddingVertical="$3"
           position="relative"
         >
           <XStack
             backgroundColor="$backgroundTransparent"
-            borderRadius="$lg"
+            borderRadius="$4"
             paddingHorizontal="$md"
             paddingVertical="$sm"
             pressStyle={{ opacity: 0.7 }}

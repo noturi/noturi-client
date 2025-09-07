@@ -11,7 +11,7 @@ export function CategoryFilterBar({ categories, onPress }: CategoryFilterBarProp
   return (
     <YStack justifyContent="center">
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$lg" paddingHorizontal="$md" paddingVertical="$md">
+        <XStack gap="$4" paddingHorizontal="$3" paddingVertical="$3">
           {categories.map((category) => (
             <CategoryButton
               key={category.name}

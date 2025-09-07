@@ -159,7 +159,7 @@ export default function MemoEditScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <YStack padding="$2">
+        <YStack padding="$1">
           <Form>
             <Form.Field required error={titleError} label="제목">
               <Input
@@ -193,7 +193,7 @@ export default function MemoEditScreen() {
               label="카테고리"
             >
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <XStack gap="$2">
+                <XStack gap="$1">
                   {categories.map((category) => (
                     <CategoryButton
                       key={category.id}
@@ -226,7 +226,7 @@ export default function MemoEditScreen() {
               </ScrollView>
 
               {showAddCategory && (
-                <XStack alignItems="center" gap="$4" marginTop="$sm">
+                <XStack alignItems="center" gap="$1" marginTop="$2">
                   <YStack flex={1}>
                     <Form.Field
                       error={
@@ -243,7 +243,7 @@ export default function MemoEditScreen() {
                       />
                     </Form.Field>
                   </YStack>
-                  <XStack alignItems="center" gap="$2">
+                  <XStack alignItems="center" gap="$1">
                     <Button
                       backgroundColor="$textPrimary"
                       borderRadius="$6"

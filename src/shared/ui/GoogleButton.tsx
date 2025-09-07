@@ -117,7 +117,7 @@ export function GoogleButton() {
       borderWidth={1}
       disabled={isLoading}
       icon={<GoogleIcon height={24} width={24} />}
-      size="$3xl"
+      size="$7"
       onPress={handleGoogleLogin}
     />
   );

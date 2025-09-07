@@ -16,9 +16,9 @@ export function Loading({ text = '', size = 'small', flex = true }: LoadingProps
     <YStack
       alignItems="center"
       flex={flex ? 1 : undefined}
-      gap="$xl"
+      gap="$5"
       justifyContent="center"
-      paddingVertical="$6xl"
+      paddingVertical="$10"
     >
       <Spinner color="$textSecondary" size={size} />
       {text && (

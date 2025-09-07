@@ -18,14 +18,14 @@ export function ActiveFilterChip({ label, onClear }: ActiveFilterChipProps) {
       borderRadius="$7"
       borderWidth={1}
       flexDirection="row"
-      paddingHorizontal="$2"
-      paddingVertical="$1"
+      paddingHorizontal="$1"
+      paddingVertical="$0"
       onPress={onClear}
     >
       <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
         {label}
       </Typography>
-      <X color="$textPrimary" size="$sm" />
+      <X color="$textPrimary" size="$2" />
     </Button>
   );
 }

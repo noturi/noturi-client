@@ -12,7 +12,7 @@ export interface FormProps {
 }
 
 const FormRoot = styled(View, {
-  gap: '$lg',
+  gap: '$4',
 } as const);
 
 // Form Field Component
@@ -24,7 +24,7 @@ export interface FormFieldProps {
 }
 
 const FormFieldWrapper = styled(View, {
-  gap: '$sm',
+  gap: '$2',
 });
 
 function FormField({ children, error, label, required }: FormFieldProps) {
@@ -76,7 +76,7 @@ export interface FormErrorProps extends React.ComponentProps<typeof Typography> 
 
 function FormError({ children, ...props }: FormErrorProps) {
   return (
-    <Typography color="$error" marginTop="$xs" variant="caption1" {...props}>
+    <Typography color="$error" marginTop="$1" variant="caption1" {...props}>
       {children}
     </Typography>
   );

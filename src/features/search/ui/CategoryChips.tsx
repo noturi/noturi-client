@@ -18,21 +18,21 @@ export function CategoryChips({
   onToggle,
 }: CategoryChipsProps) {
   return (
-    <YStack gap="$2">
+    <YStack gap="$1">
       <Typography variant="subtitle">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$2">
+        <XStack gap="$1">
           {categories.map((category) => (
             <Button
               key={category.id}
               backgroundColor={selectedCategoryIds.includes(category.id) ? '$primary' : '$surface'}
-              borderRadius="$sm"
+              borderRadius="$2"
               color={
                 selectedCategoryIds.includes(category.id) ? '$textOnPrimary' : '$textSecondary'
               }
               height={32}
               justifyContent="center"
-              paddingHorizontal="$2"
+              paddingHorizontal="$1"
               onPress={() => onToggle(category.id)}
             >
               {category.name}

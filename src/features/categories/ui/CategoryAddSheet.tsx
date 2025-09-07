@@ -69,8 +69,8 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
           borderBottomColor="$border"
           borderBottomWidth={1}
           justifyContent="space-between"
-          paddingHorizontal="$xl"
-          paddingVertical="$lg"
+          paddingHorizontal="$5"
+          paddingVertical="$4"
         >
           <Typography variant="title">새 카테고리 추가</Typography>
           <Button
@@ -83,19 +83,19 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         </XStack>
 
         {/* Content */}
-        <YStack gap="$lg" padding="$xl">
-          <YStack gap="$sm">
+        <YStack gap="$4" padding="$5">
+          <YStack gap="$2">
             <Typography variant="subtitle">카테고리 이름</Typography>
             <Input
               backgroundColor="$backgroundPrimary"
               borderColor="$border"
-              borderRadius="$lg"
+              borderRadius="$4"
               borderWidth={1}
               color="$textPrimary"
-              fontSize="$md"
+              fontSize="$3"
               maxLength={20}
-              paddingHorizontal="$lg"
-              paddingVertical="$md"
+              paddingHorizontal="$4"
+              paddingVertical="$3"
               placeholder="카테고리 이름을 입력하세요"
               placeholderTextColor="$textMuted"
               value={categoryName}
@@ -103,14 +103,14 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
             />
           </YStack>
 
-          <XStack gap="$md" marginTop="$sm">
+          <XStack gap="$3" marginTop="$2">
             <Button
               backgroundColor="$surface"
               borderColor="$border"
               borderWidth={1}
               color="$textSecondary"
               flex={1}
-              icon={<X size="$md" />}
+              icon={<X size="$3" />}
               onPress={handleClose}
             />
             <Button

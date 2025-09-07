@@ -28,7 +28,7 @@ export function ActiveFilters({
   if (!hasActiveFilters) return null;
 
   return (
-    <XStack alignItems="center" flexWrap="wrap" gap="$2">
+    <XStack alignItems="center" flexWrap="wrap" gap="$1">
       {selectedCategoryIds.map((id) => (
         <ActiveFilterChip
           key={id}

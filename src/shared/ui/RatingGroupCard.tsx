@@ -26,36 +26,36 @@ export function RatingGroupCard({
   onMemoPress,
 }: RatingGroupCardProps) {
   return (
-    <Card padding="$lg">
+    <Card padding="$4">
       <XStack
         alignItems="center"
-        gap="$sm"
-        padding="$md"
+        gap="$2"
+        padding="$3"
         pressStyle={{ opacity: 0.7 }}
         onPress={onToggle}
       >
-        <XStack alignItems="center" flex={1} gap="$sm">
+        <XStack alignItems="center" flex={1} gap="$2">
           <RatingStars rating={group.rating} />
           <Typography color="$textMuted" variant="caption1">
             ({group.memos.length}개)
           </Typography>
         </XStack>
         {isExpanded ? (
-          <ChevronUp color="$textMuted" size="$md" />
+          <ChevronUp color="$textMuted" size="$3" />
         ) : (
-          <ChevronDown color="$textMuted" size="$md" />
+          <ChevronDown color="$textMuted" size="$3" />
         )}
       </XStack>
 
       {isExpanded && (
         <>
           <Separator borderColor="$border" />
-          <YStack gap="$none" padding="$md">
+          <YStack gap="$0" padding="$3">
             {group.memos.map((memo) => (
               <XStack
                 key={memo.id}
                 alignSelf="flex-start"
-                paddingVertical="$xs"
+                paddingVertical="$1"
                 pressStyle={{ opacity: 0.7 }}
                 onPress={() => onMemoPress?.(memo)}
               >

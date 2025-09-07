@@ -29,18 +29,18 @@ function ToggleButton({ isActive, onPress, icon, label }: ToggleButtonProps) {
         alignItems="center"
         backgroundColor="$backgroundSecondary"
         borderColor={isActive ? '$primary' : '$border'}
-        borderRadius="$xl"
+        borderRadius="$5"
         borderWidth={1}
         height={48}
         justifyContent="center"
-        padding="$md"
+        padding="$3"
         width={48}
       >
         {icon}
       </XStack>
       <Typography
         color={isActive ? '$textPrimary' : '$textMuted'}
-        fontWeight={isActive ? '600' : '400'}
+        fontWeight={isActive ? 600 : 400}
         pointerEvents="none"
         variant="caption2"
       >
@@ -52,9 +52,9 @@ function ToggleButton({ isActive, onPress, icon, label }: ToggleButtonProps) {
 
 export function MemoViewToggle({ selectedView, onViewChange }: MemoViewToggleProps) {
   return (
-    <XStack gap="$lg" paddingHorizontal="$lg" paddingVertical="$sm">
+    <XStack gap="$4" paddingHorizontal="$4" paddingVertical="$2">
       <ToggleButton
-        icon={<Star color="$star" fill="#ebd759" size="$md" />}
+        icon={<Star color="$star" fill="#ebd759" size="$3" />}
         isActive={selectedView === 'rating'}
         label="별점메모"
         onPress={() => onViewChange('rating')}

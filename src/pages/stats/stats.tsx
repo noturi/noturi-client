@@ -32,10 +32,10 @@ export default function StatsScreen() {
         justifyContent="center"
         padding="$sm"
       >
-        <Typography color="$textPrimary" fontSize="$xl" fontWeight="$semibold" textAlign="center">
+        <Typography color="$textPrimary" fontSize="$5" fontWeight="$5" textAlign="center">
           통계 조회 실패
         </Typography>
-        <Typography color="$textMuted" fontSize="$md" textAlign="center">
+        <Typography color="$textMuted" fontSize="$3" textAlign="center">
           통계 데이터를 불러오는데 실패했습니다.{'\n'}잠시 후 다시 시도해주세요.
         </Typography>
       </YStack>
@@ -44,12 +44,12 @@ export default function StatsScreen() {
 
   return (
     <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
-      <YStack gap="$2xl" paddingHorizontal="$lg">
+      <YStack gap="$6" paddingHorizontal="$4">
         {overallStats && <OverallStatsView stats={overallStats} />}
 
         {categoryStats && (
-          <YStack gap="$md">
-            <Typography paddingLeft="$md" variant="subheading">
+          <YStack gap="$3">
+            <Typography fontWeight="$5" paddingLeft="$3" variant="subheading">
               카테고리별 통계
             </Typography>
             <CategoryStatsView categories={categoryStats} />

@@ -9,12 +9,12 @@ export default function LoginScreen() {
       alignItems="center"
       backgroundColor="$backgroundPrimary"
       flex={1}
-      gap="$3xl"
+      gap="$7"
       justifyContent="center"
-      padding="$xl"
+      padding="$5"
     >
       <Typography variant="display">Noturi</Typography>
-      <XStack gap="$xl">
+      <XStack gap="$5">
         <GoogleButton />
         <AppleButton />
       </XStack>

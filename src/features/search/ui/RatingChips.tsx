@@ -12,9 +12,9 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
   const theme = useTheme();
   const starColor = (theme.rating2 as any)?.get?.() ?? theme.textPrimary.get();
   return (
-    <YStack gap="$2">
+    <YStack gap="$1">
       <Typography variant="subtitle">평점</Typography>
-      <XStack gap="$2">
+      <XStack gap="$1">
         {[5, 4, 3, 2, 1].map((rating) => (
           <Button
             key={rating}
@@ -25,11 +25,11 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
             display="flex"
             height={32}
             justifyContent="center"
-            paddingHorizontal="$2"
+            paddingHorizontal="$1"
             onPress={() => onSelect(selectedRating === rating ? undefined : rating)}
           >
-            <XStack alignItems="center" gap="$1">
-              <Star color={starColor} fill={starColor} size="$md" />
+            <XStack alignItems="center" gap="$0">
+              <Star color={starColor} fill={starColor} size="$3" />
               <Typography
                 color={selectedRating === rating ? '$textOnPrimary' : '$textPrimary'}
                 pointerEvents="none"

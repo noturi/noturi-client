@@ -25,14 +25,14 @@ export const SubmitButton = ({
     return (
       <Button
         backgroundColor={disabled ? '$surfaceDisabled' : '$primary'}
-        borderRadius="$xl"
+        borderRadius="$5"
         bottom={keyboardHeight > 0 ? keyboardHeight + 40 : 30}
         color={disabled ? '$textMuted' : '$textOnAccent'}
-        fontSize="$lg"
-        fontWeight="$semibold"
-        height="$6xl"
+        fontSize="$4"
+        fontWeight="$5"
+        height="$10"
         left={20}
-        paddingHorizontal="$5xl"
+        paddingHorizontal="$9"
         position="absolute"
         right={20}
         zIndex={1000}
@@ -47,9 +47,9 @@ export const SubmitButton = ({
     <Button
       backgroundColor={disabled ? '$surfaceDisabled' : '$primary'}
       color={disabled ? '$textMuted' : '$textOnAccent'}
-      fontSize="$lg"
-      height="$5xl"
-      paddingHorizontal="$5xl"
+      fontSize="$4"
+      height="$9"
+      paddingHorizontal="$9"
       onPress={onPress}
     >
       {isLoading ? loadingText : children}

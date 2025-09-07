@@ -24,7 +24,7 @@ export function MemoListView({
   const renderFooter = useCallback(() => {
     if (!isFetchingNextPage) return null;
     return (
-      <YStack alignItems="center" paddingVertical="$4">
+      <YStack alignItems="center" paddingVertical="$1">
         <Loading />
       </YStack>
     );

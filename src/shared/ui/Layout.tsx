@@ -3,22 +3,22 @@ import { YStack, styled } from 'tamagui';
 export const Screen = styled(YStack, {
   flex: 1,
   backgroundColor: '$background',
-  padding: '$6xl',
+  padding: '$10',
 });
 
 export const Card = styled(YStack, {
   backgroundColor: '$surface',
   borderColor: '$border',
   borderWidth: 1,
-  borderRadius: '$2xl',
-  padding: '$2xl',
+  borderRadius: '$6',
+  padding: '$6',
 });
 
 export const Logo = styled(YStack, {
   width: 60,
   height: 60,
   backgroundColor: '$primary',
-  borderRadius: '$xl',
+  borderRadius: '$5',
   justifyContent: 'center',
   alignItems: 'center',
 });

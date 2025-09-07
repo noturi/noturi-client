@@ -10,7 +10,7 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
   if (!categories || categories.length === 0) {
     return (
       <Card>
-        <YStack gap="$4">
+        <YStack gap="$1">
           <Typography color="$textMuted" textAlign="center" variant="body2">
             카테고리별 통계 데이터가 없습니다.
           </Typography>
@@ -24,14 +24,14 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
       <YStack>
         {categories?.map((category) => {
           return (
-            <YStack key={category.id} padding="$sm">
-              <XStack alignItems="center" justifyContent="space-between" padding="$sm">
-                <Typography color="$textPrimary" fontWeight="$semibold" variant="body1">
+            <YStack key={category.id} padding="$2">
+              <XStack alignItems="center" justifyContent="space-between" padding="$2">
+                <Typography color="$textPrimary" fontWeight="$5" variant="body1">
                   {category.categoryName}
                 </Typography>
 
-                <XStack alignItems="center" gap="$lg">
-                  <Typography fontWeight="$semibold" variant="subtitle">
+                <XStack alignItems="center" gap="$4">
+                  <Typography fontWeight="$5" variant="subtitle">
                     {category.count}개
                   </Typography>
                   <StarRating rating={category.avgRating} />

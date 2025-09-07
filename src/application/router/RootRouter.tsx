@@ -37,11 +37,11 @@ export function RootRouter() {
           headerBackTitle: '',
           headerBackButtonMenuEnabled: false,
           headerRight: () => (
-            <XStack paddingRight="$md">
+            <XStack paddingRight="$3">
               <Pressable
                 onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
               >
-                <Edit3 color="$textSecondary" size="$lg" />
+                <Edit3 color="$textSecondary" size="$4" />
               </Pressable>
             </XStack>
           ),
@@ -67,7 +67,7 @@ export function RootRouter() {
           headerBackButtonMenuEnabled: false,
           headerLeft: () => (
             <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
-              <ChevronLeft color="$primary" size="$lg" />
+              <ChevronLeft color="$primary" size="$4" />
             </Pressable>
           ),
         }}

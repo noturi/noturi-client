@@ -41,12 +41,12 @@ export function StarRating({ rating }: StarRatingProps) {
     <XStack
       alignItems="center"
       backgroundColor={config.bgColor}
-      borderRadius="$lg"
-      gap="$sm"
-      paddingHorizontal="$sm"
-      paddingVertical="$sm"
+      borderRadius="$4"
+      gap="$2"
+      paddingHorizontal="$2"
+      paddingVertical="$2"
     >
-      <Star color={starColor} fill={starColor} size="$md" />
+      <Star color={starColor} fill={starColor} size="$3" />
       <Typography color={`$${config.colorKey}`} variant="caption1">
         {safeRating.toFixed(1)}
       </Typography>

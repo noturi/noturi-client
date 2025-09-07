@@ -10,9 +10,9 @@ export function RatingStars({ rating }: RatingStarsProps) {
   const theme = useTheme();
 
   return (
-    <XStack alignItems="center" gap="$xs" pointerEvents="none">
+    <XStack alignItems="center" gap="$1" pointerEvents="none">
       {Array.from({ length: rating }, (_, i) => (
-        <Star key={i} color="$star" fill={theme.star.val} size="$md" />
+        <Star key={i} color="$star" fill={theme.star.val} size="$3" />
       ))}
     </XStack>
   );
