@@ -3,7 +3,7 @@ import { Card, Typography } from '~/shared/ui';
 export function StatsHeader() {
   return (
     <Card alignItems="center" backgroundColor="$primary">
-      <Typography color="white" fontSize="$7" fontWeight="$6" variant="heading">
+      <Typography color="white" variant="heading">
         통계
       </Typography>
       <Typography color="white" marginTop="$0" opacity={0.9} variant="body2">
