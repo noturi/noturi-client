@@ -44,50 +44,50 @@ const getComponentByVariant = (variant: TypographyVariant) => {
 const variantStyles = {
   display: {
     fontSize: '$7', // 24px
-    fontWeight: 600, // semibold
+    fontWeight: '$5', // 600 - semibold
     lineHeight: '$7', // 28px
     color: '$textPrimary',
   },
   heading: {
     fontSize: '$7', // 24px
-    fontWeight: 500, // medium
+    fontWeight: '$4', // 500 - medium
     lineHeight: '$7', // 28px
     color: '$textPrimary',
   },
   subheading: {
     fontSize: '$6', // 20px
-    fontWeight: 600, // semibold
+    fontWeight: '$4', // 600 - semibold
     lineHeight: '$6', // 24px
     color: '$textPrimary',
   },
   title: {
     fontSize: '$5', // 18px
-    fontWeight: 700, // bold
+    fontWeight: '$6', // 700 - bold
     lineHeight: '$5', // 20px
     color: '$textPrimary',
   },
   subtitle: {
     fontSize: '$4', // 16px
-    fontWeight: 500, // medium
+    fontWeight: '$4', // 500 - medium
     lineHeight: '$4', // 18px
     color: '$textPrimary',
   },
 
   body1: {
     fontSize: '$5', // 18px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: '$5', // 20px
     color: '$textPrimary',
   },
   body2: {
     fontSize: '$4', // 16px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: '$4', // 18px
     color: '$textPrimary',
   },
   body3: {
     fontSize: 14, // 14px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: 16, // 16px
     color: '$textPrimary',
   },
@@ -95,13 +95,13 @@ const variantStyles = {
   // 작은 텍스트들
   caption1: {
     fontSize: 14, // 14px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: 16, // 16px
     color: '$textSecondary',
   },
   caption2: {
     fontSize: '$2', // 12px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: '$2', // 14px
     color: '$textMuted',
   },
@@ -109,14 +109,14 @@ const variantStyles = {
   // 특수 용도
   link: {
     fontSize: 14, // 14px
-    fontWeight: 300, // light
+    fontWeight: '$2', // 300 - light
     lineHeight: 16, // 16px
     color: '$accent',
     textDecorationLine: 'none',
   },
   label: {
     fontSize: '$2', // 12px
-    fontWeight: 400, // regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: '$2', // 14px
     color: '$textPrimary',
     textTransform: 'uppercase',
@@ -136,11 +136,11 @@ export const Typography = ({ variant = 'body1', children, ...props }: Typography
 
   return (
     <Component
+      {...props}
       {...styles}
       margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
       pointerEvents="none"
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
-      {...props}
     >
       {children}
     </Component>
