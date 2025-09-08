@@ -1,8 +1,11 @@
 import { User } from '~/entities/user';
+import { HREFS } from '~/shared/constants';
 import { tokenEventManager, useTokens } from '~/shared/lib';
 import Logger from '~/shared/lib/logger';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
+import { router } from 'expo-router';
 
 import { authService } from './authService';
 
@@ -112,11 +115,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setError(null);
       await authService.logout();
       setAuthState(false);
+      // 로그인 페이지로 리다이렉트
+      router.replace(HREFS.login());
     } catch (error) {
       console.error('로그아웃 실패:', error);
       setError('로그아웃에 실패했습니다.');
       // 에러가 있어도 상태는 로그아웃 상태로 변경
       setAuthState(false);
+      // 에러가 있어도 로그인 페이지로 이동
+      router.replace(HREFS.login());
     }
   };
 
