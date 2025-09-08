@@ -1,6 +1,6 @@
 import { KyInstance } from 'ky';
 import {
-  CategoryStatsResponse,
+  CategoryStatsResponseDto,
   OverallStats,
   OverallStatsParamsDto,
   TrendsParamsDto,
@@ -48,8 +48,8 @@ export class StatisticsApi {
   }
 
   // 카테고리별 통계 조회
-  async getCategoryStats(): Promise<CategoryStatsResponse[]> {
-    const response = await this.api.get('statistics/categories').json<CategoryStatsResponse[]>();
+  async getCategoryStats(): Promise<CategoryStatsResponseDto[]> {
+    const response = await this.api.get('statistics/categories').json<CategoryStatsResponseDto[]>();
     return response;
   }
 }
