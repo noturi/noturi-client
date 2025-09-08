@@ -1,8 +1,8 @@
 import { KyInstance } from 'ky';
 import {
   CategoryStatsResponseDto,
-  OverallStats,
   OverallStatsParamsDto,
+  OverallStatsResponseDto,
   TrendsParamsDto,
   TrendsResponseDto,
 } from '~/entities/statistics';
@@ -32,7 +32,7 @@ export class StatisticsApi {
   }
 
   // 전체 통계 조회
-  async getOverallStats(params: OverallStatsParamsDto = {}): Promise<OverallStats> {
+  async getOverallStats(params: OverallStatsParamsDto = {}): Promise<OverallStatsResponseDto> {
     const searchParams = new URLSearchParams();
 
     if (params.year) searchParams.append('year', params.year.toString());
@@ -42,7 +42,7 @@ export class StatisticsApi {
       .get('statistics/overview', {
         searchParams,
       })
-      .json<OverallStats>();
+      .json<OverallStatsResponseDto>();
 
     return response;
   }
