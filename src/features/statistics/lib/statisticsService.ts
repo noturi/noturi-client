@@ -1,17 +1,8 @@
-import { CategoryStats, CategoryStatsResponse } from '~/entities/statistics';
+import { CategoryStatsResponseDto } from '~/entities/statistics';
 
 export class StatisticsService {
-  // 서버 응답을 UI용 데이터로 변환
-  static transformCategoryStats(response: CategoryStatsResponse[]): CategoryStats[] {
-    return response.map((item) => ({
-      ...item,
-      color: this.getCategoryColor(item.name),
-      description: this.getCategoryDescription(item.name),
-    }));
-  }
-
   // 카테고리별 색상 매핑
-  private static getCategoryColor(categoryName: string): string {
+  static getCategoryColor(categoryName: string): string {
     const colorMap: Record<string, string> = {
       영화: '#667eea',
       책: '#764ba2',
@@ -24,9 +15,8 @@ export class StatisticsService {
     return colorMap[categoryName] || colorMap.default;
   }
 
-  // 카테고리별 설명 매핑
-  private static getCategoryDescription(categoryName: string): string {
-    // 실제 카테고리 이름을 그대로 사용
-    return categoryName;
+  // 카테고리별 설명 생성
+  static getCategoryDescription(stats: CategoryStatsResponseDto): string {
+    return `총 ${stats.count}개 메모, 평균 ${stats.averageRating.toFixed(1)}점`;
   }
 }
