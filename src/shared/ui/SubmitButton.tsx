@@ -1,4 +1,5 @@
-import { Button } from 'tamagui';
+import { View } from 'tamagui';
+import { Button } from '~/shared/ui';
 
 interface SubmitButtonProps {
   children: React.ReactNode;
@@ -23,33 +24,29 @@ export const SubmitButton = ({
 
   if (position === 'fixed') {
     return (
-      <Button
-        backgroundColor={disabled ? '$surfaceDisabled' : '$primary'}
-        borderRadius="$5"
-        bottom={keyboardHeight > 0 ? keyboardHeight + 40 : 30}
-        color={disabled ? '$textMuted' : '$textOnAccent'}
-        fontSize="$4"
-        fontWeight="$5"
-        height="$10"
-        left={20}
-        paddingHorizontal="$9"
+      <View
+        backgroundColor="$backgroundPrimary"
+        bottom={0}
+        left={0}
+        paddingBottom={keyboardHeight > 0 ? keyboardHeight + 20 : 40}
+        paddingHorizontal={10}
+        paddingTop={10}
         position="absolute"
-        right={20}
-        zIndex={1000}
-        onPress={onPress}
+        right={0}
+        zIndex="$5"
       >
-        {isLoading ? loadingText : children}
-      </Button>
+        <Button disabled={disabled} size="lg" onPress={onPress}>
+          {isLoading ? loadingText : children}
+        </Button>
+      </View>
     );
   }
 
   return (
     <Button
-      backgroundColor={disabled ? '$surfaceDisabled' : '$primary'}
-      color={disabled ? '$textMuted' : '$textOnAccent'}
-      fontSize="$4"
-      height="$9"
-      paddingHorizontal="$9"
+      bottom={keyboardHeight > 0 ? keyboardHeight + 20 : 40}
+      disabled={disabled}
+      size="lg"
       onPress={onPress}
     >
       {isLoading ? loadingText : children}
