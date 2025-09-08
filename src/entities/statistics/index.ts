@@ -1,10 +1,9 @@
 export type {
-  RatingDistribution,
   CategoryPattern,
-  TrendsResponseDto,
-  TrendsParamsDto,
+  CategoryStatsResponseDto,
   OverallStats,
   OverallStatsParamsDto,
-  CategoryStats,
-  CategoryStatsResponse,
+  RatingDistribution,
+  TrendsParamsDto,
+  TrendsResponseDto,
 } from './model/types';

@@ -42,20 +42,15 @@ export const OverallStatsParamsDtoSchema = z.object({
   month: z.number().optional(),
 });
 
-// 서버에서 오는 카테고리별 통계 응답 스키마
-export const CategoryStatsResponseSchema = z.object({
-  categoryId: z.string(),
-  categoryName: z.string(),
-  color: z.string(),
-});
-
-// UI에서 사용하는 카테고리별 통계 스키마
-export const CategoryStatsSchema = z.object({
+export const CategoryStatsResponseDtoSchema = z.object({
+  id: z.string(),
   name: z.string(),
-  count: z.number(),
-  avgRating: z.number(),
   color: z.string(),
-  description: z.string(),
+  count: z.number(),
+  percentage: z.number(),
+  averageRating: z.number(),
+  lastMemoDate: z.string(),
+  thisMonthCount: z.number(),
 });
 
 // Zod 스키마에서 타입 추출
@@ -65,5 +60,4 @@ export type TrendsResponseDto = z.infer<typeof TrendsResponseDtoSchema>;
 export type TrendsParamsDto = z.infer<typeof TrendsParamsDtoSchema>;
 export type OverallStats = z.infer<typeof OverallStatsSchema>;
 export type OverallStatsParamsDto = z.infer<typeof OverallStatsParamsDtoSchema>;
-export type CategoryStatsResponseDto = z.infer<typeof CategoryStatsResponseSchema>;
-export type CategoryStats = z.infer<typeof CategoryStatsSchema>;
+export type CategoryStatsResponseDto = z.infer<typeof CategoryStatsResponseDtoSchema>;
