@@ -27,13 +27,16 @@ export const TrendsParamsDtoSchema = z.object({
 });
 
 // 전체 통계 정보 스키마
-export const OverallStatsSchema = z.object({
+export const OverallStatsResponseDtoSchema = z.object({
   totalMemos: z.number(),
-  avgRating: z.number(),
   totalCategories: z.number(),
-  bestExperiences: z.number(),
-  recommendedExperiences: z.number(),
-  avoidExperiences: z.number(),
+  thisMonthMemos: z.number(),
+  lastMonthMemos: z.number(),
+  growthRate: z.number(),
+  averageRating: z.number(),
+  dailyAverage: z.number(),
+  lastMemoDate: z.string(),
+  activeDaysThisMonth: z.number(),
 });
 
 // 전체 통계 요청 파라미터 스키마
@@ -58,6 +61,6 @@ export type RatingDistribution = z.infer<typeof RatingDistributionSchema>;
 export type CategoryPattern = z.infer<typeof CategoryPatternSchema>;
 export type TrendsResponseDto = z.infer<typeof TrendsResponseDtoSchema>;
 export type TrendsParamsDto = z.infer<typeof TrendsParamsDtoSchema>;
-export type OverallStats = z.infer<typeof OverallStatsSchema>;
+export type OverallStatsResponseDto = z.infer<typeof OverallStatsResponseDtoSchema>;
 export type OverallStatsParamsDto = z.infer<typeof OverallStatsParamsDtoSchema>;
 export type CategoryStatsResponseDto = z.infer<typeof CategoryStatsResponseDtoSchema>;

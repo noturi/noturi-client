@@ -1,7 +1,7 @@
 export type {
   CategoryPattern,
   CategoryStatsResponseDto,
-  OverallStats,
+  OverallStatsResponseDto,
   OverallStatsParamsDto,
   RatingDistribution,
   TrendsParamsDto,
