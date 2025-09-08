@@ -1,6 +1,6 @@
-import { Button, Input, Sheet, Spinner, XStack, YStack } from 'tamagui';
+import { Sheet, Spinner, XStack, YStack } from 'tamagui';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
-import { Typography } from '~/shared/ui';
+import { Button, Input, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Alert } from 'react-native';
@@ -21,7 +21,6 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
       setCategoryName('');
       onSuccess?.(newCategory.name);
       onClose();
-      Alert.alert('성공', '새 카테고리가 생성되었습니다.');
     },
   });
 
