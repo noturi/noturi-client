@@ -62,7 +62,8 @@ const fontSize = {
 };
 
 const bodyFont = createFont({
-  family: 'Arial, Helvetica, sans-serif',
+  family:
+    'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
   size: fontSize,
   lineHeight: {
     $1: 12,
@@ -87,17 +88,18 @@ const bodyFont = createFont({
     tight: -0.5,
   },
   face: {
-    200: { normal: 'System', italic: 'System' },
-    300: { normal: 'System', italic: 'System' },
-    400: { normal: 'System', italic: 'System' },
-    500: { normal: 'System', italic: 'System' },
-    600: { normal: 'System', italic: 'System' },
-    700: { normal: 'System', italic: 'System' },
+    200: { normal: 'Pretendard', italic: 'Pretendard' },
+    300: { normal: 'Pretendard', italic: 'Pretendard' },
+    400: { normal: 'Pretendard', italic: 'Pretendard' },
+    500: { normal: 'Pretendard', italic: 'Pretendard' },
+    600: { normal: 'Pretendard', italic: 'Pretendard' },
+    700: { normal: 'Pretendard', italic: 'Pretendard' },
   },
 });
 
 const headingFont = createFont({
-  family: 'Arial, Helvetica, sans-serif',
+  family:
+    'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
   size: fontSize,
   lineHeight: {
     $1: 14,
@@ -126,12 +128,12 @@ const headingFont = createFont({
     tight: -0.5,
   },
   face: {
-    200: { normal: 'System', italic: 'System' },
-    300: { normal: 'System', italic: 'System' },
-    400: { normal: 'System', italic: 'System' },
-    500: { normal: 'System', italic: 'System' },
-    600: { normal: 'System', italic: 'System' },
-    700: { normal: 'System', italic: 'System' },
+    200: { normal: 'Pretendard', italic: 'Pretendard' },
+    300: { normal: 'Pretendard', italic: 'Pretendard' },
+    400: { normal: 'Pretendard', italic: 'Pretendard' },
+    500: { normal: 'Pretendard', italic: 'Pretendard' },
+    600: { normal: 'Pretendard', italic: 'Pretendard' },
+    700: { normal: 'Pretendard', italic: 'Pretendard' },
   },
 });
 
@@ -140,6 +142,10 @@ const tokens = createTokens({
     $1: '#ffffff',
     $2: '#000000',
     $3: 'transparent',
+    $error: '#f44336',
+    $success: '#4caf50',
+    $warning: '#ff9800',
+    $accent: '#ffc107',
   },
   space: {
     $0: 0,
