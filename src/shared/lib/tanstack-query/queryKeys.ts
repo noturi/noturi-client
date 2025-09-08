@@ -10,7 +10,7 @@ export const QUERY_KEYS = {
 
   // 카테고리 관련
   categories: ['categories'] as const,
-  category: (id: number) => ['category', id] as const,
+  category: (id: string) => ['category', id] as const,
   categoriesAll: ['categories', 'all'] as const,
   categoriesActive: ['categories', 'active'] as const,
   categoriesUnused: ['categories', 'unused'] as const,
@@ -19,10 +19,12 @@ export const QUERY_KEYS = {
   categoriesByMemoCount: ['categories', 'sorted', 'memoCount'] as const,
   categoriesByCreatedDate: ['categories', 'sorted', 'createdAt'] as const,
   categoryCheckExists: (name: string) => ['category', 'check-exists', name] as const,
-  memoCategories: ['memo-categories'] as const,
 
   // 통계
-  memoStats: ['memo-stats'] as const,
-  categoryStats: ['category-stats'] as const,
-  categoryDistribution: ['category-distribution'] as const,
+  statisticsMemos: ['statistics', 'memos'] as const,
+  statisticsCategories: ['statistics', 'categories'] as const,
+  statisticsCategoryDistribution: ['statistics', 'category-distribution'] as const,
+  statisticsTrends: (params: Record<string, unknown>) => ['statistics', 'trends', params] as const,
+  statisticsOverall: (params: Record<string, unknown>) =>
+    ['statistics', 'overall', params] as const,
 } as const;
