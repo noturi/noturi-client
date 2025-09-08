@@ -1,9 +1,9 @@
 import { XStack, YStack } from 'tamagui';
-import { OverallStats } from '~/entities/statistics';
+import { OverallStatsResponseDto } from '~/entities/statistics';
 import { Card, Typography } from '~/shared/ui';
 
 interface OverallStatsViewProps {
-  stats: OverallStats;
+  stats: OverallStatsResponseDto;
 }
 
 export function OverallStatsView({ stats }: OverallStatsViewProps) {
@@ -20,7 +20,7 @@ export function OverallStatsView({ stats }: OverallStatsViewProps) {
 
       <Card>
         <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="title">{(stats.avgRating ?? 0).toFixed(1)}</Typography>
+          <Typography variant="title">{(stats.averageRating ?? 0).toFixed(1)}</Typography>
           <Typography variant="caption1">평균 별점</Typography>
         </YStack>
       </Card>
@@ -32,12 +32,12 @@ export function OverallStatsView({ stats }: OverallStatsViewProps) {
         </YStack>
       </Card>
 
-      <Card>
+      {/* <Card>
         <YStack alignItems="center" flex={1} gap="$2" padding="$2">
           <Typography variant="title">{stats.recommendedExperiences ?? 0}</Typography>
           <Typography variant="caption1">추천 경험</Typography>
         </YStack>
-      </Card>
+      </Card> */}
     </XStack>
   );
 }
