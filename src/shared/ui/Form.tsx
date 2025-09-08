@@ -1,4 +1,4 @@
-import { View, styled } from 'tamagui';
+import { SizableText, View, styled } from 'tamagui';
 import type { FormFieldError } from '~/shared/lib/useForm';
 
 import React from 'react';
@@ -41,11 +41,7 @@ function FormField({ children, error, label, required }: FormFieldProps) {
         </Typography>
       )}
       {children}
-      {error && (
-        <Typography color="$error" variant="subtitle">
-          {error.message}
-        </Typography>
-      )}
+      {error && <FormError>{error.message}</FormError>}
     </FormFieldWrapper>
   );
 }
@@ -61,9 +57,9 @@ function FormLabel({ children, required, ...props }: FormLabelProps) {
     <Typography variant="subtitle" {...props}>
       {children}
       {required && (
-        <Typography color="$error" variant="subtitle">
+        <SizableText color="$error" fontSize="$4" fontWeight="$4">
           *
-        </Typography>
+        </SizableText>
       )}
     </Typography>
   );
@@ -76,7 +72,7 @@ export interface FormErrorProps extends React.ComponentProps<typeof Typography> 
 
 function FormError({ children, ...props }: FormErrorProps) {
   return (
-    <Typography color="$error" marginTop="$1" variant="caption1" {...props}>
+    <Typography color="$error" marginTop="$1" variant="caption2" {...props}>
       {children}
     </Typography>
   );
