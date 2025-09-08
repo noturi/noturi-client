@@ -45,11 +45,11 @@ export function useCreateMemoMutation(
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoCategories,
+        queryKey: QUERY_KEYS.statisticsCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoStats,
+        queryKey: QUERY_KEYS.statisticsMemos,
         exact: false,
       });
 
@@ -90,11 +90,11 @@ export function useUpdateMemoMutation(
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoCategories,
+        queryKey: QUERY_KEYS.statisticsCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoStats,
+        queryKey: QUERY_KEYS.statisticsMemos,
         exact: false,
       });
 
@@ -135,11 +135,11 @@ export function useDeleteMemoMutation(
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoCategories,
+        queryKey: QUERY_KEYS.statisticsCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoStats,
+        queryKey: QUERY_KEYS.statisticsMemos,
         exact: false,
       });
 
@@ -182,11 +182,11 @@ export function useBulkDeleteMemosMutation(
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoCategories,
+        queryKey: QUERY_KEYS.statisticsCategories,
         exact: false,
       });
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.memoStats,
+        queryKey: QUERY_KEYS.statisticsMemos,
         exact: false,
       });
 
