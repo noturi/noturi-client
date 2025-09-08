@@ -69,7 +69,9 @@ export function MemoRatingGroupView({
   if (memos.length === 0) {
     return (
       <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted">작성된 메모가 없습니다</Typography>
+        <Typography color="$textMuted" variant="body2">
+          작성된 메모가 없습니다
+        </Typography>
       </YStack>
     );
   }
