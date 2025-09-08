@@ -37,7 +37,7 @@ export const MemoFormContent = ({
   const memoForm = useForm<MemoFormData>({
     initialValues: {
       title: '',
-      memoContent: '',
+      content: '',
       rating: 0,
       selectedCategory: '',
     },
@@ -54,7 +54,7 @@ export const MemoFormContent = ({
 
       createMemoMutation.mutate({
         title: values.title,
-        content: values.memoContent,
+        content: values.content,
         categoryId: selectedCat.id,
         rating: values.rating,
       });
@@ -120,9 +120,16 @@ export const MemoFormContent = ({
     return () => clearTimeout(timer);
   }, [shouldAutoFocus]);
 
-  const shouldShowTitleError =
-    memoForm.errors.title && memoForm.values.title.length === 0 && memoForm.touched.title;
+  const shouldShowTitleError = memoForm.shouldShowError('title');
+  const shouldShowSelectedCategoryError = memoForm.shouldShowError('selectedCategory');
+  const selectedCategoryError = shouldShowSelectedCategoryError
+    ? memoForm.errors.selectedCategory
+    : undefined;
+
   const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
+
+  const shouldShowContentError = memoForm.shouldShowError('content');
+  const contentError = shouldShowContentError ? memoForm.errors.content : undefined;
 
   return (
     <>
@@ -147,32 +154,18 @@ export const MemoFormContent = ({
               />
             </Form.Field>
 
-            <Form.Field
-              required
-              error={
-                memoForm.shouldShowError('memoContent') ? memoForm.errors.memoContent : undefined
-              }
-              label="내용"
-            >
+            <Form.Field required error={contentError} label="내용">
               <TextArea
                 multiline
-                hasError={!!memoForm.shouldShowError('memoContent')}
+                hasError={!!contentError}
                 placeholder="내용을 입력하세요"
-                value={memoForm.values.memoContent}
-                onBlur={() => memoForm.setTouched('memoContent')}
-                onChangeText={(text) => memoForm.setValue('memoContent', text)}
+                value={memoForm.values.content}
+                onBlur={() => memoForm.setTouched('content')}
+                onChangeText={(text) => memoForm.setValue('content', text)}
               />
             </Form.Field>
 
-            <Form.Field
-              required
-              error={
-                memoForm.shouldShowError('selectedCategory')
-                  ? memoForm.errors.selectedCategory
-                  : undefined
-              }
-              label="카테고리"
-            >
+            <Form.Field required error={selectedCategoryError} label="카테고리">
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <XStack gap="$2">
                   {categories.map((category) => (
@@ -243,8 +236,8 @@ export const MemoFormContent = ({
 
             <Form.Field label="평점">
               <RatingSelector
-                rating={memoForm.values.rating}
-                onRatingChange={(rating) => memoForm.setValue('rating', rating)}
+                rating={Number(memoForm.values.rating)}
+                onRatingChange={(rating) => memoForm.setValue('rating', Number(rating))}
               />
             </Form.Field>
           </Form>
