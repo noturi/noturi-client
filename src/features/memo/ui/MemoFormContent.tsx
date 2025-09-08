@@ -1,4 +1,4 @@
-import { Button, ScrollView, XStack, YStack } from 'tamagui';
+import { ScrollView, XStack, YStack } from 'tamagui';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
@@ -8,9 +8,9 @@ import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/constants/colors';
 import { MESSAGES } from '~/shared/constants/messages';
 import { useForm, useToast } from '~/shared/lib';
-import { Form, Input, SubmitButton, TextArea } from '~/shared/ui';
+import { Button, Form, Input, SubmitButton, TextArea } from '~/shared/ui';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,10 +19,16 @@ import { RatingSelector } from './RatingSelector';
 interface MemoFormContentProps {
   keyboardHeight: number;
   onSuccess?: () => void;
+  shouldAutoFocus?: boolean;
 }
 
-export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentProps) => {
+export const MemoFormContent = ({
+  keyboardHeight,
+  onSuccess,
+  shouldAutoFocus = false,
+}: MemoFormContentProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
+  const titleInputRef = useRef<any>(null);
   const toast = useToast();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -104,16 +110,26 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
     memoForm.setValue('selectedCategory', categoryName);
   };
 
+  useEffect(() => {
+    if (!shouldAutoFocus) return;
+
+    const timer = setTimeout(() => {
+      titleInputRef.current?.focus();
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [shouldAutoFocus]);
+
   const shouldShowTitleError =
     memoForm.errors.title && memoForm.values.title.length === 0 && memoForm.touched.title;
   const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
 
   return (
     <>
-      <YStack flex={1} onStartShouldSetResponder={() => true}>
+      <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 20,
+            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 120 : 120,
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -121,12 +137,13 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
           <Form>
             <Form.Field required error={titleError} label="제목">
               <Input
-                autoFocus
+                ref={titleInputRef}
                 hasError={!!shouldShowTitleError}
                 placeholder="제목을 입력하세요"
                 value={memoForm.values.title}
                 onBlur={() => memoForm.setTouched('title')}
                 onChangeText={(text) => memoForm.setValue('title', text)}
+                onFocus={() => memoForm.clearError('title')}
               />
             </Form.Field>
 
@@ -140,7 +157,7 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
               <TextArea
                 multiline
                 hasError={!!memoForm.shouldShowError('memoContent')}
-                placeholder="무엇을 기록하고 싶나요?"
+                placeholder="내용을 입력하세요"
                 value={memoForm.values.memoContent}
                 onBlur={() => memoForm.setTouched('memoContent')}
                 onChangeText={(text) => memoForm.setValue('memoContent', text)}
@@ -171,16 +188,10 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
                   ))}
                   {!showAddCategory && (
                     <Button
-                      backgroundColor="$surface"
-                      borderColor="$border"
-                      borderRadius="$5"
                       borderStyle="dashed"
-                      borderWidth={1}
-                      color="$textSecondary"
-                      fontSize="$3"
-                      minHeight={40}
                       minWidth={60}
-                      pressStyle={{ backgroundColor: '$surfaceHover' }}
+                      size="md"
+                      variant="ghost"
                       onPress={() => setShowAddCategory(true)}
                     >
                       + 추가
@@ -209,26 +220,18 @@ export const MemoFormContent = ({ keyboardHeight, onSuccess }: MemoFormContentPr
                   </YStack>
                   <XStack alignItems="center" gap="$1">
                     <Button
-                      backgroundColor="$textPrimary"
-                      borderRadius="$6"
-                      color="$textOnPrimary"
                       disabled={!categoryForm.isValid || createCategoryMutation.isPending}
-                      fontSize="$3"
-                      minHeight={40}
                       minWidth={60}
+                      size="md"
+                      variant="primary"
                       onPress={handleAddCategory}
                     >
                       추가
                     </Button>
                     <Button
-                      backgroundColor="$surface"
-                      borderColor="$border"
-                      borderRadius="$6"
-                      borderWidth={1}
-                      color="$textSecondary"
-                      fontSize="$3"
-                      minHeight={40}
                       minWidth={60}
+                      size="md"
+                      variant="ghost"
                       onPress={handleCancelAddCategory}
                     >
                       취소
