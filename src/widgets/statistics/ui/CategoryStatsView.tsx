@@ -1,9 +1,9 @@
 import { Separator, XStack, YStack } from 'tamagui';
-import { CategoryStatsResponse } from '~/entities/statistics';
+import { CategoryStatsResponseDto } from '~/entities/statistics';
 import { Card, StarRating, Typography } from '~/shared/ui';
 
 interface CategoryStatsViewProps {
-  categories?: CategoryStatsResponse[];
+  categories?: CategoryStatsResponseDto[];
 }
 
 export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
@@ -24,17 +24,13 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
       <YStack>
         {categories?.map((category) => {
           return (
-            <YStack key={category.id} padding="$2">
+            <YStack key={category.id} gap="$2" padding="$2">
               <XStack alignItems="center" justifyContent="space-between" padding="$2">
-                <Typography color="$textPrimary" fontWeight="$5" variant="body1">
-                  {category.categoryName}
-                </Typography>
+                <Typography color="$textPrimary">{category.name}</Typography>
 
                 <XStack alignItems="center" gap="$4">
-                  <Typography fontWeight="$5" variant="subtitle">
-                    {category.count}개
-                  </Typography>
-                  <StarRating rating={category.avgRating} />
+                  <Typography variant="subtitle">{category.count}개</Typography>
+                  <StarRating rating={category.averageRating} />
                 </XStack>
               </XStack>
               <Separator borderColor="$border" />
