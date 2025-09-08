@@ -6,11 +6,11 @@ import { HREFS } from '~/shared/constants/routes';
 import { Card, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 
 import { router } from 'expo-router';
 
-import { LogOut, Settings } from '@tamagui/lucide-icons';
+import { FileText, LogOut, Settings } from '@tamagui/lucide-icons';
 
 export default function ProfileScreen() {
   const [openManage, setOpenManage] = useState(false);
@@ -36,6 +36,10 @@ export default function ProfileScreen() {
         },
       },
     ]);
+  };
+
+  const handlePrivacyPolicy = () => {
+    Linking.openURL('https://www.notion.so/noturi/Noturi-26835607f32980199ec9d064c0cb4627');
   };
 
   return (
@@ -91,6 +95,23 @@ export default function ProfileScreen() {
               Noturi Team
             </Typography>
           </YStack>
+
+          <Separator borderColor="$border" marginVertical="$2" />
+
+          <XStack
+            alignItems="center"
+            borderRadius="$5"
+            gap="$3"
+            paddingHorizontal="$2"
+            paddingVertical="$3"
+            pressStyle={{ backgroundColor: '$backgroundSecondary' }}
+            onPress={handlePrivacyPolicy}
+          >
+            <FileText color="$textSecondary" size="$3" />
+            <Typography color="$textPrimary" flex={1} variant="body2">
+              개인정보처리방침
+            </Typography>
+          </XStack>
         </YStack>
       </Card>
 
