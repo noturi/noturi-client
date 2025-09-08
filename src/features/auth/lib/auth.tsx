@@ -1,5 +1,5 @@
 import { User } from '~/entities/user';
-import { useTokens } from '~/shared/lib';
+import { tokenEventManager, useTokens } from '~/shared/lib';
 import Logger from '~/shared/lib/logger';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -69,6 +69,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     initializeAuth();
   }, [tokens]);
+
+  // 토큰 만료 이벤트 처리
+  useEffect(() => {
+    const handleTokenExpired = async () => {
+      Logger.warn('토큰 만료 감지 - 자동 갱신 시도');
+
+      const refreshSuccess = await refreshAccessToken();
+
+      if (!refreshSuccess) {
+        Logger.warn('토큰 갱신 실패 - 자동 로그아웃 처리');
+        await logout();
+      }
+    };
+
+    // 토큰 만료 이벤트 리스너 등록
+    const unsubscribe = tokenEventManager.onTokenExpired(handleTokenExpired);
+
+    return unsubscribe;
+  }, []);
 
   // 토큰 저장
   const saveAuthTokens = async (authTokens: {
