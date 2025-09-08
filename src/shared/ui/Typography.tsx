@@ -136,11 +136,11 @@ export const Typography = ({ variant = 'body1', children, ...props }: Typography
 
   return (
     <Component
-      {...props}
       {...styles}
       margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
       pointerEvents="none"
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
+      {...props}
     >
       {children}
     </Component>
