@@ -1,5 +1,6 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/features/memo/api/queries';
+import { MemoDeleteButton } from '~/features/memo/ui';
 import { Loading, StarRating, Typography } from '~/shared/ui';
 
 import { useLocalSearchParams } from 'expo-router';
@@ -51,17 +52,17 @@ export default function MemoDetailScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundPrimary" flex={1}>
+    <YStack backgroundColor="$backgroundSecondary" flex={1} padding="$4">
       <ScrollView flex={1} showsVerticalScrollIndicator={false}>
         <YStack gap="$1" padding="$1">
           <YStack gap="$2">
             <XStack alignItems="flex-start" justifyContent="space-between">
-              <XStack alignItems="center" flex={1} gap="$1">
+              <XStack alignItems="center" flex={1} gap="$4">
                 <YStack
                   backgroundColor={memo.category.color}
                   borderRadius="$2"
-                  paddingHorizontal="$1"
-                  paddingVertical="$0"
+                  paddingHorizontal="$3"
+                  paddingVertical="$2"
                 >
                   <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
                     {memo.category.name}
@@ -71,7 +72,10 @@ export default function MemoDetailScreen() {
                   {formatDate(memo.createdAt)}
                 </Typography>
               </XStack>
-              <StarRating rating={memo.rating} />
+              <XStack alignItems="center" gap="$2">
+                <StarRating rating={memo.rating} />
+                <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
+              </XStack>
             </XStack>
 
             <Typography color="$textPrimary" variant="title">
@@ -79,7 +83,7 @@ export default function MemoDetailScreen() {
             </Typography>
           </YStack>
 
-          <YStack gap="$2" marginTop="$1">
+          <YStack gap="$2" marginTop="$2">
             <Typography color="$textPrimary" variant="body2">
               {memo.content}
             </Typography>
