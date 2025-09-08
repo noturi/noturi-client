@@ -37,7 +37,7 @@ export const Input = styled(TamaguiInput, {
       md: {
         height: 36,
         paddingHorizontal: '$4',
-        fontSize: 14,
+        fontSize: '$3',
       },
       lg: {
         height: 44,

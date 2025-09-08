@@ -7,7 +7,7 @@ export const TextArea = styled(TamaguiTextArea, {
   borderWidth: 0,
   color: '$textPrimary',
   fontSize: 14,
-  padding: '$5',
+  padding: '$4',
   placeholderTextColor: '$textMuted',
 
   // 포커스 스타일
@@ -35,9 +35,8 @@ export const TextArea = styled(TamaguiTextArea, {
       },
       md: {
         minHeight: 120,
-        paddingHorizontal: '$5',
-        paddingVertical: '$2',
-        fontSize: '$2',
+        paddingHorizontal: '$4',
+        fontSize: '$3',
       },
       lg: {
         minHeight: 160,
