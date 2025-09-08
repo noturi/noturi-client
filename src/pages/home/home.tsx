@@ -36,13 +36,15 @@ export default function HomeScreen() {
     categoriesData?.categories,
   );
 
-  const memoQueryParams = {
-    limit: 20,
-    // 간단메모일 때는 카테고리 필터링 안함
-    categoryId: selectedView === 'rating' ? selectedCategoryId : undefined,
-    sortBy: 'createdAt' as const,
-    sortOrder: 'desc' as const,
-  };
+  const memoQueryParams = useMemo(
+    () => ({
+      limit: 20,
+      categoryId: selectedView === 'rating' ? selectedCategoryId : undefined,
+      sortBy: 'createdAt' as const,
+      sortOrder: 'desc' as const,
+    }),
+    [selectedView, selectedCategoryId],
+  );
 
   const {
     data: memosData,
