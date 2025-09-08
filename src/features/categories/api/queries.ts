@@ -13,24 +13,24 @@ export const categoryListQuery = (params: CategoryListParamsDto = {}) =>
   });
 
 // 특정 카테고리 쿼리
-export const categoryDetailQuery = (id: number) =>
+export const categoryDetailQuery = (id: string) =>
   queryOptions({
     queryKey: QUERY_KEYS.category(id),
-    queryFn: () => categoryApi.getCategory(String(id)),
+    queryFn: () => categoryApi.getCategory(id),
     enabled: !!id, // id가 있을 때만 실행
   });
 
 // 카테고리 통계 쿼리
 export const categoryStatsQuery = () =>
   queryOptions({
-    queryKey: QUERY_KEYS.categoryStats,
+    queryKey: QUERY_KEYS.statisticsCategories,
     queryFn: () => categoryApi.getCategoryStats(),
   });
 
 // 카테고리 분포 쿼리
 export const categoryDistributionQuery = () =>
   queryOptions({
-    queryKey: QUERY_KEYS.categoryDistribution,
+    queryKey: QUERY_KEYS.statisticsCategoryDistribution,
     queryFn: () => categoryApi.getCategoryDistribution(),
   });
 

@@ -36,7 +36,7 @@ export const memoDetailQuery = (id: string) =>
 // 카테고리 목록 쿼리
 export const categoriesQuery = () =>
   queryOptions({
-    queryKey: QUERY_KEYS.memoCategories,
+    queryKey: QUERY_KEYS.categories,
     queryFn: () => memoApi.getCategories(),
   });
 
@@ -51,7 +51,7 @@ export const searchMemosQuery = (query: string) =>
 // 메모 통계 쿼리
 export const memoStatsQuery = () =>
   queryOptions({
-    queryKey: QUERY_KEYS.memoStats,
+    queryKey: QUERY_KEYS.statisticsMemos,
     queryFn: () => memoApi.getMemoStats(),
   });
 
