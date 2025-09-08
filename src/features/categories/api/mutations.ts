@@ -5,6 +5,7 @@ import {
   ReorderCategoriesDto,
   UpdateCategoryDto,
 } from '~/entities/category/model/types';
+import { QUERY_KEYS } from '~/shared/lib/tanstack-query/queryKeys';
 
 import {
   type DefaultError,
@@ -30,10 +31,10 @@ export function useCreateCategoryMutation(
     mutationFn: (data: CreateCategoryDto) => categoryApi.createCategory(data),
     onMutate,
     onSuccess: async (newCategory, createData, context) => {
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
-      await queryClient.setQueryData(['category', newCategory.id], newCategory);
-      await queryClient.invalidateQueries({ queryKey: ['category-stats'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-distribution'] });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
+      await queryClient.setQueryData(QUERY_KEYS.category(newCategory.id), newCategory);
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
       await onSuccess?.(newCategory, createData, context);
     },
     onError,
@@ -56,10 +57,10 @@ export function useUpdateCategoryMutation(
     mutationFn: (data: UpdateCategoryDto) => categoryApi.updateCategory(data),
     onMutate,
     onSuccess: async (updatedCategory, updateData, context) => {
-      await queryClient.setQueryData(['category', updatedCategory.id], updatedCategory);
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-stats'] });
-      await queryClient.invalidateQueries({ queryKey: ['memos'] });
+      await queryClient.setQueryData(QUERY_KEYS.category(updatedCategory.id), updatedCategory);
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
       await onSuccess?.(updatedCategory, updateData, context);
     },
     onError,
@@ -74,7 +75,7 @@ export function useDeleteCategoryMutation(
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   >,
 ) {
-  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options || {};
+  const { mutationKey = [], onMutate, onSuccess, onSettled } = options || {};
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -82,15 +83,14 @@ export function useDeleteCategoryMutation(
     mutationFn: (id: string) => categoryApi.deleteCategory(id),
     onMutate,
     onSuccess: async (_, deletedId, context) => {
-      await queryClient.removeQueries({ queryKey: ['category', deletedId] });
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-stats'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-distribution'] });
-      await queryClient.invalidateQueries({ queryKey: ['memos'] });
+      await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(deletedId) });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
 
       await onSuccess?.(_, deletedId, context);
     },
-    onError,
     onSettled,
   });
 }
@@ -110,7 +110,7 @@ export function useReorderCategoriesMutation(
     mutationFn: (data: ReorderCategoriesDto) => categoryApi.reorderCategories(data),
     onMutate,
     onSuccess: async (_, reorderData, context) => {
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
 
       await onSuccess?.(_, reorderData, context);
     },
@@ -134,12 +134,12 @@ export function useMergeCategoriesMutation(
     mutationFn: (data: MergeCategoriesDto) => categoryApi.mergeCategories(data),
     onMutate,
     onSuccess: async (_, mergeData, context) => {
-      await queryClient.removeQueries({ queryKey: ['category', mergeData.sourceId] });
-      await queryClient.invalidateQueries({ queryKey: ['category', mergeData.targetId] });
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-stats'] });
-      await queryClient.invalidateQueries({ queryKey: ['category-distribution'] });
-      await queryClient.invalidateQueries({ queryKey: ['memos'] });
+      await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(mergeData.sourceId) });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.category(mergeData.targetId) });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
 
       await onSuccess?.(_, mergeData, context);
     },
