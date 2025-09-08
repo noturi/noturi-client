@@ -1,4 +1,5 @@
 import Logger from '../lib/logger';
+import { tokenEventManager } from '../lib/tokenEventManager';
 import { logErrorResponse } from './logger';
 import { ApiError, ErrorResponseBody } from './types';
 
@@ -19,7 +20,8 @@ export const handleErrorResponse = async (request: Request, response: Response) 
 
   if (response.status === 401) {
     Logger.warn('401 Unauthorized - 토큰 만료 또는 무효');
-    // TODO: AuthContext의 logout 또는 refreshToken 호출
+    // 토큰 만료
+    tokenEventManager.emitTokenExpired();
   }
 
   const body: ErrorResponseBody = await response
