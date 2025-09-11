@@ -11,6 +11,7 @@ import {
   CategoryFilterBar,
   MemoRatingGroupView,
   MemoSimpleView,
+  MemoNotificationView,
   MemoViewToggle,
   type MemoViewType,
 } from '~/widgets/memo-list/ui';
@@ -77,8 +78,8 @@ export default function HomeScreen() {
     Logger.info('HomeScreen', `보기 방식 변경: ${view}`);
     setSelectedView(view);
 
-    // 간단메모로 변경시 카테고리를 전체로 초기화
-    if (view === 'simple') {
+    // 간단메모 또는 알림메모로 변경시 카테고리를 전체로 초기화
+    if (view === 'simple' || view === 'notification') {
       setSelectedCategory('전체');
     }
   }, []);
@@ -132,6 +133,11 @@ export default function HomeScreen() {
               isPending={memosPending}
               memos={transformedMemos}
               onMemoPress={handleMemoPress}
+            />
+          ) : selectedView === 'notification' ? (
+            <MemoNotificationView
+              isError={Boolean(memosError)}
+              isPending={memosPending}
             />
           ) : (
             <MemoSimpleView
