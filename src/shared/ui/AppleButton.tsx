@@ -76,7 +76,7 @@ export function AppleButton() {
         name: credential.fullName
           ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim()
           : undefined,
-        identityToken: credential.identityToken || '',
+        idToken: credential.identityToken || '',
         user: credential.user,
       };
 
