@@ -49,6 +49,18 @@ export const ROUTES = {
     href: '/create',
     label: '메모 작성',
   },
+  memoCreateRating: {
+    name: 'memo/create/rating',
+    path: '/memo/create/rating',
+    href: '/memo/create/rating',
+    label: '별점 메모 작성',
+  },
+  memoCreateText: {
+    name: 'memo/create/text',
+    path: '/memo/create/text',
+    href: '/memo/create/text',
+    label: '일반 메모 작성',
+  },
 } as const;
 
 export const HREFS = {
@@ -65,4 +77,6 @@ export const HREFS = {
     params: { id },
   }),
   create: (): Href => ({ pathname: ROUTES.create.href as any }),
+  memoCreateRating: (): Href => ({ pathname: ROUTES.memoCreateRating.href as any }),
+  memoCreateText: (): Href => ({ pathname: ROUTES.memoCreateText.href as any }),
 } as const;
