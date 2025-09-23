@@ -13,11 +13,11 @@ export function EmptyState({ icon, title, description }: EmptyStateProps) {
   return (
     <YStack alignItems="center" flex={1} justifyContent="center" paddingHorizontal="$1">
       {icon}
-      <Typography color="$textMuted" marginTop="$2" textAlign="center" variant="title">
+      <Typography color="$textMuted" marginTop="$2" textAlign="center" variant="headline">
         {title}
       </Typography>
       {description ? (
-        <Typography color="$textMuted" marginTop="$1" textAlign="center" variant="body1">
+        <Typography color="$textMuted" marginTop="$1" textAlign="center" variant="body">
           {description}
         </Typography>
       ) : null}

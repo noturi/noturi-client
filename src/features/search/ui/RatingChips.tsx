@@ -13,7 +13,7 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
   const starColor = (theme.rating2 as any)?.get?.() ?? theme.textPrimary.get();
   return (
     <YStack gap="$1">
-      <Typography variant="subtitle">평점</Typography>
+      <Typography variant="callout">평점</Typography>
       <XStack gap="$1">
         {[5, 4, 3, 2, 1].map((rating) => (
           <Button
@@ -33,7 +33,7 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
               <Typography
                 color={selectedRating === rating ? '$textOnPrimary' : '$textPrimary'}
                 pointerEvents="none"
-                variant="subtitle"
+                variant="callout"
               >
                 {rating}
               </Typography>
