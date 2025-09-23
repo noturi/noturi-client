@@ -59,7 +59,7 @@ export function RatingGroupCard({
                 pressStyle={{ opacity: 0.7 }}
                 onPress={() => onMemoPress?.(memo)}
               >
-                <Typography color="$textPrimary" variant="body2">
+                <Typography color="$textPrimary" variant="callout">
                   {memo.title}
                 </Typography>
               </XStack>

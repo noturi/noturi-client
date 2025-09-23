@@ -31,10 +31,10 @@ function FormField({ children, error, label, required }: FormFieldProps) {
   return (
     <FormFieldWrapper>
       {label && (
-        <Typography variant="subtitle">
+        <Typography variant="callout">
           {label}
           {required && (
-            <Typography color="$error" variant="subtitle">
+            <Typography color="$error" variant="callout">
               *
             </Typography>
           )}
@@ -54,7 +54,7 @@ export interface FormLabelProps extends React.ComponentProps<typeof Typography> 
 
 function FormLabel({ children, required, ...props }: FormLabelProps) {
   return (
-    <Typography variant="subtitle" {...props}>
+    <Typography variant="callout" {...props}>
       {children}
       {required && (
         <SizableText color="$error" fontSize="$4" fontWeight="$4">

@@ -46,7 +46,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
           marginBottom="$1"
           numberOfLines={1}
           pointerEvents="none"
-          variant="subtitle"
+          variant="callout"
         >
           {memo.title}
         </Typography>

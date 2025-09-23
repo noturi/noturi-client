@@ -69,7 +69,7 @@ export function MemoRatingGroupView({
   if (memos.length === 0) {
     return (
       <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted" variant="body2">
+        <Typography color="$textMuted" variant="callout">
           작성된 메모가 없습니다
         </Typography>
       </YStack>
@@ -78,7 +78,7 @@ export function MemoRatingGroupView({
 
   return (
     <YStack gap="$3">
-      <Typography paddingLeft="$3" variant="subheading">
+      <Typography paddingLeft="$3" variant="title3">
         메모
       </Typography>
       <YStack gap="$4" marginBottom="$5">

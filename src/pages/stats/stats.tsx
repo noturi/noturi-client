@@ -49,7 +49,7 @@ export default function StatsScreen() {
 
         {categoryStats && (
           <YStack gap="$3">
-            <Typography variant="subheading">카테고리별 통계</Typography>
+            <Typography variant="title3">카테고리별 통계</Typography>
             <CategoryStatsView categories={categoryStats} />
           </YStack>
         )}

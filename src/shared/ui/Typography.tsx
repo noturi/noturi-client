@@ -3,14 +3,15 @@ import { H1, H2, H3, H4, H5, Paragraph, SizableText } from 'tamagui';
 import React from 'react';
 
 export type TypographyVariant =
-  | 'display'
-  | 'heading'
-  | 'subheading'
-  | 'title'
-  | 'subtitle'
-  | 'body1'
-  | 'body2'
-  | 'body3'
+  | 'largeTitle'
+  | 'title1'
+  | 'title2'
+  | 'title3'
+  | 'headline'
+  | 'body'
+  | 'callout'
+  | 'subheadline'
+  | 'footnote'
   | 'caption1'
   | 'caption2'
   | 'link'
@@ -18,20 +19,21 @@ export type TypographyVariant =
 
 const getComponentByVariant = (variant: TypographyVariant) => {
   switch (variant) {
-    case 'display':
+    case 'largeTitle':
       return H1;
-    case 'heading':
+    case 'title1':
       return H2;
-    case 'subheading':
+    case 'title2':
       return H3;
-    case 'title':
+    case 'title3':
       return H4;
-    case 'subtitle':
+    case 'headline':
       return H5;
-    case 'body1':
-    case 'body2':
-    case 'body3':
+    case 'body':
+    case 'callout':
+    case 'subheadline':
       return Paragraph;
+    case 'footnote':
     case 'caption1':
     case 'caption2':
     case 'link':
@@ -42,85 +44,101 @@ const getComponentByVariant = (variant: TypographyVariant) => {
 };
 
 const variantStyles = {
-  display: {
-    fontSize: '$7', // 24px
-    fontWeight: '$5', // 600 - semibold
-    lineHeight: '$7', // 28px
+  // iOS Typography Scale - https://developer.apple.com/design/human-interface-guidelines/typography
+  largeTitle: {
+    fontSize: 34, // 34pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 41, // 41pt
     color: '$textPrimary',
+    letterSpacing: 0.37,
   },
-  heading: {
-    fontSize: '$7', // 24px
-    fontWeight: '$4', // 500 - medium
-    lineHeight: '$7', // 28px
+  title1: {
+    fontSize: 28, // 28pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 34, // 34pt
     color: '$textPrimary',
+    letterSpacing: 0.36,
   },
-  subheading: {
-    fontSize: '$6', // 20px
+  title2: {
+    fontSize: 22, // 22pt
     fontWeight: '$4', // 600 - semibold
-    lineHeight: '$6', // 24px
+    lineHeight: 28, // 28pt
     color: '$textPrimary',
+    letterSpacing: 0.35,
   },
-  title: {
-    fontSize: '$5', // 18px
-    fontWeight: '$6', // 700 - bold
-    lineHeight: '$5', // 20px
+  title3: {
+    fontSize: 20, // 20pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 25, // 25pt
     color: '$textPrimary',
+    letterSpacing: 0.38,
   },
-  subtitle: {
-    fontSize: '$4', // 16px
-    fontWeight: '$4', // 500 - medium
-    lineHeight: '$4', // 18px
+  headline: {
+    fontSize: 17, // 17pt
+    fontWeight: '$5', // 600 - semibold
+    lineHeight: 22, // 22pt
     color: '$textPrimary',
+    letterSpacing: -0.41,
   },
-
-  body1: {
-    fontSize: '$5', // 18px
-    fontWeight: '$2', // 300 - light
-    lineHeight: '$5', // 20px
+  body: {
+    fontSize: 17, // 17pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 22, // 22pt
     color: '$textPrimary',
+    letterSpacing: -0.41,
   },
-  body2: {
-    fontSize: '$4', // 16px
-    fontWeight: '$2', // 300 - light
-    lineHeight: '$4', // 18px
+  callout: {
+    fontSize: 16, // 16pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 21, // 21pt
     color: '$textPrimary',
+    letterSpacing: -0.32,
   },
-  body3: {
-    fontSize: 14, // 14px
-    fontWeight: '$2', // 300 - light
-    lineHeight: 16, // 16px
+  subheadline: {
+    fontSize: 15, // 15pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 20, // 20pt
     color: '$textPrimary',
+    letterSpacing: -0.24,
   },
-
-  // 작은 텍스트들
+  footnote: {
+    fontSize: 13, // 13pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 18, // 18pt
+    color: '$textPrimary',
+    letterSpacing: -0.08,
+  },
   caption1: {
-    fontSize: 14, // 14px
-    fontWeight: '$2', // 300 - light
-    lineHeight: 16, // 16px
+    fontSize: 12, // 12pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 16, // 16pt
     color: '$textSecondary',
+    letterSpacing: 0,
   },
   caption2: {
-    fontSize: '$2', // 12px
-    fontWeight: '$2', // 300 - light
-    lineHeight: '$2', // 14px
+    fontSize: 11, // 11pt
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 13, // 13pt
     color: '$textMuted',
+    letterSpacing: 0.07,
   },
 
   // 특수 용도
   link: {
-    fontSize: 14, // 14px
-    fontWeight: '$2', // 300 - light
-    lineHeight: 16, // 16px
+    fontSize: 17, // body와 동일
+    fontWeight: '$2', // 400 - regular
+    lineHeight: 22,
     color: '$accent',
     textDecorationLine: 'none',
+    letterSpacing: -0.41,
   },
   label: {
-    fontSize: '$2', // 12px
-    fontWeight: '$3', // 400 - regular
-    lineHeight: '$2', // 14px
+    fontSize: 11, // 11pt
+    fontWeight: '$3', // 500 - medium
+    lineHeight: 13,
     color: '$textPrimary',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.07,
   },
 } as const;
 
@@ -130,14 +148,16 @@ export interface TypographyProps {
   [key: string]: any;
 }
 
-export const Typography = ({ variant = 'body1', children, ...props }: TypographyProps) => {
+export const Typography = ({ variant = 'body', children, ...props }: TypographyProps) => {
   const Component = getComponentByVariant(variant);
   const styles = variantStyles[variant];
 
   return (
     <Component
       {...styles}
-      margin={variant === 'body1' || variant === 'body2' || variant === 'body3' ? 0 : undefined}
+      margin={
+        variant === 'body' || variant === 'callout' || variant === 'subheadline' ? 0 : undefined
+      }
       pointerEvents="none"
       pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
       {...props}

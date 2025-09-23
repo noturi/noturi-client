@@ -11,7 +11,7 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
     return (
       <Card>
         <YStack gap="$1">
-          <Typography color="$textMuted" textAlign="center" variant="body2">
+          <Typography color="$textMuted" textAlign="center" variant="callout">
             카테고리별 통계 데이터가 없습니다.
           </Typography>
         </YStack>
@@ -29,7 +29,7 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
                 <Typography color="$textPrimary">{category.name}</Typography>
 
                 <XStack alignItems="center" gap="$4">
-                  <Typography variant="subtitle">{category.count}개</Typography>
+                  <Typography variant="callout">{category.count}개</Typography>
                   <StarRating rating={category.averageRating} />
                 </XStack>
               </XStack>

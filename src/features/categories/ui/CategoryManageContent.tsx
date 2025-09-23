@@ -174,7 +174,7 @@ export const CategoryManageContent = ({
                     justifyContent="space-between"
                     padding="$3"
                   >
-                    <Typography variant="body2">{category.name}</Typography>
+                    <Typography variant="callout">{category.name}</Typography>
                     <XStack
                       disabled={categories.length <= 1 || deleteCategoryMutation.isPending}
                       onPress={() => handleDeleteCategory(category.id)}

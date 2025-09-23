@@ -19,7 +19,7 @@ export const CategorySelector = ({
 }: CategorySelectorProps) => {
   return (
     <YStack gap="$2">
-      <Typography variant="title">카테고리</Typography>
+      <Typography variant="headline">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <XStack gap="$2">
           {categories.map((category) => (

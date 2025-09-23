@@ -29,10 +29,10 @@ export default function MemoDetailScreen() {
         flex={1}
         justifyContent="center"
       >
-        <Typography color="$textPrimary" variant="body1">
+        <Typography color="$textPrimary" variant="body">
           메모를 찾을 수 없습니다
         </Typography>
-        <Typography color="$textMuted" marginTop="$1" variant="body3">
+        <Typography color="$textMuted" marginTop="$1" variant="footnote">
           {error?.message || '요청한 메모가 존재하지 않습니다'}
         </Typography>
       </YStack>
@@ -78,13 +78,13 @@ export default function MemoDetailScreen() {
               </XStack>
             </XStack>
 
-            <Typography color="$textPrimary" variant="title">
+            <Typography color="$textPrimary" variant="headline">
               {memo.title}
             </Typography>
           </YStack>
 
           <YStack gap="$2" marginTop="$2">
-            <Typography color="$textPrimary" variant="body2">
+            <Typography color="$textPrimary" variant="callout">
               {memo.content}
             </Typography>
           </YStack>

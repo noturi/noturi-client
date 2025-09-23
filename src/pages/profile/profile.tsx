@@ -57,7 +57,7 @@ export default function ProfileScreen() {
               onPress={() => setOpenManage(true)}
             >
               <Settings color="$textSecondary" size="$3" />
-              <Typography color="$textPrimary" flex={1} variant="body2">
+              <Typography color="$textPrimary" flex={1} variant="callout">
                 카테고리 관리
               </Typography>
             </XStack>
@@ -74,7 +74,7 @@ export default function ProfileScreen() {
               onPress={handleLogout}
             >
               <LogOut color="$textPrimary" size="$3" />
-              <Typography color="$textPrimary" flex={1} variant="body2">
+              <Typography color="$textPrimary" flex={1} variant="callout">
                 로그아웃
               </Typography>
             </XStack>
@@ -84,14 +84,14 @@ export default function ProfileScreen() {
 
       <Card>
         <YStack gap="$3" padding="$4">
-          <Typography color="$textPrimary" variant="subheading">
+          <Typography color="$textPrimary" variant="title3">
             앱 정보
           </Typography>
           <YStack gap="$2">
-            <Typography color="$textSecondary" variant="body2">
+            <Typography color="$textSecondary" variant="callout">
               버전 1.0.0
             </Typography>
-            <Typography color="$textSecondary" variant="body2">
+            <Typography color="$textSecondary" variant="callout">
               Noturi Team
             </Typography>
           </YStack>
@@ -108,7 +108,7 @@ export default function ProfileScreen() {
             onPress={handlePrivacyPolicy}
           >
             <FileText color="$textSecondary" size="$3" />
-            <Typography color="$textPrimary" flex={1} variant="body2">
+            <Typography color="$textPrimary" flex={1} variant="callout">
               개인정보처리방침
             </Typography>
           </XStack>

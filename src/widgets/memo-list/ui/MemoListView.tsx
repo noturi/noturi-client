@@ -59,7 +59,7 @@ export function MemoListView({
   if (memos.length === 0) {
     return (
       <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted" variant="body1">
+        <Typography color="$textMuted" variant="body">
           작성된 메모가 없습니다
         </Typography>
       </YStack>

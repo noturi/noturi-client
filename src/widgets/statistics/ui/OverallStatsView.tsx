@@ -13,21 +13,21 @@ export function OverallStatsView({ stats }: OverallStatsViewProps) {
     <XStack gap="$4">
       <Card>
         <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="title">{stats.totalMemos ?? 0}</Typography>
+          <Typography variant="headline">{stats.totalMemos ?? 0}</Typography>
           <Typography variant="caption1">총 메모</Typography>
         </YStack>
       </Card>
 
       <Card>
         <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="title">{(stats.averageRating ?? 0).toFixed(1)}</Typography>
+          <Typography variant="headline">{(stats.averageRating ?? 0).toFixed(1)}</Typography>
           <Typography variant="caption1">평균 별점</Typography>
         </YStack>
       </Card>
 
       <Card>
         <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="title">{stats.totalCategories ?? 0}</Typography>
+          <Typography variant="headline">{stats.totalCategories ?? 0}</Typography>
           <Typography variant="caption1">카테고리</Typography>
         </YStack>
       </Card>

@@ -71,7 +71,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
           paddingHorizontal="$5"
           paddingVertical="$4"
         >
-          <Typography variant="title">새 카테고리 추가</Typography>
+          <Typography variant="headline">새 카테고리 추가</Typography>
           <Button
             backgroundColor="$backgroundTransparent"
             color="$textSecondary"
@@ -84,7 +84,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         {/* Content */}
         <YStack gap="$4" padding="$5">
           <YStack gap="$2">
-            <Typography variant="subtitle">카테고리 이름</Typography>
+            <Typography variant="callout">카테고리 이름</Typography>
             <Input
               backgroundColor="$backgroundPrimary"
               borderColor="$border"

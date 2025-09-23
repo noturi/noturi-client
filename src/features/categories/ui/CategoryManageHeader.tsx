@@ -27,7 +27,7 @@ export const CategoryManageHeader = ({ onClose }: CategoryManageHeaderProps) => 
       >
         <X color="$textSecondary" size="$4" />
       </XStack>
-      <Typography left={0} position="absolute" right={0} textAlign="center" variant="subheading">
+      <Typography left={0} position="absolute" right={0} textAlign="center" variant="title3">
         카테고리 관리
       </Typography>
     </XStack>
