@@ -11,23 +11,31 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
   return (
     <XStack
       alignItems="center"
-      borderBottomColor="$border"
-      borderBottomWidth={1}
-      paddingHorizontal="$2"
-      paddingVertical="$3"
+      backgroundColor="$backgroundPrimary"
+      borderBottomColor="$borderPrimary"
+      borderBottomWidth={0.5}
+      height={44}
+      justifyContent="center"
+      paddingHorizontal="$4"
       position="relative"
     >
       <XStack
-        backgroundColor="$backgroundTransparent"
-        borderRadius="$4"
-        paddingHorizontal="$3"
-        paddingVertical="$2"
-        pressStyle={{ opacity: 0.7 }}
+        alignItems="center"
+        backgroundColor="transparent"
+        borderRadius="$2"
+        height={44}
+        justifyContent="center"
+        left="$4"
+        paddingHorizontal="$2"
+        position="absolute"
+        pressStyle={{ opacity: 0.5 }}
+        width={44}
         onPress={onClose}
       >
-        <X color="$textSecondary" size="$4" />
+        <X color="$primary" size="$5" strokeWidth={2} />
       </XStack>
-      <Typography left={0} position="absolute" right={0} textAlign="center" variant="subheading">
+      
+      <Typography color="$textPrimary" fontWeight="600" variant="headline">
         새 메모
       </Typography>
     </XStack>
