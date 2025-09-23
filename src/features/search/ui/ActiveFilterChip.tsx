@@ -22,7 +22,7 @@ export function ActiveFilterChip({ label, onClear }: ActiveFilterChipProps) {
       paddingVertical="$0"
       onPress={onClear}
     >
-      <Typography color="$textPrimary" pointerEvents="none" variant="subtitle">
+      <Typography color="$textPrimary" pointerEvents="none" variant="callout">
         {label}
       </Typography>
       <X color="$textPrimary" size="$2" />
