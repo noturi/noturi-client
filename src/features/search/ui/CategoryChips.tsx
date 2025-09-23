@@ -19,7 +19,7 @@ export function CategoryChips({
 }: CategoryChipsProps) {
   return (
     <YStack gap="$1">
-      <Typography variant="subtitle">카테고리</Typography>
+      <Typography variant="callout">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <XStack gap="$1">
           {categories.map((category) => (
