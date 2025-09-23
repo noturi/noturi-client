@@ -13,7 +13,7 @@ export default function LoginScreen() {
       justifyContent="center"
       padding="$5"
     >
-      <Typography variant="display">Noturi</Typography>
+      <Typography variant="largeTitle">Noturi</Typography>
       <XStack gap="$5">
         <GoogleButton />
         <AppleButton />
