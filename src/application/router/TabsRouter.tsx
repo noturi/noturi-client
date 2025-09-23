@@ -8,7 +8,7 @@ import { Redirect, Tabs } from 'expo-router';
 import { FileChartColumn, Home, Plus, User } from '@tamagui/lucide-icons';
 
 import { useAuth } from '../../features/auth';
-import { MemoCreateSheet } from '../../features/memo';
+import { MemoTypeSelectSheet } from '../../features/memo';
 import { HREFS } from '../../shared/constants';
 import { Loading } from '../../shared/ui';
 
@@ -174,7 +174,7 @@ export function TabsRouter() {
         />
       </Tabs>
 
-      <MemoCreateSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
+      <MemoTypeSelectSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
     </>
   );
 }
