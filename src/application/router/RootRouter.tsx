@@ -1,4 +1,4 @@
-import { XStack, useTheme } from 'tamagui';
+import { XStack, useTheme, Text } from 'tamagui';
 
 import { Pressable } from 'react-native';
 
@@ -70,6 +70,24 @@ export function RootRouter() {
               <ChevronLeft color="$primary" size="$4" />
             </Pressable>
           ),
+        }}
+      />
+
+      <Stack.Screen
+        name={ROUTES.memoCreateRating.name}
+        options={{
+          title: ROUTES.memoCreateRating.label,
+          headerBackTitle: '',
+          headerBackButtonMenuEnabled: false,
+        }}
+      />
+
+      <Stack.Screen
+        name={ROUTES.memoCreateText.name}
+        options={{
+          title: ROUTES.memoCreateText.label,
+          headerBackTitle: '',
+          headerBackButtonMenuEnabled: false,
         }}
       />
     </Stack>

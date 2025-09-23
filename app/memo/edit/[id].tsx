@@ -1,3 +1,10 @@
-import MemoEditScreen from '../../../src/pages/memo-edit/[id]';
+import { MemoEditForm } from '~/features/memo/ui';
 
-export default MemoEditScreen;
+import { router, useLocalSearchParams } from 'expo-router';
+
+export default function MemoEditScreen() {
+  const { id } = useLocalSearchParams();
+  const memoId = id as string;
+
+  return <MemoEditForm memoId={memoId} onSuccess={() => router.back()} />;
+}
