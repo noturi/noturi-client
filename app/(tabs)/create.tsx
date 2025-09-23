@@ -1,3 +1,5 @@
-import CreateScreen from '../../src/pages/create/create';
+import { View } from 'react-native';
 
-export default CreateScreen;
+export default function CreateScreen() {
+  return <View />;
+}
