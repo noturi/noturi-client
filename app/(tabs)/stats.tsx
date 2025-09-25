@@ -32,10 +32,10 @@ export default function StatsScreen() {
         justifyContent="center"
         padding="$sm"
       >
-        <Typography color="$textPrimary" fontSize="$5" fontWeight="$5" textAlign="center">
+        <Typography variant="headline" textAlign="center">
           통계 조회 실패
         </Typography>
-        <Typography color="$textMuted" fontSize="$3" textAlign="center">
+        <Typography variant="footnote" color="$textMuted" textAlign="center">
           통계 데이터를 불러오는데 실패했습니다.{'\n'}잠시 후 다시 시도해주세요.
         </Typography>
       </YStack>
@@ -49,7 +49,7 @@ export default function StatsScreen() {
 
         {categoryStats && (
           <YStack gap="$3">
-            <Typography variant="title3">카테고리별 통계</Typography>
+            <Typography variant="headline">카테고리별 통계</Typography>
             <CategoryStatsView categories={categoryStats} />
           </YStack>
         )}
