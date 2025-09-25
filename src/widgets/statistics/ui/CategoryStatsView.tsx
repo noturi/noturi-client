@@ -22,7 +22,8 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
   return (
     <Card>
       <YStack>
-        {categories?.map((category) => {
+        {categories?.map((category, index) => {
+          const isLast = index === categories.length - 1;
           return (
             <YStack key={category.id} gap="$2" padding="$2">
               <XStack alignItems="center" justifyContent="space-between" padding="$2">
@@ -33,7 +34,7 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
                   <StarRating rating={category.averageRating} />
                 </XStack>
               </XStack>
-              <Separator borderColor="$border" />
+              {!isLast && <Separator borderColor="$border" />}
             </YStack>
           );
         })}
