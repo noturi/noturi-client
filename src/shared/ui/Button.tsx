@@ -1,68 +1,114 @@
 import { Button as TamaguiButton, styled } from 'tamagui';
 
 export const Button = styled(TamaguiButton, {
-  borderRadius: '$5',
-  fontSize: 14,
-  fontWeight: '$4',
-  height: 36,
+  borderRadius: '$6',
+  fontSize: 17,
+  fontWeight: '600',
+  height: 44,
+  minWidth: 44,
 
-  animation: 'quick',
+  animation: 'bouncy',
 
   pressStyle: {
-    scale: 0.95,
+    scale: 0.96,
+    opacity: 0.8,
   },
 
   variants: {
     variant: {
       primary: {
         backgroundColor: '$primary',
-        borderColor: '$border',
-        borderWidth: 1,
-        color: '$textOnPrimary',
+        color: 'white',
         pressStyle: {
-          scale: 0.95,
-          backgroundColor: '$primaryHover',
+          scale: 0.96,
+          backgroundColor: '$blue10',
+          opacity: 0.9,
+        },
+      },
+      secondary: {
+        backgroundColor: 'transparent',
+        borderColor: '$gray8',
+        borderWidth: 1,
+        color: '$blue9',
+        pressStyle: {
+          scale: 0.96,
+          backgroundColor: '$gray3',
+        },
+      },
+      destructive: {
+        backgroundColor: '$red9',
+        color: 'white',
+        pressStyle: {
+          scale: 0.96,
+          backgroundColor: '$red10',
+          opacity: 0.9,
+        },
+      },
+      plain: {
+        backgroundColor: 'transparent',
+        color: '$blue9',
+        paddingHorizontal: '$2',
+        pressStyle: {
+          opacity: 0.6,
+          scale: 1,
+        },
+      },
+      filled: {
+        backgroundColor: '$gray6',
+        color: '$textPrimary',
+        pressStyle: {
+          scale: 0.96,
+          backgroundColor: '$gray7',
+        },
+      },
+      tinted: {
+        backgroundColor: '$blue4',
+        color: '$blue9',
+        pressStyle: {
+          scale: 0.96,
+          backgroundColor: '$blue5',
         },
       },
       ghost: {
-        backgroundColor: '$backgroundTransparent',
-        borderColor: '$border',
+        backgroundColor: 'transparent',
+        borderColor: '$gray8',
         borderWidth: 1,
         color: '$textPrimary',
         pressStyle: {
-          scale: 0.95,
-          backgroundColor: '$surfaceHover',
+          scale: 0.96,
+          backgroundColor: '$gray3',
         },
       },
-      link: {
-        backgroundColor: '$backgroundTransparent',
-        borderColor: '$backgroundTransparent',
-        paddingHorizontal: 0,
-        paddingVertical: 2,
-        textDecorationLine: 'none',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+      outlined: {
+        backgroundColor: 'transparent',
+        borderColor: '$borderColor',
+        borderWidth: 1,
+        color: '$textPrimary',
         pressStyle: {
-          opacity: 0.7,
+          scale: 0.96,
+          backgroundColor: '$backgroundSecondary',
         },
       },
     },
 
     size: {
       sm: {
-        height: 28,
+        height: 32,
         paddingHorizontal: '$3',
-        fontSize: 12,
+        fontSize: 13,
+        fontWeight: '400',
       },
       md: {
-        height: 36,
+        height: 44,
         paddingHorizontal: '$4',
-        fontSize: 14,
+        fontSize: 17,
+        fontWeight: '400',
       },
       lg: {
-        height: 44,
+        height: 56,
         paddingHorizontal: '$5',
-        fontSize: 16,
+        fontSize: 17,
+        fontWeight: '600',
       },
     },
 
