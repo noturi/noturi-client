@@ -1,9 +1,9 @@
 import { XStack, YStack } from 'tamagui';
 import { Typography } from '~/shared/ui';
 
-import { Bell, Star } from '@tamagui/lucide-icons';
+import { Calendar, Star } from '@tamagui/lucide-icons';
 
-export type MemoViewType = 'rating' | 'simple' | 'notification';
+export type MemoViewType = 'rating' | 'simple' | 'calendar';
 
 interface MemoViewToggleProps {
   selectedView: MemoViewType;
@@ -60,10 +60,10 @@ export function MemoViewToggle({ selectedView, onViewChange }: MemoViewTogglePro
         onPress={() => onViewChange('rating')}
       />
       <ToggleButton
-        icon={<Bell color="$blue10" size="$3" />}
-        isActive={selectedView === 'notification'}
-        label="알림메모"
-        onPress={() => onViewChange('notification')}
+        icon={<Calendar color="$blue10" size="$3" />}
+        isActive={selectedView === 'calendar'}
+        label="캘린더"
+        onPress={() => onViewChange('calendar')}
       />
       {/* <ToggleButton
         icon={<List color="$secondary" size="$md" />}
