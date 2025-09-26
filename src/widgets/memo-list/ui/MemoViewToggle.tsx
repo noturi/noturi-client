@@ -3,7 +3,7 @@ import { Typography } from '~/shared/ui';
 
 import { Calendar, Star } from '@tamagui/lucide-icons';
 
-export type MemoViewType = 'rating' | 'simple' | 'calendar';
+export type MemoViewType = 'rating' | 'calendar';
 
 interface MemoViewToggleProps {
   selectedView: MemoViewType;
@@ -65,12 +65,6 @@ export function MemoViewToggle({ selectedView, onViewChange }: MemoViewTogglePro
         label="캘린더"
         onPress={() => onViewChange('calendar')}
       />
-      {/* <ToggleButton
-        icon={<List color="$secondary" size="$md" />}
-        isActive={selectedView === 'simple'}
-        label="간단메모"
-        onPress={() => onViewChange('simple')}
-      /> */}
     </XStack>
   );
 }
