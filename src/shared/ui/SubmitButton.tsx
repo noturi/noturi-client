@@ -1,42 +1,71 @@
-import { View } from 'tamagui';
+import { Spinner, View, XStack } from 'tamagui';
+import { useKeyboard } from '~/shared/lib';
 import { Button } from '~/shared/ui';
 
 interface SubmitButtonProps {
   children: React.ReactNode;
   isLoading?: boolean;
-  isDisabled?: boolean;
-  keyboardHeight?: number;
+  disabled?: boolean;
   onPress: () => void;
   loadingText?: string;
   position?: 'fixed' | 'static';
+  followKeyboard?: boolean;
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'destructive'
+    | 'plain'
+    | 'filled'
+    | 'tinted'
+    | 'ghost'
+    | 'outlined';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  flex?: number;
 }
 
 export const SubmitButton = ({
   children,
   isLoading = false,
-  isDisabled = false,
-  keyboardHeight = 0,
+  disabled = false,
   onPress,
   loadingText = '처리중...',
   position = 'fixed',
+  followKeyboard = true,
+  variant = 'primary',
+  ...props
 }: SubmitButtonProps) => {
-  const disabled = isDisabled || isLoading;
+  const { keyboardHeight } = useKeyboard();
+
+  const loadingContent = (
+    <XStack alignItems="center" gap="$2">
+      <Spinner color="white" size="small" />
+      {loadingText}
+    </XStack>
+  );
 
   if (position === 'fixed') {
     return (
       <View
         backgroundColor="$backgroundPrimary"
-        bottom={0}
+        borderTopColor="$borderColor"
+        bottom={followKeyboard ? keyboardHeight : 0}
         left={0}
-        paddingBottom={keyboardHeight > 0 ? keyboardHeight + 20 : 40}
-        paddingHorizontal={10}
-        paddingTop={10}
+        paddingBottom={followKeyboard && keyboardHeight > 0 ? 16 : 40}
+        paddingHorizontal={16}
+        paddingTop={16}
         position="absolute"
         right={0}
         zIndex="$5"
       >
-        <Button disabled={disabled} size="lg" onPress={onPress}>
-          {isLoading ? loadingText : children}
+        <Button
+          disabled={disabled || isLoading}
+          opacity={isLoading ? 0.8 : 1}
+          size="lg"
+          variant={variant}
+          onPress={onPress}
+          {...props}
+        >
+          {isLoading ? loadingContent : children}
         </Button>
       </View>
     );
@@ -44,12 +73,14 @@ export const SubmitButton = ({
 
   return (
     <Button
-      bottom={keyboardHeight > 0 ? keyboardHeight + 20 : 40}
-      disabled={disabled}
+      disabled={disabled || isLoading}
+      opacity={isLoading ? 0.8 : 1}
       size="lg"
+      variant={variant}
       onPress={onPress}
+      {...props}
     >
-      {isLoading ? loadingText : children}
+      {isLoading ? loadingContent : children}
     </Button>
   );
 };
