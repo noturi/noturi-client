@@ -13,21 +13,6 @@ export interface Memo {
   updatedAt: string;
 }
 
-// 알림 메모 타입
-export interface NotificationMemo {
-  id: string;
-  title: string;
-  content: string;
-  reminderDate: Date;
-  notificationId?: string;
-  categoryId: string;
-  category?: any;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  isNotified?: boolean;
-}
-
 // 메모 생성 요청
 export interface CreateMemoDto {
   title: string;
@@ -35,14 +20,6 @@ export interface CreateMemoDto {
   categoryId: string; // UUID 형태
   rating: number;
   description?: string;
-}
-
-// 알림 메모 생성 요청
-export interface CreateNotificationMemoDto {
-  title: string;
-  content: string;
-  categoryId: string;
-  reminderDate: Date;
 }
 
 // 메모 수정 요청
