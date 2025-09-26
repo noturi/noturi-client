@@ -1,5 +1,5 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
-import { memoDetailQuery } from '~/features/memo/api/queries';
+import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo/ui';
 import { Loading, StarRating, Typography } from '~/shared/ui';
 
