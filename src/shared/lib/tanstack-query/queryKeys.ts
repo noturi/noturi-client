@@ -20,6 +20,12 @@ export const QUERY_KEYS = {
   categoriesByCreatedDate: ['categories', 'sorted', 'createdAt'] as const,
   categoryCheckExists: (name: string) => ['category', 'check-exists', name] as const,
 
+  // 캘린더 메모 관련
+  calendarMemos: ['calendar-memos'] as const,
+  calendarMemo: (id: string) => ['calendar-memo', id] as const,
+  calendarMemosInfinite: (params: Record<string, unknown>) =>
+    ['calendar-memos', 'infinite', params] as const,
+
   // 통계
   statisticsMemos: ['statistics', 'memos'] as const,
   statisticsCategories: ['statistics', 'categories'] as const,
