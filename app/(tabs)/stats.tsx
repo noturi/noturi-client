@@ -1,5 +1,5 @@
 import { ScrollView, YStack } from 'tamagui';
-import { categoryStatsQuery, overallStatsQuery } from '~/features/statistics';
+import { categoryStatsQuery, overallStatsQuery } from '~/entities/statistics';
 import { Loading, Typography } from '~/shared/ui';
 import { CategoryStatsView, OverallStatsView } from '~/widgets/statistics';
 
