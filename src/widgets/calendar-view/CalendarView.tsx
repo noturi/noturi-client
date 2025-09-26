@@ -1,9 +1,20 @@
 import { ScrollView, YStack } from 'tamagui';
-import { CalendarMemo, calendarMemoMonthlyQuery } from '~/entities/calendar-memo';
+import {
+  CalendarMemo,
+  CreateCalendarMemoDto,
+  calendarMemoMonthlyQuery,
+} from '~/entities/calendar-memo';
+import {
+  CalendarAddModal,
+  CalendarFloatingButton,
+  useCreateCalendarMemo,
+} from '~/features/calendar';
+import { useCalendarDate } from '~/shared/lib/calendar';
 import { setupKoreanLocale } from '~/shared/lib/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
 
 import { useMemo, useState } from 'react';
+import { Alert } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 
 import { useQuery } from '@tanstack/react-query';
@@ -21,9 +32,18 @@ export type CalendarViewProps = {
 };
 
 export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewProps) {
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
-  const [currentMonth, setCurrentMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const createCalendarMemoMutation = useCreateCalendarMemo();
+
+  const {
+    startDate,
+    endDate,
+    currentMonth,
+    setStartDate,
+    setEndDate,
+    setCurrentMonth,
+    clearSelection,
+  } = useCalendarDate();
 
   // 현재 표시 중인 월의 년/월 추출
   const currentDate = useMemo(() => {
@@ -51,8 +71,7 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
 
     // 같은 날짜 재선택 시 해제
     if (startDate === selectedDateString && !endDate) {
-      setStartDate('');
-      setEndDate('');
+      clearSelection();
       return;
     }
 
@@ -85,14 +104,24 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
   // 선택된 메모들 필터링
   const selectedMemos = useMemo(() => {
     if (startDate && endDate) {
+      // 기간 선택: 선택된 기간과 겹치는 모든 일정
       const start = new Date(startDate);
       const end = new Date(endDate);
       return allMemos.filter((memo) => {
-        const memoDate = new Date(memo.startDate.split('T')[0]);
-        return memoDate >= start && memoDate <= end;
+        const memoStart = new Date(memo.startDate.split('T')[0]);
+        const memoEnd = new Date(memo.endDate.split('T')[0]);
+        // 일정과 선택 기간이 겹치는지 확인
+        return memoStart <= end && memoEnd >= start;
       });
     } else if (startDate) {
-      return allMemos.filter((memo) => memo.startDate.split('T')[0] === startDate);
+      // 단일 날짜 선택: 해당 날짜에 포함되는 모든 일정
+      const selectedDate = new Date(startDate);
+      return allMemos.filter((memo) => {
+        const memoStart = new Date(memo.startDate.split('T')[0]);
+        const memoEnd = new Date(memo.endDate.split('T')[0]);
+        // 선택된 날짜가 일정의 시작일~종료일 범위 안에 있는지 확인
+        return selectedDate >= memoStart && selectedDate <= memoEnd;
+      });
     }
     return [];
   }, [allMemos, startDate, endDate]);
@@ -102,8 +131,27 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
     return startDate && endDate ? `${startDate} ~ ${endDate} 기간 일정` : `${startDate} 일정`;
   }, [startDate, endDate]);
 
+  const handleAddCalendarMemo = async (data: CreateCalendarMemoDto) => {
+    await createCalendarMemoMutation.mutateAsync(data);
+  };
+
+  const handleFloatingButtonPress = () => {
+    console.log('플로팅 버튼 클릭됨, startDate:', startDate);
+    if (!startDate) {
+      console.log('날짜가 선택되지 않음');
+      Alert.alert(
+        '날짜를 먼저 선택해주세요',
+        '캘린더에서 날짜를 선택한 후 일정을 추가할 수 있습니다.',
+        [{ text: '확인' }],
+      );
+      return;
+    }
+    console.log('모달 열기 시도');
+    setIsAddModalOpen(true);
+  };
+
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1} gap="$4">
+    <YStack flex={1} gap="$4" position="relative">
       <Card>
         <Calendar
           markedDates={markedDates}
@@ -131,6 +179,14 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
           />
         </YStack>
       </ScrollView>
+
+      <CalendarFloatingButton onPress={handleFloatingButtonPress} />
+
+      <CalendarAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAddCalendarMemo}
+      />
     </YStack>
   );
 }
