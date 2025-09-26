@@ -47,3 +47,86 @@ export function formatAbsoluteTime(dateString: string): string {
     minute: '2-digit',
   });
 }
+
+/**
+ * 12시간 형식(AM/PM)을 24시간 형식으로 변환
+ * @param hour 시간 (1-12)
+ * @param minute 분 (00-59)
+ * @param ampm AM 또는 PM
+ * @returns 24시간 형식 시간 문자열 (예: "09:30", "14:15")
+ */
+export function convertTo24Hour(hour: string, minute: string, ampm: string): string {
+  let hour24 = parseInt(hour);
+  if (ampm === 'PM' && hour24 !== 12) {
+    hour24 += 12;
+  } else if (ampm === 'AM' && hour24 === 12) {
+    hour24 = 0;
+  }
+  return `${hour24.toString().padStart(2, '0')}:${minute}`;
+}
+
+/**
+ * 24시간 형식을 12시간 형식(AM/PM)으로 변환
+ * @param time24 24시간 형식 시간 문자열 (예: "14:30")
+ * @returns 12시간 형식 객체 { hour: "2", minute: "30", ampm: "PM" }
+ */
+export function convertTo12Hour(time24: string): { hour: string; minute: string; ampm: string } {
+  const [hourStr, minute] = time24.split(':');
+  const hour24 = parseInt(hourStr);
+
+  let hour12: number;
+  let ampm: string;
+
+  if (hour24 === 0) {
+    hour12 = 12;
+    ampm = 'AM';
+  } else if (hour24 < 12) {
+    hour12 = hour24;
+    ampm = 'AM';
+  } else if (hour24 === 12) {
+    hour12 = 12;
+    ampm = 'PM';
+  } else {
+    hour12 = hour24 - 12;
+    ampm = 'PM';
+  }
+
+  return {
+    hour: hour12.toString().padStart(2, '0'),
+    minute,
+    ampm,
+  };
+}
+
+/**
+ * 시간 선택 옵션 생성 유틸리티
+ */
+export const timeSelectOptions = {
+  /**
+   * 시간 옵션 생성 (1-12시)
+   */
+  getHourOptions: () => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const hour = i + 1;
+      return { value: hour.toString().padStart(2, '0'), label: `${hour}시` };
+    });
+  },
+
+  /**
+   * 분 옵션 생성 (5분 단위)
+   */
+  getMinuteOptions: () => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const minute = i * 5;
+      return { value: minute.toString().padStart(2, '0'), label: `${minute}분` };
+    });
+  },
+
+  /**
+   * AM/PM 옵션 생성
+   */
+  getAmPmOptions: () => [
+    { value: 'AM', label: '오전' },
+    { value: 'PM', label: '오후' },
+  ],
+};
