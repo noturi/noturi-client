@@ -1,8 +1,9 @@
+export * from './api';
 export type {
   CategoryPattern,
   CategoryStatsResponseDto,
-  OverallStatsResponseDto,
   OverallStatsParamsDto,
+  OverallStatsResponseDto,
   RatingDistribution,
   TrendsParamsDto,
   TrendsResponseDto,
