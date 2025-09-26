@@ -7,6 +7,7 @@ export * from './Input';
 export * from './Loading';
 export * from './RatingGroupCard';
 export * from './RatingStars';
+export * from './Select';
 export * from './StarRating';
 export * from './SubmitButton';
 export * from './TextArea';
