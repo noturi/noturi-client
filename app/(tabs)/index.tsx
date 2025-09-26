@@ -1,17 +1,17 @@
 import { ScrollView, YStack } from 'tamagui';
 import type { UICategory } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo';
+import { infiniteMemoListQuery } from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/lib';
-import { infiniteMemoListQuery } from '~/features/memo/api';
 import { MemoService } from '~/features/memo/lib';
 import Logger from '~/shared/lib/logger';
 import { ApiErrorBoundary, Card, Loading, Typography } from '~/shared/ui';
+import { CalendarView } from '~/widgets/calendar-view/CalendarView';
 import {
   CategoryFilterBar,
   MemoRatingGroupView,
   MemoSimpleView,
-  MemoNotificationView,
   MemoViewToggle,
   type MemoViewType,
 } from '~/widgets/memo-list/ui';
@@ -78,8 +78,8 @@ export default function HomeScreen() {
     Logger.info('HomeScreen', `보기 방식 변경: ${view}`);
     setSelectedView(view);
 
-    // 간단메모 또는 알림메모로 변경시 카테고리를 전체로 초기화
-    if (view === 'simple' || view === 'notification') {
+    // 간단메모 또는 캘린더로 변경시 카테고리를 전체로 초기화
+    if (view === 'simple' || view === 'calendar') {
       setSelectedCategory('전체');
     }
   }, []);
@@ -127,17 +127,14 @@ export default function HomeScreen() {
             </Card>
           )}
 
-          {selectedView === 'rating' ? (
+          {selectedView === 'calendar' ? (
+            <CalendarView />
+          ) : selectedView === 'rating' ? (
             <MemoRatingGroupView
               isError={Boolean(memosError)}
               isPending={memosPending}
               memos={transformedMemos}
               onMemoPress={handleMemoPress}
-            />
-          ) : selectedView === 'notification' ? (
-            <MemoNotificationView
-              isError={Boolean(memosError)}
-              isPending={memosPending}
             />
           ) : (
             <MemoSimpleView
