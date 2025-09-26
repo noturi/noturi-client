@@ -59,6 +59,9 @@ importers:
       expo-blur:
         specifier: ~14.1.5
         version: 14.1.5(expo@53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      expo-calendar:
+        specifier: ^15.0.7
+        version: 15.0.7(expo@53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))
       expo-constants:
         specifier: ~17.1.7
         version: 17.1.7(expo@53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))
@@ -122,6 +125,9 @@ importers:
       react-native:
         specifier: 0.79.5
         version: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
+      react-native-calendars:
+        specifier: ^1.1313.0
+        version: 1.1313.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       react-native-gesture-handler:
         specifier: ~2.24.0
         version: 2.24.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -143,6 +149,9 @@ importers:
       react-native-webview:
         specifier: 13.13.5
         version: 13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      recyclerlistview:
+        specifier: ^4.2.3
+        version: 4.2.3(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       tamagui:
         specifier: ^1.132.15
         version: 1.132.15(react-dom@19.0.0(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -162,6 +171,9 @@ importers:
       '@types/react':
         specifier: ~19.0.10
         version: 19.0.14
+      '@types/react-native-calendars':
+        specifier: ^1.1264.7
+        version: 1.1267.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
       babel-plugin-module-resolver:
         specifier: ^5.0.2
         version: 5.0.2
@@ -2044,6 +2056,10 @@ packages:
   '@types/node@24.0.13':
     resolution: {integrity: sha512-Qm9OYVOFHFYg3wJoTSrz80hoec5Lia/dPp84do3X7dZvLikQvM1YpmvTBEdIr/e+U8HTkFjLHLnl78K/qjf+jQ==}
 
+  '@types/react-native-calendars@1.1267.0':
+    resolution: {integrity: sha512-HLHdG5Z7aDUEgKTRYocjx+1bLJEPnX7vW3QN91BsHnyQFQvbr4K2us025SmU7XXSzIzOneUEpi8qdXVW1o2sdg==}
+    deprecated: This is a stub types definition. react-native-calendars provides its own type definitions, so you do not need this installed.
+
   '@types/react@19.0.14':
     resolution: {integrity: sha512-ixLZ7zG7j1fM0DijL9hDArwhwcCb4vqmePgwtV0GfnkHRSCUEv4LvzarcTdhoqgyMznUx/EhoTUv31CKZzkQlw==}
 
@@ -3145,6 +3161,12 @@ packages:
       react: '*'
       react-native: '*'
 
+  expo-calendar@15.0.7:
+    resolution: {integrity: sha512-llMpiRElC8Vq1YMHfn9LLGtE/c2BkpeCJnC8gRgliLf+Hnpk+DiqS8KeDut8a8hQ0xSrE1xyjPSfXLTNZG8nQA==}
+    peerDependencies:
+      expo: '*'
+      react-native: '*'
+
   expo-constants@17.1.7:
     resolution: {integrity: sha512-byBjGsJ6T6FrLlhOBxw4EaiMXrZEn/MlUYIj/JAd+FS7ll5X/S4qVRbIimSJtdW47hXMq0zxPfJX6njtA56hHA==}
     peerDependencies:
@@ -4231,6 +4253,9 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+
   moti@0.30.0:
     resolution: {integrity: sha512-YN78mcefo8kvJaL+TZNyusq6YA2aMFvBPl8WiLPy4eb4wqgOFggJOjP9bUr2YO8PrAt0uusmRG8K4RPL4OhCsA==}
     peerDependencies:
@@ -4651,6 +4676,10 @@ packages:
   react-is@19.1.0:
     resolution: {integrity: sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==}
 
+  react-native-calendars@1.1313.0:
+    resolution: {integrity: sha512-YQ7Vg57rBRVymolamYDTxZ0lPOELTDHQbTukTWdxR47aRBYJwKI6ocRbwcY5gYgyDwNgJS4uLGu5AvmYS74LYQ==}
+    engines: {node: '>=18'}
+
   react-native-edge-to-edge@1.6.0:
     resolution: {integrity: sha512-2WCNdE3Qd6Fwg9+4BpbATUxCLcouF6YRY7K+J36KJ4l3y+tWN6XCqAC4DuoGblAAbb2sLkhEDp4FOlbOIot2Og==}
     peerDependencies:
@@ -4682,6 +4711,12 @@ packages:
       react: '*'
       react-native: '*'
 
+  react-native-safe-area-context@4.5.0:
+    resolution: {integrity: sha512-0WORnk9SkREGUg2V7jHZbuN5x4vcxj/1B0QOcXJjdYWrzZHgLcUzYWWIUecUPJh747Mwjt/42RZDOaFn3L8kPQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   react-native-safe-area-context@5.4.0:
     resolution: {integrity: sha512-JaEThVyJcLhA+vU0NU8bZ0a1ih6GiF4faZ+ArZLqpYbL6j7R3caRqj+mE3lEtKCuHgwjLg3bCxLL1GPUJZVqUA==}
     peerDependencies:
@@ -4699,6 +4734,9 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
+
+  react-native-swipe-gestures@1.0.5:
+    resolution: {integrity: sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==}
 
   react-native-web@0.20.0:
     resolution: {integrity: sha512-OOSgrw+aON6R3hRosCau/xVxdLzbjEcsLysYedka0ZON4ZZe6n9xgeN9ZkoejhARM36oTlUgHIQqxGutEJ9Wxg==}
@@ -4737,6 +4775,12 @@ packages:
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
+
+  recyclerlistview@4.2.3:
+    resolution: {integrity: sha512-STR/wj/FyT8EMsBzzhZ1l2goYirMkIgfV3gYEPxI3Kf3lOnu6f7Dryhyw7/IkQrgX5xtTcDrZMqytvteH9rL3g==}
+    peerDependencies:
+      react: '>= 15.2.1'
+      react-native: '>= 0.30.0'
 
   reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
@@ -5231,6 +5275,9 @@ packages:
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
+  ts-object-utils@0.0.5:
+    resolution: {integrity: sha512-iV0GvHqOmilbIKJsfyfJY9/dNHCs969z3so90dQWsO1eMMozvTpnB1MEaUbb3FYtZTGjv5sIy/xmslEz0Rg2TA==}
+
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
@@ -5485,6 +5532,9 @@ packages:
   xcode@3.0.1:
     resolution: {integrity: sha512-kCz5k7J7XbJtjABOvkc5lJmkiDh8VhjVCGNiqdKCscmVpdVUpEAyXv1xmCLkQJ5dsHqx3IPO4XW+NTDhU/fatA==}
     engines: {node: '>=10.0.0'}
+
+  xdate@0.8.3:
+    resolution: {integrity: sha512-1NhJWPJwN+VjbkACT9XHbQK4o6exeSVtS2CxhMPwUE7xQakoEFTlwra9YcqV/uHQVyeEUYoYC46VGDJ+etnIiw==}
 
   xml2js@0.6.0:
     resolution: {integrity: sha512-eLTh0kA8uHceqesPqSE+VvO1CDDJWMwlQfB6LuN6T8w6MaDJ8Txm8P7s5cHD0miF0V+GGTZrDQfxPZQVsur33w==}
@@ -8295,6 +8345,13 @@ snapshots:
     dependencies:
       undici-types: 7.8.0
 
+  '@types/react-native-calendars@1.1267.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      react-native-calendars: 1.1313.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+    transitivePeerDependencies:
+      - react
+      - react-native
+
   '@types/react@19.0.14':
     dependencies:
       csstype: 3.1.3
@@ -9640,6 +9697,11 @@ snapshots:
       react: 19.0.0
       react-native: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
 
+  expo-calendar@15.0.7(expo@53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)):
+    dependencies:
+      expo: 53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
+
   expo-constants@17.1.7(expo@53.0.20(@babel/core@7.28.0)(@expo/metro-runtime@5.0.4(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)))(react-native-webview@13.13.5(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)):
     dependencies:
       '@expo/config': 11.0.13
@@ -10909,6 +10971,9 @@ snapshots:
 
   mkdirp@3.0.1: {}
 
+  moment@2.30.1:
+    optional: true
+
   moti@0.30.0(react-dom@19.0.0(react@19.0.0))(react-native-reanimated@3.17.5(@babel/core@7.28.0)(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       framer-motion: 6.5.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -11316,6 +11381,22 @@ snapshots:
 
   react-is@19.1.0: {}
 
+  react-native-calendars@1.1313.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      memoize-one: 5.2.1
+      prop-types: 15.8.1
+      react-native-safe-area-context: 4.5.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      react-native-swipe-gestures: 1.0.5
+      recyclerlistview: 4.2.3(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      xdate: 0.8.3
+    optionalDependencies:
+      moment: 2.30.1
+    transitivePeerDependencies:
+      - react
+      - react-native
+
   react-native-edge-to-edge@1.6.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
@@ -11359,6 +11440,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  react-native-safe-area-context@4.5.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
+
   react-native-safe-area-context@5.4.0(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
@@ -11379,6 +11465,8 @@ snapshots:
       react: 19.0.0
       react-native: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
       warn-once: 0.1.1
+
+  react-native-swipe-gestures@1.0.5: {}
 
   react-native-web@0.20.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
@@ -11461,6 +11549,14 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
+
+  recyclerlistview@4.2.3(react-native@0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0):
+    dependencies:
+      lodash.debounce: 4.0.8
+      prop-types: 15.8.1
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.28.0)(@types/react@19.0.14)(react@19.0.0)
+      ts-object-utils: 0.0.5
 
   reflect.getprototypeof@1.0.10:
     dependencies:
@@ -12107,6 +12203,8 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
+  ts-object-utils@0.0.5: {}
+
   tsconfig-paths@3.15.0:
     dependencies:
       '@types/json5': 0.0.29
@@ -12370,6 +12468,8 @@ snapshots:
     dependencies:
       simple-plist: 1.3.1
       uuid: 7.0.3
+
+  xdate@0.8.3: {}
 
   xml2js@0.6.0:
     dependencies:
