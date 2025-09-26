@@ -5,13 +5,13 @@ import { infiniteMemoListQuery } from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/lib';
 import { MemoService } from '~/features/memo/lib';
+import { CalendarDateProvider } from '~/shared/lib/calendar';
 import Logger from '~/shared/lib/logger';
-import { ApiErrorBoundary, Card, Loading, Typography } from '~/shared/ui';
-import { CalendarView } from '~/widgets/calendar-view/CalendarView';
+import { Card, Loading, Typography } from '~/shared/ui';
+import { CalendarView } from '~/widgets/calendar-view';
 import {
   CategoryFilterBar,
   MemoRatingGroupView,
-  MemoSimpleView,
   MemoViewToggle,
   type MemoViewType,
 } from '~/widgets/memo-list/ui';
@@ -77,11 +77,6 @@ export default function HomeScreen() {
   const handleViewChange = useCallback((view: MemoViewType) => {
     Logger.info('HomeScreen', `보기 방식 변경: ${view}`);
     setSelectedView(view);
-
-    // 간단메모 또는 캘린더로 변경시 카테고리를 전체로 초기화
-    if (view === 'simple' || view === 'calendar') {
-      setSelectedCategory('전체');
-    }
   }, []);
 
   if (categoriesError) {
@@ -114,38 +109,34 @@ export default function HomeScreen() {
   if (categoriesLoading) return <Loading text="카테고리 로딩 중..." />;
 
   return (
-    <ApiErrorBoundary>
-      <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
-        <YStack gap="$6" paddingHorizontal="$4">
-          <Card>
-            <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
-          </Card>
+    <YStack backgroundColor="$backgroundSecondary" flex={1}>
+      <YStack paddingHorizontal="$4" paddingTop="$4">
+        <Card>
+          <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
+        </Card>
+      </YStack>
 
-          {selectedView === 'rating' && (
-            <Card>
+      <YStack flex={1} paddingHorizontal="$4" paddingTop="$4">
+        {selectedView === 'rating' && (
+          <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+            <YStack gap="$4">
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
-            </Card>
-          )}
+              <MemoRatingGroupView
+                isError={Boolean(memosError)}
+                isPending={memosPending}
+                memos={transformedMemos}
+                onMemoPress={handleMemoPress}
+              />
+            </YStack>
+          </ScrollView>
+        )}
 
-          {selectedView === 'calendar' ? (
+        {selectedView === 'calendar' && (
+          <CalendarDateProvider>
             <CalendarView />
-          ) : selectedView === 'rating' ? (
-            <MemoRatingGroupView
-              isError={Boolean(memosError)}
-              isPending={memosPending}
-              memos={transformedMemos}
-              onMemoPress={handleMemoPress}
-            />
-          ) : (
-            <MemoSimpleView
-              isError={Boolean(memosError)}
-              isPending={memosPending}
-              memos={transformedMemos}
-              onMemoPress={handleMemoPress}
-            />
-          )}
-        </YStack>
-      </ScrollView>
-    </ApiErrorBoundary>
+          </CalendarDateProvider>
+        )}
+      </YStack>
+    </YStack>
   );
 }
