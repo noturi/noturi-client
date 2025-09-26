@@ -2,16 +2,30 @@ import { useMemo } from 'react';
 
 import { CalendarMemo } from '@/entities/calendar-memo';
 
-const SELECTION_COLOR = '#007AFF';
+// 비즈니스 상수
+const CALENDAR_COLORS = {
+  SELECTION: '#007AFF',
+  SCHEDULE_LIGHT: '#007AFF', // 1개 일정 (여유)
+  SCHEDULE_MODERATE: '#FFC107', // 2개 일정 (보통)
+  SCHEDULE_BUSY: '#FF9800', // 3개 일정 (바쁨)
+  SCHEDULE_OVERLOAD: '#FF5722', // 4개+ 일정 (과부하)
+} as const;
 
-// 날짜 범위 생성 함수
-const createDateRange = (start: string, end: string): string[] => {
-  const dates = [];
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+const SCHEDULE_DENSITY_THRESHOLDS = {
+  LIGHT: 1,
+  MODERATE: 2,
+  BUSY: 3,
+  OVERLOAD: 4,
+} as const;
 
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
+// 유틸리티: 기간 내 모든 날짜 생성
+const generateDateRangeInclusive = (startDate: string, endDate: string): string[] => {
+  const dates: string[] = [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const currentDate = new Date(start);
+  while (currentDate <= end) {
     dates.push(currentDate.toISOString().split('T')[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
@@ -19,77 +33,190 @@ const createDateRange = (start: string, end: string): string[] => {
   return dates;
 };
 
-// 메모 마킹 생성
-const createMemoMarkings = (memos: CalendarMemo[]): Record<string, any> => {
-  const markings: Record<string, any> = {};
+// 비즈니스 로직: 각 날짜별 일정 밀도 계산
+const calculateScheduleDensityByDate = (memos: CalendarMemo[]): Record<string, number> => {
+  const densityByDate: Record<string, number> = {};
 
   memos.forEach((memo) => {
-    const date = memo.startDate.split('T')[0];
-    if (!markings[date]) {
-      markings[date] = {};
-    }
-    markings[date].marked = true;
-    markings[date].dotColor = SELECTION_COLOR;
+    const affectedDates = getAffectedDatesByMemo(memo);
+
+    affectedDates.forEach((date) => {
+      densityByDate[date] = (densityByDate[date] || 0) + 1;
+    });
   });
+
+  return densityByDate;
+};
+
+// 비즈니스 로직: 메모가 영향을 주는 모든 날짜 추출
+const getAffectedDatesByMemo = (memo: CalendarMemo): string[] => {
+  const startDate = memo.startDate.split('T')[0];
+  const endDate = memo.endDate.split('T')[0];
+
+  const isSingleDayEvent = startDate === endDate;
+  const isPeriodEvent = !isSingleDayEvent;
+
+  if (isPeriodEvent) {
+    // 기간 일정: 시작일부터 종료일까지 모든 날짜에 영향
+    return generateDateRangeInclusive(startDate, endDate);
+  } else {
+    // 단일 날짜 일정: 해당 날짜만 영향
+    return [startDate];
+  }
+};
+
+// 비즈니스 로직: 일정 밀도에 따른 시각적 표현 결정
+const determineScheduleVisualization = (density: number) => {
+  if (density >= SCHEDULE_DENSITY_THRESHOLDS.OVERLOAD) {
+    return {
+      type: 'OVERLOAD' as const,
+      color: CALENDAR_COLORS.SCHEDULE_OVERLOAD,
+      text: `${density}+`,
+      description: '과부하 상태',
+    };
+  } else if (density === SCHEDULE_DENSITY_THRESHOLDS.BUSY) {
+    return {
+      type: 'BUSY' as const,
+      color: CALENDAR_COLORS.SCHEDULE_BUSY,
+      text: density.toString(),
+      description: '바쁜 상태',
+    };
+  } else if (density === SCHEDULE_DENSITY_THRESHOLDS.MODERATE) {
+    return {
+      type: 'MODERATE' as const,
+      color: CALENDAR_COLORS.SCHEDULE_MODERATE,
+      text: density.toString(),
+      description: '보통 상태',
+    };
+  } else if (density === SCHEDULE_DENSITY_THRESHOLDS.LIGHT) {
+    return {
+      type: 'LIGHT' as const,
+      color: CALENDAR_COLORS.SCHEDULE_LIGHT,
+      text: null,
+      description: '여유 상태',
+    };
+  }
+
+  return null;
+};
+
+// UI 레이어: 캘린더 마킹 생성
+const createCalendarMarkingsWithSelection = (
+  userSelectedStartDate: string,
+  userSelectedEndDate: string,
+  scheduleDensityByDate: Record<string, number>,
+): Record<string, any> => {
+  const markings: Record<string, any> = {};
+
+  // 1단계: 일정 밀도에 따른 시각적 표시
+  Object.entries(scheduleDensityByDate).forEach(([date, density]) => {
+    const visualization = determineScheduleVisualization(density);
+
+    if (!visualization) return;
+
+    if (!markings[date]) markings[date] = {};
+
+    markings[date].marked = true;
+    markings[date].dotColor = visualization.color;
+
+    if (visualization.text) {
+      markings[date].customStyles = {
+        text: {
+          color: visualization.color,
+          fontSize: 8,
+          fontWeight: 'bold',
+          marginTop: 8,
+        },
+      };
+      markings[date].customText = visualization.text;
+    }
+  });
+
+  // 2단계: 사용자 선택 영역 표시 (일정 표시 위에 오버레이)
+  applyUserSelectionOverlay(markings, userSelectedStartDate, userSelectedEndDate);
 
   return markings;
 };
 
-// 선택 기간 마킹 생성
-const createSelectionMarkings = (
+// UI 레이어: 사용자 선택 영역 오버레이 적용
+const applyUserSelectionOverlay = (
+  markings: Record<string, any>,
   startDate: string,
   endDate: string,
-  existingMarkings: Record<string, any>,
-): Record<string, any> => {
-  const markings = { ...existingMarkings };
+): void => {
+  const hasDateRangeSelection = startDate && endDate;
+  const hasSingleDateSelection = startDate && !endDate;
 
-  if (startDate && endDate) {
-    const dateRange = createDateRange(startDate, endDate);
-    dateRange.forEach((date, index) => {
+  if (hasDateRangeSelection) {
+    const selectedDateRange = generateDateRangeInclusive(startDate, endDate);
+
+    selectedDateRange.forEach((date, index) => {
       if (!markings[date]) markings[date] = {};
 
-      if (dateRange.length === 1) {
-        // 같은 날짜 선택
-        markings[date] = { ...markings[date], selected: true, selectedColor: SELECTION_COLOR };
-      } else if (index === 0) {
-        // 시작일
+      const isFirstDate = index === 0;
+      const isLastDate = index === selectedDateRange.length - 1;
+      const isSingleDateRange = selectedDateRange.length === 1;
+
+      if (isSingleDateRange) {
+        // 단일 날짜 선택
+        markings[date] = {
+          ...markings[date],
+          selected: true,
+          selectedColor: CALENDAR_COLORS.SELECTION,
+        };
+      } else if (isFirstDate) {
+        // 기간 선택 시작일
         markings[date] = {
           ...markings[date],
           startingDay: true,
-          color: SELECTION_COLOR,
+          color: CALENDAR_COLORS.SELECTION,
           textColor: 'white',
         };
-      } else if (index === dateRange.length - 1) {
-        // 종료일
+      } else if (isLastDate) {
+        // 기간 선택 종료일
         markings[date] = {
           ...markings[date],
           endingDay: true,
-          color: SELECTION_COLOR,
+          color: CALENDAR_COLORS.SELECTION,
           textColor: 'white',
         };
       } else {
-        // 중간 날짜
-        markings[date] = { ...markings[date], color: SELECTION_COLOR, textColor: 'white' };
+        // 기간 선택 중간 날짜
+        markings[date] = {
+          ...markings[date],
+          color: CALENDAR_COLORS.SELECTION,
+          textColor: 'white',
+        };
       }
     });
-  } else if (startDate) {
-    // 시작일만 선택된 상태
+  } else if (hasSingleDateSelection) {
+    // 시작일만 선택된 상태 (기간 선택 중)
     if (!markings[startDate]) markings[startDate] = {};
     markings[startDate] = {
       ...markings[startDate],
       startingDay: true,
       endingDay: true,
-      color: SELECTION_COLOR,
+      color: CALENDAR_COLORS.SELECTION,
       textColor: 'white',
     };
   }
-
-  return markings;
 };
 
-export const useCalendarMarkings = (memos: CalendarMemo[], startDate: string, endDate: string) => {
+// 메인 비즈니스 로직: 캘린더 마킹 계산
+export const useCalendarMarkings = (
+  memos: CalendarMemo[],
+  userSelectedStartDate: string,
+  userSelectedEndDate: string,
+) => {
   return useMemo(() => {
-    const memoMarkings = createMemoMarkings(memos);
-    return createSelectionMarkings(startDate, endDate, memoMarkings);
-  }, [memos, startDate, endDate]);
+    // 1단계: 일정 데이터 분석 - 각 날짜별 일정 밀도 계산
+    const scheduleDensityByDate = calculateScheduleDensityByDate(memos);
+
+    // 2단계: UI 렌더링 - 밀도 + 사용자 선택에 따른 캘린더 마킹 생성
+    return createCalendarMarkingsWithSelection(
+      userSelectedStartDate,
+      userSelectedEndDate,
+      scheduleDensityByDate,
+    );
+  }, [memos, userSelectedStartDate, userSelectedEndDate]);
 };
