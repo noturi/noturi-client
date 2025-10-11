@@ -36,28 +36,46 @@ export const MemoFormContent = ({
 
   const memoForm = useForm<MemoFormData>({
     initialValues: {
-      title: '',
-      content: '',
+      text: '',
       rating: 0,
       selectedCategory: '',
     },
     validationSchema: memoFormSchema,
     onSubmit: async (values) => {
-      const selectedCat = categories.find((cat) => cat.name === values.selectedCategory);
-      if (!selectedCat) {
-        memoForm.setError('selectedCategory', {
-          message: '카테고리를 선택해주세요.',
-          type: 'required',
-        });
-        return;
+      // 첫 번째 줄을 제목으로, 나머지를 내용으로 분리
+      const lines = values.text.split('\n');
+      let title = lines[0].trim() || '제목 없음';
+      let content = lines.slice(1).join('\n').trim();
+
+      // 제목이 30자를 넘으면 잘라서 나머지는 내용에 추가
+      if (title.length > 30) {
+        const truncatedTitle = title.substring(0, 30);
+        const remainingText = title.substring(30);
+        title = truncatedTitle;
+        content = remainingText + (content ? '\n' + content : '');
       }
 
-      createMemoMutation.mutate({
-        title: values.title,
-        content: values.content,
-        categoryId: selectedCat.id,
-        rating: values.rating,
-      });
+      // 카테고리가 선택된 경우에만 categoryId 포함
+      const selectedCat = values.selectedCategory
+        ? categories.find((cat) => cat.name === values.selectedCategory)
+        : null;
+
+      const memoData: any = {
+        title,
+        content: content || '',
+      };
+
+      // categoryId가 있을 때만 추가
+      if (selectedCat?.id) {
+        memoData.categoryId = selectedCat.id;
+      }
+
+      // rating이 0보다 클 때만 추가
+      if (values.rating > 0) {
+        memoData.rating = values.rating;
+      }
+
+      createMemoMutation.mutate(memoData);
     },
   });
 
@@ -90,7 +108,7 @@ export const MemoFormContent = ({
       onSuccess?.();
     },
     onError: () => {
-      memoForm.setError('title', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
+      memoForm.setError('text', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
     },
   });
 
@@ -120,16 +138,13 @@ export const MemoFormContent = ({
     return () => clearTimeout(timer);
   }, [shouldAutoFocus]);
 
-  const shouldShowTitleError = memoForm.shouldShowError('title');
+  const shouldShowTextError = memoForm.shouldShowError('text');
   const shouldShowSelectedCategoryError = memoForm.shouldShowError('selectedCategory');
   const selectedCategoryError = shouldShowSelectedCategoryError
     ? memoForm.errors.selectedCategory
     : undefined;
 
-  const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
-
-  const shouldShowContentError = memoForm.shouldShowError('content');
-  const contentError = shouldShowContentError ? memoForm.errors.content : undefined;
+  const textError = shouldShowTextError ? memoForm.errors.text : undefined;
 
   return (
     <>
@@ -142,30 +157,20 @@ export const MemoFormContent = ({
           showsVerticalScrollIndicator={false}
         >
           <Form>
-            <Form.Field required error={titleError} label="제목">
-              <Input
-                ref={titleInputRef}
-                hasError={!!shouldShowTitleError}
-                placeholder="제목을 입력하세요"
-                value={memoForm.values.title}
-                onBlur={() => memoForm.setTouched('title')}
-                onChangeText={(text) => memoForm.setValue('title', text)}
-                onFocus={() => memoForm.clearError('title')}
-              />
-            </Form.Field>
-
-            <Form.Field required error={contentError} label="내용">
+            <Form.Field required error={textError} label="메모">
               <TextArea
+                ref={titleInputRef}
                 multiline
-                hasError={!!contentError}
-                placeholder="내용을 입력하세요"
-                value={memoForm.values.content}
-                onBlur={() => memoForm.setTouched('content')}
-                onChangeText={(text) => memoForm.setValue('content', text)}
+                hasError={!!shouldShowTextError}
+                minHeight={220}
+                value={memoForm.values.text}
+                onBlur={() => memoForm.setTouched('text')}
+                onChangeText={(text) => memoForm.setValue('text', text)}
+                onFocus={() => memoForm.clearError('text')}
               />
             </Form.Field>
 
-            <Form.Field required error={selectedCategoryError} label="카테고리">
+            <Form.Field error={selectedCategoryError} label="카테고리">
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <XStack gap="$2">
                   {categories.map((category) => (
@@ -182,8 +187,7 @@ export const MemoFormContent = ({
                   {!showAddCategory && (
                     <Button
                       borderStyle="dashed"
-                      minWidth={60}
-                      size="md"
+                      size="sm"
                       variant="ghost"
                       onPress={() => setShowAddCategory(true)}
                     >
@@ -246,7 +250,6 @@ export const MemoFormContent = ({
 
       <SubmitButton
         isLoading={createMemoMutation.isPending}
-        keyboardHeight={keyboardHeight}
         loadingText="등록중..."
         onPress={memoForm.handleSubmit}
       >
