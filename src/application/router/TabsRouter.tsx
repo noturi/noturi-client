@@ -1,20 +1,17 @@
-import { XStack, useTheme } from 'tamagui';
+import { useTheme } from 'tamagui';
 
-import { useState } from 'react';
 import { Pressable } from 'react-native';
 
 import { Redirect, Tabs } from 'expo-router';
 
-import { FileChartColumn, Home, Plus, User } from '@tamagui/lucide-icons';
+import { FileChartColumn, Home, User } from '@tamagui/lucide-icons';
 
 import { useAuth } from '../../features/auth';
-import { MemoTypeSelectSheet } from '../../features/memo';
 import { HREFS } from '../../shared/constants';
 import { Loading } from '../../shared/ui';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const theme = useTheme();
 
   if (isInitialLoading) {
@@ -26,36 +23,35 @@ export function TabsRouter() {
   }
 
   return (
-    <>
-      <Tabs
-        screenOptions={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: theme.backgroundSecondary.val,
-          },
-          headerTintColor: theme.textPrimary.val,
-          headerTitleStyle: {
-            fontWeight: '600',
-            fontSize: 20,
-          },
-          headerShadowVisible: false,
-          headerTitleAlign: 'left',
-          tabBarShowLabel: false,
-          tabBarStyle: {
-            height: 83,
-            paddingBottom: 30,
-            paddingTop: 5,
-          },
-          tabBarActiveTintColor: theme.primary.val,
-          tabBarInactiveTintColor: theme.textMuted.val,
-          tabBarItemStyle: {
-            paddingVertical: 4,
-            paddingHorizontal: 16,
-            minHeight: 35,
-            minWidth: 35,
-          },
-        }}
-      >
+    <Tabs
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: theme.backgroundSecondary.val,
+        },
+        headerTintColor: theme.textPrimary.val,
+        headerTitleStyle: {
+          fontWeight: '600',
+          fontSize: 20,
+        },
+        headerShadowVisible: false,
+        headerTitleAlign: 'left',
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 83,
+          paddingBottom: 30,
+          paddingTop: 5,
+        },
+        tabBarActiveTintColor: theme.primary.val,
+        tabBarInactiveTintColor: theme.textMuted.val,
+        tabBarItemStyle: {
+          paddingVertical: 4,
+          paddingHorizontal: 16,
+          minHeight: 35,
+          minWidth: 35,
+        },
+      }}
+    >
         <Tabs.Screen
           name="index"
           options={{
@@ -88,39 +84,6 @@ export function TabsRouter() {
           }}
         />
 
-        <Tabs.Screen
-          listeners={({ navigation }) => ({
-            tabPress: (e) => {
-              e.preventDefault();
-              setIsSheetOpen(true);
-            },
-          })}
-          name="create"
-          options={{
-            title: '',
-            tabBarIcon: ({ color, focused }) => (
-              <XStack backgroundColor={'$backgroundSecondary'} borderRadius="$5" padding="$2">
-                <Plus color={focused ? 'white' : (color as any)} size="$5" />
-              </XStack>
-            ),
-            tabBarButton: (props) => (
-              <Pressable
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 8,
-                  },
-                ]}
-                onPress={props.onPress}
-              >
-                {props.children}
-              </Pressable>
-            ),
-            headerShown: false,
-          }}
-        />
 
         <Tabs.Screen
           name="stats"
@@ -172,9 +135,6 @@ export function TabsRouter() {
             ),
           }}
         />
-      </Tabs>
-
-      <MemoTypeSelectSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
-    </>
+    </Tabs>
   );
 }
