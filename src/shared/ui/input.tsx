@@ -12,6 +12,10 @@ export const Input = styled(TamaguiInput, {
   placeholderTextColor: '$textMuted',
   textAlignVertical: 'center',
 
+  // 한글 입력 문제 해결을 위한 설정
+  autoCorrect: false,
+  autoCapitalize: 'none',
+
   focusStyle: {
     borderWidth: 1,
     borderColor: '$primary',

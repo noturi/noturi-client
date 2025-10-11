@@ -14,7 +14,7 @@ export default function RatingMemoCreateScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
       <YStack backgroundColor="$backgroundPrimary" flex={1}>
         <YStack flex={1}>
-          <MemoFormContent keyboardHeight={0} shouldAutoFocus={true} onSuccess={handleSuccess} />
+          <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
         </YStack>
       </YStack>
     </SafeAreaView>

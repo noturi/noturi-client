@@ -17,13 +17,11 @@ import { useQuery } from '@tanstack/react-query';
 import { RatingSelector } from './rating-selector';
 
 interface MemoFormContentProps {
-  keyboardHeight: number;
   onSuccess?: () => void;
   shouldAutoFocus?: boolean;
 }
 
 export const MemoFormContent = ({
-  keyboardHeight,
   onSuccess,
   shouldAutoFocus = false,
 }: MemoFormContentProps) => {
@@ -151,7 +149,7 @@ export const MemoFormContent = ({
       <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 120 : 120,
+            paddingBottom: 120,
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

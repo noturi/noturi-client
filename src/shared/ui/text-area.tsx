@@ -10,6 +10,11 @@ export const TextArea = styled(TamaguiTextArea, {
   padding: '$4',
   placeholderTextColor: '$textMuted',
 
+  // 한글 입력 문제 해결을 위한 설정
+  autoCorrect: false,
+  autoCapitalize: 'none',
+  keyboardType: 'default',
+
   // 포커스 스타일
   focusStyle: {
     borderWidth: 1,

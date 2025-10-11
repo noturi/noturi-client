@@ -20,7 +20,7 @@ export default function TextMemoCreateScreen() {
       <YStack backgroundColor="$backgroundPrimary" flex={1}>
         <MemoFormHeader onClose={handleClose} />
         <YStack flex={1}>
-          <MemoFormContent keyboardHeight={0} shouldAutoFocus={true} onSuccess={handleSuccess} />
+          <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
         </YStack>
       </YStack>
     </SafeAreaView>

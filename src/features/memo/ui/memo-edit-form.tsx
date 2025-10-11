@@ -9,7 +9,6 @@ import { useForm, useToast } from '~/shared/lib';
 import { Form, Input, Loading, SubmitButton, TextArea } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
-import { Keyboard, Platform } from 'react-native';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -23,7 +22,6 @@ interface MemoEditFormProps {
 
 export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const toast = useToast();
 
   const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId));
@@ -78,23 +76,6 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memo]);
 
-  // 키보드 이벤트 처리
-  useEffect(() => {
-    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
-
-    const showListener = Keyboard.addListener(showEvent, (e) => {
-      const height = Platform.OS === 'ios' ? e.endCoordinates.height - 34 : e.endCoordinates.height;
-      setKeyboardHeight(height);
-    });
-    const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
-
-    return () => {
-      showListener?.remove();
-      hideListener?.remove();
-    };
-  }, []);
-
   const createCategoryMutation = useCreateCategoryMutation({
     onSuccess: (newCategory) => {
       memoForm.setValue('selectedCategory', newCategory.name);
@@ -142,7 +123,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     <YStack backgroundColor="$backgroundPrimary" flex={1}>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: keyboardHeight > 0 ? keyboardHeight + 20 : 20,
+          paddingBottom: 120,
         }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
