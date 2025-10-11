@@ -151,7 +151,7 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
   };
 
   return (
-    <YStack flex={1} gap="$4" position="relative">
+    <YStack flex={1} gap="$4" paddingHorizontal="$4" paddingTop="$4" position="relative">
       <Card>
         <Calendar
           markedDates={markedDates}
