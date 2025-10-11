@@ -118,6 +118,7 @@ import { LocalComponent } from './LocalComponent';
 ### 🚨 FSD 핵심 원칙: 3개의 세그먼트
 
 FSD(Feature-Sliced Design)는 각 슬라이스를 **3개의 표준 세그먼트**로 구성합니다:
+
 - `api/` - 서버 통신
 - `model/` - 비즈니스 로직, 상태, 타입
 - `ui/` - UI 컴포넌트
@@ -129,6 +130,7 @@ FSD(Feature-Sliced Design)는 각 슬라이스를 **3개의 표준 세그먼트*
 **핵심 원칙**: Entities는 READ만, Features는 CREATE/UPDATE/DELETE만 담당합니다.
 
 #### Entities (읽기 전용)
+
 ```
 entities/memo/
 ├── api/                         # READ 전용 API
@@ -149,6 +151,7 @@ entities/memo/
 ```
 
 **Entities의 model/ 세그먼트**:
+
 - ✅ 타입 정의 (types.ts)
 - ✅ 스키마/Validation (schemas.ts)
 - ✅ 데이터 변환 함수 (백엔드 DTO → UI 모델)
@@ -160,6 +163,7 @@ entities/memo/
 - ❌ lib/ 폴더 사용 금지
 
 #### Features (쓰기 전용)
+
 ```
 features/memo/
 ├── api/                         # CUD 전용 API
@@ -180,6 +184,7 @@ features/memo/
 ```
 
 **Features의 model/ 세그먼트**:
+
 - ✅ CUD 관련 비즈니스 로직
 - ✅ 폼 validation/처리
 - ✅ CUD용 커스텀 hooks (useMemoForm, useFormValidation)
@@ -208,18 +213,21 @@ entities/memo/
 ### 📋 Model 세그먼트 역할 분리 원칙
 
 #### API vs Model 분리
+
 ```typescript
 // ❌ 잘못된 방법 - model에서 API 직접 호출
 // entities/memo/model/transforms.ts
 export async function fetchAndTransformMemos() {
-  const memos = await memoApi.getMemos();  // ❌ model에서 API 호출 금지!
+  const memos = await memoApi.getMemos(); // ❌ model에서 API 호출 금지!
   return transformMemos(memos);
 }
 
 // ✅ 올바른 방법 - model은 순수 변환만
 // entities/memo/model/transforms.ts
 export function transformMemos(memos: Memo[]): UIMemo[] {
-  return memos.map(memo => ({ /* 변환 로직 */ }));
+  return memos.map((memo) => ({
+    /* 변환 로직 */
+  }));
 }
 
 // entities/memo/api/queries.ts에서 조합
@@ -237,13 +245,14 @@ export const useTransformedMemosQuery = () => {
 ```
 
 #### Service 클래스 사용 금지
+
 ```typescript
 // ❌ 잘못된 방법 - Service에서 API 직접 호출
 // features/memo/model/memo-service.ts
 export class MemoService {
   async createMemo(data: CreateMemoDto) {
     const validated = this.validate(data);
-    return await memoApi.createMemo(validated);  // ❌ Service에서 API 호출 금지!
+    return await memoApi.createMemo(validated); // ❌ Service에서 API 호출 금지!
   }
 }
 
@@ -258,8 +267,8 @@ export function validateMemoData(data: CreateMemoDto): CreateMemoDto {
 export const useCreateMemoMutation = () =>
   useMutation({
     mutationFn: (data: CreateMemoDto) => {
-      const validated = validateMemoData(data);  // model의 validation 사용
-      return memoMutationApi.createMemo(validated);  // api 호출
+      const validated = validateMemoData(data); // model의 validation 사용
+      return memoMutationApi.createMemo(validated); // api 호출
     },
   });
 ```
@@ -267,14 +276,15 @@ export const useCreateMemoMutation = () =>
 ### 📋 레이어별 역할 분리
 
 #### Entity Layer (READ)
+
 ```typescript
 // entities/memo/api/apis.ts
 export class MemoApi {
   // ✅ GET 메서드만
-  async getMemos(params: MemoListParamsDto): Promise<MemoListResponseDto> { }
-  async getMemo(id: string): Promise<Memo> { }
-  async searchMemos(query: string): Promise<MemoSearchResultDto> { }
-  async getMemoStats(): Promise<MemoStatsDto> { }
+  async getMemos(params: MemoListParamsDto): Promise<MemoListResponseDto> {}
+  async getMemo(id: string): Promise<Memo> {}
+  async searchMemos(query: string): Promise<MemoSearchResultDto> {}
+  async getMemoStats(): Promise<MemoStatsDto> {}
 
   // ❌ 이런 메서드들은 features로 이동
   // async createMemo() { }
@@ -297,16 +307,17 @@ export const useMemoQuery = (id: string) =>
 ```
 
 #### Feature Layer (CREATE/UPDATE/DELETE)
+
 ```typescript
 // features/memo/api/apis.ts
-import { CreateMemoDto, UpdateMemoDto, Memo } from '~/entities/memo';
+import { CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
 
 export class MemoMutationApi {
   // ✅ CUD 메서드만
-  async createMemo(data: CreateMemoDto): Promise<Memo> { }
-  async updateMemo(data: UpdateMemoDto): Promise<Memo> { }
-  async deleteMemo(id: string): Promise<void> { }
-  async bulkDeleteMemos(ids: string[]): Promise<void> { }
+  async createMemo(data: CreateMemoDto): Promise<Memo> {}
+  async updateMemo(data: UpdateMemoDto): Promise<Memo> {}
+  async deleteMemo(id: string): Promise<void> {}
+  async bulkDeleteMemos(ids: string[]): Promise<void> {}
 }
 
 // features/memo/api/mutations.ts
@@ -364,7 +375,7 @@ export function MemoEditForm({ id }: { id: string }) {
    - [ ] mutations.ts에 useMutation만 있는지 확인
 
 3. **타입 정의 검토**
-   - [ ] 모든 DTO, Entity 타입이 entities/*/model/types.ts에 있는지
+   - [ ] 모든 DTO, Entity 타입이 entities/\*/model/types.ts에 있는지
    - [ ] Features에서 타입을 entities에서 import하는지
 
 4. **Import 경로 수정**
