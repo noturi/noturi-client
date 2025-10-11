@@ -7,7 +7,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { router } from 'expo-router';
 
-import { authService } from './authService';
+import { authService } from './auth-service';
 
 interface AuthContextType {
   getUser: () => Promise<User | null>;

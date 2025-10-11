@@ -1,1 +1,1 @@
-export * from './memoService';
+export * from './memo-service';

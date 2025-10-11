@@ -3,11 +3,11 @@ import {
   type GoogleLoginDto,
   type LoginResponseDto,
 } from '~/entities/user/model/types';
-import { queryClient } from '~/shared/api/queryClient';
+import { queryClient } from '~/shared/api/query-client';
 
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { authService } from '../lib/authService';
+import { authService } from '../lib/auth-service';
 import { authApi } from './apis';
 
 export function useGoogleLoginMutation(

@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import { AuthProvider } from '../../features/auth';
-import { QueryProvider } from './QueryProvider';
-import { TamaguiProvider } from './TamaguiProvider';
+import { QueryProvider } from './query-provider';
+import { TamaguiProvider } from './tamagui-provider';
 
 interface AppProviderProps {
   children: ReactNode;

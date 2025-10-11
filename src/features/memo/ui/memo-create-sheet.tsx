@@ -3,15 +3,15 @@ import { Sheet, YStack } from 'tamagui';
 import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
 
-import { CategoryManageContent } from './CategoryManageContent';
-import { CategoryManageHeader } from './CategoryManageHeader';
+import { MemoFormContent } from './memo-form-content';
+import { MemoFormHeader } from './memo-form-header';
 
-interface CategoryManageSheetProps {
+interface MemoCreateSheetProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
+export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -55,8 +55,8 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
           <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
         </YStack>
 
-        <CategoryManageHeader onClose={onClose} />
-        <CategoryManageContent
+        <MemoFormHeader onClose={onClose} />
+        <MemoFormContent
           keyboardHeight={keyboardHeight}
           shouldAutoFocus={isOpen}
           onSuccess={onClose}

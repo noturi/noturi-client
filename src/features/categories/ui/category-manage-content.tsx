@@ -5,7 +5,7 @@ import {
   useDeleteCategoryMutation,
 } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { useForm } from '~/shared/lib/useForm';
+import { useForm } from '~/shared/lib/use-form';
 import { Button, Form, Input, SubmitButton, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
@@ -192,7 +192,6 @@ export const CategoryManageContent = ({
       {isFormVisible && (
         <SubmitButton
           isLoading={createCategoryMutation.isPending}
-          keyboardHeight={keyboardHeight}
           loadingText="추가 중..."
           onPress={form.handleSubmit}
         >

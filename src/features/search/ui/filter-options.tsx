@@ -1,7 +1,7 @@
 import { YStack } from 'tamagui';
 
-import { CategoryChips } from './CategoryChips';
-import { RatingChips } from './RatingChips';
+import { CategoryChips } from './category-chips';
+import { RatingChips } from './rating-chips';
 
 interface CategoryLite {
   id: string;

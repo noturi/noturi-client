@@ -1,5 +1,5 @@
-export { CategoryAddSheet } from './CategoryAddSheet';
-export { CategoryButton } from './CategoryButton';
-export { CategoryManageSheet } from './CategoryManageSheet';
-export { CategorySelector } from './CategorySelector';
-export { SortButton } from './SortButton';
+export { CategoryAddSheet } from './category-add-sheet';
+export { CategoryButton } from './category-button';
+export { CategoryManageSheet } from './category-manage-sheet';
+export { CategorySelector } from './category-selector';
+export { SortButton } from './sort-button';

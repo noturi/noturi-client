@@ -1,6 +1,6 @@
 import { use } from 'react';
 
-import { CalendarDateContext, CalendarDateContextValue } from './CalendarDateContext';
+import { CalendarDateContext, CalendarDateContextValue } from './calendar-date-context';
 
 export function useCalendarDate(): CalendarDateContextValue {
   const context = use(CalendarDateContext);

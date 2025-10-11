@@ -1,9 +1,9 @@
 import { SizableText, View, styled } from 'tamagui';
-import type { FormFieldError } from '~/shared/lib/useForm';
+import type { FormFieldError } from '~/shared/lib/use-form';
 
 import React from 'react';
 
-import { Typography } from './Typography';
+import { Typography } from './typography';
 
 // Form Root Component
 export interface FormProps {

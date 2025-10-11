@@ -1,3 +1,3 @@
-export { CategoryStatsView } from './CategoryStatsView';
-export { OverallStatsView } from './OverallStatsView';
-export { StatsHeader } from './StatsHeader';
+export { CategoryStatsView } from './category-stats-view';
+export { OverallStatsView } from './overall-stats-view';
+export { StatsHeader } from './stats-header';

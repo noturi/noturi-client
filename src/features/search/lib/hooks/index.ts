@@ -1,4 +1,4 @@
-export { useInfiniteMemos } from './useInfiniteMemos';
-export { useMemoSearch } from './useMemoSearch';
-export { useSearchFilters } from './useSearchFilters';
-export { useTransformMemos } from './useTransformMemos';
+export { useInfiniteMemos } from './use-infinite-memos';
+export { useMemoSearch } from './use-memo-search';
+export { useSearchFilters } from './use-search-filters';
+export { useTransformMemos } from './use-transform-memos';

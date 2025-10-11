@@ -1,1 +1,1 @@
-export { StatisticsService } from './statisticsService';
+export { StatisticsService } from './statistics-service';

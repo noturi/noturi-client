@@ -1,5 +1,5 @@
 import { CreateMemoDto, Memo, UIMemo, UpdateMemoDto } from '~/entities/memo';
-import { formatTimeAgo } from '~/shared/lib/formatTime';
+import { formatTimeAgo } from '~/shared/lib/format-time';
 
 import { memoApi } from '../api';
 

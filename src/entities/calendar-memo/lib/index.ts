@@ -1,1 +1,1 @@
-export { CalendarMemoService } from './calendarMemoService';
+export { CalendarMemoService } from './calendar-memo-service';

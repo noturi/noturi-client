@@ -13,7 +13,7 @@ import { Keyboard, Platform } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
 import { memoDetailQuery, useUpdateMemoMutation } from '../api';
-import { RatingSelector } from './RatingSelector';
+import { RatingSelector } from './rating-selector';
 
 interface MemoEditFormProps {
   memoId: string;
@@ -271,7 +271,6 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
 
       <SubmitButton
         isLoading={updateMemoMutation.isPending}
-        keyboardHeight={keyboardHeight}
         loadingText="저장중..."
         onPress={() => {
           memoForm.handleSubmit();

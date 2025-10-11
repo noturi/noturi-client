@@ -5,9 +5,9 @@ import { useCallback } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { useInfiniteMemos } from './useInfiniteMemos';
-import { useSearchFilters } from './useSearchFilters';
-import { useTransformMemos } from './useTransformMemos';
+import { useInfiniteMemos } from './use-infinite-memos';
+import { useSearchFilters } from './use-search-filters';
+import { useTransformMemos } from './use-transform-memos';
 
 interface FiltersNamespace {
   // state

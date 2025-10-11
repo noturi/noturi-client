@@ -1,7 +1,7 @@
 import { XStack, YStack } from 'tamagui';
-import { AppleButton } from '~/shared/ui/AppleButton';
-import { GoogleButton } from '~/shared/ui/GoogleButton';
-import { Typography } from '~/shared/ui/Typography';
+import { AppleButton } from '~/shared/ui/apple-button';
+import { GoogleButton } from '~/shared/ui/google-button';
+import { Typography } from '~/shared/ui/typography';
 
 export default function LoginScreen() {
   return (

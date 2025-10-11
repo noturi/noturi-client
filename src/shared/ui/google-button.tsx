@@ -12,7 +12,7 @@ import { Alert, Platform } from 'react-native';
 
 import { router } from 'expo-router';
 
-import { GoogleIcon } from './GoogleIcon';
+import { GoogleIcon } from './google-icon';
 
 // 에러 메시지 매핑
 const ERROR_MESSAGES = {

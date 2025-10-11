@@ -1,3 +1,3 @@
-export { CalendarAddModal } from './CalendarAddModal';
-export { CalendarCreateButton } from './CalendarCreateButton';
-export { CalendarFloatingButton } from './CalendarFloatingButton';
+export { CalendarAddModal } from './calendar-add-modal';
+export { CalendarCreateButton } from './calendar-create-button';
+export { CalendarFloatingButton } from './calendar-floating-button';

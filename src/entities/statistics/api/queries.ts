@@ -1,9 +1,9 @@
 import { OverallStatsParamsDto, TrendsParamsDto } from '~/entities/statistics/model/types';
-import { QUERY_KEYS } from '~/shared/lib/tanstack-query/queryKeys';
+import { QUERY_KEYS } from '~/shared/lib/tanstack-query/query-keys';
 
 import { queryOptions } from '@tanstack/react-query';
 
-import { statisticsApi } from './statisticsApi';
+import { statisticsApi } from './statistics-api';
 
 // 트렌드 분석 쿼리
 export const trendsQuery = (params: TrendsParamsDto = {}) =>

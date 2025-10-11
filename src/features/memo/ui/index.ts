@@ -1,8 +1,8 @@
-export { MemoCreateSheet } from './MemoCreateSheet';
-export { MemoDeleteButton } from './MemoDeleteButton';
-export { MemoEditForm } from './MemoEditForm';
-export { MemoFormContent } from './MemoFormContent';
-export { MemoFormHeader } from './MemoFormHeader';
-export { MemoItem } from './MemoItem';
-export { MemoTypeSelectSheet } from './MemoTypeSelectSheet';
-export { RatingSelector } from './RatingSelector';
+export { MemoCreateSheet } from './memo-create-sheet';
+export { MemoDeleteButton } from './memo-delete-button';
+export { MemoEditForm } from './memo-edit-form';
+export { MemoFormContent } from './memo-form-content';
+export { MemoFormHeader } from './memo-form-header';
+export { MemoItem } from './memo-item';
+export { MemoTypeSelectSheet } from './memo-type-select-sheet';
+export { RatingSelector } from './rating-selector';

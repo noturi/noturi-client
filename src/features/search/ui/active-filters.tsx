@@ -1,6 +1,6 @@
 import { XStack } from 'tamagui';
 
-import { ActiveFilterChip } from './ActiveFilterChip';
+import { ActiveFilterChip } from './active-filter-chip';
 
 interface CategoryLite {
   id: string;

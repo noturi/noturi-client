@@ -1,12 +1,12 @@
 import { ScrollView, Sheet, Text, XStack, YStack } from 'tamagui';
 import { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
 import { useCalendarDate } from '~/shared/lib/calendar';
-import { convertTo24Hour, timeSelectOptions } from '~/shared/lib/formatTime';
+import { convertTo24Hour, timeSelectOptions } from '~/shared/lib/format-time';
 import { Form, Input, Select } from '~/shared/ui';
 
 import { useState } from 'react';
 
-import { CalendarCreateButton } from './CalendarCreateButton';
+import { CalendarCreateButton } from './calendar-create-button';
 
 interface CalendarAddModalProps {
   isOpen: boolean;

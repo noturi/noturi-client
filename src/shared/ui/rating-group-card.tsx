@@ -3,9 +3,9 @@ import type { UIMemo } from '~/entities/memo/model/types';
 
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 
-import { Card } from './Card';
-import { RatingStars } from './RatingStars';
-import { Typography } from './Typography';
+import { Card } from './card';
+import { RatingStars } from './rating-stars';
+import { Typography } from './typography';
 
 export type RatingGroup = {
   rating: number;

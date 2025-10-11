@@ -3,7 +3,7 @@ import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schem
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { CategoryButton } from '~/features/categories/ui/CategoryButton';
+import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/constants/colors';
 import { MESSAGES } from '~/shared/constants/messages';
@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { RatingSelector } from './RatingSelector';
+import { RatingSelector } from './rating-selector';
 
 interface MemoFormContentProps {
   keyboardHeight: number;

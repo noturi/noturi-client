@@ -1,2 +1,2 @@
-export { RootRouter } from './RootRouter';
-export { TabsRouter } from './TabsRouter';
+export { RootRouter } from './root-router';
+export { TabsRouter } from './tabs-router';

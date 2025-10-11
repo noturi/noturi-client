@@ -1,5 +1,5 @@
 import type { MemoListResponseDto, UIMemo } from '~/entities/memo/model/types';
-import { MemoService } from '~/features/memo/lib/memoService';
+import { MemoService } from '~/features/memo/lib/memo-service';
 
 import { useMemo } from 'react';
 

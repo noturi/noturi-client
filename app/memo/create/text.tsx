@@ -1,6 +1,6 @@
 import { YStack } from 'tamagui';
-import { MemoFormContent } from '~/features/memo/ui/MemoFormContent';
-import { MemoFormHeader } from '~/features/memo/ui/MemoFormHeader';
+import { MemoFormContent } from '~/features/memo/ui/memo-form-content';
+import { MemoFormHeader } from '~/features/memo/ui/memo-form-header';
 
 import { SafeAreaView } from 'react-native';
 

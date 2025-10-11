@@ -1,3 +1,3 @@
-export { AppProvider } from './AppProvider';
-export { QueryProvider } from './QueryProvider';
-export { TamaguiProvider } from './TamaguiProvider';
+export { AppProvider } from './app-provider';
+export { QueryProvider } from './query-provider';
+export { TamaguiProvider } from './tamagui-provider';

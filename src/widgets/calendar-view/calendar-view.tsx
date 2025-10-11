@@ -19,9 +19,9 @@ import { Calendar, DateData } from 'react-native-calendars';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { CalendarMemoList } from '../CalendarMemoList';
+import { CalendarMemoList } from '../calendar-memo-list';
 import { CALENDAR_THEME } from './constants';
-import { useCalendarMarkings } from './useCalendarMarkings';
+import { useCalendarMarkings } from './use-calendar-markings';
 
 // 한국어 로케일 초기화
 setupKoreanLocale();

@@ -2,8 +2,8 @@ import { YStack } from 'tamagui';
 
 import React, { Component, ReactNode } from 'react';
 
-import { Button } from './Button';
-import { Typography } from './Typography';
+import { Button } from './button';
+import { Typography } from './typography';
 
 interface Props {
   children: ReactNode;
