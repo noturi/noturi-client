@@ -1,4 +1,4 @@
-import { Memo, memoApi, UIMemo } from '~/entities/memo';
+import { Memo, UIMemo, memoApi } from '~/entities/memo';
 import { formatTimeAgo } from '~/shared/lib/format-time';
 
 /**
