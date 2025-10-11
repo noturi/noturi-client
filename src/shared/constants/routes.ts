@@ -53,7 +53,7 @@ export const ROUTES = {
     name: 'memo/create/rating',
     path: '/memo/create/rating',
     href: '/memo/create/rating',
-    label: '별점 메모 작성',
+    label: '메모 작성',
   },
   memoCreateText: {
     name: 'memo/create/text',
