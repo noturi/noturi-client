@@ -17,7 +17,7 @@ export interface Memo {
 export interface CreateMemoDto {
   title: string;
   content: string;
-  categoryId: string; // UUID 형태
+  categoryId?: string; // UUID 형태, 선택사항
   rating: number;
   description?: string;
 }
