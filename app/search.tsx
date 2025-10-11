@@ -1,5 +1,5 @@
 import { Sheet, YStack } from 'tamagui';
-import { useMemoSearch } from '~/features/search/lib/hooks/use-memo-search';
+import { useMemoSearch } from '~/features/search/model';
 import {
   ActiveFilters,
   EmptyState,

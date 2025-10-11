@@ -1,4 +1,5 @@
 import { Button, ScrollView, XStack, YStack } from 'tamagui';
+import { memoDetailQuery } from '~/entities/memo/api';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/categories/api';
@@ -12,7 +13,7 @@ import { Keyboard, Platform } from 'react-native';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { memoDetailQuery, useUpdateMemoMutation } from '../api';
+import { useUpdateMemoMutation } from '../api';
 import { RatingSelector } from './rating-selector';
 
 interface MemoEditFormProps {
@@ -31,8 +32,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
 
   const memoForm = useForm<MemoFormData>({
     initialValues: {
-      title: '',
-      content: '',
+      text: '',
       rating: 0,
       selectedCategory: '',
     },
@@ -47,10 +47,15 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
         return;
       }
 
+      // text를 제목과 내용으로 분리
+      const lines = values.text.split('\n');
+      const title = lines[0].trim() || '제목 없음';
+      const content = lines.slice(1).join('\n').trim();
+
       updateMemoMutation.mutate({
         id: memoId,
-        title: values.title,
-        content: values.content,
+        title,
+        content: content || '',
         categoryId: selectedCat.id,
         rating: values.rating,
       });
@@ -65,8 +70,8 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
   // 메모 데이터로 폼 초기화
   useEffect(() => {
     if (memo) {
-      memoForm.setValue('title', memo.title);
-      memoForm.setValue('content', memo.content);
+      const text = memo.content ? `${memo.title}\n${memo.content}` : memo.title;
+      memoForm.setValue('text', text);
       memoForm.setValue('rating', Number(memo.rating));
       memoForm.setValue('selectedCategory', memo.category.name);
     }
@@ -122,11 +127,8 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     memoForm.setValue('selectedCategory', categoryName);
   };
 
-  const shouldShowTitleError = memoForm.shouldShowError('title');
-  const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
-
-  const shouldShowContentError = memoForm.shouldShowError('content');
-  const contentError = shouldShowContentError ? memoForm.errors.content : undefined;
+  const shouldShowTextError = memoForm.shouldShowError('text');
+  const textError = shouldShowTextError ? memoForm.errors.text : undefined;
 
   if (isLoading) {
     return (
@@ -147,25 +149,17 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
       >
         <YStack padding="$4">
           <Form>
-            <Form.Field required error={titleError} label="제목">
-              <Input
-                autoFocus
-                hasError={!!shouldShowTitleError}
-                placeholder="제목을 입력하세요"
-                value={memoForm.values.title}
-                onBlur={() => memoForm.setTouched('title')}
-                onChangeText={(text) => memoForm.setValue('title', text)}
-              />
-            </Form.Field>
-
-            <Form.Field required error={contentError} label="내용">
+            <Form.Field required error={textError} label="메모">
               <TextArea
+                autoFocus
                 multiline
-                hasError={!!shouldShowContentError}
-                placeholder="무엇을 기록하고 싶나요?"
-                value={memoForm.values.content}
-                onBlur={() => memoForm.setTouched('content')}
-                onChangeText={(text) => memoForm.setValue('content', text)}
+                hasError={!!shouldShowTextError}
+                minHeight={220}
+                placeholder="첫 번째 줄은 제목, 나머지는 내용이 됩니다"
+                value={memoForm.values.text}
+                onBlur={() => memoForm.setTouched('text')}
+                onChangeText={(text) => memoForm.setValue('text', text)}
+                onFocus={() => memoForm.clearError('text')}
               />
             </Form.Field>
 

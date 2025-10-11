@@ -3,6 +3,14 @@ import { QUERY_KEYS } from '~/shared/lib';
 
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
+/**
+ * Entity Layer - READ 전용 React Query
+ *
+ * 이 파일은 메모 엔티티의 조회용 Query만 정의합니다.
+ * - ✅ queryOptions, infiniteQueryOptions만 사용
+ * - ❌ useMutation은 features/memo/api/mutations.ts에서 처리
+ */
+
 // 메모 목록 쿼리
 export const memoListQuery = (params: MemoListParamsDto = {}) =>
   queryOptions({

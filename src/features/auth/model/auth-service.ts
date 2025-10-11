@@ -1,5 +1,5 @@
-import { authTokenCache } from '~/shared/model/cache';
-import Logger from '~/shared/model/logger';
+import { authTokenCache } from '~/shared/lib/cache';
+import Logger from '~/shared/lib/logger';
 
 import { authApi } from '../api/apis';
 

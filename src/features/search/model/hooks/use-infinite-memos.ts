@@ -1,5 +1,4 @@
-import { type MemoListResponseDto } from '~/entities/memo/model/types';
-import { memoApi } from '~/features/memo/api';
+import { type MemoListResponseDto, memoApi } from '~/entities/memo';
 
 import { type InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 

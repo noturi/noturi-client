@@ -1,7 +1,7 @@
 import { User } from '~/entities/user';
 import { HREFS } from '~/shared/constants';
-import { tokenEventManager, useTokens } from '~/shared/model';
-import Logger from '~/shared/model/logger';
+import { tokenEventManager, useTokens } from '~/shared/lib';
+import Logger from '~/shared/lib/logger';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 

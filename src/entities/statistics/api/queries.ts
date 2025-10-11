@@ -1,5 +1,5 @@
 import { OverallStatsParamsDto, TrendsParamsDto } from '~/entities/statistics/model/types';
-import { QUERY_KEYS } from '~/shared/lib/tanstack-query/query-keys';
+import { QUERY_KEYS } from '~/shared/lib';
 
 import { queryOptions } from '@tanstack/react-query';
 

@@ -13,7 +13,15 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { memoApi } from './apis';
+import { memoMutationApi } from './apis';
+
+/**
+ * Feature Layer - CUD 전용 React Query Mutations
+ *
+ * 이 파일은 메모 피처의 변경용 Mutation만 정의합니다.
+ * - ✅ useMutation 관련 hooks만 사용
+ * - ❌ useQuery는 entities/memo/api/queries.ts에서 처리
+ */
 
 // 메모 생성 뮤테이션
 export function useCreateMemoMutation(
@@ -27,7 +35,7 @@ export function useCreateMemoMutation(
 
   return useMutation({
     mutationKey: ['memo', 'create', ...mutationKey],
-    mutationFn: (data: CreateMemoDto) => memoApi.createMemo(data),
+    mutationFn: (data: CreateMemoDto) => memoMutationApi.createMemo(data),
     onMutate,
     onSuccess: async (newMemo, createData, context) => {
       // 새로 생성된 메모를 캐시에 저장
@@ -72,7 +80,7 @@ export function useUpdateMemoMutation(
 
   return useMutation({
     mutationKey: ['memo', 'update', ...mutationKey],
-    mutationFn: (data: UpdateMemoDto) => memoApi.updateMemo(data),
+    mutationFn: (data: UpdateMemoDto) => memoMutationApi.updateMemo(data),
     onMutate,
     onSuccess: async (updatedMemo, updateData, context) => {
       // 특정 메모 캐시 업데이트
@@ -116,7 +124,7 @@ export function useDeleteMemoMutation(
 
   return useMutation({
     mutationKey: ['memo', 'delete', ...mutationKey],
-    mutationFn: (id: string) => memoApi.deleteMemo(id),
+    mutationFn: (id: string) => memoMutationApi.deleteMemo(id),
     onMutate,
     onSuccess: async (_, deletedId, context) => {
       // 삭제된 메모의 캐시 제거
@@ -161,7 +169,7 @@ export function useBulkDeleteMemosMutation(
 
   return useMutation({
     mutationKey: ['memo', 'bulk-delete', ...mutationKey],
-    mutationFn: (data: BulkDeleteMemosDto) => memoApi.bulkDeleteMemos(data),
+    mutationFn: (data: BulkDeleteMemosDto) => memoMutationApi.bulkDeleteMemos(data),
     onMutate,
     onSuccess: async (_, deleteData, context) => {
       // 삭제된 메모들의 캐시 제거

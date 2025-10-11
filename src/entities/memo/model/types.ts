@@ -70,6 +70,14 @@ export interface MemoSearchResultDto {
   highlightedFields?: string[];
 }
 
+// 메모 통계
+export interface MemoStatsDto {
+  totalMemos: number;
+  totalCategories: number;
+  averageRating: number;
+  recentMemosCount: number;
+}
+
 // UI 메모 타입 정의
 export interface UIMemo {
   id: string; // UUID 형태로 변경

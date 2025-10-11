@@ -1,4 +1,4 @@
-import { useDebounce } from '~/shared/model/use-debounce';
+import { useDebounce } from '~/shared/lib/use-debounce';
 
 import { useCallback, useState } from 'react';
 

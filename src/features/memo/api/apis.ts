@@ -1,52 +1,19 @@
 import { KyInstance } from 'ky';
-import {
-  BulkDeleteMemosDto,
-  CategoryStatsDto,
-  CreateMemoDto,
-  Memo,
-  MemoListParamsDto,
-  MemoListResponseDto,
-  MemoSearchResultDto,
-  UpdateMemoDto,
-} from '~/entities/memo';
+import { BulkDeleteMemosDto, CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
 import { api } from '~/shared/api';
 
-export class MemoApi {
+/**
+ * Feature Layer - CUD 전용 API
+ *
+ * 이 클래스는 메모 피처의 변경 작업만 담당합니다.
+ * - ✅ POST, PUT, DELETE 요청만 처리
+ * - ❌ GET 요청은 entities/memo/api/apis.ts에서 처리
+ */
+export class MemoMutationApi {
   private api: KyInstance;
 
   constructor(apiInstance: KyInstance) {
     this.api = apiInstance;
-  }
-
-  // 메모 목록 조회
-  async getMemos(params: MemoListParamsDto = {}): Promise<MemoListResponseDto> {
-    const searchParams = new URLSearchParams();
-
-    if (params.page) searchParams.append('page', params.page.toString());
-    if (params.limit) searchParams.append('limit', params.limit.toString());
-    if (params.categoryId) searchParams.append('categoryId', params.categoryId);
-    if (params.categoryIds && params.categoryIds.length > 0) {
-      for (const id of params.categoryIds) searchParams.append('categoryIds', id);
-    }
-    if (params.rating !== undefined) searchParams.append('rating', params.rating.toString());
-    if (params.sortBy) searchParams.append('sortBy', params.sortBy);
-    if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
-    if (params.search) searchParams.append('search', params.search);
-    if (params.startDate) searchParams.append('startDate', params.startDate);
-    if (params.endDate) searchParams.append('endDate', params.endDate);
-
-    const url = `memos?${searchParams.toString()}`;
-
-    const response = await this.api.get(url);
-    const data = await response.json<MemoListResponseDto>();
-
-    return data;
-  }
-
-  // 특정 메모 조회
-  async getMemo(id: string): Promise<Memo> {
-    const response = await this.api.get(`memos/${id}`);
-    return response.json<Memo>();
   }
 
   // 메모 생성
@@ -77,29 +44,6 @@ export class MemoApi {
       json: data,
     });
   }
-
-  // 카테고리 목록 조회
-  async getCategories(): Promise<CategoryStatsDto[]> {
-    const response = await this.api.get('memos/categories');
-    return response.json<CategoryStatsDto[]>();
-  }
-
-  // 메모 검색
-  async searchMemos(query: string): Promise<MemoSearchResultDto> {
-    const response = await this.api.get(`memos/search?q=${encodeURIComponent(query)}`);
-    return response.json<MemoSearchResultDto>();
-  }
-
-  // 메모 통계 조회
-  async getMemoStats(): Promise<{
-    totalMemos: number;
-    totalCategories: number;
-    averageRating: number;
-    recentMemosCount: number;
-  }> {
-    const response = await this.api.get('memos/stats');
-    return response.json();
-  }
 }
 
-export const memoApi = new MemoApi(api);
+export const memoMutationApi = new MemoMutationApi(api);

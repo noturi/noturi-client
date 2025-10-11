@@ -1,7 +1,11 @@
-import { NativeCalendarService } from '~/shared/model/calendar';
-import Logger from '~/shared/model/logger';
+import { NativeCalendarService } from '~/shared/lib/calendar';
+import Logger from '~/shared/lib/logger';
 
-import type { CalendarMemo, CreateCalendarMemoDto, UpdateCalendarMemoDto } from '../model/types';
+import type {
+  CalendarMemo,
+  CreateCalendarMemoDto,
+  UpdateCalendarMemoDto,
+} from '~/entities/calendar-memo/model/types';
 
 export class CalendarMemoService {
   // 캘린더 메모를 네이티브 캘린더와 동기화

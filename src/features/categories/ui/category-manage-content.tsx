@@ -16,7 +16,7 @@ import { X } from '@tamagui/lucide-icons';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { handleCategoryFormError } from '../lib/form-error-handler';
+import { handleCategoryFormError } from '../model/form-error-handler';
 
 interface CategoryManageContentProps {
   keyboardHeight: number;

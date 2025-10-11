@@ -5,7 +5,7 @@ import {
   ReorderCategoriesDto,
   UpdateCategoryDto,
 } from '~/entities/category/model/types';
-import { QUERY_KEYS } from '~/shared/lib/tanstack-query/query-keys';
+import { QUERY_KEYS } from '~/shared/lib';
 
 import {
   type DefaultError,

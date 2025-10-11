@@ -1,6 +1,6 @@
 import { Separator, XStack, YStack } from 'tamagui';
 import { useLogoutMutation } from '~/features/auth/api/mutation';
-import { useAuth } from '~/features/auth/lib/auth';
+import { useAuth } from '~/features/auth/model';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { HREFS } from '~/shared/constants/routes';
 import { Card, Typography } from '~/shared/ui';

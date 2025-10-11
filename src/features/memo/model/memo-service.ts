@@ -1,7 +1,5 @@
-import { CreateMemoDto, Memo, UIMemo, UpdateMemoDto } from '~/entities/memo';
-import { formatTimeAgo } from '~/shared/model/format-time';
-
-import { memoApi } from '../api';
+import { Memo, memoApi, UIMemo } from '~/entities/memo';
+import { formatTimeAgo } from '~/shared/lib/format-time';
 
 /**
  * 메모 서비스 클래스
@@ -9,81 +7,13 @@ import { memoApi } from '../api';
  */
 export class MemoService {
   /**
-   * 메모 생성 전 데이터 검증 및 변환
-   */
-  async createMemoWithValidation(data: CreateMemoDto): Promise<Memo> {
-    // 데이터 검증
-    if (!data.title.trim()) {
-      throw new Error('제목은 필수입니다.');
-    }
-
-    if (!data.content.trim()) {
-      throw new Error('내용은 필수입니다.');
-    }
-
-    if (data.rating < 0 || data.rating > 5) {
-      throw new Error('평점은 0-5 사이의 값이어야 합니다.');
-    }
-
-    // 데이터 정제
-    const processedData: CreateMemoDto = {
-      ...data,
-      title: data.title.trim(),
-      content: data.content.trim(),
-      categoryId: data.categoryId,
-      description: data.description?.trim(),
-    };
-
-    return await memoApi.createMemo(processedData);
-  }
-
-  /**
-   * 메모 수정 전 데이터 검증 및 변환
-   */
-  async updateMemoWithValidation(data: UpdateMemoDto): Promise<Memo> {
-    // 데이터 검증
-    if (data.title && !data.title.trim()) {
-      throw new Error('제목은 빈 값일 수 없습니다.');
-    }
-
-    if (data.content && !data.content.trim()) {
-      throw new Error('내용은 빈 값일 수 없습니다.');
-    }
-
-    if (data.rating !== undefined && (data.rating < 0 || data.rating > 5)) {
-      throw new Error('평점은 0-5 사이의 값이어야 합니다.');
-    }
-
-    // 데이터 정제
-    const processedData: UpdateMemoDto = {
-      ...data,
-      title: data.title?.trim(),
-      content: data.content?.trim(),
-      categoryId: data.categoryId,
-      description: data.description?.trim(),
-    };
-
-    return await memoApi.updateMemo(processedData);
-  }
-
-  /**
-   * 메모 삭제 전 확인
-   */
-  async deleteMemoWithConfirmation(id: string, skipConfirmation: boolean = false): Promise<void> {
-    if (!skipConfirmation) {
-    }
-
-    return await memoApi.deleteMemo(id);
-  }
-
-  /**
    * 메모 검색 결과 하이라이팅
    */
   async searchMemosWithHighlight(query: string) {
     const result = await memoApi.searchMemos(query);
 
     // 검색 결과에 하이라이팅 로직 추가
-    const highlightedMemos = result.memos.map((memo) => ({
+    const highlightedMemos = result.memos.map((memo: Memo) => ({
       ...memo,
       highlightedTitle: this.highlightText(memo.title, query),
       highlightedContent: this.highlightText(memo.content, query),
@@ -108,7 +38,7 @@ export class MemoService {
       categoryStats: categories,
       averageMemosPerCategory: categories.length > 0 ? stats.totalMemos / categories.length : 0,
       topCategory: categories.reduce(
-        (prev, current) => (prev.count > current.count ? prev : current),
+        (prev: any, current: any) => (prev.count > current.count ? prev : current),
         categories[0],
       ),
     };

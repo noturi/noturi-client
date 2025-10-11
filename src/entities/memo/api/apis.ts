@@ -5,9 +5,17 @@ import {
   MemoListParamsDto,
   MemoListResponseDto,
   MemoSearchResultDto,
+  MemoStatsDto,
 } from '~/entities/memo/model/types';
 import { api } from '~/shared/api';
 
+/**
+ * Entity Layer - READ 전용 API
+ *
+ * 이 클래스는 메모 엔티티의 조회 작업만 담당합니다.
+ * - ✅ GET 요청만 처리
+ * - ❌ POST, PUT, DELETE는 features/memo/api/apis.ts에서 처리
+ */
 export class MemoApi {
   private api: KyInstance;
 
@@ -59,14 +67,9 @@ export class MemoApi {
   }
 
   // 메모 통계 조회
-  async getMemoStats(): Promise<{
-    totalMemos: number;
-    totalCategories: number;
-    averageRating: number;
-    recentMemosCount: number;
-  }> {
+  async getMemoStats(): Promise<MemoStatsDto> {
     const response = await this.api.get('memos/stats');
-    return response.json();
+    return response.json<MemoStatsDto>();
   }
 }
 
