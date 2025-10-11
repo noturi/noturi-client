@@ -1,17 +1,12 @@
 import { z } from 'zod';
 
 export const memoFormSchema = z.object({
-  title: z
-    .string()
-    .min(1, '제목을 입력해주세요')
-    .max(100, '제목은 100자 이하로 입력해주세요')
-    .transform((val) => val.trim()),
-  content: z
+  text: z
     .string()
     .min(1, '내용을 입력해주세요')
-    .max(2000, '내용은 2000자 이하로 입력해주세요')
+    .max(2100, '내용은 2100자 이하로 입력해주세요')
     .transform((val) => val.trim()),
-  selectedCategory: z.string().min(1, '카테고리를 선택해주세요'),
+  selectedCategory: z.string().optional(),
   rating: z.number().min(0).max(5),
 });
 
