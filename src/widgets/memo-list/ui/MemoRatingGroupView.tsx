@@ -12,12 +12,20 @@ type MemoRatingGroupViewProps = {
 };
 
 const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
-  return [5, 4, 3, 2, 1]
+  const groups = [5, 4, 3, 2, 1, 0]
     .map((rating) => ({
       rating,
-      memos: memos.filter((memo) => Math.ceil(memo.rating) === rating),
+      memos: memos.filter((memo) => {
+        if (rating === 0) {
+          // 평점이 없거나 0인 메모들
+          return !memo.rating || memo.rating === 0;
+        }
+        return Math.ceil(memo.rating) === rating;
+      }),
     }))
     .filter((group) => group.memos.length > 0);
+
+  return groups;
 };
 
 export function MemoRatingGroupView({
