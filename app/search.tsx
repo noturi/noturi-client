@@ -1,8 +1,4 @@
-import { useCallback } from 'react';
-
-import { Search } from '@tamagui/lucide-icons';
 import { Sheet, YStack } from 'tamagui';
-
 import { useMemoSearch } from '~/features/search/lib/hooks/use-memo-search';
 import {
   ActiveFilters,
@@ -11,6 +7,10 @@ import {
   MemoList,
   SearchInputBar,
 } from '~/features/search/ui';
+
+import { useCallback } from 'react';
+
+import { Search } from '@tamagui/lucide-icons';
 
 export default function SearchScreen() {
   const { filters, categories, memos } = useMemoSearch();

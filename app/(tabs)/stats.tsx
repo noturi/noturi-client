@@ -32,10 +32,10 @@ export default function StatsScreen() {
         justifyContent="center"
         padding="$sm"
       >
-        <Typography variant="headline" textAlign="center">
+        <Typography textAlign="center" variant="headline">
           통계 조회 실패
         </Typography>
-        <Typography variant="footnote" color="$textMuted" textAlign="center">
+        <Typography color="$textMuted" textAlign="center" variant="footnote">
           통계 데이터를 불러오는데 실패했습니다.{'\n'}잠시 후 다시 시도해주세요.
         </Typography>
       </YStack>

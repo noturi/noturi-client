@@ -34,7 +34,7 @@ export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
       >
         <X color="$primary" size="$5" strokeWidth={2} />
       </XStack>
-      
+
       <Typography color="$textPrimary" fontWeight="600" variant="headline">
         새 메모
       </Typography>

@@ -52,89 +52,88 @@ export function TabsRouter() {
         },
       }}
     >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: '',
-            tabBarIcon: ({ color, focused }) => (
-              <Home color={color as any} fill={focused ? color : 'none'} size="$5" />
-            ),
-            tabBarButton: (props) => (
-              <Pressable
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 8,
-                  },
-                ]}
-                onPress={props.onPress}
-              >
-                {props.children}
-              </Pressable>
-            ),
-            // headerRight: () => (
-            //   <XStack paddingRight="$md">
-            //     <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
-            //       <Search size="$lg" />
-            //     </Pressable>
-            //   </XStack>
-            // ),
-          }}
-        />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <Home color={color as any} fill={focused ? color : 'none'} size="$5" />
+          ),
+          tabBarButton: (props) => (
+            <Pressable
+              style={[
+                {
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 8,
+                },
+              ]}
+              onPress={props.onPress}
+            >
+              {props.children}
+            </Pressable>
+          ),
+          // headerRight: () => (
+          //   <XStack paddingRight="$md">
+          //     <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
+          //       <Search size="$lg" />
+          //     </Pressable>
+          //   </XStack>
+          // ),
+        }}
+      />
 
+      <Tabs.Screen
+        name="stats"
+        options={{
+          title: '통계',
+          tabBarIcon: ({ color, focused }) => (
+            <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$5" />
+          ),
+          tabBarButton: (props) => (
+            <Pressable
+              style={[
+                {
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 8,
+                },
+              ]}
+              onPress={props.onPress}
+            >
+              {props.children}
+            </Pressable>
+          ),
+        }}
+      />
 
-        <Tabs.Screen
-          name="stats"
-          options={{
-            title: '통계',
-            tabBarIcon: ({ color, focused }) => (
-              <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$5" />
-            ),
-            tabBarButton: (props) => (
-              <Pressable
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 8,
-                  },
-                ]}
-                onPress={props.onPress}
-              >
-                {props.children}
-              </Pressable>
-            ),
-          }}
-        />
-
-        <Tabs.Screen
-          name="profile"
-          options={{
-            title: '프로필',
-            tabBarIcon: ({ color, focused }) => (
-              <User color={color as any} fill={focused ? color : 'none'} size="$5" />
-            ),
-            tabBarButton: (props) => (
-              <Pressable
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingVertical: 12,
-                    paddingHorizontal: 20,
-                  },
-                ]}
-                onPress={props.onPress}
-              >
-                {props.children}
-              </Pressable>
-            ),
-          }}
-        />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: '프로필',
+          tabBarIcon: ({ color, focused }) => (
+            <User color={color as any} fill={focused ? color : 'none'} size="$5" />
+          ),
+          tabBarButton: (props) => (
+            <Pressable
+              style={[
+                {
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingVertical: 12,
+                  paddingHorizontal: 20,
+                },
+              ]}
+              onPress={props.onPress}
+            >
+              {props.children}
+            </Pressable>
+          ),
+        }}
+      />
     </Tabs>
   );
 }

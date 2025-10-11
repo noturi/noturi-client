@@ -70,6 +70,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
       memoForm.setValue('rating', Number(memo.rating));
       memoForm.setValue('selectedCategory', memo.category.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memo]);
 
   // 키보드 이벤트 처리

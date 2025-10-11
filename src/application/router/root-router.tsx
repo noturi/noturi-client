@@ -1,4 +1,4 @@
-import { XStack, useTheme, Text } from 'tamagui';
+import { XStack, useTheme } from 'tamagui';
 
 import { Pressable } from 'react-native';
 
