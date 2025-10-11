@@ -36,27 +36,41 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     },
     validationSchema: memoFormSchema,
     onSubmit: async (values) => {
-      const selectedCat = categories.find((cat) => cat.name === values.selectedCategory);
-      if (!selectedCat) {
-        memoForm.setError('selectedCategory', {
-          message: '카테고리를 선택해주세요.',
-          type: 'required',
-        });
-        return;
+      // 첫 번째 줄을 제목으로, 나머지를 내용으로 분리
+      const lines = values.text.split('\n');
+      let title = lines[0].trim() || '제목 없음';
+      let content = lines.slice(1).join('\n').trim();
+
+      // 제목이 30자를 넘으면 잘라서 나머지는 내용에 추가
+      if (title.length > 30) {
+        const truncatedTitle = title.substring(0, 30);
+        const remainingText = title.substring(30);
+        title = truncatedTitle;
+        content = remainingText + (content ? '\n' + content : '');
       }
 
-      // text를 제목과 내용으로 분리
-      const lines = values.text.split('\n');
-      const title = lines[0].trim() || '제목 없음';
-      const content = lines.slice(1).join('\n').trim();
+      // 카테고리가 선택된 경우에만 categoryId 포함
+      const selectedCat = values.selectedCategory
+        ? categories.find((cat) => cat.name === values.selectedCategory)
+        : null;
 
-      updateMemoMutation.mutate({
+      const memoData: any = {
         id: memoId,
         title,
         content: content || '',
-        categoryId: selectedCat.id,
-        rating: values.rating,
-      });
+      };
+
+      // categoryId가 있을 때만 추가
+      if (selectedCat?.id) {
+        memoData.categoryId = selectedCat.id;
+      }
+
+      // rating이 0보다 클 때만 추가
+      if (values.rating > 0) {
+        memoData.rating = values.rating;
+      }
+
+      updateMemoMutation.mutate(memoData);
     },
   });
 
@@ -70,8 +84,8 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     if (memo) {
       const text = memo.content ? `${memo.title}\n${memo.content}` : memo.title;
       memoForm.setValue('text', text);
-      memoForm.setValue('rating', Number(memo.rating));
-      memoForm.setValue('selectedCategory', memo.category.name);
+      memoForm.setValue('rating', Number(memo.rating) || 0);
+      memoForm.setValue('selectedCategory', memo.category?.name || '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memo]);
@@ -145,7 +159,6 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
             </Form.Field>
 
             <Form.Field
-              required
               error={
                 memoForm.shouldShowError('selectedCategory')
                   ? memoForm.errors.selectedCategory
