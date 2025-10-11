@@ -58,22 +58,24 @@ export default function MemoDetailScreen() {
           <YStack gap="$2">
             <XStack alignItems="flex-start" justifyContent="space-between">
               <XStack alignItems="center" flex={1} gap="$4">
-                <YStack
-                  backgroundColor={memo.category.color}
-                  borderRadius="$2"
-                  paddingHorizontal="$3"
-                  paddingVertical="$2"
-                >
-                  <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
-                    {memo.category.name}
-                  </Typography>
-                </YStack>
+                {memo.category && (
+                  <YStack
+                    backgroundColor={memo.category.color}
+                    borderRadius="$2"
+                    paddingHorizontal="$3"
+                    paddingVertical="$2"
+                  >
+                    <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
+                      {memo.category.name}
+                    </Typography>
+                  </YStack>
+                )}
                 <Typography color="$textMuted" variant="caption2">
                   {formatDate(memo.createdAt)}
                 </Typography>
               </XStack>
               <XStack alignItems="center" gap="$2">
-                <StarRating rating={memo.rating} />
+                {memo.rating > 0 && <StarRating rating={memo.rating} />}
                 <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
               </XStack>
             </XStack>
