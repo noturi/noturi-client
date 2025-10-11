@@ -1,4 +1,4 @@
-import { Spinner, View, XStack } from 'tamagui';
+import { Spinner, Text, View, XStack } from 'tamagui';
 import { useKeyboard } from '~/shared/lib';
 import { Button } from '~/shared/ui';
 
@@ -39,7 +39,7 @@ export const SubmitButton = ({
   const loadingContent = (
     <XStack alignItems="center" gap="$2">
       <Spinner color="white" size="small" />
-      {loadingText}
+      <Text color="white">{loadingText}</Text>
     </XStack>
   );
 
