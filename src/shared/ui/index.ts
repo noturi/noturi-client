@@ -2,6 +2,7 @@ export * from './ApiErrorBoundary';
 export * from './AppleButton';
 export * from './Button';
 export * from './Card';
+export * from './FloatingButton';
 export * from './Form';
 export * from './Input';
 export * from './Loading';
