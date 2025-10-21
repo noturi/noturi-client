@@ -1,7 +1,7 @@
 import { YStack } from 'tamagui';
 import { MemoFormContent } from '~/features/memo/ui/memo-form-content';
 
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
 
