@@ -1,10 +1,9 @@
 import { useTheme } from 'tamagui';
 
-import { Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Redirect, Tabs } from 'expo-router';
-
-import { FileChartColumn, Home, User } from '@tamagui/lucide-icons';
+import { Redirect } from 'expo-router';
+import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { useAuth } from '../../features/auth';
 import { HREFS } from '../../shared/constants';
@@ -23,117 +22,29 @@ export function TabsRouter() {
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: theme.backgroundSecondary.val,
-        },
-        headerTintColor: theme.textPrimary.val,
-        headerTitleStyle: {
-          fontWeight: '600',
-          fontSize: 20,
-        },
-        headerShadowVisible: false,
-        headerTitleAlign: 'left',
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          height: 83,
-          paddingBottom: 30,
-          paddingTop: 5,
-        },
-        tabBarActiveTintColor: theme.primary.val,
-        tabBarInactiveTintColor: theme.textMuted.val,
-        tabBarItemStyle: {
-          paddingVertical: 4,
-          paddingHorizontal: 16,
-          minHeight: 35,
-          minWidth: 35,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <Home color={color as any} fill={focused ? color : 'none'} size="$5" />
-          ),
-          tabBarButton: (props) => (
-            <Pressable
-              style={[
-                {
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 8,
-                },
-              ]}
-              onPress={props.onPress}
-            >
-              {props.children}
-            </Pressable>
-          ),
-          // headerRight: () => (
-          //   <XStack paddingRight="$md">
-          //     <Pressable style={{ padding: 8 }} onPress={() => router.push(HREFS.search())}>
-          //       <Search size="$lg" />
-          //     </Pressable>
-          //   </XStack>
-          // ),
+    <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1 }}>
+      <NativeTabs
+        disableTransparentOnScrollEdge
+        labelStyle={{
+          color: theme.textPrimary.val,
         }}
-      />
+        tintColor={theme.primary.val}
+      >
+        <NativeTabs.Trigger name="index">
+          <Icon drawable="ic_menu_home" sf="house.fill" />
+          <Label>홈</Label>
+        </NativeTabs.Trigger>
 
-      <Tabs.Screen
-        name="stats"
-        options={{
-          title: '통계',
-          tabBarIcon: ({ color, focused }) => (
-            <FileChartColumn color={color as any} fill={focused ? color : 'none'} size="$5" />
-          ),
-          tabBarButton: (props) => (
-            <Pressable
-              style={[
-                {
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 8,
-                },
-              ]}
-              onPress={props.onPress}
-            >
-              {props.children}
-            </Pressable>
-          ),
-        }}
-      />
+        <NativeTabs.Trigger name="stats">
+          <Icon drawable="ic_menu_agenda" sf="chart.bar.fill" />
+          <Label>통계</Label>
+        </NativeTabs.Trigger>
 
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: '프로필',
-          tabBarIcon: ({ color, focused }) => (
-            <User color={color as any} fill={focused ? color : 'none'} size="$5" />
-          ),
-          tabBarButton: (props) => (
-            <Pressable
-              style={[
-                {
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingVertical: 12,
-                  paddingHorizontal: 20,
-                },
-              ]}
-              onPress={props.onPress}
-            >
-              {props.children}
-            </Pressable>
-          ),
-        }}
-      />
-    </Tabs>
+        <NativeTabs.Trigger name="profile">
+          <Icon drawable="ic_menu_myplaces" sf="person.fill" />
+          <Label>프로필</Label>
+        </NativeTabs.Trigger>
+      </NativeTabs>
+    </SafeAreaView>
   );
 }
