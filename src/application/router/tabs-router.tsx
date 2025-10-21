@@ -1,7 +1,5 @@
 import { useTheme } from 'tamagui';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { Redirect } from 'expo-router';
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
@@ -22,29 +20,27 @@ export function TabsRouter() {
   }
 
   return (
-    <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1 }}>
-      <NativeTabs
-        disableTransparentOnScrollEdge
-        labelStyle={{
-          color: theme.textPrimary.val,
-        }}
-        tintColor={theme.primary.val}
-      >
-        <NativeTabs.Trigger name="index">
-          <Icon drawable="ic_menu_home" sf="house.fill" />
-          <Label>홈</Label>
-        </NativeTabs.Trigger>
+    <NativeTabs
+      disableTransparentOnScrollEdge
+      labelStyle={{
+        color: String(theme.textPrimary.val),
+      }}
+      tintColor={String(theme.primary.val)}
+    >
+      <NativeTabs.Trigger name="index">
+        <Icon drawable="ic_menu_home" sf="house.fill" />
+        <Label>홈</Label>
+      </NativeTabs.Trigger>
 
-        <NativeTabs.Trigger name="stats">
-          <Icon drawable="ic_menu_agenda" sf="chart.bar.fill" />
-          <Label>통계</Label>
-        </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="stats">
+        <Icon drawable="ic_menu_agenda" sf="chart.bar.fill" />
+        <Label>통계</Label>
+      </NativeTabs.Trigger>
 
-        <NativeTabs.Trigger name="profile">
-          <Icon drawable="ic_menu_myplaces" sf="person.fill" />
-          <Label>프로필</Label>
-        </NativeTabs.Trigger>
-      </NativeTabs>
-    </SafeAreaView>
+      <NativeTabs.Trigger name="profile">
+        <Icon drawable="ic_menu_myplaces" sf="person.fill" />
+        <Label>프로필</Label>
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 }
