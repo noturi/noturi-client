@@ -21,10 +21,7 @@ interface MemoFormContentProps {
   shouldAutoFocus?: boolean;
 }
 
-export const MemoFormContent = ({
-  onSuccess,
-  shouldAutoFocus = false,
-}: MemoFormContentProps) => {
+export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoFormContentProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<any>(null);
   const toast = useToast();
@@ -216,19 +213,13 @@ export const MemoFormContent = ({
                   <XStack alignItems="center" gap="$1">
                     <Button
                       disabled={!categoryForm.isValid || createCategoryMutation.isPending}
-                      minWidth={60}
-                      size="md"
+                      size="sm"
                       variant="primary"
                       onPress={handleAddCategory}
                     >
                       추가
                     </Button>
-                    <Button
-                      minWidth={60}
-                      size="md"
-                      variant="ghost"
-                      onPress={handleCancelAddCategory}
-                    >
+                    <Button size="sm" variant="ghost" onPress={handleCancelAddCategory}>
                       취소
                     </Button>
                   </XStack>
