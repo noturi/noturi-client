@@ -1,8 +1,6 @@
 import { YStack } from 'tamagui';
 import { MemoFormContent } from '~/features/memo/ui/memo-form-content';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { router } from 'expo-router';
 
 export default function RatingMemoCreateScreen() {
@@ -11,12 +9,10 @@ export default function RatingMemoCreateScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      <YStack backgroundColor="$backgroundPrimary" flex={1}>
-        <YStack flex={1}>
-          <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
-        </YStack>
+    <YStack backgroundColor="$backgroundSecondary" flex={1}>
+      <YStack flex={1} padding="$4">
+        <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
       </YStack>
-    </SafeAreaView>
+    </YStack>
   );
 }
