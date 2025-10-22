@@ -1,4 +1,4 @@
-import { ScrollView, YStack } from 'tamagui';
+import { YStack } from 'tamagui';
 import type { UICategory } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo';
 import { infiniteMemoListQuery } from '~/entities/memo';
@@ -6,15 +6,9 @@ import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
 import { CalendarDateProvider } from '~/shared/lib/calendar';
-import Logger from '~/shared/lib/logger';
-import { Card, FloatingButton, Loading, Typography } from '~/shared/ui';
+import { Card, Loading, Typography } from '~/shared/ui';
 import { CalendarView } from '~/widgets/calendar-view';
-import {
-  CategoryFilterBar,
-  MemoRatingGroupView,
-  MemoViewToggle,
-  type MemoViewType,
-} from '~/widgets/memo-list/ui';
+import { MemoViewToggle, type MemoViewType, RatingView } from '~/widgets/memo-list/ui';
 
 import { useCallback, useMemo, useState } from 'react';
 
@@ -65,23 +59,15 @@ export default function HomeScreen() {
   }, [memosData]);
 
   const handleCategoryPress = (categoryName: string) => {
-    Logger.info('HomeScreen', `카테고리 선택: ${categoryName}`);
     setSelectedCategory(categoryName);
   };
 
   const handleMemoPress = useCallback((memo: UIMemo) => {
-    Logger.info('HomeScreen', `메모 선택: ${memo.title} (${memo.id})`);
     router.push(`/memo/${memo.id}`);
   }, []);
 
   const handleViewChange = useCallback((view: MemoViewType) => {
-    Logger.info('HomeScreen', `보기 방식 변경: ${view}`);
     setSelectedView(view);
-  }, []);
-
-  const handleFloatingButtonPress = useCallback(() => {
-    Logger.info('HomeScreen', '플로팅 버튼 클릭 - 메모 작성 화면으로 이동');
-    router.push('/memo/create/rating');
   }, []);
 
   if (categoriesError) {
@@ -123,20 +109,14 @@ export default function HomeScreen() {
 
       <YStack flex={1} position="relative">
         {selectedView === 'rating' && (
-          <>
-            <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-              <YStack gap="$4" paddingHorizontal="$4" paddingTop="$4">
-                <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
-                <MemoRatingGroupView
-                  isError={Boolean(memosError)}
-                  isPending={memosPending}
-                  memos={transformedMemos}
-                  onMemoPress={handleMemoPress}
-                />
-              </YStack>
-            </ScrollView>
-            <FloatingButton onPress={handleFloatingButtonPress} />
-          </>
+          <RatingView
+            categories={categories}
+            isError={Boolean(memosError)}
+            isPending={memosPending}
+            memos={transformedMemos}
+            onCategoryPress={handleCategoryPress}
+            onMemoPress={handleMemoPress}
+          />
         )}
 
         {selectedView === 'calendar' && (
