@@ -180,7 +180,9 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
         </YStack>
       </ScrollView>
 
-      <CalendarFloatingButton onPress={handleFloatingButtonPress} />
+      <YStack bottom={140} position="absolute" right="$4">
+        <CalendarFloatingButton onPress={handleFloatingButtonPress} />
+      </YStack>
 
       <CalendarAddModal
         isOpen={isAddModalOpen}
