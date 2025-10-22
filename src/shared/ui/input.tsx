@@ -1,7 +1,7 @@
 import { Input as TamaguiInput, styled } from 'tamagui';
 
 export const Input = styled(TamaguiInput, {
-  backgroundColor: '$backgroundSecondary',
+  backgroundColor: '$backgroundPrimary',
   borderRadius: '$5',
   borderWidth: 0,
   color: '$textPrimary',
@@ -52,7 +52,7 @@ export const Input = styled(TamaguiInput, {
 
     variant: {
       default: {
-        backgroundColor: '$backgroundSecondary',
+        backgroundColor: '$backgroundPrimary',
         borderWidth: 0,
       },
       outlined: {

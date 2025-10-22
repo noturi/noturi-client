@@ -2,7 +2,7 @@ import { TextArea as TamaguiTextArea, styled } from 'tamagui';
 
 export const TextArea = styled(TamaguiTextArea, {
   // 기본 스타일
-  backgroundColor: '$backgroundSecondary',
+  backgroundColor: '$backgroundPrimary',
   borderRadius: '$5',
   borderWidth: 0,
   color: '$textPrimary',
@@ -52,7 +52,7 @@ export const TextArea = styled(TamaguiTextArea, {
 
     variant: {
       default: {
-        backgroundColor: '$backgroundSecondary',
+        backgroundColor: '$backgroundPrimary',
         borderWidth: 0,
       },
       outlined: {
