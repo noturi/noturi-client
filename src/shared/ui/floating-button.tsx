@@ -13,7 +13,6 @@ export function FloatingButton({ onPress }: FloatingButtonProps) {
     <Button
       backgroundColor="$primary"
       borderRadius={22}
-      bottom="$4"
       height={44}
       position="absolute"
       pressStyle={{
