@@ -15,7 +15,8 @@ export type TypographyVariant =
   | 'caption1'
   | 'caption2'
   | 'link'
-  | 'label';
+  | 'label'
+  | 'number';
 
 const getComponentByVariant = (variant: TypographyVariant) => {
   switch (variant) {
@@ -38,6 +39,7 @@ const getComponentByVariant = (variant: TypographyVariant) => {
     case 'caption2':
     case 'link':
     case 'label':
+    case 'number':
     default:
       return SizableText;
   }
@@ -47,28 +49,28 @@ const variantStyles = {
   // iOS Typography Scale - https://developer.apple.com/design/human-interface-guidelines/typography
   largeTitle: {
     fontSize: 34, // 34pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 41, // 41pt
     color: '$textPrimary',
     letterSpacing: 0.37,
   },
   title1: {
     fontSize: 28, // 28pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 34, // 34pt
     color: '$textPrimary',
     letterSpacing: 0.36,
   },
   title2: {
     fontSize: 22, // 22pt
-    fontWeight: '$4', // 600 - semibold
+    fontWeight: '$5', // 600 - semibold
     lineHeight: 28, // 28pt
     color: '$textPrimary',
     letterSpacing: 0.35,
   },
   title3: {
     fontSize: 20, // 20pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 25, // 25pt
     color: '$textPrimary',
     letterSpacing: 0.38,
@@ -82,42 +84,42 @@ const variantStyles = {
   },
   body: {
     fontSize: 17, // 17pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 22, // 22pt
     color: '$textPrimary',
     letterSpacing: -0.41,
   },
   callout: {
     fontSize: 16, // 16pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 21, // 21pt
     color: '$textPrimary',
     letterSpacing: -0.32,
   },
   subheadline: {
     fontSize: 15, // 15pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 20, // 20pt
     color: '$textPrimary',
     letterSpacing: -0.24,
   },
   footnote: {
     fontSize: 13, // 13pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 18, // 18pt
     color: '$textPrimary',
     letterSpacing: -0.08,
   },
   caption1: {
     fontSize: 12, // 12pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 16, // 16pt
     color: '$textSecondary',
     letterSpacing: 0,
   },
   caption2: {
     fontSize: 11, // 11pt
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 13, // 13pt
     color: '$textMuted',
     letterSpacing: 0.07,
@@ -126,7 +128,7 @@ const variantStyles = {
   // 특수 용도
   link: {
     fontSize: 17, // body와 동일
-    fontWeight: '$2', // 400 - regular
+    fontWeight: '$3', // 400 - regular
     lineHeight: 22,
     color: '$accent',
     textDecorationLine: 'none',
@@ -134,11 +136,18 @@ const variantStyles = {
   },
   label: {
     fontSize: 11, // 11pt
-    fontWeight: '$3', // 500 - medium
+    fontWeight: '$4', // 500 - medium
     lineHeight: 13,
     color: '$textPrimary',
     textTransform: 'uppercase',
     letterSpacing: 0.07,
+  },
+  number: {
+    fontSize: 15, // 17pt
+    fontWeight: '$6', // 700 - bold
+    lineHeight: 22, // 22pt
+    color: '$textNumber',
+    letterSpacing: -0.41,
   },
 } as const;
 
