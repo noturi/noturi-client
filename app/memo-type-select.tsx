@@ -26,7 +26,7 @@ export default function MemoTypeSelectScreen() {
             <Star color="$textPrimary" size="$4" />
             <YStack flex={1} gap="$1">
               <Typography color="$textPrimary" variant="headline">
-                평점 메모
+                메모
               </Typography>
               <Typography color="$textSecondary" variant="callout">
                 경험에 대한 평점과 함께 메모를 작성합니다
