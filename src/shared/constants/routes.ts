@@ -18,6 +18,6 @@ export const ROUTES = {
   memoDetail: { name: 'memo/[id]', label: '메모 상세' },
   memoEdit: { name: 'memo/edit/[id]', label: '메모 수정' },
   search: { name: 'search', label: '검색' },
-  memoCreateRating: { name: 'memo/create/rating', label: '평점 메모 작성' },
+  memoCreateRating: { name: 'memo/create/rating', label: '메모 작성' },
   memoCreateText: { name: 'memo/create/text', label: '텍스트 메모 작성' },
 } as const;
