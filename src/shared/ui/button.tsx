@@ -1,9 +1,8 @@
 import { Button as TamaguiButton, styled } from 'tamagui';
 
 export const Button = styled(TamaguiButton, {
-  borderRadius: '$6',
+  borderRadius: '$5',
   fontSize: 17,
-  fontWeight: '600',
   height: 44,
   minWidth: 44,
 
