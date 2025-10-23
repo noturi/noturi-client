@@ -1,6 +1,6 @@
-import { XStack, YStack } from 'tamagui';
+import { XStack } from 'tamagui';
 import { OverallStatsResponseDto } from '~/entities/statistics';
-import { Card, Typography } from '~/shared/ui';
+import { Card, StarRating, Typography } from '~/shared/ui';
 
 interface OverallStatsViewProps {
   stats: OverallStatsResponseDto;
@@ -12,30 +12,30 @@ export function OverallStatsView({ stats }: OverallStatsViewProps) {
   return (
     <XStack gap="$4">
       <Card>
-        <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="headline">{stats.totalMemos ?? 0}</Typography>
-          <Typography variant="caption1">총 메모</Typography>
-        </YStack>
+        <XStack alignItems="center" flex={1} gap="$2" padding="$2">
+          <Typography variant="footnote">총 메모</Typography>
+          <Typography variant="number">{stats.totalMemos ?? 0}</Typography>
+        </XStack>
       </Card>
 
       <Card>
-        <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="headline">{(stats.averageRating ?? 0).toFixed(1)}</Typography>
-          <Typography variant="caption1">평균 별점</Typography>
-        </YStack>
+        <XStack alignItems="center" flex={1} gap="$2" padding="$2">
+          <Typography variant="footnote">평균 별점</Typography>
+          <StarRating rating={stats.averageRating ?? 0} />
+        </XStack>
       </Card>
 
       <Card>
-        <YStack alignItems="center" flex={1} gap="$2" padding="$2">
-          <Typography variant="headline">{stats.totalCategories ?? 0}</Typography>
-          <Typography variant="caption1">카테고리</Typography>
-        </YStack>
+        <XStack alignItems="center" flex={1} gap="$2" padding="$2">
+          <Typography variant="footnote">카테고리</Typography>
+          <Typography variant="number">{stats.totalCategories ?? 0}</Typography>
+        </XStack>
       </Card>
 
       {/* <Card>
-        <YStack alignItems="center" flex={1} gap="$2" padding="$2">
+        <YStack alignItems="flex" flex={1} gap="$2" padding="$2">
           <Typography variant="title">{stats.recommendedExperiences ?? 0}</Typography>
-          <Typography variant="caption1">추천 경험</Typography>
+          <Typography variant="headline">추천 경험</Typography>
         </YStack>
       </Card> */}
     </XStack>
