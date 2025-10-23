@@ -24,6 +24,7 @@ const themes = {
     textMuted: '#9e9e9e',
     textOnAccent: '#000000',
     textOnPrimary: '#ffffff',
+    textNumber: '#2196f3', // 파란색
 
     backgroundPrimary: '#ffffff',
     backgroundSecondary: '#f5f5f5',
