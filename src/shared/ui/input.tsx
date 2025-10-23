@@ -1,9 +1,10 @@
 import { Input as TamaguiInput, styled } from 'tamagui';
 
 export const Input = styled(TamaguiInput, {
-  backgroundColor: '$backgroundPrimary',
+  backgroundColor: '$surface',
   borderRadius: '$5',
-  borderWidth: 0,
+  borderWidth: 1,
+  borderColor: '$border',
   color: '$textPrimary',
   fontSize: 14,
   fontWeight: '$4',
@@ -58,7 +59,6 @@ export const Input = styled(TamaguiInput, {
       outlined: {
         backgroundColor: '$backgroundTransparent',
         borderWidth: 1,
-        borderColor: '$border',
       },
     },
   } as const,
