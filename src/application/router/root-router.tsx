@@ -20,7 +20,7 @@ export function RootRouter() {
         headerTintColor: theme.textPrimary.val,
         headerTitleStyle: {
           fontWeight: '600',
-          fontSize: 18,
+          fontSize: 16,
         },
         headerShadowVisible: false,
         headerBackTitle: '',
@@ -33,12 +33,17 @@ export function RootRouter() {
       <Stack.Screen
         name={ROUTES.memoDetail.name}
         options={({ route }: { route: { params?: { id?: string } } }) => ({
-          title: ROUTES.memoDetail.label,
+          title: '',
           headerBackTitle: '',
           headerBackButtonMenuEnabled: false,
           headerRight: () => (
-            <XStack paddingRight="$3">
+            <XStack alignItems="center" paddingRight="$3">
               <Pressable
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingLeft: 4,
+                }}
                 onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
               >
                 <Edit3 color="$textSecondary" size="$4" />
