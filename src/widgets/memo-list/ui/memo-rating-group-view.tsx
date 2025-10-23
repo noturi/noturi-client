@@ -86,7 +86,7 @@ export function MemoRatingGroupView({
 
   return (
     <YStack gap="$3">
-      <Typography paddingLeft="$3" variant="title3">
+      <Typography paddingLeft="$3" variant="headline">
         메모
       </Typography>
       <YStack gap="$4" marginBottom="$5">
