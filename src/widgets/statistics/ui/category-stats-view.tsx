@@ -27,10 +27,13 @@ export function CategoryStatsView({ categories }: CategoryStatsViewProps) {
           return (
             <YStack key={category.id} gap="$2" padding="$2">
               <XStack alignItems="center" justifyContent="space-between" padding="$2">
-                <Typography color="$textPrimary">{category.name}</Typography>
+                <Typography variant="subheadline">{category.name}</Typography>
 
                 <XStack alignItems="center" gap="$4">
-                  <Typography variant="callout">{category.count}개</Typography>
+                  <XStack alignItems="center" gap="$2">
+                    <Typography variant="number">{category.count}</Typography>
+                    <Typography variant="subheadline">개</Typography>
+                  </XStack>
                   <StarRating rating={category.averageRating} />
                 </XStack>
               </XStack>
