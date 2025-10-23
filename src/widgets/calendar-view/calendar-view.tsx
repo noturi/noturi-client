@@ -128,7 +128,7 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
 
   const headerTitle = useMemo(() => {
     if (!startDate) return null;
-    return startDate && endDate ? `${startDate} ~ ${endDate} 기간 일정` : `${startDate} 일정`;
+    return startDate && endDate ? `${startDate} ~ ${endDate}` : `${startDate}`;
   }, [startDate, endDate]);
 
   const handleAddCalendarMemo = async (data: CreateCalendarMemoDto) => {
@@ -166,7 +166,7 @@ export function CalendarView({ onDateSelect, onDateRangeSelect }: CalendarViewPr
       <ScrollView flex={1}>
         <YStack gap="$3">
           {headerTitle && (
-            <Typography color="$textPrimary" variant="headline">
+            <Typography color="$textPrimary" variant="subheadline">
               {headerTitle}
             </Typography>
           )}
