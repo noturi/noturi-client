@@ -1,12 +1,12 @@
-import { Button, ScrollView, XStack, YStack } from 'tamagui';
+import { Button, ScrollView, View, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/entities/memo/api';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/categories/api';
 import { CategoryButton } from '~/features/categories/ui';
 import { DEFAULT_COLORS, MESSAGES } from '~/shared/constants';
-import { useForm, useToast } from '~/shared/lib';
-import { Form, Input, Loading, SubmitButton, TextArea } from '~/shared/ui';
+import { useForm, useKeyboard, useToast } from '~/shared/lib';
+import { FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
 
@@ -23,6 +23,7 @@ interface MemoEditFormProps {
 export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const toast = useToast();
+  const { keyboardHeight } = useKeyboard();
 
   const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId));
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -134,15 +135,15 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
   }
 
   return (
-    <YStack backgroundColor="$backgroundPrimary" flex={1}>
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 120,
-        }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <YStack padding="$4">
+    <>
+      <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 80 : 120,
+          }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <Form>
             <Form.Field required error={textError} label="메모">
               <TextArea
@@ -181,16 +182,9 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                   ))}
                   {!showAddCategory && (
                     <Button
-                      backgroundColor="$surface"
-                      borderColor="$border"
-                      borderRadius="$5"
                       borderStyle="dashed"
-                      borderWidth={1}
-                      color="$textSecondary"
-                      fontSize={14}
-                      minHeight={40}
-                      minWidth={60}
-                      pressStyle={{ backgroundColor: '$surfaceHover' }}
+                      size="sm"
+                      variant="ghost"
                       onPress={() => setShowAddCategory(true)}
                     >
                       + 추가
@@ -200,7 +194,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
               </ScrollView>
 
               {showAddCategory && (
-                <XStack alignItems="center" gap="$2" marginTop="$3">
+                <XStack alignItems="center" gap="$1" marginTop="$2">
                   <YStack flex={1}>
                     <Form.Field
                       error={
@@ -217,30 +211,15 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                       />
                     </Form.Field>
                   </YStack>
-                  <XStack alignItems="center" gap="$2">
+                  <XStack alignItems="center" gap="$1">
                     <Button
-                      backgroundColor="$textPrimary"
-                      borderRadius="$6"
-                      color="$textOnPrimary"
                       disabled={!categoryForm.isValid || createCategoryMutation.isPending}
-                      fontSize={14}
-                      minHeight={40}
-                      minWidth={60}
+                      size="sm"
                       onPress={handleAddCategory}
                     >
                       추가
                     </Button>
-                    <Button
-                      backgroundColor="$surface"
-                      borderColor="$border"
-                      borderRadius="$6"
-                      borderWidth={1}
-                      color="$textSecondary"
-                      fontSize={14}
-                      minHeight={40}
-                      minWidth={60}
-                      onPress={handleCancelAddCategory}
-                    >
+                    <Button size="sm" onPress={handleCancelAddCategory}>
                       취소
                     </Button>
                   </XStack>
@@ -255,18 +234,25 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
               />
             </Form.Field>
           </Form>
-        </YStack>
-      </ScrollView>
+        </ScrollView>
+      </YStack>
 
-      <SubmitButton
-        isLoading={updateMemoMutation.isPending}
-        loadingText="저장중..."
-        onPress={() => {
-          memoForm.handleSubmit();
-        }}
+      <View
+        alignItems="flex-end"
+        backgroundColor="transparent"
+        bottom={keyboardHeight > 0 ? keyboardHeight + 60 : 140}
+        left={0}
+        paddingHorizontal={24}
+        position="absolute"
+        right={0}
+        zIndex="$5"
       >
-        저장
-      </SubmitButton>
-    </YStack>
+        <FloatingButton
+          disabled={!memoForm.isValid}
+          isLoading={updateMemoMutation.isPending}
+          onPress={memoForm.handleSubmit}
+        />
+      </View>
+    </>
   );
 };
