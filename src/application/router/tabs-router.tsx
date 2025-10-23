@@ -20,13 +20,7 @@ export function TabsRouter() {
   }
 
   return (
-    <NativeTabs
-      disableTransparentOnScrollEdge
-      labelStyle={{
-        color: String(theme.textPrimary.val),
-      }}
-      tintColor={String(theme.primary.val)}
-    >
+    <NativeTabs disableTransparentOnScrollEdge tintColor={String(theme.primary.val)}>
       <NativeTabs.Trigger name="index">
         <Icon drawable="ic_menu_home" sf="house.fill" />
         <Label>홈</Label>
