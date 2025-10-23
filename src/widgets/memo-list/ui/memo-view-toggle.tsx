@@ -56,7 +56,7 @@ export function MemoViewToggle({ selectedView, onViewChange }: MemoViewTogglePro
       <ToggleButton
         icon={<Star color="$star" fill="#ebd759" size="$3" />}
         isActive={selectedView === 'rating'}
-        label="별점메모"
+        label="메모"
         onPress={() => onViewChange('rating')}
       />
       <ToggleButton
