@@ -1,6 +1,6 @@
 import { YStack } from 'tamagui';
 import type { CalendarMemo } from '~/entities/calendar-memo';
-import { Card, Loading, Typography } from '~/shared/ui';
+import { Card, Typography } from '~/shared/ui';
 
 interface CalendarMemoListProps {
   startDate: string;
@@ -17,9 +17,7 @@ export function CalendarMemoList({
   isLoading,
   isError,
 }: CalendarMemoListProps) {
-  if (isLoading) {
-    return <Loading text="일정을 불러오는 중..." />;
-  }
+  if (!startDate) return null;
 
   if (isError) {
     return (
