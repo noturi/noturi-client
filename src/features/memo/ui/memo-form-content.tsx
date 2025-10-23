@@ -1,4 +1,4 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
+import { ScrollView, View, XStack, YStack } from 'tamagui';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
@@ -7,8 +7,8 @@ import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/constants/colors';
 import { MESSAGES } from '~/shared/constants/messages';
-import { useForm, useToast } from '~/shared/lib';
-import { Button, Form, Input, SubmitButton, TextArea } from '~/shared/ui';
+import { useForm, useKeyboard, useToast } from '~/shared/lib';
+import { Button, FloatingButton, Form, Input, TextArea } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -25,6 +25,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<any>(null);
   const toast = useToast();
+  const { keyboardHeight } = useKeyboard();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -146,7 +147,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
       <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: 120,
+            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 80 : 120,
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -237,13 +238,22 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
         </ScrollView>
       </YStack>
 
-      <SubmitButton
-        isLoading={createMemoMutation.isPending}
-        loadingText="등록중..."
-        onPress={memoForm.handleSubmit}
+      <View
+        alignItems="flex-end"
+        backgroundColor="transparent"
+        bottom={keyboardHeight > 0 ? keyboardHeight + 60 : 140}
+        left={0}
+        paddingHorizontal={24}
+        position="absolute"
+        right={0}
+        zIndex="$5"
       >
-        등록
-      </SubmitButton>
+        <FloatingButton
+          disabled={!memoForm.isValid}
+          isLoading={createMemoMutation.isPending}
+          onPress={memoForm.handleSubmit}
+        />
+      </View>
     </>
   );
 };
