@@ -51,8 +51,8 @@ export function Select({
       <TouchableOpacity disabled={disabled} onPress={toggleOpen}>
         <XStack
           alignItems="center"
-          backgroundColor="$backgroundSecondary"
-          borderColor="$borderColor"
+          backgroundColor="$surface"
+          borderColor="$border"
           borderRadius="$4"
           borderWidth={1}
           height={height}
