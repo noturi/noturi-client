@@ -46,13 +46,13 @@ export const SubmitButton = ({
   if (position === 'fixed') {
     return (
       <View
-        backgroundColor="$backgroundPrimary"
-        borderTopColor="$borderColor"
+        alignItems="flex-end"
+        backgroundColor="transparent"
         bottom={followKeyboard ? keyboardHeight : 0}
         left={0}
-        paddingBottom={followKeyboard && keyboardHeight > 0 ? 16 : 40}
-        paddingHorizontal={16}
-        paddingTop={16}
+        paddingBottom={followKeyboard && keyboardHeight > 0 ? 12 : 24}
+        paddingHorizontal={24}
+        paddingTop={12}
         position="absolute"
         right={0}
         zIndex="$5"
@@ -60,7 +60,7 @@ export const SubmitButton = ({
         <Button
           disabled={disabled || isLoading}
           opacity={isLoading ? 0.8 : 1}
-          size="lg"
+          size="md"
           variant={variant}
           onPress={onPress}
           {...props}
