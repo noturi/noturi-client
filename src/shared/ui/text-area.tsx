@@ -4,7 +4,8 @@ export const TextArea = styled(TamaguiTextArea, {
   // 기본 스타일
   backgroundColor: '$backgroundPrimary',
   borderRadius: '$5',
-  borderWidth: 0,
+  borderWidth: 1,
+  borderColor: '$border',
   color: '$textPrimary',
   fontSize: 14,
   padding: '$4',
