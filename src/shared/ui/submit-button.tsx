@@ -60,7 +60,6 @@ export const SubmitButton = ({
         <Button
           disabled={disabled || isLoading}
           opacity={isLoading ? 0.8 : 1}
-          size="md"
           variant={variant}
           onPress={onPress}
           {...props}

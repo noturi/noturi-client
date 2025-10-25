@@ -80,9 +80,9 @@ export default function HomeScreen() {
         alignItems="center"
         backgroundColor="$backgroundPrimary"
         flex={1}
-        gap="$sm"
+        gap="$3"
         justifyContent="center"
-        padding="$sm"
+        padding="$3"
       >
         <Typography color="$textPrimary" fontSize="$5" fontWeight="$5" textAlign="center">
           {isNetworkError ? '서버 연결 실패' : '오류가 발생했습니다'}

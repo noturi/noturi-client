@@ -113,7 +113,7 @@ export const CategoryManageContent = ({
             {/* 카테고리 추가 버튼 */}
             {!isFormVisible && (
               <Form.Field>
-                <Button size="md" variant="ghost" onPress={handleAddCategory}>
+                <Button variant="ghost" onPress={handleAddCategory}>
                   + 새 카테고리 추가
                 </Button>
               </Form.Field>
@@ -140,10 +140,10 @@ export const CategoryManageContent = ({
                     />
                   </YStack>
                   <XStack alignItems="center" gap="$1">
-                    <Button minWidth={60} size="md" variant="primary" onPress={form.handleSubmit}>
+                    <Button minWidth={60} variant="primary" onPress={form.handleSubmit}>
                       추가
                     </Button>
-                    <Button minWidth={60} size="md" variant="ghost" onPress={handleCancelAdd}>
+                    <Button minWidth={60} variant="ghost" onPress={handleCancelAdd}>
                       취소
                     </Button>
                   </XStack>

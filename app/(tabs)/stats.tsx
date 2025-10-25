@@ -28,9 +28,9 @@ export default function StatsScreen() {
         alignItems="center"
         backgroundColor="$backgroundPrimary"
         flex={1}
-        gap="$sm"
+        gap="$3"
         justifyContent="center"
-        padding="$sm"
+        padding="$3"
       >
         <Typography textAlign="center" variant="headline">
           통계 조회 실패
