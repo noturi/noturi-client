@@ -1,5 +1,5 @@
 import { useAppleLoginMutation, useAuth } from '~/features/auth';
-import { ROUTES } from '~/shared/constants';
+import { HREFS } from '~/shared/constants';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';
@@ -20,7 +20,7 @@ export function AppleButton() {
         user: loginResponse.user,
       });
 
-      router.replace(ROUTES.tabs.href);
+      router.replace(HREFS.tabs());
     },
   });
 

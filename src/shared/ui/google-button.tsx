@@ -5,7 +5,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { Button } from 'tamagui';
 import { useAuth, useGoogleLoginMutation } from '~/features/auth';
-import { ROUTES } from '~/shared/constants';
+import { HREFS } from '~/shared/constants';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';
@@ -35,7 +35,7 @@ export function GoogleButton() {
         user: loginResponse.user,
       });
 
-      router.replace(ROUTES.tabs.href);
+      router.replace(HREFS.tabs());
     },
   });
 
