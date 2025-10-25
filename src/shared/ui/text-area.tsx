@@ -8,6 +8,7 @@ export const TextArea = styled(TamaguiTextArea, {
   borderColor: '$border',
   color: '$textPrimary',
   fontSize: 14,
+  fontFamily: '$body',
   padding: '$4',
   placeholderTextColor: '$textMuted',
 
@@ -65,7 +66,6 @@ export const TextArea = styled(TamaguiTextArea, {
   } as const,
 
   defaultVariants: {
-    size: 'md',
     variant: 'default',
     hasError: false,
   },

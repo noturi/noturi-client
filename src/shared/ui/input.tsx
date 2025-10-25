@@ -8,6 +8,7 @@ export const Input = styled(TamaguiInput, {
   color: '$textPrimary',
   fontSize: 14,
   fontWeight: '$4',
+  fontFamily: '$body',
   height: 36,
 
   placeholderTextColor: '$textMuted',
@@ -64,7 +65,6 @@ export const Input = styled(TamaguiInput, {
   } as const,
 
   defaultVariants: {
-    size: 'md',
     variant: 'default',
     hasError: false,
   },
