@@ -79,18 +79,9 @@ export function RootRouter() {
       />
 
       <Stack.Screen
-        name={ROUTES.memoCreateRating.name}
+        name={ROUTES.memoCreate.name}
         options={{
-          title: ROUTES.memoCreateRating.label,
-          headerBackTitle: '',
-          headerBackButtonMenuEnabled: false,
-        }}
-      />
-
-      <Stack.Screen
-        name={ROUTES.memoCreateText.name}
-        options={{
-          title: ROUTES.memoCreateText.label,
+          title: ROUTES.memoCreate.label,
           headerBackTitle: '',
           headerBackButtonMenuEnabled: false,
         }}
