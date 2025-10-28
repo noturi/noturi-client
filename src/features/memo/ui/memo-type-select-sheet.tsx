@@ -16,7 +16,7 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
     console.log('Rating memo clicked');
     onClose();
     setTimeout(() => {
-      router.push(HREFS.memoCreateRating());
+      router.push(HREFS.memoCreate());
     }, 100);
   };
 
@@ -24,7 +24,7 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
     console.log('Text memo clicked');
     onClose();
     setTimeout(() => {
-      router.push(HREFS.memoCreateText());
+      router.push(HREFS.memoCreate());
     }, 100);
   };
 
