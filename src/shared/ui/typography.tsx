@@ -77,7 +77,7 @@ const variantStyles = {
   },
   headline: {
     fontSize: 17, // 17pt
-    fontWeight: '$5', // 600 - semibold
+    fontWeight: '$4', // 600 - semibold
     lineHeight: 22, // 22pt
     color: '$textPrimary',
     letterSpacing: -0.41,
@@ -112,7 +112,7 @@ const variantStyles = {
   },
   caption1: {
     fontSize: 12, // 12pt
-    fontWeight: '$3', // 400 - regular
+    fontWeight: '$4',
     lineHeight: 16, // 16pt
     color: '$textSecondary',
     letterSpacing: 0,
@@ -144,7 +144,7 @@ const variantStyles = {
   },
   number: {
     fontSize: 15, // 17pt
-    fontWeight: '$6', // 700 - bold
+    fontWeight: '$4', // 700 - bold
     lineHeight: 22, // 22pt
     color: '$textNumber',
     letterSpacing: -0.41,
