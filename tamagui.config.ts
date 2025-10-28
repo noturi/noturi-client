@@ -64,7 +64,7 @@ const fontSize = {
 
 const bodyFont = createFont({
   family:
-    'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
+    'Pretendard-Regular, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
   size: fontSize,
   lineHeight: {
     1: 12,
@@ -89,18 +89,18 @@ const bodyFont = createFont({
     tight: -0.5,
   },
   face: {
-    200: { normal: 'Pretendard', italic: 'Pretendard' },
-    300: { normal: 'Pretendard', italic: 'Pretendard' },
-    400: { normal: 'Pretendard', italic: 'Pretendard' },
-    500: { normal: 'Pretendard', italic: 'Pretendard' },
-    600: { normal: 'Pretendard', italic: 'Pretendard' },
-    700: { normal: 'Pretendard', italic: 'Pretendard' },
+    200: { normal: 'Pretendard-ExtraLight', italic: 'Pretendard-ExtraLight' },
+    300: { normal: 'Pretendard-Light', italic: 'Pretendard-Light' },
+    400: { normal: 'Pretendard-Regular', italic: 'Pretendard-Regular' },
+    500: { normal: 'Pretendard-Medium', italic: 'Pretendard-Medium' },
+    600: { normal: 'Pretendard-SemiBold', italic: 'Pretendard-SemiBold' },
+    700: { normal: 'Pretendard-Bold', italic: 'Pretendard-Bold' },
   },
 });
 
 const headingFont = createFont({
   family:
-    'Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
+    'Pretendard-Regular, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif',
   size: fontSize,
   lineHeight: {
     1: 14,
@@ -129,12 +129,12 @@ const headingFont = createFont({
     tight: -0.5,
   },
   face: {
-    200: { normal: 'Pretendard', italic: 'Pretendard' },
-    300: { normal: 'Pretendard', italic: 'Pretendard' },
-    400: { normal: 'Pretendard', italic: 'Pretendard' },
-    500: { normal: 'Pretendard', italic: 'Pretendard' },
-    600: { normal: 'Pretendard', italic: 'Pretendard' },
-    700: { normal: 'Pretendard', italic: 'Pretendard' },
+    200: { normal: 'Pretendard-ExtraLight', italic: 'Pretendard-ExtraLight' },
+    300: { normal: 'Pretendard-Light', italic: 'Pretendard-Light' },
+    400: { normal: 'Pretendard-Regular', italic: 'Pretendard-Regular' },
+    500: { normal: 'Pretendard-Medium', italic: 'Pretendard-Medium' },
+    600: { normal: 'Pretendard-SemiBold', italic: 'Pretendard-SemiBold' },
+    700: { normal: 'Pretendard-Bold', italic: 'Pretendard-Bold' },
   },
 });
 
