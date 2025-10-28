@@ -6,11 +6,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
 
-export default function TextMemoCreateScreen() {
+export default function RatingMemoCreateScreen() {
   const handleClose = () => {
     router.back();
-  };
 
+  };
   const handleSuccess = () => {
     router.push('/(tabs)');
   };
