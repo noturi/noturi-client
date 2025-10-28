@@ -184,7 +184,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                     <Button
                       borderStyle="dashed"
                       size="sm"
-                      variant="ghost"
+                      variant="outlined"
                       onPress={() => setShowAddCategory(true)}
                     >
                       + 추가

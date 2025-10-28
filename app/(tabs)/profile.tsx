@@ -43,7 +43,13 @@ export default function ProfileScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1} gap="$4" padding="$4">
+    <YStack
+      backgroundColor="$backgroundSecondary"
+      flex={1}
+      gap="$4"
+      paddingHorizontal="$4"
+      paddingTop="$4"
+    >
       {isAuthenticated && (
         <Card>
           <YStack gap="$2">

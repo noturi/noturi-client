@@ -44,12 +44,14 @@ export default function StatsScreen() {
 
   return (
     <ScrollView backgroundColor="$backgroundSecondary" flex={1}>
-      <YStack gap="$6" paddingHorizontal="$4">
+      <YStack gap="$4" paddingHorizontal="$4" paddingTop="$4">
         {overallStats && <OverallStatsView stats={overallStats} />}
 
         {categoryStats && (
           <YStack gap="$3">
-            <Typography variant="headline">카테고리별 통계</Typography>
+            <Typography paddingLeft="$3" variant="headline">
+              카테고리별 통계
+            </Typography>
             <CategoryStatsView categories={categoryStats} />
           </YStack>
         )}

@@ -157,7 +157,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     };
 
     return (
-      <YStack flex={1} gap="$4" paddingHorizontal="$4" paddingTop="$4" position="relative">
+      <YStack flex={1} gap="$4" position="relative">
         <Card>
           <Calendar
             markedDates={markedDates}
