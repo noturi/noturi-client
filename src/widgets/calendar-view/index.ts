@@ -1,1 +1,1 @@
-export { CalendarView } from './calendar-view';
+export { CalendarView, type CalendarViewRef } from './calendar-view';
