@@ -22,17 +22,17 @@ export function TabsRouter() {
   return (
     <NativeTabs disableTransparentOnScrollEdge tintColor={String(theme.primary.val)}>
       <NativeTabs.Trigger name="index">
-        <Icon drawable="ic_menu_home" sf="house.fill" />
+        <Icon drawable="ic_menu_home" sf={{ default: 'house', selected: 'house.fill' }} />
         <Label>홈</Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="stats">
-        <Icon drawable="ic_menu_agenda" sf="chart.bar.fill" />
+        <Icon drawable="ic_menu_agenda" sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }} />
         <Label>통계</Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="profile">
-        <Icon drawable="ic_menu_myplaces" sf="person.fill" />
+        <Icon drawable="ic_menu_myplaces" sf={{ default: 'person', selected: 'person.fill' }} />
         <Label>프로필</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
