@@ -56,11 +56,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
         </YStack>
 
         <MemoFormHeader onClose={onClose} />
-        <MemoFormContent
-          keyboardHeight={keyboardHeight}
-          shouldAutoFocus={isOpen}
-          onSuccess={onClose}
-        />
+        <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />
       </Sheet.Frame>
     </Sheet>
   );
