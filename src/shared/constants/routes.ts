@@ -3,7 +3,6 @@ import type { Href } from 'expo-router';
 export const HREFS = {
   login: (): Href => '/login',
   tabs: (): Href => '/(tabs)',
-  create: (): Href => '/memo-type-select',
   search: (): Href => '/search',
   memoDetail: (id: string): Href => `/memo/${id}`,
   memoEdit: (id: string): Href => `/memo/edit/${id}`,
@@ -17,5 +16,5 @@ export const ROUTES = {
   memoDetail: { name: 'memo/[id]', label: '메모 상세' },
   memoEdit: { name: 'memo/edit/[id]', label: '메모 수정' },
   search: { name: 'search', label: '검색' },
-  memoCreate: { name: 'memo/create', label: '메모 작성' },
+  memoCreate: { name: 'memo/create/index', label: '메모 작성' },
 } as const;
