@@ -152,7 +152,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
         );
         return;
       }
-      console.log('모달 열기 시도');
+
       setIsAddModalOpen(true);
     };
 
@@ -195,3 +195,5 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     );
   },
 );
+
+CalendarView.displayName = 'CalendarView';
