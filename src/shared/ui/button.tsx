@@ -5,7 +5,7 @@ export const Button = styled(TamaguiButton, {
   fontSize: 17,
   height: 44,
   minWidth: 44,
-  fontFamily: '$body',
+
   animation: 'bouncy',
 
   pressStyle: {
