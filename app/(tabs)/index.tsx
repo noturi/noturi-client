@@ -5,16 +5,18 @@ import { infiniteMemoListQuery } from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
-import { CalendarDateProvider } from '~/shared/lib/calendar';
-import { Card, Loading, Typography } from '~/shared/ui';
-import { CalendarView } from '~/widgets/calendar-view';
+import { CalendarDateProvider } from '~/shared/lib/calendar/calendar-date-context';
+import { Card, FloatingButton, Loading, Typography } from '~/shared/ui';
+import { CalendarView, type CalendarViewRef } from '~/widgets/calendar-view';
 import { MemoViewToggle, type MemoViewType, RatingView } from '~/widgets/memo-list/ui';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { router } from 'expo-router';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+
+import { HREFS } from '@/shared/constants/routes';
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -70,6 +72,16 @@ export default function HomeScreen() {
     setSelectedView(view);
   }, []);
 
+  const calendarRef = useRef<CalendarViewRef>(null);
+
+  const handleCreateMemoPress = useCallback(() => {
+    if (selectedView === 'rating') {
+      router.push(HREFS.memoCreate());
+    } else {
+      calendarRef.current?.handleFloatingButtonPress();
+    }
+  }, [selectedView]);
+
   if (categoriesError) {
     const isNetworkError =
       categoriesError.message?.includes('Network request failed') ||
@@ -100,12 +112,17 @@ export default function HomeScreen() {
   if (categoriesLoading) return <Loading text="카테고리 로딩 중..." />;
 
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1} position="relative">
-      <YStack paddingHorizontal="$4" paddingTop="$4">
-        <Card>
-          <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
-        </Card>
-      </YStack>
+    <YStack
+      backgroundColor="$backgroundSecondary"
+      flex={1}
+      gap="$4"
+      paddingHorizontal="$4"
+      paddingTop="$4"
+      position="relative"
+    >
+      <Card>
+        <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
+      </Card>
 
       <YStack flex={1} position="relative">
         {selectedView === 'rating' && (
@@ -121,9 +138,13 @@ export default function HomeScreen() {
 
         {selectedView === 'calendar' && (
           <CalendarDateProvider>
-            <CalendarView />
+            <CalendarView ref={calendarRef} />
           </CalendarDateProvider>
         )}
+      </YStack>
+
+      <YStack bottom={140} position="absolute" right="$4">
+        <FloatingButton onPress={handleCreateMemoPress} />
       </YStack>
     </YStack>
   );
