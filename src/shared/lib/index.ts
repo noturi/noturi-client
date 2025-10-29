@@ -1,5 +1,6 @@
 export * from './cache';
 export * from './calendar';
+export { useGradualAnimation } from './hooks/useGradualAnimation';
 export { default as Logger } from './logger';
 export * from './tanstack-query';
 export { tokenEventManager } from './token-event-manager';
