@@ -1,10 +1,10 @@
-import { XStack, useTheme } from 'tamagui';
+import { useTheme } from 'tamagui';
 
 import { Pressable } from 'react-native';
 
 import { Stack, router } from 'expo-router';
 
-import { ChevronLeft, Edit3 } from '@tamagui/lucide-icons';
+import { ChevronLeft } from '@tamagui/lucide-icons';
 
 import { HREFS, ROUTES } from '../../shared/constants';
 
@@ -32,25 +32,11 @@ export function RootRouter() {
 
       <Stack.Screen
         name={ROUTES.memoDetail.name}
-        options={({ route }: { route: { params?: { id?: string } } }) => ({
+        options={{
           title: '',
           headerBackTitle: '',
           headerBackButtonMenuEnabled: false,
-          headerRight: () => (
-            <XStack alignItems="center" paddingRight="$3">
-              <Pressable
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingLeft: 4,
-                }}
-                onPress={() => router.push(HREFS.memoEdit(String(route.params?.id ?? '')))}
-              >
-                <Edit3 color="$textSecondary" size="$4" />
-              </Pressable>
-            </XStack>
-          ),
-        })}
+        }}
       />
 
       <Stack.Screen
