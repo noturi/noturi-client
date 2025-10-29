@@ -1,8 +1,5 @@
 import { Sheet, YStack } from 'tamagui';
 
-import { useEffect, useState } from 'react';
-import { Keyboard, Platform } from 'react-native';
-
 import { CategoryManageContent } from './category-manage-content';
 import { CategoryManageHeader } from './category-manage-header';
 
@@ -12,31 +9,13 @@ interface CategoryManageSheetProps {
 }
 
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
-
-    const showListener = Keyboard.addListener(showEvent, (e) => {
-      const height = Platform.OS === 'ios' ? e.endCoordinates.height : e.endCoordinates.height + 20;
-      setKeyboardHeight(height);
-    });
-    const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
-
-    return () => {
-      showListener?.remove();
-      hideListener?.remove();
-    };
-  }, []);
-
   return (
     <Sheet
       dismissOnSnapToBottom
       modal
       animation="quick"
       open={isOpen}
-      snapPoints={keyboardHeight > 0 ? [85] : [85, 50]}
+      snapPoints={[85, 50]}
       snapPointsMode="percent"
       onOpenChange={onClose}
     >
@@ -56,11 +35,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         </YStack>
 
         <CategoryManageHeader onClose={onClose} />
-        <CategoryManageContent
-          keyboardHeight={keyboardHeight}
-          shouldAutoFocus={isOpen}
-          onSuccess={onClose}
-        />
+        <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
       </Sheet.Frame>
     </Sheet>
   );

@@ -1,4 +1,4 @@
-import { ScrollView, View, XStack, YStack } from 'tamagui';
+import { ScrollView, XStack, YStack } from 'tamagui';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
@@ -7,10 +7,11 @@ import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/constants/colors';
 import { MESSAGES } from '~/shared/constants/messages';
-import { useForm, useKeyboard, useToast } from '~/shared/lib';
+import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { Button, FloatingButton, Form, Input, TextArea } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,7 +26,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<any>(null);
   const toast = useToast();
-  const { keyboardHeight } = useKeyboard();
+  const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -142,16 +143,16 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
 
   const textError = shouldShowTextError ? memoForm.errors.text : undefined;
 
+  const floatingButtonPosition = useAnimatedStyle(() => {
+    return {
+      bottom: height.value > 42 ? height.value + 10 : 140,
+    };
+  }, []);
+
   return (
     <>
       <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 80 : 120,
-          }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <Form>
             <Form.Field required error={textError} label="메모">
               <TextArea
@@ -238,22 +239,22 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
         </ScrollView>
       </YStack>
 
-      <View
-        alignItems="flex-end"
-        backgroundColor="transparent"
-        bottom={keyboardHeight > 0 ? keyboardHeight + 60 : 140}
-        left={0}
-        paddingHorizontal={24}
-        position="absolute"
-        right={0}
-        zIndex="$5"
+      <Animated.View
+        pointerEvents="box-none"
+        style={[
+          {
+            position: 'absolute',
+            right: 16,
+          },
+          floatingButtonPosition,
+        ]}
       >
         <FloatingButton
           disabled={!memoForm.isValid}
           isLoading={createMemoMutation.isPending}
           onPress={memoForm.handleSubmit}
         />
-      </View>
+      </Animated.View>
     </>
   );
 };

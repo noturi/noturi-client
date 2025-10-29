@@ -5,12 +5,13 @@ import {
   useDeleteCategoryMutation,
 } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { useForm } from '~/shared/lib/use-form';
-import { Button, Form, Input, SubmitButton, Typography } from '~/shared/ui';
+import { useForm, useGradualAnimation } from '~/shared/lib';
+import { Button, FloatingButton, Form, Input, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { Alert } from 'react-native';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { X } from '@tamagui/lucide-icons';
 
@@ -19,18 +20,17 @@ import { useQuery } from '@tanstack/react-query';
 import { handleCategoryFormError } from '../model/form-error-handler';
 
 interface CategoryManageContentProps {
-  keyboardHeight: number;
   shouldAutoFocus?: boolean;
   onSuccess?: () => void;
 }
 
 export const CategoryManageContent = ({
-  keyboardHeight,
   shouldAutoFocus = false,
   onSuccess,
 }: CategoryManageContentProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const textInputRef = useRef<TextInput | null>(null);
+  const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -47,10 +47,16 @@ export const CategoryManageContent = ({
     onSubmit: async (values) => {
       createCategoryMutation.mutate({
         name: values.categoryName.trim(),
-        color: '#de07ff', // 기본 색상
+        color: '#07ff9c', // 기본 색상
       });
     },
   });
+
+  const floatingButtonPosition = useAnimatedStyle(() => {
+    return {
+      bottom: height.value > 42 ? height.value + 10 : 140,
+    };
+  }, []);
 
   // 자동 포커스 (shouldAutoFocus가 true일 때만)
   useEffect(() => {
@@ -102,13 +108,7 @@ export const CategoryManageContent = ({
   return (
     <>
       <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: keyboardHeight > 0 ? keyboardHeight + 120 : 120,
-          }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <Form>
             {/* 카테고리 추가 버튼 */}
             {!isFormVisible && (
@@ -190,13 +190,24 @@ export const CategoryManageContent = ({
       </YStack>
 
       {isFormVisible && (
-        <SubmitButton
-          isLoading={createCategoryMutation.isPending}
-          loadingText="추가 중..."
-          onPress={form.handleSubmit}
+        <Animated.View
+          pointerEvents="box-none"
+          style={[
+            {
+              position: 'absolute',
+              right: 16,
+            },
+            floatingButtonPosition,
+          ]}
         >
-          카테고리 추가
-        </SubmitButton>
+          <FloatingButton
+            disabled={!form.isValid}
+            isLoading={createCategoryMutation.isPending}
+            onPress={form.handleSubmit}
+          >
+            카테고리 추가
+          </FloatingButton>
+        </Animated.View>
       )}
     </>
   );
