@@ -11,7 +11,12 @@ interface FloatingButtonProps {
   children?: React.ReactNode;
 }
 
-export function FloatingButton({ onPress, disabled = false, isLoading = false, children }: FloatingButtonProps) {
+export function FloatingButton({
+  onPress,
+  disabled = false,
+  isLoading = false,
+  children,
+}: FloatingButtonProps) {
   const content = isLoading ? (
     <XStack alignItems="center" gap="$2">
       <Spinner color="white" size="small" />
@@ -31,7 +36,7 @@ export function FloatingButton({ onPress, disabled = false, isLoading = false, c
       height={44}
       minWidth={44}
       opacity={disabled || isLoading ? 0.6 : 1}
-      paddingHorizontal={children ? "$3" : 0}
+      paddingHorizontal={children ? '$3' : 0}
       position="absolute"
       pressStyle={{
         opacity: 0.8,
@@ -39,7 +44,7 @@ export function FloatingButton({ onPress, disabled = false, isLoading = false, c
       }}
       right="$4"
       style={styles.shadow}
-      width={children ? "auto" : 44}
+      width={children ? 'auto' : 44}
       onPress={onPress}
     >
       {content}
