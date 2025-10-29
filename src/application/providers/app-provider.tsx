@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AuthProvider } from '../../features/auth';
 import { QueryProvider } from './query-provider';
@@ -12,7 +13,9 @@ export function AppProvider({ children }: AppProviderProps) {
   return (
     <QueryProvider>
       <TamaguiProvider>
-        <AuthProvider>{children}</AuthProvider>
+        <KeyboardProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </KeyboardProvider>
       </TamaguiProvider>
     </QueryProvider>
   );
