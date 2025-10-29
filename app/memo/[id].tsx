@@ -1,9 +1,10 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo/ui';
-import { Loading, StarRating, Typography } from '~/shared/ui';
+import { HREFS } from '~/shared/constants';
+import { FloatingButton, Loading, StarRating, Typography } from '~/shared/ui';
 
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -12,6 +13,10 @@ export default function MemoDetailScreen() {
   const memoId = id as string;
 
   const { data: memo, isLoading, error } = useQuery(memoDetailQuery(memoId));
+
+  const handleEdit = () => {
+    router.push(HREFS.memoEdit(memoId));
+  };
 
   if (isLoading) {
     return (
@@ -52,46 +57,52 @@ export default function MemoDetailScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1} padding="$4">
-      <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-        <YStack gap="$1" padding="$1">
-          <YStack gap="$2">
-            <XStack alignItems="flex-start" justifyContent="space-between">
-              <XStack alignItems="center" flex={1} gap="$4">
-                {memo.category && (
-                  <YStack
-                    backgroundColor={memo.category.color}
-                    borderRadius="$2"
-                    paddingHorizontal="$3"
-                    paddingVertical="$2"
-                  >
-                    <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
-                      {memo.category.name}
-                    </Typography>
-                  </YStack>
-                )}
-                <Typography color="$textMuted" variant="caption2">
-                  {formatDate(memo.createdAt)}
-                </Typography>
+    <>
+      <YStack backgroundColor="$backgroundSecondary" flex={1} padding="$4">
+        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <YStack gap="$1" padding="$1">
+            <YStack gap="$2">
+              <XStack alignItems="flex-start" justifyContent="space-between">
+                <XStack alignItems="center" flex={1} gap="$4">
+                  {memo.category && (
+                    <YStack
+                      backgroundColor={memo.category.color}
+                      borderRadius="$2"
+                      paddingHorizontal="$3"
+                      paddingVertical="$2"
+                    >
+                      <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
+                        {memo.category.name}
+                      </Typography>
+                    </YStack>
+                  )}
+                  <Typography color="$textMuted" variant="caption2">
+                    {formatDate(memo.createdAt)}
+                  </Typography>
+                </XStack>
+                <XStack alignItems="center" gap="$2">
+                  {memo.rating > 0 && <StarRating rating={memo.rating} />}
+                  <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
+                </XStack>
               </XStack>
-              <XStack alignItems="center" gap="$2">
-                {memo.rating > 0 && <StarRating rating={memo.rating} />}
-                <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
-              </XStack>
-            </XStack>
 
-            <Typography color="$textPrimary" variant="headline">
-              {memo.title}
-            </Typography>
-          </YStack>
+              <Typography color="$textPrimary" variant="headline">
+                {memo.title}
+              </Typography>
+            </YStack>
 
-          <YStack gap="$2" marginTop="$2">
-            <Typography color="$textPrimary" variant="callout">
-              {memo.content}
-            </Typography>
+            <YStack gap="$2" marginTop="$2">
+              <Typography color="$textPrimary" variant="callout">
+                {memo.content}
+              </Typography>
+            </YStack>
           </YStack>
-        </YStack>
-      </ScrollView>
-    </YStack>
+        </ScrollView>
+      </YStack>
+
+      <YStack bottom={140} position="absolute" right="$4">
+        <FloatingButton onPress={handleEdit} />
+      </YStack>
+    </>
   );
 }
