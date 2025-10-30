@@ -15,7 +15,7 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
 
   return (
     <Pressable
-      hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+      hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
       style={({ pressed }) => ({
         transform: [{ scale: pressed ? 0.96 : 1 }],
         opacity: pressed ? 0.95 : 1,

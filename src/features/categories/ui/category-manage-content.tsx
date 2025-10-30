@@ -6,12 +6,12 @@ import {
 } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { useForm, useGradualAnimation } from '~/shared/lib';
-import { Button, FloatingButton, Form, Input, Typography } from '~/shared/ui';
+import { Button, Form, Input, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
-import { Alert } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { Alert, Pressable } from 'react-native';
+import { useAnimatedStyle } from 'react-native-reanimated';
 
 import { X } from '@tamagui/lucide-icons';
 
@@ -47,7 +47,7 @@ export const CategoryManageContent = ({
     onSubmit: async (values) => {
       createCategoryMutation.mutate({
         name: values.categoryName.trim(),
-        color: '#07ff9c', // 기본 색상
+        color: '#07ff9c',
       });
     },
   });
@@ -110,46 +110,49 @@ export const CategoryManageContent = ({
       <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
         <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <Form>
-            {/* 카테고리 추가 버튼 */}
-            {!isFormVisible && (
-              <Form.Field>
-                <Button variant="ghost" onPress={handleAddCategory}>
-                  + 새 카테고리 추가
+            <Form.Field>
+              {!isFormVisible && (
+                <Button borderStyle="dashed" size="sm" variant="ghost" onPress={handleAddCategory}>
+                  + 추가
                 </Button>
-              </Form.Field>
-            )}
+              )}
 
-            {/* 카테고리 추가 폼 */}
-            {isFormVisible && (
-              <Form.Field
-                required
-                error={form.shouldShowError('categoryName') ? form.errors.categoryName : undefined}
-                label="새 카테고리"
-              >
-                <XStack gap="$2">
+              {isFormVisible && (
+                <XStack alignItems="center" gap="$1" marginTop="$2">
                   <YStack flex={1}>
-                    <Input
-                      ref={textInputRef}
-                      hasError={!!form.shouldShowError('categoryName')}
-                      maxLength={20}
-                      placeholder="카테고리 이름을 입력하세요"
-                      value={form.values.categoryName}
-                      onBlur={() => form.setTouched('categoryName')}
-                      onChangeText={(text) => form.setValue('categoryName', text)}
-                      onFocus={() => form.clearError('categoryName')}
-                    />
+                    <Form.Field
+                      error={
+                        form.shouldShowError('categoryName') ? form.errors.categoryName : undefined
+                      }
+                    >
+                      <Input
+                        ref={textInputRef}
+                        hasError={!!form.shouldShowError('categoryName')}
+                        maxLength={20}
+                        placeholder="새 카테고리 이름"
+                        value={form.values.categoryName}
+                        onBlur={() => form.setTouched('categoryName')}
+                        onChangeText={(text) => form.setValue('categoryName', text)}
+                        onFocus={() => form.clearError('categoryName')}
+                      />
+                    </Form.Field>
                   </YStack>
                   <XStack alignItems="center" gap="$1">
-                    <Button minWidth={60} variant="primary" onPress={form.handleSubmit}>
+                    <Button
+                      disabled={!form.isValid || createCategoryMutation.isPending}
+                      size="sm"
+                      variant="primary"
+                      onPress={form.handleSubmit}
+                    >
                       추가
                     </Button>
-                    <Button minWidth={60} variant="ghost" onPress={handleCancelAdd}>
+                    <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
                       취소
                     </Button>
                   </XStack>
                 </XStack>
-              </Form.Field>
-            )}
+              )}
+            </Form.Field>
 
             {/* 삭제 에러 표시 */}
             {form.errors.categoryDeleteError && (
@@ -162,53 +165,37 @@ export const CategoryManageContent = ({
 
             {/* 기존 카테고리 목록 */}
             <Form.Field label="기존 카테고리">
-              <XStack gap="$2">
+              <XStack flexWrap="wrap" gap="$3">
                 {categories.map((category) => (
-                  <XStack
+                  <Pressable
                     key={category.id}
-                    alignItems="center"
-                    backgroundColor="$backgroundPrimary"
-                    borderColor="$border"
-                    borderRadius="$8"
-                    borderWidth={1}
-                    justifyContent="space-between"
-                    padding="$3"
+                    disabled={categories.length <= 1 || deleteCategoryMutation.isPending}
+                    style={({ pressed }) => ({
+                      transform: [{ scale: pressed ? 0.96 : 1 }],
+                      opacity: pressed ? 0.95 : 1,
+                    })}
+                    onPress={() => handleDeleteCategory(category.id)}
                   >
-                    <Typography variant="callout">{category.name}</Typography>
                     <XStack
-                      disabled={categories.length <= 1 || deleteCategoryMutation.isPending}
-                      onPress={() => handleDeleteCategory(category.id)}
+                      alignItems="center"
+                      backgroundColor="$surface"
+                      borderColor="$border"
+                      borderRadius="$4"
+                      borderWidth={1}
+                      gap="$2"
+                      paddingHorizontal="$3"
+                      paddingVertical="$2"
                     >
-                      <X color="$error" size="$3" />
+                      <Typography variant="caption1">{category.name}</Typography>
+                      <X color="$error" size="$2" />
                     </XStack>
-                  </XStack>
+                  </Pressable>
                 ))}
               </XStack>
             </Form.Field>
           </Form>
         </ScrollView>
       </YStack>
-
-      {isFormVisible && (
-        <Animated.View
-          pointerEvents="box-none"
-          style={[
-            {
-              position: 'absolute',
-              right: 16,
-            },
-            floatingButtonPosition,
-          ]}
-        >
-          <FloatingButton
-            disabled={!form.isValid}
-            isLoading={createCategoryMutation.isPending}
-            onPress={form.handleSubmit}
-          >
-            카테고리 추가
-          </FloatingButton>
-        </Animated.View>
-      )}
     </>
   );
 };

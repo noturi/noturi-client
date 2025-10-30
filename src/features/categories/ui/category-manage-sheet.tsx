@@ -1,7 +1,8 @@
 import { Sheet, YStack } from 'tamagui';
 
+import { Typography } from '@/shared/ui';
+
 import { CategoryManageContent } from './category-manage-content';
-import { CategoryManageHeader } from './category-manage-header';
 
 interface CategoryManageSheetProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       modal
       animation="quick"
       open={isOpen}
-      snapPoints={[85, 50]}
+      snapPoints={[50, 30]}
       snapPointsMode="percent"
       onOpenChange={onClose}
     >
@@ -33,8 +34,11 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
           <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
         </YStack>
-
-        <CategoryManageHeader onClose={onClose} />
+        <YStack gap="$4" padding="$4" paddingBottom="$6">
+          <Typography textAlign="center" variant="headline">
+            카테고리 관리
+          </Typography>
+        </YStack>
         <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
       </Sheet.Frame>
     </Sheet>

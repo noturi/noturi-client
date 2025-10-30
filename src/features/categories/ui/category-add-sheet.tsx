@@ -3,7 +3,6 @@ import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Alert } from 'react-native';
 
 import { X } from '@tamagui/lucide-icons';
 
@@ -25,11 +24,6 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
   });
 
   const handleCreate = () => {
-    if (!categoryName.trim()) {
-      Alert.alert('알림', '카테고리 이름을 입력해주세요.');
-      return;
-    }
-
     createCategoryMutation.mutate({
       name: categoryName.trim(),
       color: '$primary',
