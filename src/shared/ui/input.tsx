@@ -8,8 +8,8 @@ export const Input = styled(TamaguiInput, {
   color: '$textPrimary',
   fontSize: 14,
   fontWeight: '$4',
-
   height: 36,
+  paddingHorizontal: '$2',
 
   placeholderTextColor: '$textMuted',
   textAlignVertical: 'center',
@@ -37,17 +37,14 @@ export const Input = styled(TamaguiInput, {
     size: {
       sm: {
         height: 28,
-        paddingHorizontal: '$3',
         fontSize: '$2',
       },
       md: {
         height: 36,
-        paddingHorizontal: '$4',
         fontSize: '$3',
       },
       lg: {
         height: 44,
-        paddingHorizontal: '$5',
         fontSize: '$4',
       },
     },
@@ -55,11 +52,11 @@ export const Input = styled(TamaguiInput, {
     variant: {
       default: {
         backgroundColor: '$backgroundPrimary',
-        borderWidth: 0,
+        borderWidth: 1,
       },
       outlined: {
         backgroundColor: '$backgroundTransparent',
-        borderWidth: 1,
+        borderWidth: 0,
       },
     },
   } as const,
@@ -67,5 +64,6 @@ export const Input = styled(TamaguiInput, {
   defaultVariants: {
     variant: 'default',
     hasError: false,
+    size: 'md',
   },
 });

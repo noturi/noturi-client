@@ -9,7 +9,8 @@ export const TextArea = styled(TamaguiTextArea, {
   color: '$textPrimary',
   fontSize: 14,
 
-  padding: '$4',
+  paddingHorizontal: '$2',
+  paddingVertical: '$3',
   placeholderTextColor: '$textMuted',
 
   // 한글 입력 문제 해결을 위한 설정
@@ -37,17 +38,14 @@ export const TextArea = styled(TamaguiTextArea, {
     size: {
       sm: {
         minHeight: 80,
-        paddingHorizontal: '$4',
         fontSize: '$2',
       },
       md: {
         minHeight: 120,
-        paddingHorizontal: '$4',
         fontSize: '$3',
       },
       lg: {
         minHeight: 160,
-        paddingHorizontal: '$6',
         fontSize: '$4',
       },
     },
@@ -55,12 +53,11 @@ export const TextArea = styled(TamaguiTextArea, {
     variant: {
       default: {
         backgroundColor: '$backgroundPrimary',
-        borderWidth: 0,
+        borderWidth: 1,
       },
       outlined: {
         backgroundColor: '$backgroundPrimary',
-        borderWidth: 1,
-        borderColor: '$border',
+        borderWidth: 0,
       },
     },
   } as const,

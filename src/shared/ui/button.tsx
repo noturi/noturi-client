@@ -5,6 +5,8 @@ export const Button = styled(TamaguiButton, {
   fontSize: 17,
   height: 44,
   minWidth: 44,
+  borderWidth: 1,
+  borderColor: '$border',
 
   animation: 'bouncy',
 
