@@ -6,7 +6,7 @@ import { Stack, router } from 'expo-router';
 
 import { ChevronLeft } from '@tamagui/lucide-icons';
 
-import { HREFS, ROUTES } from '../../shared/constants';
+import { ROUTES } from '../../shared/constants';
 
 export function RootRouter() {
   const theme = useTheme();

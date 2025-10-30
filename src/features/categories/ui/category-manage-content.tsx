@@ -5,13 +5,12 @@ import {
   useDeleteCategoryMutation,
 } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { useForm, useGradualAnimation } from '~/shared/lib';
+import { useForm } from '~/shared/lib';
 import { Button, Form, Input, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { Alert, Pressable } from 'react-native';
-import { useAnimatedStyle } from 'react-native-reanimated';
 
 import { X } from '@tamagui/lucide-icons';
 
@@ -30,7 +29,6 @@ export const CategoryManageContent = ({
 }: CategoryManageContentProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const textInputRef = useRef<TextInput | null>(null);
-  const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
@@ -51,12 +49,6 @@ export const CategoryManageContent = ({
       });
     },
   });
-
-  const floatingButtonPosition = useAnimatedStyle(() => {
-    return {
-      bottom: height.value > 42 ? height.value + 10 : 140,
-    };
-  }, []);
 
   // 자동 포커스 (shouldAutoFocus가 true일 때만)
   useEffect(() => {
