@@ -1,4 +1,4 @@
-import { Button, ScrollView, XStack, YStack } from 'tamagui';
+import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/entities/memo/api';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
@@ -6,7 +6,7 @@ import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/cat
 import { CategoryButton } from '~/features/categories/ui';
 import { DEFAULT_COLORS, MESSAGES } from '~/shared/constants';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
-import { FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
+import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
@@ -169,7 +169,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
               label="카테고리"
             >
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <XStack gap="$2">
+                <XStack gap="$3">
                   {categories.map((category) => (
                     <CategoryButton
                       key={category.id}
@@ -185,7 +185,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                     <Button
                       borderStyle="dashed"
                       size="sm"
-                      variant="outlined"
+                      variant="ghost"
                       onPress={() => setShowAddCategory(true)}
                     >
                       + 추가

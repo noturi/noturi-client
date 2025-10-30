@@ -169,7 +169,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
 
             <Form.Field error={selectedCategoryError} label="카테고리">
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <XStack gap="$2">
+                <XStack gap="$3">
                   {categories.map((category) => (
                     <CategoryButton
                       key={category.id}
