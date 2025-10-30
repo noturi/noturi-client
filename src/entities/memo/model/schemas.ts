@@ -15,7 +15,6 @@ export type MemoFormData = z.infer<typeof memoFormSchema>;
 export const categoryFormSchema = z.object({
   name: z
     .string()
-    .min(1, '카테고리 이름을 입력해주세요')
     .max(20, '카테고리 이름은 20자 이하로 입력해주세요')
     .transform((val) => val.trim()),
 });
