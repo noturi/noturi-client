@@ -22,7 +22,7 @@ export function RatingView({
 }: RatingViewProps) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <YStack gap="$4">
+      <YStack gap="$6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />
         <MemoRatingGroupView
           isError={isError}
