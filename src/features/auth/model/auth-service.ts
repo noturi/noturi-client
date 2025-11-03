@@ -43,15 +43,14 @@ export class AuthService {
     }
   }
 
-  async logout(signal: AbortSignal): Promise<void> {
+  async logout(): Promise<void> {
     try {
-      // 리프레시 토큰 가져오기
       const tokens = await authTokenCache.getAuthTokens();
       const refreshToken = tokens.refreshToken;
 
       if (refreshToken) {
         // 서버에 로그아웃 요청 (리프레시 토큰 포함)
-        await authApi.logout({ refreshToken }, signal);
+        await authApi.logout({ refreshToken });
       }
     } catch (error) {
       console.error('서버 로그아웃 요청 실패:', error);
