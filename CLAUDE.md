@@ -108,9 +108,11 @@ import { LocalComponent } from './LocalComponent';
 
 FSD(Feature-Sliced Design)는 각 슬라이스를 **3개의 표준 세그먼트**로 구성합니다:
 
-- `api/` - 서버 통신
-- `model/` - 비즈니스 로직, 상태, 타입
-- `ui/` - UI 컴포넌트
+- `api/` - 서버 통신, request functions, data types, mappers 등 백엔드 통신 및 데이터 로직
+- `model/` - 비즈니스 로직, 상태, 타입, schema, interfaces, store 등 애플리케이션 도메인 모델  
+- `ui/` - UI 컴포넌트, date formatter, styles 등 UI 표현과 직접 관련된 코드
+- `lib/` - 해당 Slice에서 여러 모듈이 함께 사용하는 공통 library code
+- `config/` - configuration files, feature flags 등 환경·기능 설정
 
 **현재 프로젝트**: `lib/` 폴더를 일부 기능에서 사용하고 있습니다. (features/calendar/lib, shared/lib)
 
