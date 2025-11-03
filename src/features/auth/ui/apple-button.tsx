@@ -1,4 +1,5 @@
-import { useAppleLoginMutation, useAuth } from '~/features/auth';
+import { useAppleLoginMutation } from '~/features/auth/api';
+import { useAuth } from '~/features/auth/model';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';

@@ -5,8 +5,8 @@ import {
   calendarMemoMonthlyQuery,
 } from '~/entities/calendar-memo';
 import { CalendarAddModal, useCreateCalendarMemo } from '~/features/calendar';
+import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { useCalendarDate } from '~/shared/lib/calendar';
-import { setupKoreanLocale } from '~/shared/lib/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';

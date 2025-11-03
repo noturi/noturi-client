@@ -13,8 +13,8 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { DEFAULT_COLORS } from '@/shared/config/colors';
-import { MESSAGES } from '@/shared/config/messages';
+import { DEFAULT_COLORS } from '@/shared/config';
+import { MESSAGES } from '@/shared/model';
 
 import { RatingSelector } from './rating-selector';
 

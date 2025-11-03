@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-import { AuthProvider } from '../../features/auth';
+import { AuthProvider } from '../../features/auth/model';
 import { QueryProvider } from './query-provider';
 import { TamaguiProvider } from './tamagui-provider';
 

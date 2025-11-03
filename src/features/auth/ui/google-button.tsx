@@ -4,7 +4,8 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import { Button } from 'tamagui';
-import { useAuth, useGoogleLoginMutation } from '~/features/auth';
+import { useGoogleLoginMutation } from '~/features/auth/api';
+import { useAuth } from '~/features/auth/model';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';

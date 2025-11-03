@@ -1,5 +1,5 @@
 import Logger from '../lib/logger';
-import { tokenEventManager } from '../lib/token-event-manager';
+import { tokenEventManager } from '../model/token-event-manager';
 import { logErrorResponse } from './logger';
 import { ApiError, ErrorResponseBody } from './types';
 
