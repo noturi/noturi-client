@@ -107,7 +107,6 @@ export const TOKEN_KEYS = {
   USER: 'user',
 } as const;
 
-// 인증 토큰 전용 헬퍼 함수들
 export const authTokenCache = {
   saveAuthTokens: async (tokens: { accessToken: string; refreshToken: string; user: string }) => {
     await Promise.all([
