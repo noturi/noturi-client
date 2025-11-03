@@ -27,8 +27,6 @@ export function GoogleButton() {
 
   const googleLoginMutation = useGoogleLoginMutation({
     onSuccess: async (loginResponse) => {
-      console.log('Login successful:', loginResponse);
-
       await saveAuthTokens({
         accessToken: loginResponse.tokens.accessToken,
         refreshToken: loginResponse.tokens.refreshToken,
