@@ -16,11 +16,8 @@ project/
 │
 └── src/                          # 비즈니스 로직
     ├── application/              # 🚨 중요: app이 아닌 application
-    │   ├── providers/            # 전역 Provider들 (Tamagui, React Query, Auth)
-    │   └── router/               # 라우팅 설정 (Stack.Screen 정의)
-    ├── pages/                    # 페이지 컴포넌트들
+    │   └── providers/            # 전역 Provider들 (Tamagui, React Query, Auth)
     ├── features/                 # 기능별 모듈들
-    ├── entities/                 # 비즈니스 엔티티들
     ├── shared/                   # 공통 모듈들
     └── widgets/                  # 복합 UI 컴포넌트들
 ```
@@ -50,8 +47,8 @@ export default function RootLayout() {
   );
 }
 
-// app/login.tsx - pages에서 import
-import LoginScreen from '../src/pages/auth/login';
+// app/login.tsx - features에서 import
+import LoginScreen from '../src/features/auth/ui/login-screen';
 export default LoginScreen;
 ```
 
@@ -71,16 +68,8 @@ export function AppProvider({ children }) {
   );
 }
 
-// src/application/router/RootRouter.tsx
-export function RootRouter() {
-  return (
-    <Stack>
-      <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* 모든 Stack.Screen 정의 */}
-    </Stack>
-  );
-}
+// src/application/providers/AppProvider.tsx에서 직접 Provider만 관리
+// 실제 라우팅은 Expo Router가 app/ 폴더에서 자동 처리
 ```
 
 ## 🔗 Import 규칙
@@ -123,90 +112,107 @@ FSD(Feature-Sliced Design)는 각 슬라이스를 **3개의 표준 세그먼트*
 - `model/` - 비즈니스 로직, 상태, 타입
 - `ui/` - UI 컴포넌트
 
-**중요**: `lib/` 폴더는 FSD 표준이 아닙니다. 모든 로직은 `model/`에 위치해야 합니다.
+**현재 프로젝트**: `lib/` 폴더를 일부 기능에서 사용하고 있습니다. (features/calendar/lib, shared/lib)
 
-### 📂 Entities vs Features: CRUD 역할 분리
+### 📂 FSD 레이어별 역할 구분
 
-**핵심 원칙**: Entities는 READ만, Features는 CREATE/UPDATE/DELETE만 담당합니다.
+#### 핵심 개념 이해
 
-#### Entities (읽기 전용)
+**Entities (엔티티)**: 데이터 그 자체의 표현
+- Product를 어떻게 표시할 것인가
+- 데이터 중심의 순수한 표현이므로 특별한 상호작용 로직이 없음
+- 순수한 데이터 모델과 기본적인 표시 컴포넌트
 
-```
-entities/memo/
-├── api/                         # READ 전용 API
-│   ├── apis.ts                 # GET 메서드만 (getMemos, getMemo, searchMemos 등)
-│   ├── queries.ts              # React Query queries만
-│   └── index.ts
-├── model/                       # READ 관련 모든 로직 (⚠️ lib 사용 금지)
-│   ├── types.ts                # 타입, 인터페이스 정의
-│   ├── schemas.ts              # Zod, Yup 등 스키마
-│   ├── constants.ts            # 상수, Enum
-│   ├── transforms.ts           # 데이터 변환 함수 (백엔드 → UI)
-│   ├── utils.ts                # 계산, 포맷팅 등 유틸리티
-│   ├── hooks.ts                # READ용 커스텀 hooks
-│   └── index.ts
-├── ui/                          # READ용 UI 컴포넌트 (선택적)
-│   └── memo-card.tsx
-└── index.ts
-```
+**Widgets (위젯)**: 화면 구획의 구성과 배치  
+- 여러 Product들을 하나의 섹션으로 어떻게 조직할 것인가
+- 화면 구획 내에서의 사용자 상호작용 (레이아웃 변경, 더보기 등)
+- 복합 UI 컴포넌트의 조합과 배치
 
-**Entities의 model/ 세그먼트**:
+**Features (기능)**: 특정 맥락에서의 행동과 흐름
+- 검색이라는 행동에서 Product를 어떻게 다룰 것인가  
+- 특정 목적을 위한 복합적인 사용자 행동 (검색, 필터링, 주문 등)
+- 비즈니스 로직과 사용자 워크플로우
 
-- ✅ 타입 정의 (types.ts)
-- ✅ 스키마/Validation (schemas.ts)
-- ✅ 데이터 변환 함수 (백엔드 DTO → UI 모델)
-- ✅ READ 관련 비즈니스 로직
-- ✅ READ용 커스텀 hooks (useTransformedMemos 등)
-- ✅ 계산/포맷팅 유틸리티
-- ❌ API 호출 금지 (api/ 세그먼트에서만)
-- ❌ CUD 로직 금지 (features로)
-- ❌ lib/ 폴더 사용 금지
+#### 현재 프로젝트 적용
 
-#### Features (쓰기 전용)
+**Entities**: 순수 데이터 표현 (memo, user, category의 기본 모델)
+**Features**: 특정 기능의 비즈니스 로직 (auth, memo-crud, categories-management)  
+**Widgets**: 복합 UI 컴포넌트 (memo-list, category-manager, dashboard-summary)
+
+#### Features (비즈니스 로직)
 
 ```
 features/memo/
-├── api/                         # CUD 전용 API
-│   ├── apis.ts                 # POST, PUT, DELETE 메서드만
-│   ├── mutations.ts            # React Query mutations만
+├── api/                         # API 통신
+│   ├── apis.ts                 # 모든 CRUD API 메서드
+│   ├── queries.ts              # React Query queries
+│   ├── mutations.ts            # React Query mutations
 │   └── index.ts
-├── model/                       # CUD 관련 모든 로직 (⚠️ lib 사용 금지)
-│   ├── hooks.ts                # CUD용 커스텀 hooks (useMemoForm 등)
-│   ├── validation.ts           # 폼 검증 로직
-│   ├── transforms.ts           # 폼 데이터 변환
-│   ├── utils.ts                # 에러 핸들링, 유틸리티
+├── model/                       # 비즈니스 로직
+│   ├── types.ts                # 타입, 인터페이스 정의
+│   ├── schemas.ts              # Zod, Yup 등 스키마
+│   ├── hooks.ts                # 커스텀 hooks
+│   ├── utils.ts                # 유틸리티 함수들
 │   └── index.ts
-├── ui/                          # CUD용 UI 컴포넌트
+├── lib/                         # 현재 프로젝트에서 사용 중
+│   └── hooks/                  # 특정 기능의 hooks
+├── ui/                          # UI 컴포넌트
 │   ├── memo-form.tsx
-│   ├── memo-edit-form.tsx
+│   ├── memo-card.tsx
 │   └── index.ts
 └── index.ts
 ```
 
 **Features의 model/ 세그먼트**:
 
-- ✅ CUD 관련 비즈니스 로직
-- ✅ 폼 validation/처리
-- ✅ CUD용 커스텀 hooks (useMemoForm, useFormValidation)
-- ✅ 에러 핸들링 로직
-- ✅ 데이터 변환 (폼 → DTO)
-- ❌ API 호출 금지 (api/ 세그먼트에서만)
-- ❌ READ 로직 금지 (entities 것을 재사용)
-- ❌ 타입 정의 금지 (entities에서 import)
-- ❌ lib/ 폴더 사용 금지
+- ✅ 타입 정의 (types.ts)
+- ✅ 스키마/Validation (schemas.ts)
+- ✅ 비즈니스 로직 처리
+- ✅ 커스텀 hooks
+- ✅ 유틸리티 함수들
+- ⚠️ lib/ 폴더도 사용 가능 (현재 프로젝트 구조)
 
-### 🚫 절대 금지 사항
+#### Widgets (복합 UI 컴포넌트)
 
 ```
-# ❌ 잘못된 구조
-entities/memo/
-├── lib/           # lib 폴더는 FSD 표준이 아님!
-└── model/
+widgets/memo-list/
+├── ui/                          # 복합 UI 컴포넌트
+│   ├── memo-list.tsx
+│   ├── memo-list-item.tsx
+│   └── index.ts
+└── index.ts
 
-# ✅ 올바른 구조
-entities/memo/
+widgets/category-manager/
+├── ui/                          # 복합 UI 컴포넌트
+│   ├── category-manager.tsx
+│   ├── category-list.tsx
+│   └── index.ts
+└── index.ts
+```
+
+**현재 프로젝트에서 사용하는 구조**:
+
+- ✅ Features: 특정 기능의 모든 비즈니스 로직
+- ✅ Widgets: 복합 UI 컴포넌트 조합
+- ✅ Shared: 공통으로 사용되는 모든 것들
+- ⚠️ lib/ 폴더 사용 중 (일부 features와 shared에서)
+
+### 🔄 현재 프로젝트 구조
+
+현재 프로젝트는 다음과 같은 구조를 사용합니다:
+
+```
+features/calendar/
 ├── api/
-├── model/         # 모든 로직은 model에
+├── lib/           # 현재 프로젝트에서는 lib 사용 중
+├── model/
+└── ui/
+
+shared/
+├── api/
+├── config/
+├── constants/
+├── lib/           # 공통 유틸리티들
 └── ui/
 ```
 
@@ -385,13 +391,10 @@ export function MemoEditForm({ id }: { id: string }) {
 ### Types 위치
 
 ```typescript
-// ❌ 잘못된 방법
-import { LoginDto } from '~/features/auth/api/types';
-
-// ✅ 올바른 방법 - entities에 types 저장
-import { LoginDto } from '~/entities/user/model/types';
-import { CreateMemoDto } from '~/entities/memo/model/types';
-import { CategoryDto } from '~/entities/category/model/types';
+// ✅ 현재 프로젝트 방법 - features에 types 저장
+import { LoginDto } from '~/features/auth/model/types';
+import { CreateMemoDto } from '~/features/memo/model/types';
+import { CategoryDto } from '~/features/categories/model/types';
 ```
 
 ## ⚙️ Metro 설정
@@ -466,8 +469,8 @@ pkill -f metro && rm -rf .expo && rm -rf node_modules/.cache && npx expo start -
 ### Lint
 
 ```bash
-pnpm lint              # 체크
-pnpm lint --fix         # 자동 수정
+expo lint              # 체크
+expo lint --fix        # 자동 수정
 ```
 
 ## TypeScript 규칙
