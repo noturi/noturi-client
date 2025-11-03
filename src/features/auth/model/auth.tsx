@@ -3,7 +3,7 @@ import { HREFS } from '~/shared/constants';
 import { tokenEventManager, useTokens } from '~/shared/lib';
 import Logger from '~/shared/lib/logger';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { router } from 'expo-router';
 
@@ -31,6 +31,19 @@ interface AuthContextType {
   clearError: () => void;
 }
 
+const useOneTaskAtTime = () => {
+  const abortController = useRef<AbortController | null>(null);
+  const cancelPendingTask = useCallback(() => {
+    if (abortController.current) {
+      abortController.current.abort();
+    }
+    abortController.current = new AbortController();
+    return abortController.current.signal;
+  }, []);
+
+  return cancelPendingTask;
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
@@ -47,6 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
 
   const tokens = useTokens();
+
+  const cancelPendingTask = useOneTaskAtTime();
 
   const clearError = () => setError(null);
 
@@ -73,6 +88,72 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initializeAuth();
   }, [tokens]);
 
+  const saveAuthTokens = async (authTokens: {
+    accessToken: string;
+    refreshToken: string;
+    user: User;
+  }) => {
+    const signal = cancelPendingTask();
+
+    try {
+      setError(null);
+      await tokens.saveAuthTokens(authTokens);
+
+      if (signal.aborted) return;
+
+      setAuthState(true);
+    } catch (error) {
+      if (signal.aborted) return;
+
+      console.error('토큰 저장 실패:', error);
+      setError('토큰 저장에 실패했습니다.');
+      throw error;
+    }
+  };
+
+  const logout = useCallback(async (): Promise<void> => {
+    const signal = cancelPendingTask();
+    try {
+      setError(null);
+      await authService.logout(signal);
+
+      if (signal.aborted) return;
+      setAuthState(false);
+      router.replace(HREFS.login());
+    } catch (error) {
+      if (signal.aborted) return;
+      console.error('로그아웃 실패:', error);
+      setError('로그아웃에 실패했습니다.');
+      setAuthState(false);
+      router.replace(HREFS.login());
+    }
+  }, [cancelPendingTask]);
+
+  const refreshAccessToken = useCallback(async (): Promise<boolean> => {
+    const signal = cancelPendingTask();
+    try {
+      setError(null);
+      const result = await authService.refreshAccessToken(signal);
+
+      if (signal.aborted) return false;
+
+      if (result.success) {
+        setAuthState(true);
+        return true;
+      } else {
+        setError(result.error || '세션이 만료되었습니다. 다시 로그인해주세요.');
+        setAuthState(false);
+        return false;
+      }
+    } catch (error) {
+      if (signal.aborted) return false;
+      console.error('토큰 갱신 실패:', error);
+      setError('토큰 갱신에 실패했습니다.');
+      setAuthState(false);
+      return false;
+    }
+  }, [cancelPendingTask]);
+
   // 토큰 만료 이벤트 처리
   useEffect(() => {
     const handleTokenExpired = async () => {
@@ -90,64 +171,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const unsubscribe = tokenEventManager.onTokenExpired(handleTokenExpired);
 
     return unsubscribe;
-  }, []);
-
-  // 토큰 저장
-  const saveAuthTokens = async (authTokens: {
-    accessToken: string;
-    refreshToken: string;
-    user: User;
-  }) => {
-    try {
-      setError(null);
-      await tokens.saveAuthTokens(authTokens);
-      setAuthState(true);
-    } catch (error) {
-      console.error('토큰 저장 실패:', error);
-      setError('토큰 저장에 실패했습니다.');
-      throw error;
-    }
-  };
-
-  // 로그아웃
-  const logout = async () => {
-    try {
-      setError(null);
-      await authService.logout();
-      setAuthState(false);
-      // 로그인 페이지로 리다이렉트
-      router.replace(HREFS.login());
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-      setError('로그아웃에 실패했습니다.');
-      // 에러가 있어도 상태는 로그아웃 상태로 변경
-      setAuthState(false);
-      // 에러가 있어도 로그인 페이지로 이동
-      router.replace(HREFS.login());
-    }
-  };
-
-  // 토큰 갱신
-  const refreshAccessToken = async (): Promise<boolean> => {
-    try {
-      setError(null);
-      const result = await authService.refreshAccessToken();
-
-      if (result.success) {
-        setAuthState(true);
-        return true;
-      } else {
-        setError(result.error || '세션이 만료되었습니다. 다시 로그인해주세요.');
-        setAuthState(false);
-        return false;
-      }
-    } catch (error) {
-      console.error('토큰 갱신 실패:', error);
-      setError('토큰 갱신에 실패했습니다.');
-      setAuthState(false);
-      return false;
-    }
-  };
+  }, [refreshAccessToken, logout]);
 
   const value: AuthContextType = {
     getUser,

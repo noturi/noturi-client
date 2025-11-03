@@ -9,7 +9,7 @@ interface RefreshTokenResult {
 }
 
 export class AuthService {
-  async refreshAccessToken(): Promise<RefreshTokenResult> {
+  async refreshAccessToken(signal: AbortSignal): Promise<RefreshTokenResult> {
     try {
       const tokens = await authTokenCache.getAuthTokens();
       const currentRefreshToken = tokens.refreshToken;
@@ -18,9 +18,7 @@ export class AuthService {
         return { success: false, error: '리프레시 토큰이 없습니다.' };
       }
 
-      const response = await authApi.refreshToken({
-        refreshToken: currentRefreshToken,
-      });
+      const response = await authApi.refreshToken({ refreshToken: currentRefreshToken }, signal);
 
       // 기존 사용자 정보 유지
       const currentUser = tokens.user;
@@ -45,7 +43,7 @@ export class AuthService {
     }
   }
 
-  async logout(): Promise<void> {
+  async logout(signal: AbortSignal): Promise<void> {
     try {
       // 리프레시 토큰 가져오기
       const tokens = await authTokenCache.getAuthTokens();
@@ -53,7 +51,7 @@ export class AuthService {
 
       if (refreshToken) {
         // 서버에 로그아웃 요청 (리프레시 토큰 포함)
-        await authApi.logout({ refreshToken });
+        await authApi.logout({ refreshToken }, signal);
       }
     } catch (error) {
       console.error('서버 로그아웃 요청 실패:', error);
@@ -64,9 +62,9 @@ export class AuthService {
     }
   }
 
-  async validateCurrentToken(): Promise<boolean> {
+  async validateCurrentToken(signal: AbortSignal): Promise<boolean> {
     try {
-      return await authApi.validateToken();
+      return await authApi.validateToken(signal);
     } catch (error) {
       console.error('토큰 검증 실패:', error);
       return false;

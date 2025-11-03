@@ -10,9 +10,14 @@ import { type DefaultError, type UseMutationOptions, useMutation } from '@tansta
 import { authService } from '../model/auth-service';
 import { authApi } from './apis';
 
+type MutationVariables<T> = {
+  dto: T;
+  signal: AbortSignal;
+};
+
 export function useGoogleLoginMutation(
   options: Pick<
-    UseMutationOptions<LoginResponseDto, DefaultError, GoogleLoginDto>,
+    UseMutationOptions<LoginResponseDto, DefaultError, MutationVariables<GoogleLoginDto>>,
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   > = {},
 ) {
@@ -20,8 +25,8 @@ export function useGoogleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'google-login', ...mutationKey],
-    mutationFn: (dto: GoogleLoginDto) => {
-      return authApi.googleLogin(dto);
+    mutationFn: ({ dto, signal }: MutationVariables<GoogleLoginDto>) => {
+      return authApi.googleLogin(dto, signal);
     },
     onMutate,
     onSuccess: async (loginResponse, loginData, context) => {
@@ -42,7 +47,7 @@ export function useGoogleLoginMutation(
 
 export function useAppleLoginMutation(
   options: Pick<
-    UseMutationOptions<LoginResponseDto, DefaultError, AppleLoginDto>,
+    UseMutationOptions<LoginResponseDto, DefaultError, MutationVariables<AppleLoginDto>>,
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   > = {},
 ) {
@@ -50,8 +55,8 @@ export function useAppleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'apple-login', ...mutationKey],
-    mutationFn: (dto: AppleLoginDto) => {
-      return authApi.appleLogin(dto);
+    mutationFn: ({ dto, signal }: MutationVariables<AppleLoginDto>) => {
+      return authApi.appleLogin(dto, signal);
     },
     onMutate,
     onSuccess: async (loginResponse, loginData, context) => {
@@ -72,7 +77,7 @@ export function useAppleLoginMutation(
 
 export function useLogoutMutation(
   options: Pick<
-    UseMutationOptions<void, DefaultError, void>,
+    UseMutationOptions<void, DefaultError, AbortSignal>,
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   > = {},
 ) {
@@ -80,8 +85,8 @@ export function useLogoutMutation(
 
   return useMutation({
     mutationKey: ['auth', 'logout', ...mutationKey],
-    mutationFn: () => {
-      return authService.logout();
+    mutationFn: (signal: AbortSignal) => {
+      return authService.logout(signal);
     },
     onMutate,
     onSuccess: async (_, __, context) => {
