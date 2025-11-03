@@ -35,14 +35,18 @@ project/
 ### `app/` (Expo Router 전용)
 
 ```typescript
-// app/_layout.tsx - 최소한의 코드만
+// app/_layout.tsx - Expo Router 라우팅 직접 관리
 import { AppProvider } from '../src/application/providers';
-import { RootRouter } from '../src/application/router';
+import { Stack } from 'expo-router';
 
 export default function RootLayout() {
   return (
     <AppProvider>
-      <RootRouter />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ title: '로그인' }} />
+        <Stack.Screen name="memo/[id]" options={{ title: '메모 상세' }} />
+      </Stack>
     </AppProvider>
   );
 }
@@ -68,8 +72,8 @@ export function AppProvider({ children }) {
   );
 }
 
-// src/application/providers/AppProvider.tsx에서 직접 Provider만 관리
-// 실제 라우팅은 Expo Router가 app/ 폴더에서 자동 처리
+// src/application/providers/AppProvider.tsx에서는 Provider만 관리
+// 실제 라우팅 구조는 app/_layout.tsx에서 Stack으로 정의
 ```
 
 ## 🔗 Import 규칙
@@ -102,17 +106,17 @@ import { router } from 'expo-router';
 import { LocalComponent } from './LocalComponent';
 ```
 
-## 🏭 FSD 모듈 구조 (3-Segment Architecture)
+## 🏭 FSD 모듈 구조
 
-### 🚨 FSD 핵심 원칙: 3개의 세그먼트
+### 📂 FSD 세그먼트 구성
 
-FSD(Feature-Sliced Design)는 각 슬라이스를 **3개의 표준 세그먼트**로 구성합니다:
+FSD는 전통적으로 `api/`, `model/`, `ui/` 3개의 세그먼트를 권장하지만, 이 프로젝트는 필요에 따라 `lib/`와 `config/`를 포함한 최대 5개의 세그먼트를 사용합니다:
 
 - `api/` - 서버 통신, request functions, data types, mappers 등 백엔드 통신 및 데이터 로직
 - `model/` - 비즈니스 로직, 상태, 타입, schema, interfaces, store 등 애플리케이션 도메인 모델  
 - `ui/` - UI 컴포넌트, date formatter, styles 등 UI 표현과 직접 관련된 코드
-- `lib/` - 해당 Slice에서 여러 모듈이 함께 사용하는 공통 library code
-- `config/` - configuration files, feature flags 등 환경·기능 설정
+- `lib/` - (선택) 해당 Slice에서 여러 모듈이 함께 사용하는 공통 library code
+- `config/` - (선택) configuration files, feature flags 등 환경·기능 설정
 
 **현재 프로젝트**: `lib/` 폴더를 일부 기능에서 사용하고 있습니다. (features/calendar/lib, shared/lib)
 
@@ -393,10 +397,10 @@ export function MemoEditForm({ id }: { id: string }) {
 ### Types 위치
 
 ```typescript
-// ✅ 현재 프로젝트 방법 - features에 types 저장
-import { LoginDto } from '~/features/auth/model/types';
-import { CreateMemoDto } from '~/features/memo/model/types';
-import { CategoryDto } from '~/features/categories/model/types';
+// ✅ 현재 프로젝트 방법 - entities에 types 저장
+import { LoginDto, GoogleLoginDto, AppleLoginDto } from '~/entities/user/model/types';
+import { User } from '~/entities/user/model/auth';
+import { Memo, CreateMemoDto, UpdateMemoDto } from '~/entities/memo/model/types';
 ```
 
 ## ⚙️ Metro 설정
