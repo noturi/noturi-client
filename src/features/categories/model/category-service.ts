@@ -1,11 +1,13 @@
 import {
+  CATEGORY_COLORS,
+  CATEGORY_ICONS,
   Category,
   CreateCategoryDto,
+  DEFAULT_CATEGORIES,
   MergeCategoriesDto,
   UICategory,
   UpdateCategoryDto,
 } from '~/entities/category';
-import { CATEGORY_COLORS, CATEGORY_ICONS, DEFAULT_CATEGORIES } from '~/shared/constants';
 
 import { categoryApi } from '../api';
 

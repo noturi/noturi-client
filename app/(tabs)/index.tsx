@@ -16,7 +16,7 @@ import { router } from 'expo-router';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { HREFS } from '@/shared/constants/routes';
+import { HREFS } from '@/shared/config/routes';
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('전체');

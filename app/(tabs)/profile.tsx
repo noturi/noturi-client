@@ -2,7 +2,6 @@ import { Separator, XStack, YStack } from 'tamagui';
 import { useLogoutMutation } from '~/features/auth/api/mutation';
 import { useAuth } from '~/features/auth/model';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
-import { HREFS } from '~/shared/constants/routes';
 import { Card, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -11,6 +10,8 @@ import { Alert, Linking } from 'react-native';
 import { router } from 'expo-router';
 
 import { FileText, LogOut, Settings } from '@tamagui/lucide-icons';
+
+import { HREFS } from '@/shared/config/routes';
 
 export default function ProfileScreen() {
   const [openManage, setOpenManage] = useState(false);

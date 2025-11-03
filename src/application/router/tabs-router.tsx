@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router';
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { useAuth } from '../../features/auth';
-import { HREFS } from '../../shared/constants';
+import { HREFS } from '../../shared/config';
 import { Loading } from '../../shared/ui';
 
 export function TabsRouter() {

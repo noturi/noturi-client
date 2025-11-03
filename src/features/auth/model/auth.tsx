@@ -1,6 +1,4 @@
 import { User, parseUser } from '~/entities/user';
-import { HREFS } from '~/shared/constants';
-import { tokenEventManager } from '~/shared/lib';
 import { authTokenCache } from '~/shared/lib/cache';
 import Logger from '~/shared/lib/logger';
 
@@ -14,6 +12,9 @@ import React, {
 } from 'react';
 
 import { router } from 'expo-router';
+
+import { HREFS } from '@/shared/config';
+import { tokenEventManager } from '@/shared/model';
 
 import { authService } from './auth-service';
 

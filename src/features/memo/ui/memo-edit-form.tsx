@@ -4,7 +4,6 @@ import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schem
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/categories/api';
 import { CategoryButton } from '~/features/categories/ui';
-import { DEFAULT_COLORS, MESSAGES } from '~/shared/constants';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
@@ -12,6 +11,8 @@ import { useEffect, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
+
+import { DEFAULT_COLORS, MESSAGES } from '@/shared/config';
 
 import { useUpdateMemoMutation } from '../api';
 import { RatingSelector } from './rating-selector';

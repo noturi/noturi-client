@@ -1,7 +1,7 @@
 import { Redirect } from 'expo-router';
 
 import { useAuth } from '../src/features/auth';
-import { HREFS } from '../src/shared/constants';
+import { HREFS } from '../src/shared/config';
 import { Loading } from '../src/shared/ui';
 
 export default function IndexPage() {

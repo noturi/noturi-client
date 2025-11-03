@@ -5,12 +5,13 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { Button } from 'tamagui';
 import { useAuth, useGoogleLoginMutation } from '~/features/auth';
-import { HREFS } from '~/shared/constants';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';
 
 import { router } from 'expo-router';
+
+import { HREFS } from '@/shared/config';
 
 import { GoogleIcon } from './google-icon';
 

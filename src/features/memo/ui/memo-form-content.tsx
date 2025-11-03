@@ -5,8 +5,6 @@ import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
-import { DEFAULT_COLORS } from '~/shared/constants/colors';
-import { MESSAGES } from '~/shared/constants/messages';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { Button, FloatingButton, Form, Input, TextArea } from '~/shared/ui';
 
@@ -14,6 +12,9 @@ import { useEffect, useRef, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
+
+import { DEFAULT_COLORS } from '@/shared/config/colors';
+import { MESSAGES } from '@/shared/config/messages';
 
 import { RatingSelector } from './rating-selector';
 

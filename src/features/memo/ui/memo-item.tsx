@@ -1,9 +1,10 @@
 import { XStack, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { HREFS } from '~/shared/constants';
 import { StarRating, Typography } from '~/shared/ui';
 
 import { router } from 'expo-router';
+
+import { HREFS } from '@/shared/config';
 
 interface MemoItemProps {
   memo: UIMemo;

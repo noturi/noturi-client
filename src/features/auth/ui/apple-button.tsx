@@ -1,11 +1,12 @@
 import { useAppleLoginMutation, useAuth } from '~/features/auth';
-import { HREFS } from '~/shared/constants';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';
 
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { router } from 'expo-router';
+
+import { HREFS } from '@/shared/config';
 
 export function AppleButton() {
   const { saveAuthTokens, error, clearError } = useAuth();
