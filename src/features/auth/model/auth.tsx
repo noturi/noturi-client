@@ -1,18 +1,26 @@
-import { User } from '~/entities/user';
+import { User, parseUser } from '~/entities/user';
 import { HREFS } from '~/shared/constants';
-import { tokenEventManager, useTokens } from '~/shared/lib';
+import { tokenEventManager } from '~/shared/lib';
+import { authTokenCache } from '~/shared/lib/cache';
 import Logger from '~/shared/lib/logger';
 
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 
 import { router } from 'expo-router';
 
 import { authService } from './auth-service';
 
 interface AuthContextType {
-  getUser: () => Promise<User | null>;
-  getAccessToken: () => Promise<string | null>;
-  getRefreshToken: () => Promise<string | null>;
+  getUser: () => User | null;
+  getAccessToken: () => string | null;
+  getRefreshToken: () => string | null;
 
   isAuthenticated: boolean;
   isInitialLoading: boolean;
@@ -30,6 +38,137 @@ interface AuthContextType {
 
   clearError: () => void;
 }
+
+interface AuthState {
+  isAuthenticated: boolean;
+  isInitialLoading: boolean;
+  error: string | null;
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+}
+
+class AuthStore {
+  private listeners = new Set<() => void>();
+  private state: AuthState = {
+    isAuthenticated: false,
+    isInitialLoading: true,
+    error: null,
+    user: null,
+    accessToken: null,
+    refreshToken: null,
+  };
+
+  subscribe = (listener: () => void) => {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  };
+
+  getSnapshot = () => this.state;
+
+  getServerSnapshot = () => this.state;
+
+  private setState = (newState: Partial<AuthState>) => {
+    this.state = { ...this.state, ...newState };
+    this.listeners.forEach((listener) => listener());
+  };
+
+  saveAuthTokens = async (tokens: { accessToken: string; refreshToken: string; user: User }) => {
+    try {
+      await authTokenCache.saveAuthTokens({
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        user: JSON.stringify(tokens.user),
+      });
+      this.setState({
+        isAuthenticated: true,
+        error: null,
+        user: tokens.user,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      });
+    } catch (error) {
+      console.error('토큰 저장 실패:', error);
+      this.setState({ error: '토큰 저장에 실패했습니다.' });
+      throw error;
+    }
+  };
+
+  clearAuthTokens = async () => {
+    try {
+      await authTokenCache.clearAuthTokens();
+      this.setState({
+        isAuthenticated: false,
+        error: null,
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+      });
+    } catch (error) {
+      console.error('토큰 삭제 실패:', error);
+      this.setState({ error: '로그아웃에 실패했습니다.' });
+      throw error;
+    }
+  };
+
+  initializeAuth = async () => {
+    try {
+      const tokens = await authTokenCache.getAuthTokens();
+      const user = parseUser(tokens.user);
+      const isAuthenticated = !!(tokens.accessToken && tokens.user);
+
+      this.setState({
+        isAuthenticated,
+        isInitialLoading: false,
+        user,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      });
+    } catch (error) {
+      Logger.error('인증 상태 확인 실패:', error);
+      this.setState({
+        isAuthenticated: false,
+        isInitialLoading: false,
+        error: '인증 상태 확인에 실패했습니다.',
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+      });
+    }
+  };
+
+  getUser = (): User | null => {
+    return this.state.user;
+  };
+
+  getAccessToken = (): string | null => {
+    return this.state.accessToken;
+  };
+
+  getRefreshToken = (): string | null => {
+    return this.state.refreshToken;
+  };
+
+  setLoading = (isInitialLoading: boolean) => {
+    this.setState({ isInitialLoading });
+  };
+
+  setError = (error: string | null) => {
+    this.setState({ error });
+  };
+
+  clearError = () => {
+    this.setState({ error: null });
+  };
+
+  setAuthenticated = (isAuthenticated: boolean) => {
+    this.setState({ isAuthenticated });
+  };
+
+  getState = () => this.state;
+}
+
+const authStore = new AuthStore();
 
 const useOneTaskAtTime = () => {
   const abortController = useRef<AbortController | null>(null);
@@ -55,38 +194,20 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [authState, setAuthState] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const tokens = useTokens();
+  const authState = useSyncExternalStore(
+    authStore.subscribe,
+    authStore.getSnapshot,
+    authStore.getServerSnapshot,
+  );
 
   const cancelPendingTask = useOneTaskAtTime();
 
-  const clearError = () => setError(null);
-
-  const getUser = async (): Promise<User | null> => {
-    const rawUser = await tokens.getUser();
-    return rawUser && typeof rawUser === 'object' ? rawUser : null;
-  };
+  const clearError = () => authStore.clearError();
 
   // 초기 인증 상태 확인
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const authenticated = await tokens.checkAuthStatus();
-        setAuthState(authenticated);
-      } catch (error) {
-        Logger.error('인증 상태 확인 실패:', error);
-        setError('인증 상태 확인에 실패했습니다.');
-        setAuthState(false);
-      } finally {
-        setIsInitialLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, [tokens]);
+    authStore.initializeAuth();
+  }, []);
 
   const saveAuthTokens = async (authTokens: {
     accessToken: string;
@@ -96,60 +217,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const signal = cancelPendingTask();
 
     try {
-      setError(null);
-      await tokens.saveAuthTokens(authTokens);
+      await authStore.saveAuthTokens(authTokens);
 
       if (signal.aborted) return;
-
-      setAuthState(true);
     } catch (error) {
       if (signal.aborted) return;
-
-      console.error('토큰 저장 실패:', error);
-      setError('토큰 저장에 실패했습니다.');
       throw error;
     }
   };
 
   const logout = useCallback(async (): Promise<void> => {
-    const signal = cancelPendingTask();
     try {
-      setError(null);
-      await authService.logout(signal);
+      authStore.setError(null);
+      await authService.logout();
 
-      if (signal.aborted) return;
-      setAuthState(false);
+      await authStore.clearAuthTokens();
       router.replace(HREFS.login());
     } catch (error) {
-      if (signal.aborted) return;
       console.error('로그아웃 실패:', error);
-      setError('로그아웃에 실패했습니다.');
-      setAuthState(false);
+      await authStore.clearAuthTokens();
       router.replace(HREFS.login());
     }
-  }, [cancelPendingTask]);
+  }, []);
 
   const refreshAccessToken = useCallback(async (): Promise<boolean> => {
     const signal = cancelPendingTask();
     try {
-      setError(null);
+      authStore.setError(null);
       const result = await authService.refreshAccessToken(signal);
 
       if (signal.aborted) return false;
 
       if (result.success) {
-        setAuthState(true);
+        // 토큰이 이미 authService에서 저장됨
+        authStore.setAuthenticated(true);
+        authStore.setError(null);
         return true;
       } else {
-        setError(result.error || '세션이 만료되었습니다. 다시 로그인해주세요.');
-        setAuthState(false);
+        authStore.setError(result.error || '세션이 만료되었습니다. 다시 로그인해주세요.');
+        await authStore.clearAuthTokens();
         return false;
       }
     } catch (error) {
       if (signal.aborted) return false;
       console.error('토큰 갱신 실패:', error);
-      setError('토큰 갱신에 실패했습니다.');
-      setAuthState(false);
+      authStore.setError('토큰 갱신에 실패했습니다.');
+      await authStore.clearAuthTokens();
       return false;
     }
   }, [cancelPendingTask]);
@@ -174,12 +287,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refreshAccessToken, logout]);
 
   const value: AuthContextType = {
-    getUser,
-    getAccessToken: tokens.getAccessToken,
-    getRefreshToken: tokens.getRefreshToken,
-    isAuthenticated: authState,
-    isInitialLoading,
-    error,
+    getUser: authStore.getUser,
+    getAccessToken: authStore.getAccessToken,
+    getRefreshToken: authStore.getRefreshToken,
+    isAuthenticated: authState.isAuthenticated,
+    isInitialLoading: authState.isInitialLoading,
+    error: authState.error,
     saveAuthTokens,
     logout,
     refreshAccessToken,
