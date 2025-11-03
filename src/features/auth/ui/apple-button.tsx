@@ -96,11 +96,6 @@ export function AppleButton() {
 
   // const isLoading = appleLoginMutation.isPending;
 
-  // iOS에서만 보이도록 함
-  if (Platform.OS !== 'ios') {
-    return null;
-  }
-
   return (
     <AppleAuthentication.AppleAuthenticationButton
       buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}

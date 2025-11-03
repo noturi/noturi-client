@@ -1,7 +1,8 @@
 import { XStack, YStack } from 'tamagui';
-import { AppleButton } from '~/shared/ui/apple-button';
-import { GoogleButton } from '~/shared/ui/google-button';
+import { AppleButton, GoogleButton } from '~/features/auth/ui';
 import { Typography } from '~/shared/ui/typography';
+
+import { Platform } from 'react-native';
 
 export default function LoginScreen() {
   return (
@@ -16,7 +17,7 @@ export default function LoginScreen() {
       <Typography variant="largeTitle">Noturi</Typography>
       <XStack gap="$5">
         <GoogleButton />
-        <AppleButton />
+        {Platform.OS === 'ios' && <AppleButton />}
       </XStack>
     </YStack>
   );

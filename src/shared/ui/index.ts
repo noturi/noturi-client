@@ -1,5 +1,4 @@
 export * from './api-error-boundary';
-export * from './apple-button';
 export * from './button';
 export * from './card';
 export * from './floating-button';
