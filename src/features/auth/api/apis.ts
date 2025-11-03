@@ -17,19 +17,17 @@ export class AuthApi {
   }
 
   // Google 네이티브 로그인
-  async googleLogin(data: GoogleLoginDto, signal: AbortSignal): Promise<LoginResponseDto> {
+  async googleLogin(data: GoogleLoginDto): Promise<LoginResponseDto> {
     const response = await this.api.post('auth/google/native', {
       json: data,
-      signal,
     });
     return response.json<LoginResponseDto>();
   }
 
   // Apple 네이티브 로그인
-  async appleLogin(data: AppleLoginDto, signal: AbortSignal): Promise<LoginResponseDto> {
+  async appleLogin(data: AppleLoginDto): Promise<LoginResponseDto> {
     const response = await this.api.post('auth/apple/native', {
       json: data,
-      signal,
     });
     return response.json<LoginResponseDto>();
   }
@@ -37,16 +35,14 @@ export class AuthApi {
   async refreshToken(data: RefreshTokenDto, signal: AbortSignal): Promise<RefreshTokenResponseDto> {
     const response = await this.api.post('auth/refresh', {
       json: data,
-      signal,
     });
     return response.json<RefreshTokenResponseDto>();
   }
 
   // 로그아웃(서버에서 토큰 무효화)
-  async logout(data: LogoutDto, signal: AbortSignal): Promise<{ message: string }> {
+  async logout(data: LogoutDto): Promise<{ message: string }> {
     const response = await this.api.post('auth/logout', {
       json: data,
-      signal,
     });
     return response.json<{ message: string }>();
   }
