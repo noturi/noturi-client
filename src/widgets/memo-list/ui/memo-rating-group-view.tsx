@@ -20,7 +20,7 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
           // 평점이 없거나 0인 메모들
           return !memo.rating || memo.rating === 0;
         }
-        return Math.ceil(memo.rating) === rating;
+        return Math.floor(memo.rating) === rating;
       }),
     }))
     .filter((group) => group.memos.length > 0);
