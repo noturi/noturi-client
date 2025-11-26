@@ -64,7 +64,7 @@ export function CalendarMemoList({
 
   return (
     <Card>
-      <Typography color="$textMuted" textAlign="center">
+      <Typography color="$textMuted" textAlign="center" variant="footnote">
         {emptyMessage}
       </Typography>
     </Card>
