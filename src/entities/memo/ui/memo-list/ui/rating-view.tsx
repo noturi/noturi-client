@@ -1,7 +1,7 @@
 import { ScrollView, YStack } from 'tamagui';
 import type { UICategory } from '~/entities/category';
-import type { UIMemo } from '../../../model/types';
 
+import type { UIMemo } from '../../../model/types';
 import { CategoryFilterBar } from './category-filter-bar';
 import { MemoRatingGroupView } from './memo-rating-group-view';
 
