@@ -5,10 +5,12 @@ export function useToast() {
     Burnt.toast({
       title: message,
       preset: 'done',
+      haptic: 'success',
+      duration: 2,
       layout: {
         iconSize: {
-          height: 16,
-          width: 16,
+          height: 18,
+          width: 18,
         },
       },
     });
@@ -18,10 +20,12 @@ export function useToast() {
     Burnt.toast({
       title: message,
       preset: 'error',
+      haptic: 'error',
+      duration: 2.5,
       layout: {
         iconSize: {
-          height: 16,
-          width: 16,
+          height: 18,
+          width: 18,
         },
       },
     });
