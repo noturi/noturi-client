@@ -1,7 +1,12 @@
 import { CreateCalendarMemoDto } from '~/entities/calendar-memo/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  type DefaultError,
+  type UseMutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { calendarApi } from './api';
 
@@ -22,3 +27,33 @@ export const useCreateCalendarMemo = () => {
     },
   });
 };
+
+// 캘린더 메모 삭제 뮤테이션
+export function useDeleteCalendarMemo(
+  options: Pick<
+    UseMutationOptions<void, DefaultError, string>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['calendar-memo', 'delete', ...mutationKey],
+    mutationFn: (id: string) => calendarApi.deleteCalendarMemo(id),
+    onMutate,
+    onSuccess: async (_, deletedId, context) => {
+      // 삭제된 캘린더 메모의 캐시 제거
+      queryClient.removeQueries({ queryKey: ['calendar-memo', deletedId] });
+
+      // 캘린더 메모 목록 쿼리들 무효화
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.calendarMemos[0]],
+      });
+
+      await onSuccess?.(_, deletedId, context);
+    },
+    onError,
+    onSettled,
+  });
+}
