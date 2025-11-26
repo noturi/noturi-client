@@ -124,7 +124,7 @@ export default function HomeScreen() {
         <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
       </Card>
 
-      <YStack flex={1} position="relative">
+      <YStack flex={1}>
         {selectedView === 'rating' && (
           <RatingView
             categories={categories}
