@@ -16,6 +16,8 @@ export const Input = styled(TamaguiInput, {
   // 한글 입력 문제 해결을 위한 설정
   autoCorrect: false,
   autoCapitalize: 'none',
+  autoComplete: 'off',
+  spellCheck: false,
 
   focusStyle: {
     borderWidth: 1,
