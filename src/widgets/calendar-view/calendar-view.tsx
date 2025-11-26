@@ -19,7 +19,6 @@ import { CalendarMemoList } from '../calendar-memo-list';
 import { CALENDAR_THEME } from './constants';
 import { useCalendarMarkings } from './use-calendar-markings';
 
-// 한국어 로케일 초기화
 setupKoreanLocale();
 
 export type CalendarViewProps = {
@@ -36,7 +35,6 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const createCalendarMemoMutation = useCreateCalendarMemo();
 
-    // ref를 통해 함수 노출
     useImperativeHandle(ref, () => ({
       handleFloatingButtonPress,
     }));
@@ -142,9 +140,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     };
 
     const handleFloatingButtonPress = () => {
-      console.log('플로팅 버튼 클릭됨, startDate:', startDate);
       if (!startDate) {
-        console.log('날짜가 선택되지 않음');
         Alert.alert(
           '날짜를 먼저 선택해주세요',
           '캘린더에서 날짜를 선택한 후 일정을 추가할 수 있습니다.',
@@ -169,7 +165,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
           />
         </Card>
 
-        <ScrollView flex={1}>
+        <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 100 }}>
           <YStack gap="$3">
             {headerTitle && (
               <Typography color="$textPrimary" variant="subheadline">
