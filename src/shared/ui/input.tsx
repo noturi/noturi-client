@@ -9,8 +9,7 @@ export const Input = styled(TamaguiInput, {
   fontSize: 14,
   fontWeight: '$4',
   height: 36,
-  paddingHorizontal: '$2',
-
+  paddingHorizontal: '$3',
   placeholderTextColor: '$textMuted',
   textAlignVertical: 'center',
 
