@@ -113,7 +113,7 @@ import { LocalComponent } from './LocalComponent';
 FSD는 전통적으로 `api/`, `model/`, `ui/` 3개의 세그먼트를 권장하지만, 이 프로젝트는 필요에 따라 `lib/`와 `config/`를 포함한 최대 5개의 세그먼트를 사용합니다:
 
 - `api/` - 서버 통신, request functions, data types, mappers 등 백엔드 통신 및 데이터 로직
-- `model/` - 비즈니스 로직, 상태, 타입, schema, interfaces, store 등 애플리케이션 도메인 모델  
+- `model/` - 비즈니스 로직, 상태, 타입, schema, interfaces, store 등 애플리케이션 도메인 모델
 - `ui/` - UI 컴포넌트, date formatter, styles 등 UI 표현과 직접 관련된 코드
 - `lib/` - (선택) 해당 Slice에서 여러 모듈이 함께 사용하는 공통 library code
 - `config/` - (선택) configuration files, feature flags 등 환경·기능 설정
@@ -125,17 +125,20 @@ FSD는 전통적으로 `api/`, `model/`, `ui/` 3개의 세그먼트를 권장하
 #### 핵심 개념 이해
 
 **Entities (엔티티)**: 데이터 그 자체의 표현
+
 - Product를 어떻게 표시할 것인가
 - 데이터 중심의 순수한 표현이므로 특별한 상호작용 로직이 없음
 - 순수한 데이터 모델과 기본적인 표시 컴포넌트
 
-**Widgets (위젯)**: 화면 구획의 구성과 배치  
+**Widgets (위젯)**: 화면 구획의 구성과 배치
+
 - 여러 Product들을 하나의 섹션으로 어떻게 조직할 것인가
 - 화면 구획 내에서의 사용자 상호작용 (레이아웃 변경, 더보기 등)
 - 복합 UI 컴포넌트의 조합과 배치
 
 **Features (기능)**: 특정 맥락에서의 행동과 흐름
-- 검색이라는 행동에서 Product를 어떻게 다룰 것인가  
+
+- 검색이라는 행동에서 Product를 어떻게 다룰 것인가
 - 특정 목적을 위한 복합적인 사용자 행동 (검색, 필터링, 주문 등)
 - 비즈니스 로직과 사용자 워크플로우
 
@@ -220,6 +223,95 @@ shared/
 ├── constants/
 ├── lib/           # 공통 유틸리티들
 └── ui/
+```
+
+## 📦 FSD 레이어별 UI 컴포넌트 분류 규칙
+
+### 🎯 shared/ui vs widgets 구분
+
+**shared/ui**: 순수한 원소 UI 컴포넌트만
+
+- 기본 인터랙션 요소: Button, Input, Select, TextArea
+- 기본 레이아웃 요소: Card, Typography, Form
+- 단일 책임, 도메인 무관, 재사용 가능
+
+**widgets**: 조립형/복합 UI 컴포넌트들
+
+- 여러 원소를 조합한 UI 패턴
+- 특정 UX 패턴이나 비즈니스 로직 포함
+- 도메인 무관하지만 복잡한 상호작용
+
+### ✅ 올바른 분류
+
+#### shared/ui (순수 원소)
+
+```typescript
+// ✅ shared/ui에 위치
+export { Button } from './button'; // 기본 버튼
+export { Input } from './input'; // 기본 입력 필드
+export { Select } from './select'; // 기본 셀렉트
+export { TextArea } from './text-area'; // 기본 텍스트 영역
+export { Card } from './card'; // 기본 카드 레이아웃
+export { Typography } from './typography'; // 기본 텍스트 컴포넌트
+export { Form } from './form'; // 기본 폼 레이아웃
+```
+
+#### widgets (조립형 복합 컴포넌트)
+
+```typescript
+// ✅ widgets에 위치
+export { FloatingButton } from '~/widgets/floating-button'; // 버튼 + 위치 + 애니메이션
+export { Loading } from '~/widgets/loading'; // 스피너 + 텍스트 + 레이아웃
+export { StarRating } from '~/widgets/star-rating'; // 별 + 숫자 + 색상 로직
+export { RatingStars } from '~/widgets/rating-components'; // 별점 시스템
+export { RatingGroupCard } from '~/widgets/rating-components'; // 카드 + 별점 조합
+export { ApiErrorBoundary } from '~/widgets/api-error-boundary'; // 에러 처리 + UI
+export { SubmitButton } from '~/widgets/submit-button'; // 버튼 + 제출 로직
+```
+
+#### entities/ui (읽기 전용 데이터 표현)
+
+```typescript
+// ✅ entities에 위치 - 데이터 읽기/표시 전용
+export { CalendarView } from '~/entities/calendar-memo'; // 캘린더 데이터 표시
+export { CalendarMemoList } from '~/entities/calendar-memo'; // 메모 목록 표시
+export { MemoViewToggle, RatingView } from '~/entities/memo'; // 메모 뷰 표시
+export { StatsView } from '~/entities/statistics'; // 통계 데이터 표시
+```
+
+### 🚨 판단 기준
+
+1. **shared/ui 기준**
+   - 단일 HTML 요소의 래핑
+   - 도메인 로직 없음
+   - 순수 표현만 담당
+   - 예: Button, Input, Typography
+
+2. **widgets 기준**
+   - 2개 이상 요소의 조합
+   - UX 패턴이나 상호작용 로직 포함
+   - 도메인 무관하지만 복잡한 기능
+   - 예: FloatingButton (Button + 위치 + 애니메이션)
+
+3. **entities/ui 기준**
+   - 특정 도메인 데이터 표현
+   - 읽기 전용 (GET 작업만)
+   - 데이터 변환 및 표시
+   - 예: CalendarView, MemoList
+
+### 📋 Import 패턴
+
+```typescript
+// ✅ 올바른 import 패턴
+// 조립형
+import { CalendarView } from '~/entities/calendar-memo';
+// 데이터 표현
+import { useCreateMemo } from '~/features/memo';
+import { Button, Input, Typography } from '~/shared/ui';
+// 순수 원소
+import { FloatingButton, Loading } from '~/widgets/floating-button';
+
+// 비즈니스 로직
 ```
 
 ### 📋 Model 세그먼트 역할 분리 원칙
@@ -398,9 +490,9 @@ export function MemoEditForm({ id }: { id: string }) {
 
 ```typescript
 // ✅ 현재 프로젝트 방법 - entities에 types 저장
-import { LoginDto, GoogleLoginDto, AppleLoginDto } from '~/entities/user/model/types';
+import { CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo/model/types';
 import { User } from '~/entities/user/model/auth';
-import { Memo, CreateMemoDto, UpdateMemoDto } from '~/entities/memo/model/types';
+import { AppleLoginDto, GoogleLoginDto, LoginDto } from '~/entities/user/model/types';
 ```
 
 ## ⚙️ Metro 설정
