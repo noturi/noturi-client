@@ -130,9 +130,19 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
       return [];
     }, [allMemos, startDate, endDate]);
 
+    const formatDisplayDate = (dateString: string) => {
+      const [year, month, day] = dateString.split('-');
+      return `${year}. ${month}. ${day}`;
+    };
+
     const headerTitle = useMemo(() => {
       if (!startDate) return null;
-      return startDate && endDate ? `${startDate} ~ ${endDate}` : `${startDate}`;
+      const formattedStart = formatDisplayDate(startDate);
+      if (endDate) {
+        const formattedEnd = formatDisplayDate(endDate);
+        return `${formattedStart} ~ ${formattedEnd}`;
+      }
+      return formattedStart;
     }, [startDate, endDate]);
 
     const handleAddCalendarMemo = async (data: CreateCalendarMemoDto) => {
@@ -153,32 +163,33 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     };
 
     return (
-      <YStack flex={1} gap="$4" position="relative">
-        <Card>
-          <Calendar
-            markedDates={markedDates}
-            markingType="period"
-            monthFormat="yyyy년 MM월"
-            theme={CALENDAR_THEME}
-            onDayPress={handleDayPress}
-            onMonthChange={handleMonthChange}
-          />
-        </Card>
-
-        <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 100 }}>
-          <YStack gap="$3">
-            {headerTitle && (
-              <Typography color="$textPrimary" variant="subheadline">
-                {headerTitle}
-              </Typography>
-            )}
-            <CalendarMemoList
-              endDate={endDate}
-              isError={Boolean(memosError)}
-              isLoading={memosPending}
-              memos={selectedMemos}
-              startDate={startDate}
-            />
+      <YStack flex={1} gap="$4" paddingBottom="$10" position="relative">
+        <ScrollView contentContainerStyle={{ paddingBottom: 100 }} flex={1}>
+          <YStack gap="$4">
+            <Card>
+              <Calendar
+                markedDates={markedDates}
+                markingType="period"
+                monthFormat="yyyy년 MM월"
+                theme={CALENDAR_THEME}
+                onDayPress={handleDayPress}
+                onMonthChange={handleMonthChange}
+              />
+            </Card>
+            <YStack gap="$2">
+              {headerTitle && (
+                <Typography color="$textPrimary" variant="subheadline">
+                  {headerTitle}
+                </Typography>
+              )}
+              <CalendarMemoList
+                endDate={endDate}
+                isError={Boolean(memosError)}
+                isLoading={memosPending}
+                memos={selectedMemos}
+                startDate={startDate}
+              />
+            </YStack>
           </YStack>
         </ScrollView>
 
