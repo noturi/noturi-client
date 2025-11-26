@@ -8,6 +8,7 @@ import { CalendarAddModal, useCreateCalendarMemo } from '~/features/calendar';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { useCalendarDate } from '~/shared/lib/calendar';
 import { Card, Typography } from '~/shared/ui';
+import { CalendarMemoList } from '~/widgets/calendar-memo-list';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
@@ -15,7 +16,6 @@ import { Calendar, DateData } from 'react-native-calendars';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { CalendarMemoList } from '../calendar-memo-list';
 import { CALENDAR_THEME } from './constants';
 import { useCalendarMarkings } from './use-calendar-markings';
 
