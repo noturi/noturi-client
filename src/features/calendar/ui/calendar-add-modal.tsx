@@ -5,6 +5,7 @@ import { FloatingButton, Form, Input, Select, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
 interface CalendarAddModalProps {
   isOpen: boolean;
@@ -124,15 +125,12 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                   />
                 </Form.Field>
 
-                {/* iOS 스타일 시작/종료 섹션 */}
                 <YStack gap="$4">
-                  {/* 시작 */}
                   <YStack gap="$2">
                     <Typography color="$textSecondary" variant="subheadline">
                       시작
                     </Typography>
                     <XStack gap="$3">
-                      {/* 시작 날짜 */}
                       <Pressable
                         style={{ flex: 1 }}
                         onPress={() => {
@@ -179,145 +177,157 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
                     {/* 시작 날짜 DateTimePicker - 인라인 */}
                     {showStartDatePicker && (
-                      <View paddingTop="$3">
-                        <DateTimePicker
-                          display="spinner"
-                          mode="date"
-                          value={startDateTime}
-                          onChange={(_, selectedDate) => {
-                            if (selectedDate) {
-                              setStartDateTime(selectedDate);
-                            }
-                          }}
-                        />
-                      </View>
+                      <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                        <View paddingTop="$3">
+                          <DateTimePicker
+                            display="spinner"
+                            mode="date"
+                            value={startDateTime}
+                            onChange={(_, selectedDate) => {
+                              if (selectedDate) {
+                                setStartDateTime(selectedDate);
+                              }
+                            }}
+                          />
+                        </View>
+                      </Animated.View>
                     )}
 
                     {/* 시작 시간 DateTimePicker - 인라인 */}
                     {showStartTimePicker && (
-                      <View paddingTop="$3">
-                        <DateTimePicker
-                          display="spinner"
-                          mode="time"
-                          value={startDateTime}
-                          onChange={(_, selectedTime) => {
-                            if (selectedTime) {
-                              const newDateTime = new Date(startDateTime);
-                              newDateTime.setHours(selectedTime.getHours());
-                              newDateTime.setMinutes(selectedTime.getMinutes());
-                              setStartDateTime(newDateTime);
-                            }
-                          }}
-                        />
-                      </View>
+                      <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                        <View paddingTop="$3">
+                          <DateTimePicker
+                            display="spinner"
+                            mode="time"
+                            value={startDateTime}
+                            onChange={(_, selectedTime) => {
+                              if (selectedTime) {
+                                const newDateTime = new Date(startDateTime);
+                                newDateTime.setHours(selectedTime.getHours());
+                                newDateTime.setMinutes(selectedTime.getMinutes());
+                                setStartDateTime(newDateTime);
+                              }
+                            }}
+                          />
+                        </View>
+                      </Animated.View>
                     )}
                   </YStack>
 
                   {/* 종료 */}
-                  <YStack gap="$2">
-                    <Typography color="$textSecondary" variant="subheadline">
-                      종료
-                    </Typography>
-                    <XStack gap="$3">
-                      {/* 종료 날짜 */}
-                      <Pressable
-                        style={{ flex: 1 }}
-                        onPress={() => {
-                          setShowStartDatePicker(false);
-                          setShowStartTimePicker(false);
-                          setShowEndTimePicker(false);
-                          setShowEndDatePicker(!showEndDatePicker);
-                        }}
-                      >
-                        <Text
-                          backgroundColor="$surface"
-                          borderRadius="$4"
-                          color="$textPrimary"
-                          fontSize="$4"
-                          padding="$3"
-                          textAlign="center"
-                        >
-                          {formatDate(endDateTime)}
-                        </Text>
-                      </Pressable>
-
-                      {/* 종료 시간 */}
-                      <Pressable
-                        onPress={() => {
-                          setShowStartDatePicker(false);
-                          setShowStartTimePicker(false);
-                          setShowEndDatePicker(false);
-                          setShowEndTimePicker(!showEndTimePicker);
-                        }}
-                      >
-                        <Text
-                          backgroundColor="$surface"
-                          borderRadius="$4"
-                          color="$textPrimary"
-                          fontSize="$4"
-                          minWidth={80}
-                          padding="$3"
-                          textAlign="center"
-                        >
-                          {formatTime(endDateTime)}
-                        </Text>
-                      </Pressable>
-                    </XStack>
-
-                    {/* 종료 날짜 DateTimePicker - 인라인 */}
-                    {showEndDatePicker && (
-                      <View paddingTop="$3">
-                        <DateTimePicker
-                          display="spinner"
-                          mode="date"
-                          value={endDateTime}
-                          onChange={(_, selectedDate) => {
-                            if (selectedDate) {
-                              setEndDateTime(selectedDate);
-                            }
+                  <Animated.View layout={LinearTransition} entering={FadeIn} exiting={FadeOut}>
+                    <YStack gap="$2">
+                      <Typography color="$textSecondary" variant="subheadline">
+                        종료
+                      </Typography>
+                      <XStack gap="$3">
+                        {/* 종료 날짜 */}
+                        <Pressable
+                          style={{ flex: 1 }}
+                          onPress={() => {
+                            setShowStartDatePicker(false);
+                            setShowStartTimePicker(false);
+                            setShowEndTimePicker(false);
+                            setShowEndDatePicker(!showEndDatePicker);
                           }}
-                        />
-                      </View>
-                    )}
+                        >
+                          <Text
+                            backgroundColor="$surface"
+                            borderRadius="$4"
+                            color="$textPrimary"
+                            fontSize="$4"
+                            padding="$3"
+                            textAlign="center"
+                          >
+                            {formatDate(endDateTime)}
+                          </Text>
+                        </Pressable>
 
-                    {/* 종료 시간 DateTimePicker - 인라인 */}
-                    {showEndTimePicker && (
-                      <View paddingTop="$3">
-                        <DateTimePicker
-                          display="spinner"
-                          mode="time"
-                          value={endDateTime}
-                          onChange={(_, selectedTime) => {
-                            if (selectedTime) {
-                              const newDateTime = new Date(endDateTime);
-                              newDateTime.setHours(selectedTime.getHours());
-                              newDateTime.setMinutes(selectedTime.getMinutes());
-                              setEndDateTime(newDateTime);
-                            }
+                        {/* 종료 시간 */}
+                        <Pressable
+                          onPress={() => {
+                            setShowStartDatePicker(false);
+                            setShowStartTimePicker(false);
+                            setShowEndDatePicker(false);
+                            setShowEndTimePicker(!showEndTimePicker);
                           }}
-                        />
-                      </View>
-                    )}
-                  </YStack>
+                        >
+                          <Text
+                            backgroundColor="$surface"
+                            borderRadius="$4"
+                            color="$textPrimary"
+                            fontSize="$4"
+                            minWidth={80}
+                            padding="$3"
+                            textAlign="center"
+                          >
+                            {formatTime(endDateTime)}
+                          </Text>
+                        </Pressable>
+                      </XStack>
+
+                      {/* 종료 날짜 DateTimePicker - 인라인 */}
+                      {showEndDatePicker && (
+                        <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                          <View paddingTop="$3">
+                            <DateTimePicker
+                              display="spinner"
+                              mode="date"
+                              value={endDateTime}
+                              onChange={(_, selectedDate) => {
+                                if (selectedDate) {
+                                  setEndDateTime(selectedDate);
+                                }
+                              }}
+                            />
+                          </View>
+                        </Animated.View>
+                      )}
+
+                      {/* 종료 시간 DateTimePicker - 인라인 */}
+                      {showEndTimePicker && (
+                        <Animated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
+                          <View paddingTop="$3">
+                            <DateTimePicker
+                              display="spinner"
+                              mode="time"
+                              value={endDateTime}
+                              onChange={(_, selectedTime) => {
+                                if (selectedTime) {
+                                  const newDateTime = new Date(endDateTime);
+                                  newDateTime.setHours(selectedTime.getHours());
+                                  newDateTime.setMinutes(selectedTime.getMinutes());
+                                  setEndDateTime(newDateTime);
+                                }
+                              }}
+                            />
+                          </View>
+                        </Animated.View>
+                      )}
+                    </YStack>
+                  </Animated.View>
                 </YStack>
 
-                <Form.Field label="알림 설정">
-                  <Select
-                    options={(() => {
-                      const allOptions = [
-                        { value: 'NONE', label: '알림 안함' },
-                        ...shortTermOptions,
-                        ...longTermOptions,
-                      ];
-                      return allOptions;
-                    })()}
-                    placeholder="알림 시점을 선택하세요"
-                    value={notifyBefore || 'NONE'}
-                    onValueChange={(value) => {
-                      setNotifyBefore(value === 'NONE' ? undefined : (value as NotifyBefore));
-                    }}
-                  />
-                </Form.Field>
+                <Animated.View layout={LinearTransition}>
+                  <Form.Field label="알림 설정">
+                    <Select
+                      options={(() => {
+                        const allOptions = [
+                          { value: 'NONE', label: '알림 안함' },
+                          ...shortTermOptions,
+                          ...longTermOptions,
+                        ];
+                        return allOptions;
+                      })()}
+                      placeholder="알림 시점을 선택하세요"
+                      value={notifyBefore || 'NONE'}
+                      onValueChange={(value) => {
+                        setNotifyBefore(value === 'NONE' ? undefined : (value as NotifyBefore));
+                      }}
+                    />
+                  </Form.Field>
+                </Animated.View>
               </Form>
             </YStack>
           </ScrollView>
