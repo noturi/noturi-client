@@ -2,9 +2,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { ScrollView, Sheet, Text, View, XStack, YStack } from 'tamagui';
 import { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
 import { FloatingButton, Form, Input, Select, Typography } from '~/shared/ui';
+import { CALENDAR_COLORS, CALENDAR_THEME } from '~/widgets/calendar-view/constants';
 
 import { useState } from 'react';
 import { Pressable } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
 interface CalendarAddModalProps {
@@ -89,7 +91,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         modal
         animation="quick"
         open={isOpen}
-        snapPoints={[80]}
+        snapPoints={[90]}
         snapPointsMode="percent"
         zIndex={100000}
         onOpenChange={onClose}
@@ -109,7 +111,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
             <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
           </YStack>
 
-          <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            flex={1}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             <YStack gap="$4" padding="$4" paddingBottom="$6">
               <Typography textAlign="center" variant="headline">
                 새 일정
@@ -118,6 +124,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
               <Form>
                 <Form.Field required label="제목">
                   <Input
+                    autoComplete="off"
                     placeholder="일정 제목을 입력하세요"
                     size="lg"
                     value={title}
@@ -175,22 +182,30 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                       </Pressable>
                     </XStack>
 
-                    {/* 시작 날짜 DateTimePicker - 인라인 */}
+                    {/* 시작 날짜 캘린더 - 인라인 */}
                     {showStartDatePicker && (
                       <Animated.View
                         entering={FadeIn.delay(200)}
                         exiting={FadeOut}
                         layout={LinearTransition}
                       >
-                        <View paddingTop="$3">
-                          <DateTimePicker
-                            display="spinner"
-                            mode="date"
-                            value={startDateTime}
-                            onChange={(_, selectedDate) => {
-                              if (selectedDate) {
-                                setStartDateTime(selectedDate);
-                              }
+                        <View backgroundColor="$surface" borderRadius="$4" paddingTop="$3">
+                          <Calendar
+                            current={startDateTime.toISOString().split('T')[0]}
+                            markedDates={{
+                              [startDateTime.toISOString().split('T')[0]]: {
+                                selected: true,
+                                selectedColor: CALENDAR_COLORS.SELECTION,
+                                selectedTextColor: '#ffffff',
+                              },
+                            }}
+                            theme={CALENDAR_THEME}
+                            onDayPress={(day) => {
+                              const newDate = new Date(day.dateString);
+                              newDate.setHours(startDateTime.getHours());
+                              newDate.setMinutes(startDateTime.getMinutes());
+                              setStartDateTime(newDate);
+                              setShowStartDatePicker(false);
                             }}
                           />
                         </View>
@@ -275,22 +290,31 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                         </Pressable>
                       </XStack>
 
-                      {/* 종료 날짜 DateTimePicker - 인라인 */}
+                      {/* 종료 날짜 캘린더 - 인라인 */}
                       {showEndDatePicker && (
                         <Animated.View
                           entering={FadeIn.delay(200)}
                           exiting={FadeOut}
                           layout={LinearTransition}
                         >
-                          <View paddingTop="$3">
-                            <DateTimePicker
-                              display="spinner"
-                              mode="date"
-                              value={endDateTime}
-                              onChange={(_, selectedDate) => {
-                                if (selectedDate) {
-                                  setEndDateTime(selectedDate);
-                                }
+                          <View backgroundColor="$surface" borderRadius="$4" paddingTop="$3">
+                            <Calendar
+                              current={endDateTime.toISOString().split('T')[0]}
+                              markedDates={{
+                                [endDateTime.toISOString().split('T')[0]]: {
+                                  selected: true,
+                                  selectedColor: CALENDAR_COLORS.SELECTION,
+                                  selectedTextColor: '#ffffff',
+                                },
+                              }}
+                              minDate={startDateTime.toISOString().split('T')[0]}
+                              theme={CALENDAR_THEME}
+                              onDayPress={(day) => {
+                                const newDate = new Date(day.dateString);
+                                newDate.setHours(endDateTime.getHours());
+                                newDate.setMinutes(endDateTime.getMinutes());
+                                setEndDateTime(newDate);
+                                setShowEndDatePicker(false);
                               }}
                             />
                           </View>
