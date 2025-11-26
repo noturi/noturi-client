@@ -23,7 +23,7 @@ interface CalendarDateProviderProps {
 }
 
 export function CalendarDateProvider({ children }: CalendarDateProviderProps) {
-  const [startDate, setStartDate] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [endDate, setEndDate] = useState<string>('');
   const [currentMonth, setCurrentMonth] = useState(new Date().toISOString().slice(0, 7));
 
