@@ -177,7 +177,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
                     {/* 시작 날짜 DateTimePicker - 인라인 */}
                     {showStartDatePicker && (
-                      <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                      <Animated.View
+                        entering={FadeIn.delay(200)}
+                        exiting={FadeOut}
+                        layout={LinearTransition}
+                      >
                         <View paddingTop="$3">
                           <DateTimePicker
                             display="spinner"
@@ -195,7 +199,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
                     {/* 시작 시간 DateTimePicker - 인라인 */}
                     {showStartTimePicker && (
-                      <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                      <Animated.View
+                        entering={FadeIn.delay(200)}
+                        exiting={FadeOut}
+                        layout={LinearTransition}
+                      >
                         <View paddingTop="$3">
                           <DateTimePicker
                             display="spinner"
@@ -216,7 +224,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                   </YStack>
 
                   {/* 종료 */}
-                  <Animated.View layout={LinearTransition} entering={FadeIn} exiting={FadeOut}>
+                  <Animated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
                     <YStack gap="$2">
                       <Typography color="$textSecondary" variant="subheadline">
                         종료
@@ -269,7 +277,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
                       {/* 종료 날짜 DateTimePicker - 인라인 */}
                       {showEndDatePicker && (
-                        <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
+                        <Animated.View
+                          entering={FadeIn.delay(200)}
+                          exiting={FadeOut}
+                          layout={LinearTransition}
+                        >
                           <View paddingTop="$3">
                             <DateTimePicker
                               display="spinner"
@@ -287,7 +299,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
                       {/* 종료 시간 DateTimePicker - 인라인 */}
                       {showEndTimePicker && (
-                        <Animated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
+                        <Animated.View
+                          entering={FadeIn}
+                          exiting={FadeOut}
+                          layout={LinearTransition}
+                        >
                           <View paddingTop="$3">
                             <DateTimePicker
                               display="spinner"

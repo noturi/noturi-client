@@ -21,7 +21,11 @@ export function RatingView({
   onMemoPress,
 }: RatingViewProps) {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 200 }}>
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 200 }}
+      flex={1}
+      showsVerticalScrollIndicator={false}
+    >
       <YStack gap="$6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />
         <MemoRatingGroupView
