@@ -1,4 +1,5 @@
-import { MemoListParamsDto, memoApi } from '~/entities/memo';
+import { MemoListParamsDto } from '../model/types';
+import { memoApi } from './apis';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';

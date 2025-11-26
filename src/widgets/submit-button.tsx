@@ -19,7 +19,7 @@ interface SubmitButtonProps {
     | 'tinted'
     | 'ghost'
     | 'outlined';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg';
   flex?: number;
 }
 

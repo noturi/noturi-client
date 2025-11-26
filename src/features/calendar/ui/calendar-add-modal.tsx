@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ScrollView, Sheet, Text, View, XStack, YStack } from 'tamagui';
-import { CALENDAR_COLORS, CALENDAR_THEME } from '~/entities/calendar-memo';
-import { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
+import { CALENDAR_COLORS, CALENDAR_THEME } from '~/entities/calendar-memo/ui/calendar-view/constants';
+import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
 import { Form, Input, Select, Typography } from '~/shared/ui';
 import { FloatingButton } from '~/widgets/floating-button';
 

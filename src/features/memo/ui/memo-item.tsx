@@ -1,6 +1,7 @@
 import { XStack, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { StarRating, Typography } from '~/shared/ui';
+import { Typography } from '~/shared/ui';
+import { StarRating } from '~/widgets';
 
 import { router } from 'expo-router';
 

@@ -104,7 +104,7 @@ export const CategoryManageContent = ({
           <Form>
             <Form.Field>
               {!isFormVisible && (
-                <Button borderStyle="dashed" size="sm" variant="ghost" onPress={handleAddCategory}>
+                <Button borderStyle="dashed" size="$2" variant="ghost" onPress={handleAddCategory}>
                   + 추가
                 </Button>
               )}
@@ -132,13 +132,13 @@ export const CategoryManageContent = ({
                   <XStack alignItems="center" gap="$1">
                     <Button
                       disabled={!form.isValid || createCategoryMutation.isPending}
-                      size="sm"
+                      size="$2"
                       variant="primary"
                       onPress={form.handleSubmit}
                     >
                       추가
                     </Button>
-                    <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
+                    <Button size="$2" variant="ghost" onPress={handleCancelAdd}>
                       취소
                     </Button>
                   </XStack>

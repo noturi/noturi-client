@@ -1,6 +1,7 @@
 import { YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { Loading, Typography } from '~/shared/ui';
+import { Typography } from '~/shared/ui';
+import { Loading } from '~/widgets';
 
 type MemoSimpleViewProps = {
   memos: UIMemo[];

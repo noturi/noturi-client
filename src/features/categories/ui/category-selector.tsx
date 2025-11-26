@@ -25,14 +25,14 @@ export const CategorySelector = ({
           {categories.map((category) => (
             <Button
               key={category.id}
-              size="sm"
+              size="$2"
               variant={selectedCategory === category.name ? 'primary' : 'ghost'}
               onPress={() => onSelectCategory(category.name)}
             >
               {category.name}
             </Button>
           ))}
-          <Button size="sm" variant="ghost" onPress={() => onSelectCategory('')}>
+          <Button size="$2" variant="ghost" onPress={() => onSelectCategory('')}>
             + 추가
           </Button>
         </XStack>

@@ -1,16 +1,19 @@
 import { YStack } from 'tamagui';
 import { CalendarView, type CalendarViewRef } from '~/entities/calendar-memo';
 import type { UICategory } from '~/entities/category';
-import type { UIMemo } from '~/entities/memo';
-import { infiniteMemoListQuery } from '~/entities/memo';
-import { MemoViewToggle, type MemoViewType, RatingView } from '~/entities/memo';
+import {
+  MemoViewToggle,
+  type MemoViewType,
+  RatingView,
+  type UIMemo,
+  infiniteMemoListQuery,
+} from '~/entities/memo';
 import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
 import { CalendarDateProvider } from '~/shared/lib/calendar/calendar-date-context';
 import { Card, Typography } from '~/shared/ui';
-import { FloatingButton } from '~/widgets/floating-button';
-import { Loading } from '~/widgets/loading';
+import { FloatingButton, Loading } from '~/widgets';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 

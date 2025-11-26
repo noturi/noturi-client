@@ -1,7 +1,8 @@
 import { Separator, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/features/memo/ui/memo-item';
-import { Loading, Typography } from '~/shared/ui';
+import { Typography } from '~/shared/ui';
+import { Loading } from '~/widgets';
 
 import { useCallback } from 'react';
 import { FlatList } from 'react-native';

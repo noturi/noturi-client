@@ -1,11 +1,10 @@
 import { Separator, XStack, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
+import { Card, Typography } from '~/shared/ui';
 
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 
-import { Card } from './card';
 import { RatingStars } from './rating-stars';
-import { Typography } from './typography';
 
 export type RatingGroup = {
   rating: number;

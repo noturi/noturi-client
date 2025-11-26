@@ -5,7 +5,7 @@ import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { useAuth } from '../../features/auth/model';
 import { HREFS } from '../../shared/config';
-import { Loading } from '../../shared/ui';
+import { Loading } from '../../widgets';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
