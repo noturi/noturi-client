@@ -2,14 +2,7 @@ import { useMemo } from 'react';
 
 import { CalendarMemo } from '@/entities/calendar-memo';
 
-// 비즈니스 상수
-const CALENDAR_COLORS = {
-  SELECTION: '#007AFF',
-  SCHEDULE_LIGHT: '#007AFF', // 1개 일정 (여유)
-  SCHEDULE_MODERATE: '#FFC107', // 2개 일정 (보통)
-  SCHEDULE_BUSY: '#FF9800', // 3개 일정 (바쁨)
-  SCHEDULE_OVERLOAD: '#FF5722', // 4개+ 일정 (과부하)
-} as const;
+import { CALENDAR_COLORS } from './constants';
 
 const SCHEDULE_DENSITY_THRESHOLDS = {
   LIGHT: 1,
