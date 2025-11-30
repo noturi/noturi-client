@@ -1,4 +1,5 @@
 import { User } from '~/entities/user';
+import { notificationService } from '~/features/notification';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
 import { tokenEventManager } from '~/shared/model';
@@ -68,6 +69,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await authStore.saveAuthTokens(authTokens);
 
       if (signal.aborted) return;
+
+      // 로그인 성공 후 푸시 알림 디바이스 등록
+      notificationService.registerDevice().catch((error) => {
+        Logger.warn('푸시 알림 디바이스 등록 실패:', error);
+      });
     } catch (error) {
       if (signal.aborted) return;
       throw error;
@@ -77,6 +83,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = useCallback(async (): Promise<void> => {
     try {
       authStore.setError(null);
+
+      // 로그아웃 전 푸시 알림 디바이스 해제
+      await notificationService.unregisterAllDevices();
+
       await authService.logout();
 
       await authStore.clearAuthTokens();

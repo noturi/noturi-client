@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AuthProvider } from '../../features/auth/model';
+import { NotificationProvider } from './notification-provider';
 import { QueryProvider } from './query-provider';
 import { TamaguiProvider } from './tamagui-provider';
 
@@ -14,7 +15,9 @@ export function AppProvider({ children }: AppProviderProps) {
     <QueryProvider>
       <TamaguiProvider>
         <KeyboardProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <NotificationProvider>{children}</NotificationProvider>
+          </AuthProvider>
         </KeyboardProvider>
       </TamaguiProvider>
     </QueryProvider>
