@@ -36,4 +36,3 @@ class DeviceApi {
 }
 
 export const deviceApi = new DeviceApi(api);
-
