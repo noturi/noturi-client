@@ -1,6 +1,6 @@
 // 알림 시간 옵션
 export type NotifyBefore =
-  | 'ONE_MINUTE_BEFORE'
+  | 'AT_START_TIME'
   | 'FIVE_MINUTES_BEFORE'
   | 'TEN_MINUTES_BEFORE'
   | 'FIFTEEN_MINUTES_BEFORE'

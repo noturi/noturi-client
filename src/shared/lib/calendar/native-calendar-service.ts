@@ -236,6 +236,8 @@ export class NativeCalendarService {
   // NotifyBefore 타입을 분으로 변환
   static notifyBeforeToMinutes(notifyBefore: string): number {
     switch (notifyBefore) {
+      case 'AT_START_TIME':
+        return 0;
       case 'FIVE_MINUTES_BEFORE':
         return 5;
       case 'FIFTEEN_MINUTES_BEFORE':

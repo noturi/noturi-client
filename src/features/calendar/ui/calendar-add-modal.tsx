@@ -50,7 +50,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   // 알림 옵션
   const getAvailableNotificationOptions = () => {
     const shortTermOptions = [
-      { value: 'ONE_MINUTE_BEFORE', label: '1분 전' },
+      { value: 'AT_START_TIME', label: '이벤트 시간' },
       { value: 'FIVE_MINUTES_BEFORE', label: '5분 전' },
       { value: 'TEN_MINUTES_BEFORE', label: '10분 전' },
       { value: 'FIFTEEN_MINUTES_BEFORE', label: '15분 전' },
