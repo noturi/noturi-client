@@ -91,19 +91,16 @@ class NotificationService {
   // 디바이스 등록 (권한 요청 → 토큰 획득 → 서버 등록)
   async registerDevice(): Promise<boolean> {
     try {
-      // 1. 권한 요청
       const hasPermission = await this.requestPermissions();
       if (!hasPermission) {
         return false;
       }
 
-      // 2. Expo Push Token 획득
       const token = await this.getExpoPushToken();
       if (!token) {
         return false;
       }
 
-      // 3. 서버에 디바이스 등록
       const deviceName = this.getDeviceName();
       const platform: DevicePlatform = Platform.OS as DevicePlatform;
 
@@ -143,10 +140,20 @@ class NotificationService {
     return status;
   }
 
-  // 알림이 활성화되어 있는지 확인
+  // 알림이 활성화되어 있는지 확인 (서버에 등록된 디바이스가 있는지)
   async isNotificationEnabled(): Promise<boolean> {
-    const status = await this.getPermissionStatus();
-    return status === 'granted' && this.expoPushToken !== null;
+    try {
+      const status = await this.getPermissionStatus();
+      if (status !== 'granted') {
+        return false;
+      }
+
+      // 서버에서 디바이스 목록 조회
+      const devices = await deviceApi.getMyDevices();
+      return devices.length > 0;
+    } catch {
+      return false;
+    }
   }
 }
 

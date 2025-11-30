@@ -12,13 +12,11 @@ interface NotificationData {
   [key: string]: unknown;
 }
 
-/**
- * 알림 수신 및 알림 탭 이벤트를 처리하는 훅
- * 앱의 루트 레벨에서 한 번만 호출되어야 합니다
- */
+type Subscription = { remove: () => void };
+
 export function useNotificationObserver() {
-  const notificationListener = useRef<Notifications.Subscription | null>(null);
-  const responseListener = useRef<Notifications.Subscription | null>(null);
+  const notificationListener = useRef<Subscription | null>(null);
+  const responseListener = useRef<Subscription | null>(null);
 
   useEffect(() => {
     // 알림 수신 리스너 (앱이 포그라운드일 때)
@@ -31,7 +29,6 @@ export function useNotificationObserver() {
       const data = response.notification.request.content.data as NotificationData;
       Logger.info('알림 탭:', data);
 
-      // 알림 타입에 따른 네비게이션 처리
       handleNotificationNavigation(data);
     });
 
@@ -52,19 +49,15 @@ export function useNotificationObserver() {
 function handleNotificationNavigation(data: NotificationData) {
   if (!data) return;
 
-  // 캘린더 메모 알림인 경우
   if (data.calendarMemoId) {
-    // 캘린더 탭으로 이동하거나 상세 화면으로 이동
     router.push('/(tabs)');
     return;
   }
 
-  // 일반 메모 알림인 경우
   if (data.memoId) {
     router.push(`/memo/${data.memoId}`);
     return;
   }
 
-  // 기본: 홈으로 이동
   router.push('/(tabs)');
 }

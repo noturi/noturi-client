@@ -48,20 +48,25 @@ export default function ProfileScreen() {
         // 알림 활성화 시도
         const success = await notificationService.registerDevice();
 
-        if (!success) {
+        if (success) {
+          setNotificationEnabled(true);
+          Alert.alert('알림 활성화', '알림이 활성화되었습니다.');
+        } else {
           // 권한이 거부된 경우 설정 앱으로 이동 안내
           Alert.alert('알림 권한 필요', '설정 앱에서 알림을 허용해주세요.', [
             { text: '취소', style: 'cancel' },
             { text: '설정으로 이동', onPress: () => Linking.openSettings() },
           ]);
-        } else {
-          setNotificationEnabled(true);
         }
       } else {
         // 알림 비활성화 - 서버에서 디바이스 삭제
         await notificationService.unregisterAllDevices();
         setNotificationEnabled(false);
+        Alert.alert('알림 비활성화', '알림이 비활성화되었습니다.');
       }
+    } catch (error: any) {
+      console.error('알림 설정 오류:', error);
+      Alert.alert('오류', `알림 설정 중 문제가 발생했습니다.\n${error?.message || error}`);
     } finally {
       setNotificationLoading(false);
     }
@@ -130,7 +135,7 @@ export default function ProfileScreen() {
                 backgroundColor={notificationEnabled ? '$primary' : '$border'}
                 checked={notificationEnabled}
                 disabled={notificationLoading}
-                size="$3"
+                size="$4"
                 onCheckedChange={handleNotificationToggle}
               >
                 <Switch.Thumb animation="quick" backgroundColor="white" />
