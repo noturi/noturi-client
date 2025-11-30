@@ -1,8 +1,8 @@
 import { Separator, Switch, XStack, YStack } from 'tamagui';
 import { useLogoutMutation } from '~/features/auth/api/mutation';
 import { useAuth } from '~/features/auth/model';
-import { notificationService } from '~/features/notification';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
+import { notificationService } from '~/features/notification';
 import { Card, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -50,14 +50,10 @@ export default function ProfileScreen() {
 
         if (!success) {
           // 권한이 거부된 경우 설정 앱으로 이동 안내
-          Alert.alert(
-            '알림 권한 필요',
-            '설정 앱에서 알림을 허용해주세요.',
-            [
-              { text: '취소', style: 'cancel' },
-              { text: '설정으로 이동', onPress: () => Linking.openSettings() },
-            ],
-          );
+          Alert.alert('알림 권한 필요', '설정 앱에서 알림을 허용해주세요.', [
+            { text: '취소', style: 'cancel' },
+            { text: '설정으로 이동', onPress: () => Linking.openSettings() },
+          ]);
         } else {
           setNotificationEnabled(true);
         }
@@ -128,7 +124,7 @@ export default function ProfileScreen() {
             >
               <Bell color="$textSecondary" size="$3" />
               <Typography color="$textPrimary" flex={1} variant="callout">
-                푸시 알림
+                알림
               </Typography>
               <Switch
                 backgroundColor={notificationEnabled ? '$primary' : '$border'}
@@ -137,10 +133,7 @@ export default function ProfileScreen() {
                 size="$3"
                 onCheckedChange={handleNotificationToggle}
               >
-                <Switch.Thumb
-                  animation="quick"
-                  backgroundColor="white"
-                />
+                <Switch.Thumb animation="quick" backgroundColor="white" />
               </Switch>
             </XStack>
 
