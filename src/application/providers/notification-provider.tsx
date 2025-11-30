@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
 import { useNotificationObserver } from '~/features/notification';
+
+import { ReactNode } from 'react';
 
 interface NotificationProviderProps {
   children: ReactNode;
@@ -11,4 +12,3 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
   return <>{children}</>;
 }
-

@@ -1,2 +1,1 @@
 export { deviceApi } from './api';
-

@@ -1,7 +1,9 @@
-import * as Notifications from 'expo-notifications';
-import { useEffect, useRef } from 'react';
-import { router } from 'expo-router';
 import Logger from '~/shared/lib/logger';
+
+import { useEffect, useRef } from 'react';
+
+import * as Notifications from 'expo-notifications';
+import { router } from 'expo-router';
 
 interface NotificationData {
   type?: string;
@@ -20,22 +22,18 @@ export function useNotificationObserver() {
 
   useEffect(() => {
     // 알림 수신 리스너 (앱이 포그라운드일 때)
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        Logger.info('알림 수신:', notification.request.content);
-      },
-    );
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      Logger.info('알림 수신:', notification.request.content);
+    });
 
     // 알림 탭 리스너 (사용자가 알림을 탭했을 때)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const data = response.notification.request.content.data as NotificationData;
-        Logger.info('알림 탭:', data);
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data as NotificationData;
+      Logger.info('알림 탭:', data);
 
-        // 알림 타입에 따른 네비게이션 처리
-        handleNotificationNavigation(data);
-      },
-    );
+      // 알림 타입에 따른 네비게이션 처리
+      handleNotificationNavigation(data);
+    });
 
     return () => {
       if (notificationListener.current) {
@@ -70,4 +68,3 @@ function handleNotificationNavigation(data: NotificationData) {
   // 기본: 홈으로 이동
   router.push('/(tabs)');
 }
-
