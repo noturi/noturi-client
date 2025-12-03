@@ -1,14 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ScrollView, Sheet, Text, View, XStack, YStack } from 'tamagui';
-import {
-  ALL_DAY_NOTIFICATION_OPTIONS,
-  NOTIFICATION_OPTIONS,
-} from '~/entities/calendar-memo/model/constants';
-import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
-import {
-  CALENDAR_COLORS,
-  CALENDAR_THEME,
-} from '~/entities/calendar-memo/ui/calendar-view/constants';
 import { Form, Input, Select, Switch, Typography } from '~/shared/ui';
 import { FloatingButton } from '~/widgets/floating-button';
 
@@ -18,6 +9,12 @@ import { Pressable } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
+import {
+  ALL_DAY_NOTIFICATION_OPTIONS,
+  NOTIFICATION_OPTIONS,
+} from '@/entities/calendar/model/constants';
+import type { CreateCalendarMemoDto, NotifyBefore } from '@/entities/calendar/model/types';
+import { CALENDAR_COLORS, CALENDAR_THEME } from '@/entities/calendar/ui/calendar-view/constants';
 import { formatDate, formatTime } from '@/shared/lib/format';
 
 interface CalendarAddModalProps {
