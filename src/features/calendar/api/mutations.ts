@@ -1,4 +1,4 @@
-import { CreateCalendarMemoDto } from '~/entities/calendar-memo/model/types';
+import { CreateCalendarMemoDto } from '~/entities/calendar/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import {
