@@ -1,7 +1,8 @@
-import { CreateCalendarMemoDto } from '~/entities/calendar-memo/model/types';
 import { SubmitButton } from '~/widgets/submit-button';
 
 import type { ComponentProps } from 'react';
+
+import { CreateCalendarMemoDto } from '@/entities/calendar/model/types';
 
 import { useCreateCalendarMemo } from '../api/mutations';
 
