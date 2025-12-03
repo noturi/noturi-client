@@ -1,8 +1,14 @@
 // 시간 관련 상수
-const MS_PER_MINUTE = 1000 * 60;
-const MS_PER_HOUR = MS_PER_MINUTE * 60;
-const MS_PER_DAY = MS_PER_HOUR * 24;
-// const MS_PER_WEEK = MS_PER_DAY * 7;
+export const MS_PER_MINUTE = 1000 * 60;
+export const MS_PER_HOUR = MS_PER_MINUTE * 60;
+export const MS_PER_DAY = MS_PER_HOUR * 24;
+
+/**
+ * 현재 시간으로부터 N시간 후의 Date 반환
+ */
+export function getHoursLater(hours: number = 1): Date {
+  return new Date(Date.now() + MS_PER_HOUR * hours);
+}
 
 // 로케일 상수
 const DEFAULT_LOCALE = 'ko-KR';
