@@ -1,5 +1,5 @@
 import { CreateCalendarMemoDto } from '~/entities/calendar-memo/model/types';
-import { SubmitButton } from '~/shared/ui';
+import { SubmitButton } from '~/widgets/submit-button';
 
 import type { ComponentProps } from 'react';
 
