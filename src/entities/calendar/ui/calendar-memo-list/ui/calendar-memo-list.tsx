@@ -5,7 +5,8 @@ import { Card, Typography } from '~/shared/ui';
 import { Bell } from '@tamagui/lucide-icons';
 
 import type { CalendarMemo } from '@/entities/calendar';
-import type { NotifyBefore } from '@/entities/calendar/model/types';
+import { NOTIFICATION_LABELS } from '@/entities/calendar/model/constants';
+import { formatTime } from '@/shared/lib';
 
 interface CalendarMemoListProps {
   startDate: string;
@@ -14,21 +15,6 @@ interface CalendarMemoListProps {
   isLoading: boolean;
   isError: boolean;
 }
-
-const NOTIFICATION_LABELS: Record<NotifyBefore, string> = {
-  FIVE_MINUTES_BEFORE: '5분 전',
-  FIFTEEN_MINUTES_BEFORE: '15분 전',
-  THIRTY_MINUTES_BEFORE: '30분 전',
-  ONE_HOUR_BEFORE: '1시간 전',
-  ONE_DAY_BEFORE: '1일 전',
-};
-
-const formatTime = (date: string) => {
-  return new Date(date).toLocaleTimeString('ko-KR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
 
 const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
   return (
