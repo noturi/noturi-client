@@ -31,9 +31,12 @@ export function TabsRouter() {
         <Label>통계</Label>
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="profile">
-        <Icon drawable="ic_menu_myplaces" sf={{ default: 'person', selected: 'person.fill' }} />
-        <Label>프로필</Label>
+      <NativeTabs.Trigger name="settings">
+        <Icon
+          drawable="ic_menu_preferences"
+          sf={{ default: 'gearshape', selected: 'gearshape.fill' }}
+        />
+        <Label>설정</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );
