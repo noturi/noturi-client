@@ -1,55 +1,9 @@
-import type {
-  CalendarMemo,
-  CreateCalendarMemoDto,
-  UpdateCalendarMemoDto,
-} from '~/entities/calendar-memo/model/types';
 import { NativeCalendarService } from '~/shared/lib/calendar';
 import Logger from '~/shared/lib/logger';
 
+import type { CreateCalendarMemoDto, UpdateCalendarMemoDto } from '@/entities/calendar/model/types';
+
 export class CalendarMemoService {
-  // 캘린더 메모를 네이티브 캘린더와 동기화
-  static async syncWithNativeCalendar(memo: CalendarMemo): Promise<string | null> {
-    try {
-      if (memo.nativeCalendarEventId) {
-        // 이미 네이티브 캘린더에 연동된 경우 업데이트
-        const success = await NativeCalendarService.updateEvent(memo.nativeCalendarEventId, {
-          title: memo.title,
-          startDate: new Date(memo.startDate),
-          endDate: new Date(memo.endDate),
-          alarms: memo.hasNotification
-            ? [
-                NativeCalendarService.createAlarm(
-                  NativeCalendarService.notifyBeforeToMinutes(memo.notifyBefore),
-                ),
-              ]
-            : [],
-        });
-
-        return success ? memo.nativeCalendarEventId : null;
-      } else {
-        // 새로 네이티브 캘린더에 생성
-        const eventId = await NativeCalendarService.createEvent({
-          title: memo.title,
-          startDate: new Date(memo.startDate),
-          endDate: new Date(memo.endDate),
-          notes: `Noturi 앱에서 생성된 캘린더 메모`,
-          alarms: memo.hasNotification
-            ? [
-                NativeCalendarService.createAlarm(
-                  NativeCalendarService.notifyBeforeToMinutes(memo.notifyBefore),
-                ),
-              ]
-            : [],
-        });
-
-        return eventId;
-      }
-    } catch (error) {
-      Logger.error('CalendarMemoService', '네이티브 캘린더 동기화 실패:', error);
-      return null;
-    }
-  }
-
   // 네이티브 캘린더에서 이벤트 삭제
   static async removeFromNativeCalendar(nativeEventId: string): Promise<boolean> {
     try {
