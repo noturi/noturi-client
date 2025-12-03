@@ -1,17 +1,24 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ScrollView, Sheet, Text, View, XStack, YStack } from 'tamagui';
+import {
+  ALL_DAY_NOTIFICATION_OPTIONS,
+  NOTIFICATION_OPTIONS,
+} from '~/entities/calendar-memo/model/constants';
 import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar-memo/model/types';
 import {
   CALENDAR_COLORS,
   CALENDAR_THEME,
 } from '~/entities/calendar-memo/ui/calendar-view/constants';
-import { Form, Input, Select, Typography } from '~/shared/ui';
+import { Form, Input, Select, Switch, Typography } from '~/shared/ui';
 import { FloatingButton } from '~/widgets/floating-button';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import type { TextInput } from 'react-native';
 import { Pressable } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
+
+import { formatDate, formatTime } from '@/shared/lib/format';
 
 interface CalendarAddModalProps {
   isOpen: boolean;
@@ -20,70 +27,38 @@ interface CalendarAddModalProps {
 }
 
 export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModalProps) {
-  const [title, setTitle] = useState('');
+  const titleRef = useRef('');
+  const inputRef = useRef<TextInput>(null);
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date(Date.now() + 60 * 60 * 1000));
+  const [isAllDay, setIsAllDay] = useState(false);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [notifyBefore, setNotifyBefore] = useState<NotifyBefore | undefined>(undefined);
 
-  // 포맷팅 헬퍼 함수들
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'short',
-    });
-  };
+  const notificationOptions = isAllDay ? ALL_DAY_NOTIFICATION_OPTIONS : NOTIFICATION_OPTIONS;
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-  };
-
-  // 알림 옵션
-  const getAvailableNotificationOptions = () => {
-    const shortTermOptions = [
-      { value: 'AT_START_TIME', label: '이벤트 시간' },
-      { value: 'FIVE_MINUTES_BEFORE', label: '5분 전' },
-      { value: 'TEN_MINUTES_BEFORE', label: '10분 전' },
-      { value: 'FIFTEEN_MINUTES_BEFORE', label: '15분 전' },
-      { value: 'THIRTY_MINUTES_BEFORE', label: '30분 전' },
-      { value: 'ONE_HOUR_BEFORE', label: '1시간 전' },
-    ];
-
-    const longTermOptions = [
-      { value: 'ONE_DAY_BEFORE', label: '1일 전' },
-      { value: 'TWO_DAYS_BEFORE', label: '2일 전' },
-    ];
-
-    return { shortTermOptions, longTermOptions };
-  };
-
-  const { shortTermOptions, longTermOptions } = getAvailableNotificationOptions();
-
-  const formData: CreateCalendarMemoDto = {
-    title: title.trim(),
+  const getFormData = (): CreateCalendarMemoDto => ({
+    title: titleRef.current.trim(),
     startDate: startDateTime.toISOString(),
     endDate: endDateTime.toISOString(),
+    isAllDay,
     hasNotification: notifyBefore !== undefined,
     notifyBefore,
-  };
+  });
 
   const handleSuccess = () => {
     handleClose();
   };
 
   const handleClose = () => {
-    setTitle('');
+    titleRef.current = '';
+    inputRef.current?.clear();
     setStartDateTime(new Date());
     setEndDateTime(new Date(Date.now() + 60 * 60 * 1000));
+    setIsAllDay(false);
     setNotifyBefore(undefined);
     onClose();
   };
@@ -128,19 +103,27 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
               <Form>
                 <Form.Field required label="제목">
                   <Input
-                    autoComplete="off"
+                    ref={inputRef}
                     placeholder="일정 제목을 입력하세요"
                     size="lg"
-                    value={title}
-                    onChangeText={setTitle}
+                    onChangeText={(text) => {
+                      titleRef.current = text;
+                    }}
                   />
                 </Form.Field>
 
+                <Switch
+                  checked={isAllDay}
+                  label="하루종일"
+                  onCheckedChange={(checked) => {
+                    setIsAllDay(checked);
+                    setNotifyBefore(undefined); // 알림 옵션 초기화
+                  }}
+                />
+
                 <YStack gap="$4">
                   <YStack gap="$2">
-                    <Typography color="$textSecondary" variant="subheadline">
-                      시작
-                    </Typography>
+                    <Typography variant="footnote">시작</Typography>
                     <XStack gap="$3">
                       <Pressable
                         style={{ flex: 1 }}
@@ -153,40 +136,46 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                       >
                         <Text
                           backgroundColor="$surface"
-                          borderRadius="$4"
+                          borderColor="$border"
+                          borderRadius="$5"
+                          borderWidth={1}
                           color="$textPrimary"
                           fontSize="$4"
-                          padding="$3"
+                          height={44}
+                          lineHeight={42}
                           textAlign="center"
                         >
                           {formatDate(startDateTime)}
                         </Text>
                       </Pressable>
 
-                      {/* 시작 시간 */}
-                      <Pressable
-                        onPress={() => {
-                          setShowStartDatePicker(false);
-                          setShowEndDatePicker(false);
-                          setShowEndTimePicker(false);
-                          setShowStartTimePicker(!showStartTimePicker);
-                        }}
-                      >
-                        <Text
-                          backgroundColor="$surface"
-                          borderRadius="$4"
-                          color="$textPrimary"
-                          fontSize="$4"
-                          minWidth={80}
-                          padding="$3"
-                          textAlign="center"
+                      {!isAllDay && (
+                        <Pressable
+                          onPress={() => {
+                            setShowStartDatePicker(false);
+                            setShowEndDatePicker(false);
+                            setShowEndTimePicker(false);
+                            setShowStartTimePicker(!showStartTimePicker);
+                          }}
                         >
-                          {formatTime(startDateTime)}
-                        </Text>
-                      </Pressable>
+                          <Text
+                            backgroundColor="$surface"
+                            borderColor="$border"
+                            borderRadius="$5"
+                            borderWidth={1}
+                            color="$textPrimary"
+                            fontSize="$4"
+                            height={44}
+                            lineHeight={42}
+                            minWidth={80}
+                            textAlign="center"
+                          >
+                            {formatTime(startDateTime)}
+                          </Text>
+                        </Pressable>
+                      )}
                     </XStack>
 
-                    {/* 시작 날짜 캘린더 - 인라인 */}
                     {showStartDatePicker && (
                       <Animated.View
                         entering={FadeIn.delay(200)}
@@ -209,6 +198,13 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                               newDate.setHours(startDateTime.getHours());
                               newDate.setMinutes(startDateTime.getMinutes());
                               setStartDateTime(newDate);
+
+                              if (isAllDay) {
+                                const newEndDate = new Date(day.dateString);
+                                newEndDate.setHours(endDateTime.getHours());
+                                newEndDate.setMinutes(endDateTime.getMinutes());
+                                setEndDateTime(newEndDate);
+                              }
                               setShowStartDatePicker(false);
                             }}
                           />
@@ -216,8 +212,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                       </Animated.View>
                     )}
 
-                    {/* 시작 시간 DateTimePicker - 인라인 */}
-                    {showStartTimePicker && (
+                    {!isAllDay && showStartTimePicker && (
                       <Animated.View
                         entering={FadeIn.delay(200)}
                         exiting={FadeOut}
@@ -245,9 +240,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                   {/* 종료 */}
                   <Animated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
                     <YStack gap="$2">
-                      <Typography color="$textSecondary" variant="subheadline">
-                        종료
-                      </Typography>
+                      <Typography variant="footnote">종료</Typography>
                       <XStack gap="$3">
                         {/* 종료 날짜 */}
                         <Pressable
@@ -261,37 +254,44 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                         >
                           <Text
                             backgroundColor="$surface"
-                            borderRadius="$4"
+                            borderColor="$border"
+                            borderRadius="$5"
+                            borderWidth={1}
                             color="$textPrimary"
                             fontSize="$4"
-                            padding="$3"
+                            height={44}
+                            lineHeight={42}
                             textAlign="center"
                           >
                             {formatDate(endDateTime)}
                           </Text>
                         </Pressable>
 
-                        {/* 종료 시간 */}
-                        <Pressable
-                          onPress={() => {
-                            setShowStartDatePicker(false);
-                            setShowStartTimePicker(false);
-                            setShowEndDatePicker(false);
-                            setShowEndTimePicker(!showEndTimePicker);
-                          }}
-                        >
-                          <Text
-                            backgroundColor="$surface"
-                            borderRadius="$4"
-                            color="$textPrimary"
-                            fontSize="$4"
-                            minWidth={80}
-                            padding="$3"
-                            textAlign="center"
+                        {!isAllDay && (
+                          <Pressable
+                            onPress={() => {
+                              setShowStartDatePicker(false);
+                              setShowStartTimePicker(false);
+                              setShowEndDatePicker(false);
+                              setShowEndTimePicker(!showEndTimePicker);
+                            }}
                           >
-                            {formatTime(endDateTime)}
-                          </Text>
-                        </Pressable>
+                            <Text
+                              backgroundColor="$surface"
+                              borderColor="$border"
+                              borderRadius="$5"
+                              borderWidth={1}
+                              color="$textPrimary"
+                              fontSize="$4"
+                              height={44}
+                              lineHeight={42}
+                              minWidth={80}
+                              textAlign="center"
+                            >
+                              {formatTime(endDateTime)}
+                            </Text>
+                          </Pressable>
+                        )}
                       </XStack>
 
                       {/* 종료 날짜 캘린더 - 인라인 */}
@@ -311,13 +311,22 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                                   selectedTextColor: '#ffffff',
                                 },
                               }}
-                              minDate={startDateTime.toISOString().split('T')[0]}
+                              minDate={
+                                isAllDay ? undefined : startDateTime.toISOString().split('T')[0]
+                              }
                               theme={CALENDAR_THEME}
                               onDayPress={(day) => {
                                 const newDate = new Date(day.dateString);
                                 newDate.setHours(endDateTime.getHours());
                                 newDate.setMinutes(endDateTime.getMinutes());
                                 setEndDateTime(newDate);
+
+                                if (isAllDay) {
+                                  const newStartDate = new Date(day.dateString);
+                                  newStartDate.setHours(startDateTime.getHours());
+                                  newStartDate.setMinutes(startDateTime.getMinutes());
+                                  setStartDateTime(newStartDate);
+                                }
                                 setShowEndDatePicker(false);
                               }}
                             />
@@ -325,8 +334,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                         </Animated.View>
                       )}
 
-                      {/* 종료 시간 DateTimePicker - 인라인 */}
-                      {showEndTimePicker && (
+                      {!isAllDay && showEndTimePicker && (
                         <Animated.View
                           entering={FadeIn}
                           exiting={FadeOut}
@@ -356,14 +364,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
                 <Animated.View layout={LinearTransition}>
                   <Form.Field label="알림 설정">
                     <Select
-                      options={(() => {
-                        const allOptions = [
-                          { value: 'NONE', label: '알림 안함' },
-                          ...shortTermOptions,
-                          ...longTermOptions,
-                        ];
-                        return allOptions;
-                      })()}
+                      options={notificationOptions}
                       placeholder="알림 시점을 선택하세요"
                       value={notifyBefore || 'NONE'}
                       onValueChange={(value) => {
@@ -387,10 +388,9 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
             zIndex="$5"
           >
             <FloatingButton
-              disabled={!title.trim()}
               onPress={() => {
-                if (title.trim()) {
-                  onSubmit(formData);
+                if (titleRef.current.trim()) {
+                  onSubmit(getFormData());
                   handleSuccess();
                 }
               }}
