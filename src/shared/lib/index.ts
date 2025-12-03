@@ -1,5 +1,6 @@
 export * from './cache';
 export * from './calendar';
+export * from './format';
 export { useGradualAnimation } from './hooks/useGradualAnimation';
 export { default as Logger } from './logger';
 export * from './tanstack-query';
@@ -7,4 +8,3 @@ export { useDebounce } from './use-debounce';
 export { useForm } from './use-form';
 export * from './use-keyboard';
 export { useToast } from './use-toast';
-export * from './format-time';
