@@ -1,5 +1,4 @@
 import { YStack } from 'tamagui';
-import { CalendarView, type CalendarViewRef } from '~/entities/calendar-memo';
 import type { UICategory } from '~/entities/category';
 import {
   MemoViewToggle,
@@ -21,6 +20,7 @@ import { router } from 'expo-router';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
+import { CalendarView, type CalendarViewRef } from '@/entities/calendar';
 import { HREFS } from '@/shared/config/routes';
 
 export default function HomeScreen() {

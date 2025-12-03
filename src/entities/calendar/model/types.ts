@@ -9,10 +9,9 @@ export interface CalendarMemo {
   title: string;
   startDate: string;
   endDate: string;
-  isAllDay?: boolean; // 하루 종일 일정 여부
+  isAllDay: boolean;
   hasNotification: boolean;
   notifyBefore: NotifyBefore;
-  nativeCalendarEventId?: string; // 네이티브 캘린더 이벤트 ID
   createdAt: string;
   updatedAt: string;
 }

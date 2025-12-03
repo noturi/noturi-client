@@ -1,10 +1,11 @@
 import { XStack, YStack } from 'tamagui';
-import type { CalendarMemo } from '~/entities/calendar-memo';
-import type { NotifyBefore } from '~/entities/calendar-memo/model/types';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
 import { Card, Typography } from '~/shared/ui';
 
 import { Bell } from '@tamagui/lucide-icons';
+
+import type { CalendarMemo } from '@/entities/calendar';
+import type { NotifyBefore } from '@/entities/calendar/model/types';
 
 interface CalendarMemoListProps {
   startDate: string;
