@@ -77,7 +77,7 @@ export function Select({
             alignItems="center"
             backgroundColor="$surface"
             borderColor={isOpen ? '$borderActive' : '$border'}
-            borderRadius="$4"
+            borderRadius="$5"
             borderWidth={1}
             height={height}
             justifyContent="space-between"
