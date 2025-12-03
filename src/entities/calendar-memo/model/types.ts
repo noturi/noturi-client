@@ -7,7 +7,9 @@ export type NotifyBefore =
   | 'THIRTY_MINUTES_BEFORE'
   | 'ONE_HOUR_BEFORE'
   | 'ONE_DAY_BEFORE'
-  | 'TWO_DAYS_BEFORE';
+  | 'TWO_DAYS_BEFORE'
+  | 'THREE_DAYS_BEFORE'
+  | 'ONE_WEEK_BEFORE';
 
 // 캘린더 메모 기본 타입
 export interface CalendarMemo {
