@@ -12,8 +12,6 @@ export const NOTIFICATION_TIMING = {
   NONE: 'NONE',
 } as const;
 
-export type NotificationTiming = (typeof NOTIFICATION_TIMING)[keyof typeof NOTIFICATION_TIMING];
-
 export const NOTIFICATION_OPTIONS = [
   { value: NOTIFICATION_TIMING.NONE, label: '알림 안함' },
   { value: NOTIFICATION_TIMING.AT_START_TIME, label: '이벤트 시간' },

@@ -1,17 +1,9 @@
-// 알림 시간 옵션
-export type NotifyBefore =
-  | 'AT_START_TIME'
-  | 'FIVE_MINUTES_BEFORE'
-  | 'TEN_MINUTES_BEFORE'
-  | 'FIFTEEN_MINUTES_BEFORE'
-  | 'THIRTY_MINUTES_BEFORE'
-  | 'ONE_HOUR_BEFORE'
-  | 'ONE_DAY_BEFORE'
-  | 'TWO_DAYS_BEFORE'
-  | 'THREE_DAYS_BEFORE'
-  | 'ONE_WEEK_BEFORE';
+import { NOTIFICATION_TIMING } from './constants';
 
-// 캘린더 메모 기본 타입
+export type NotificationTiming = (typeof NOTIFICATION_TIMING)[keyof typeof NOTIFICATION_TIMING];
+
+export type NotifyBefore = Exclude<NotificationTiming, 'NONE'>;
+
 export interface CalendarMemo {
   id: string;
   title: string;
