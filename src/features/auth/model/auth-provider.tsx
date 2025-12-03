@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const cancelPendingTask = useOneTaskAtTime();
+  const isLoggingOutRef = useRef(false);
 
   const clearError = () => authStore.clearError();
 
@@ -81,11 +82,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = useCallback(async (): Promise<void> => {
+    // 이미 로그아웃 중이면 무시 (무한 루프 방지)
+    if (isLoggingOutRef.current) {
+      return;
+    }
+    isLoggingOutRef.current = true;
+
     try {
       authStore.setError(null);
 
-      // 로그아웃 전 푸시 알림 디바이스 해제
-      await notificationService.unregisterAllDevices();
+      // 로그아웃 전 푸시 알림 디바이스 해제 (실패해도 무시)
+      try {
+        await notificationService.unregisterAllDevices();
+      } catch {
+        // 401 등 에러 발생해도 로그아웃 진행
+      }
 
       await authService.logout();
 
@@ -95,6 +106,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error('로그아웃 실패:', error);
       await authStore.clearAuthTokens();
       router.replace(HREFS.login());
+    } finally {
+      isLoggingOutRef.current = false;
     }
   }, []);
 
@@ -128,6 +141,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 토큰 만료 이벤트 처리
   useEffect(() => {
     const handleTokenExpired = async () => {
+      // 이미 로그아웃 중이면 무시 (무한 루프 방지)
+      if (isLoggingOutRef.current) {
+        return;
+      }
+
       Logger.warn('토큰 만료 감지 - 자동 갱신 시도');
 
       const refreshSuccess = await refreshAccessToken();
