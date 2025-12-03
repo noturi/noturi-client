@@ -14,7 +14,7 @@ import { Bell, FileText, LogOut, Settings } from '@tamagui/lucide-icons';
 
 import { HREFS } from '@/shared/config/routes';
 
-export default function ProfileScreen() {
+export default function SettingsScreen() {
   const [openManage, setOpenManage] = useState(false);
   const [notificationEnabled, setNotificationEnabled] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
