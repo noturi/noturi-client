@@ -1,4 +1,5 @@
 export { ApiErrorBoundary } from './api-error-boundary';
+export { ErrorView } from './error-view';
 export { FloatingButton } from './floating-button';
 export { Loading } from './loading';
 export { RatingGroupCard, type RatingGroup } from './rating-group-card';
