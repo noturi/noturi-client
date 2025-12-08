@@ -8,20 +8,11 @@ import { MemoRatingGroupView } from './memo-rating-group-view';
 interface RatingViewProps {
   categories: UICategory[];
   memos: UIMemo[];
-  isError: boolean;
-  isPending: boolean;
   onCategoryPress: (categoryName: string) => void;
   onMemoPress: (memo: UIMemo) => void;
 }
 
-export function RatingView({
-  categories,
-  memos,
-  isError,
-  isPending,
-  onCategoryPress,
-  onMemoPress,
-}: RatingViewProps) {
+export function RatingView({ categories, memos, onCategoryPress, onMemoPress }: RatingViewProps) {
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 200 }}
@@ -30,12 +21,7 @@ export function RatingView({
     >
       <YStack gap="$6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />
-        <MemoRatingGroupView
-          isError={isError}
-          isPending={isPending}
-          memos={memos}
-          onMemoPress={onMemoPress}
-        />
+        <MemoRatingGroupView memos={memos} onMemoPress={onMemoPress} />
       </YStack>
     </ScrollView>
   );

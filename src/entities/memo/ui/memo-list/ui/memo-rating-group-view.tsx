@@ -1,14 +1,12 @@
 import { YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { Typography } from '~/shared/ui';
-import { Loading, type RatingGroup, RatingGroupCard } from '~/widgets';
+import { type RatingGroup, RatingGroupCard } from '~/widgets';
 
 import { useCallback, useEffect, useState } from 'react';
 
 type MemoRatingGroupViewProps = {
   memos: UIMemo[];
-  isPending: boolean;
-  isError: boolean;
   onMemoPress?: (memo: UIMemo) => void;
 };
 
@@ -29,12 +27,7 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
   return groups;
 };
 
-export function MemoRatingGroupView({
-  memos,
-  isPending,
-  isError,
-  onMemoPress,
-}: MemoRatingGroupViewProps) {
+export function MemoRatingGroupView({ memos, onMemoPress }: MemoRatingGroupViewProps) {
   const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
 
   const ratingGroups = groupMemosByRating(memos);
@@ -58,22 +51,6 @@ export function MemoRatingGroupView({
       [rating]: !prev[rating],
     }));
   }, []);
-
-  if (isPending) {
-    return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Loading />
-      </YStack>
-    );
-  }
-
-  if (isError) {
-    return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted">메모를 불러오는데 실패했습니다</Typography>
-      </YStack>
-    );
-  }
 
   if (memos.length === 0) {
     return (

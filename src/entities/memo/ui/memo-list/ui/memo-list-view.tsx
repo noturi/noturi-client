@@ -9,19 +9,11 @@ import { FlatList } from 'react-native';
 
 type MemoListViewProps = {
   memos: UIMemo[];
-  isPending: boolean;
-  isError: boolean;
   onEndReached: () => void;
   isFetchingNextPage: boolean;
 };
 
-export function MemoListView({
-  memos,
-  isPending,
-  isError,
-  onEndReached,
-  isFetchingNextPage,
-}: MemoListViewProps) {
+export function MemoListView({ memos, onEndReached, isFetchingNextPage }: MemoListViewProps) {
   const renderFooter = useCallback(() => {
     if (!isFetchingNextPage) return null;
     return (
@@ -40,22 +32,6 @@ export function MemoListView({
     ),
     [memos.length],
   );
-
-  if (isPending) {
-    return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Loading />
-      </YStack>
-    );
-  }
-
-  if (isError) {
-    return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted">메모를 불러오는데 실패했습니다</Typography>
-      </YStack>
-    );
-  }
 
   if (memos.length === 0) {
     return (
