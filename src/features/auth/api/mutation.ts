@@ -4,11 +4,11 @@ import {
   type LoginResponseDto,
 } from '~/entities/user/model/types';
 import { queryClient } from '~/shared/api/query-client';
+import { authTokenCache } from '~/shared/lib/cache';
 
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { authService } from '../model/auth-service';
-import { authApi } from './apis';
+import { authApi } from './api';
 
 export function useGoogleLoginMutation(
   options: Pick<
@@ -20,18 +20,12 @@ export function useGoogleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'google-login', ...mutationKey],
-    mutationFn: (dto: GoogleLoginDto) => {
-      return authApi.googleLogin(dto);
-    },
+    mutationFn: (dto: GoogleLoginDto) => authApi.googleLogin(dto),
     onMutate,
     onSuccess: async (loginResponse, loginData, context) => {
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['auth', 'user'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['auth', 'profile'],
-        }),
+        queryClient.invalidateQueries({ queryKey: ['auth', 'user'] }),
+        queryClient.invalidateQueries({ queryKey: ['auth', 'profile'] }),
         onSuccess?.(loginResponse, loginData, context),
       ]);
     },
@@ -50,18 +44,12 @@ export function useAppleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'apple-login', ...mutationKey],
-    mutationFn: (dto: AppleLoginDto) => {
-      return authApi.appleLogin(dto);
-    },
+    mutationFn: (dto: AppleLoginDto) => authApi.appleLogin(dto),
     onMutate,
     onSuccess: async (loginResponse, loginData, context) => {
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['auth', 'user'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['auth', 'profile'],
-        }),
+        queryClient.invalidateQueries({ queryKey: ['auth', 'user'] }),
+        queryClient.invalidateQueries({ queryKey: ['auth', 'profile'] }),
         onSuccess?.(loginResponse, loginData, context),
       ]);
     },
@@ -80,25 +68,14 @@ export function useLogoutMutation(
 
   return useMutation({
     mutationKey: ['auth', 'logout', ...mutationKey],
-    mutationFn: () => {
-      return authService.logout();
-    },
+    mutationFn: () => authTokenCache.clearAuthTokens(),
     onMutate,
     onSuccess: async (_, __, context) => {
-      // 모든 쿼리 캐시 클리어
       await queryClient.clear();
-
-      // 인증 관련 쿼리들 무효화
       await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['auth'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['memos'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['categories'],
-        }),
+        queryClient.invalidateQueries({ queryKey: ['auth'] }),
+        queryClient.invalidateQueries({ queryKey: ['memos'] }),
+        queryClient.invalidateQueries({ queryKey: ['categories'] }),
         onSuccess?.(_, __, context),
       ]);
     },

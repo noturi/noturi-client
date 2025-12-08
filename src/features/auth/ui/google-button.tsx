@@ -5,38 +5,24 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { Button } from 'tamagui';
 import { useGoogleLoginMutation } from '~/features/auth/api';
-import { useAuth } from '~/features/auth/model';
+import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
 import { useEffect } from 'react';
 import { Alert, Platform } from 'react-native';
 
-import { router } from 'expo-router';
-
-import { HREFS } from '@/shared/config';
-
 import { GoogleIcon } from './google-icon';
 
-// 에러 메시지 매핑
-const ERROR_MESSAGES = {
+const ERROR_MESSAGES: Record<string, string | null> = {
   [statusCodes.SIGN_IN_CANCELLED]: null,
   [statusCodes.IN_PROGRESS]: '이미 로그인이 진행 중입니다.',
   [statusCodes.PLAY_SERVICES_NOT_AVAILABLE]: 'Google Play Services를 사용할 수 없습니다.',
-  default: 'Google 로그인에 실패했습니다.',
-} as const;
+};
 
 export function GoogleButton() {
-  const { saveAuthTokens, error, clearError } = useAuth();
+  const { handleLoginSuccess, clearError } = useLoginHandler();
 
   const googleLoginMutation = useGoogleLoginMutation({
-    onSuccess: async (loginResponse) => {
-      await saveAuthTokens({
-        accessToken: loginResponse.tokens.accessToken,
-        refreshToken: loginResponse.tokens.refreshToken,
-        user: loginResponse.user,
-      });
-
-      router.replace(HREFS.tabs());
-    },
+    onSuccess: handleLoginSuccess,
   });
 
   useEffect(() => {
@@ -45,52 +31,7 @@ export function GoogleButton() {
     });
   }, []);
 
-  useEffect(() => {
-    if (!error) return;
-
-    Alert.alert('오류', error, [
-      {
-        text: '확인',
-        onPress: clearError,
-      },
-    ]);
-  }, [error, clearError]);
-
-  // 에러 처리 함수
-  const handleGoogleSignInError = (error: any) => {
-    console.error('Google 로그인 오류:', error);
-
-    const errorMessage =
-      ERROR_MESSAGES[error.code as keyof typeof ERROR_MESSAGES] ?? ERROR_MESSAGES.default;
-
-    if (errorMessage) {
-      Alert.alert('로그인 오류', errorMessage);
-    }
-  };
-
-  // 구글 로그인 성공 처리
-  const processGoogleSignInResponse = async (response: any) => {
-    if (!isSuccessResponse(response)) {
-      return;
-    }
-
-    const user = response.data;
-
-    if (!user.idToken) {
-      Alert.alert('로그인 오류', 'Google 인증 토큰을 받을 수 없습니다.');
-      return;
-    }
-
-    googleLoginMutation.mutate({
-      googleId: user.user.id,
-      email: user.user.email,
-      name: user.user.name,
-      photo: user.user.photo,
-      idToken: user.idToken,
-    });
-  };
-
-  const handleGoogleLogin = async () => {
+  const handlePress = async () => {
     try {
       clearError();
 
@@ -99,15 +40,25 @@ export function GoogleButton() {
       }
 
       const response = await GoogleSignin.signIn();
-      console.log('Google 로그인 응답:', response);
 
-      await processGoogleSignInResponse(response);
-    } catch (error: any) {
-      handleGoogleSignInError(error);
+      if (!isSuccessResponse(response) || !response.data.idToken) {
+        return;
+      }
+
+      const { user, idToken } = response.data;
+
+      googleLoginMutation.mutate({
+        googleId: user.id,
+        email: user.email,
+        name: user.name,
+        photo: user.photo,
+        idToken,
+      });
+    } catch (e: any) {
+      const message = ERROR_MESSAGES[e.code] ?? 'Google 로그인에 실패했습니다.';
+      if (message) Alert.alert('로그인 오류', message);
     }
   };
-
-  const isLoading = googleLoginMutation.isPending;
 
   return (
     <Button
@@ -115,10 +66,10 @@ export function GoogleButton() {
       backgroundColor="$surface"
       borderColor="$border"
       borderWidth={1}
-      disabled={isLoading}
+      disabled={googleLoginMutation.isPending}
       icon={<GoogleIcon height={24} width={24} />}
       size="$7"
-      onPress={handleGoogleLogin}
+      onPress={handlePress}
     />
   );
 }

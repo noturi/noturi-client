@@ -1,2 +1,2 @@
-export * from './apis';
+export * from './api';
 export * from './mutation';

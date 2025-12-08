@@ -29,12 +29,9 @@ export function CalendarDateProvider({ children }: CalendarDateProviderProps) {
 
   const contextValue = useMemo<CalendarDateContextValue>(
     () => ({
-      // State
       startDate,
       endDate,
       currentMonth,
-
-      // Actions
       setStartDate,
       setEndDate,
       setCurrentMonth,

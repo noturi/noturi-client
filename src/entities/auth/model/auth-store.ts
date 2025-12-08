@@ -4,7 +4,7 @@ import Logger from '~/shared/lib/logger';
 
 import type { AuthState } from './types';
 
-export class AuthStore {
+class AuthStore {
   private listeners = new Set<() => void>();
   private state: AuthState = {
     isAuthenticated: false,
@@ -21,7 +21,6 @@ export class AuthStore {
   };
 
   getSnapshot = () => this.state;
-
   getServerSnapshot = () => this.state;
 
   private setState = (newState: Partial<AuthState>) => {
@@ -30,41 +29,29 @@ export class AuthStore {
   };
 
   saveAuthTokens = async (tokens: { accessToken: string; refreshToken: string; user: User }) => {
-    try {
-      await authTokenCache.saveAuthTokens({
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-        user: JSON.stringify(tokens.user),
-      });
-      this.setState({
-        isAuthenticated: true,
-        error: null,
-        user: tokens.user,
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      });
-    } catch (error) {
-      console.error('토큰 저장 실패:', error);
-      this.setState({ error: '토큰 저장에 실패했습니다.' });
-      throw error;
-    }
+    await authTokenCache.saveAuthTokens({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: JSON.stringify(tokens.user),
+    });
+    this.setState({
+      isAuthenticated: true,
+      error: null,
+      user: tokens.user,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    });
   };
 
   clearAuthTokens = async () => {
-    try {
-      await authTokenCache.clearAuthTokens();
-      this.setState({
-        isAuthenticated: false,
-        error: null,
-        user: null,
-        accessToken: null,
-        refreshToken: null,
-      });
-    } catch (error) {
-      console.error('토큰 삭제 실패:', error);
-      this.setState({ error: '로그아웃에 실패했습니다.' });
-      throw error;
-    }
+    await authTokenCache.clearAuthTokens();
+    this.setState({
+      isAuthenticated: false,
+      error: null,
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+    });
   };
 
   initializeAuth = async () => {
@@ -93,35 +80,15 @@ export class AuthStore {
     }
   };
 
-  getUser = (): User | null => {
-    return this.state.user;
-  };
-
-  getAccessToken = (): string | null => {
-    return this.state.accessToken;
-  };
-
-  getRefreshToken = (): string | null => {
-    return this.state.refreshToken;
-  };
-
-  setLoading = (isInitialLoading: boolean) => {
-    this.setState({ isInitialLoading });
-  };
-
-  setError = (error: string | null) => {
-    this.setState({ error });
-  };
-
-  clearError = () => {
-    this.setState({ error: null });
-  };
-
-  setAuthenticated = (isAuthenticated: boolean) => {
-    this.setState({ isAuthenticated });
-  };
-
+  getUser = (): User | null => this.state.user;
+  getAccessToken = (): string | null => this.state.accessToken;
+  getRefreshToken = (): string | null => this.state.refreshToken;
   getState = () => this.state;
+
+  setLoading = (isInitialLoading: boolean) => this.setState({ isInitialLoading });
+  setError = (error: string | null) => this.setState({ error });
+  clearError = () => this.setState({ error: null });
+  setAuthenticated = (isAuthenticated: boolean) => this.setState({ isAuthenticated });
 }
 
 export const authStore = new AuthStore();

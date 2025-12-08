@@ -3,9 +3,9 @@ import { useTheme } from 'tamagui';
 import { Redirect } from 'expo-router';
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
-import { useAuth } from '../../features/auth/model';
 import { HREFS } from '../../shared/config';
 import { Loading } from '../../widgets';
+import { useAuth } from '../providers/auth-provider';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();

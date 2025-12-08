@@ -11,118 +11,110 @@ export interface TokenCache {
   clearAllTokens: () => Promise<void>;
 }
 
-const createNativeTokenCache = (): TokenCache => {
-  return {
-    getToken: async (key: string) => {
-      try {
-        const item = await SecureStore.getItemAsync(key);
-        return item;
-      } catch (error) {
-        console.error(`토큰 조회 실패 ${key}:`, error);
-        await SecureStore.deleteItemAsync(key).catch(() => {});
-        return null;
-      }
-    },
+const TOKEN_KEYS = ['accessToken', 'refreshToken', 'user'] as const;
 
-    saveToken: async (key: string, token: string) => {
-      try {
-        await SecureStore.setItemAsync(key, token);
-      } catch (error) {
-        Logger.error(`토큰 저장 실패 ${key}:`, error);
-        throw error;
-      }
-    },
+const createNativeTokenCache = (): TokenCache => ({
+  getToken: async (key) => {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (error) {
+      Logger.error(`토큰 조회 실패 [${key}]:`, error);
+      await SecureStore.deleteItemAsync(key).catch(() => {});
+      return null;
+    }
+  },
 
-    deleteToken: async (key: string) => {
-      try {
-        await SecureStore.deleteItemAsync(key);
-      } catch (error) {
-        console.error(`토큰 삭제 실패 ${key}:`, error);
-        throw error;
-      }
-    },
+  saveToken: async (key, token) => {
+    try {
+      await SecureStore.setItemAsync(key, token);
+    } catch (error) {
+      Logger.error(`토큰 저장 실패 [${key}]:`, error);
+      throw error;
+    }
+  },
 
-    clearAllTokens: async () => {
-      const tokenKeys = ['accessToken', 'refreshToken', 'user'];
-      try {
-        await Promise.all(tokenKeys.map((key) => SecureStore.deleteItemAsync(key)));
-      } catch (error) {
-        console.error('토큰 삭제 실패:', error);
-        throw error;
-      }
-    },
-  };
-};
+  deleteToken: async (key) => {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+      Logger.error(`토큰 삭제 실패 [${key}]:`, error);
+      throw error;
+    }
+  },
 
-const createWebTokenCache = (): TokenCache => {
-  return {
-    getToken: async (key: string) => {
-      try {
-        const item = localStorage.getItem(key);
-        return item;
-      } catch (error) {
-        console.error(`❌ 토큰 조회 실패 ${key}:`, error);
-        localStorage.removeItem(key);
-        return null;
-      }
-    },
+  clearAllTokens: async () => {
+    try {
+      await Promise.all(TOKEN_KEYS.map((key) => SecureStore.deleteItemAsync(key)));
+    } catch (error) {
+      Logger.error('전체 토큰 삭제 실패:', error);
+      throw error;
+    }
+  },
+});
 
-    saveToken: async (key: string, token: string) => {
-      try {
-        localStorage.setItem(key, token);
-      } catch (error) {
-        console.error(`❌ 토큰 저장 실패 ${key}:`, error);
-        throw error;
-      }
-    },
+const createWebTokenCache = (): TokenCache => ({
+  getToken: async (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      Logger.error(`토큰 조회 실패 [${key}]:`, error);
+      localStorage.removeItem(key);
+      return null;
+    }
+  },
 
-    deleteToken: async (key: string) => {
-      try {
-        localStorage.removeItem(key);
-      } catch (error) {
-        console.error(`❌ 토큰 삭제 실패 ${key}:`, error);
-        throw error;
-      }
-    },
+  saveToken: async (key, token) => {
+    try {
+      localStorage.setItem(key, token);
+    } catch (error) {
+      Logger.error(`토큰 저장 실패 [${key}]:`, error);
+      throw error;
+    }
+  },
 
-    clearAllTokens: async () => {
-      const tokenKeys = ['accessToken', 'refreshToken', 'user'];
-      try {
-        tokenKeys.forEach((key) => localStorage.removeItem(key));
-      } catch (error) {
-        console.error('❌ 토큰 삭제 실패:', error);
-        throw error;
-      }
-    },
-  };
-};
+  deleteToken: async (key) => {
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      Logger.error(`토큰 삭제 실패 [${key}]:`, error);
+      throw error;
+    }
+  },
 
-// Native: SecureStore, Web: localStorage
+  clearAllTokens: async () => {
+    try {
+      TOKEN_KEYS.forEach((key) => localStorage.removeItem(key));
+    } catch (error) {
+      Logger.error('전체 토큰 삭제 실패:', error);
+      throw error;
+    }
+  },
+});
+
 export const tokenCache: TokenCache =
-  Platform.OS !== 'web' ? createNativeTokenCache() : createWebTokenCache();
+  Platform.OS === 'web' ? createWebTokenCache() : createNativeTokenCache();
 
-export const TOKEN_KEYS = {
-  ACCESS_TOKEN: 'accessToken',
-  REFRESH_TOKEN: 'refreshToken',
-  USER: 'user',
-} as const;
+interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+  user: string;
+}
 
 export const authTokenCache = {
-  saveAuthTokens: async (tokens: { accessToken: string; refreshToken: string; user: string }) => {
+  saveAuthTokens: async (tokens: AuthTokens) => {
     await Promise.all([
-      tokenCache.saveToken(TOKEN_KEYS.ACCESS_TOKEN, tokens.accessToken),
-      tokenCache.saveToken(TOKEN_KEYS.REFRESH_TOKEN, tokens.refreshToken),
-      tokenCache.saveToken(TOKEN_KEYS.USER, tokens.user),
+      tokenCache.saveToken('accessToken', tokens.accessToken),
+      tokenCache.saveToken('refreshToken', tokens.refreshToken),
+      tokenCache.saveToken('user', tokens.user),
     ]);
   },
 
   getAuthTokens: async () => {
     const [accessToken, refreshToken, user] = await Promise.all([
-      tokenCache.getToken(TOKEN_KEYS.ACCESS_TOKEN),
-      tokenCache.getToken(TOKEN_KEYS.REFRESH_TOKEN),
-      tokenCache.getToken(TOKEN_KEYS.USER),
+      tokenCache.getToken('accessToken'),
+      tokenCache.getToken('refreshToken'),
+      tokenCache.getToken('user'),
     ]);
-
     return { accessToken, refreshToken, user };
   },
 
