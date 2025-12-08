@@ -10,7 +10,7 @@ import { Alert, Linking } from 'react-native';
 
 import { router } from 'expo-router';
 
-import { Bell, FileText, LogOut, Settings } from '@tamagui/lucide-icons';
+import { Bell, FileText, Info, LogOut, Settings } from '@tamagui/lucide-icons';
 
 import { HREFS } from '@/shared/config/routes';
 
@@ -163,26 +163,30 @@ export default function SettingsScreen() {
       )}
 
       <Card>
-        <YStack gap="$3" padding="$4">
-          <Typography color="$textPrimary" variant="title3">
-            앱 정보
-          </Typography>
-          <YStack gap="$2">
-            <Typography color="$textSecondary" variant="callout">
-              버전 1.0.0
+        <YStack gap="$2">
+          <XStack
+            alignItems="center"
+            borderRadius="$5"
+            gap="$3"
+            paddingHorizontal="$4"
+            paddingVertical="$3"
+          >
+            <Info color="$textSecondary" size="$3" />
+            <Typography color="$textPrimary" flex={1} variant="callout">
+              버전
             </Typography>
-            <Typography color="$textSecondary" variant="callout">
-              Noturi Team
+            <Typography color="$textMuted" variant="callout">
+              1.0.0
             </Typography>
-          </YStack>
+          </XStack>
 
-          <Separator borderColor="$border" marginVertical="$2" />
+          <Separator borderColor="$border" />
 
           <XStack
             alignItems="center"
             borderRadius="$5"
             gap="$3"
-            paddingHorizontal="$2"
+            paddingHorizontal="$4"
             paddingVertical="$3"
             pressStyle={{ backgroundColor: '$backgroundSecondary' }}
             onPress={handlePrivacyPolicy}
