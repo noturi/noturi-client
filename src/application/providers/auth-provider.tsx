@@ -28,11 +28,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const authState = useSyncExternalStore(
-    authStore.subscribe,
-    authStore.getSnapshot,
-    authStore.getServerSnapshot,
-  );
+  const authState = useSyncExternalStore(authStore.subscribe, authStore.getSnapshot);
 
   const isLoggingOutRef = useRef(false);
 
