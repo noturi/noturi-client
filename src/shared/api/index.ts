@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-import { afterResponseHook, beforeRequestHook } from './hooks';
+import { afterResponseHook, beforeRequestHook, beforeRetryHook } from './hooks';
 
 export { ENDPOINTS } from './endpoints';
 
@@ -11,11 +11,14 @@ export const api = ky.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  retry: 0,
-  signal: undefined,
+  retry: {
+    limit: 1,
+    statusCodes: [401], // 401일 때만 재시도
+  },
   hooks: {
     beforeRequest: [beforeRequestHook],
     afterResponse: [afterResponseHook],
+    beforeRetry: [beforeRetryHook],
   },
 });
 

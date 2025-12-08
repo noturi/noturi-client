@@ -1,5 +1,3 @@
-import Logger from '../lib/logger';
-import { tokenEventManager } from '../model/token-event-manager';
 import { logErrorResponse } from './logger';
 import { ApiError, ErrorResponseBody } from './types';
 
@@ -17,12 +15,6 @@ export const getErrorMessage = (body: ErrorResponseBody | undefined): string => 
 
 export const handleErrorResponse = async (request: Request, response: Response) => {
   await logErrorResponse(request, response);
-
-  if (response.status === 401) {
-    Logger.warn('401 Unauthorized - 토큰 만료 또는 무효');
-    // 토큰 만료
-    tokenEventManager.emitTokenExpired();
-  }
 
   const body: ErrorResponseBody = await response
     .clone()

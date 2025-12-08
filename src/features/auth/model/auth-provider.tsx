@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [cancelPendingTask]);
 
-  // 토큰 만료 이벤트 처리
+  // 토큰 만료 이벤트 처리 (토큰 갱신 실패 후 호출됨)
   useEffect(() => {
     const handleTokenExpired = async () => {
       // 이미 로그아웃 중이면 무시 (무한 루프 방지)
@@ -146,21 +146,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      Logger.warn('토큰 만료 감지 - 자동 갱신 시도');
-
-      const refreshSuccess = await refreshAccessToken();
-
-      if (!refreshSuccess) {
-        Logger.warn('토큰 갱신 실패 - 자동 로그아웃 처리');
-        await logout();
-      }
+      // 토큰 갱신 실패 후 호출되므로 바로 로그아웃
+      Logger.warn('토큰 갱신 실패 - 자동 로그아웃 처리');
+      await logout();
     };
 
     // 토큰 만료 이벤트 리스너 등록
     const unsubscribe = tokenEventManager.onTokenExpired(handleTokenExpired);
 
     return unsubscribe;
-  }, [refreshAccessToken, logout]);
+  }, [logout]);
 
   const value: AuthContextType = {
     getUser: authStore.getUser,
