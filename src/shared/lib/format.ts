@@ -165,3 +165,14 @@ export const AM_PM_OPTIONS = [
   { value: 'AM', label: '오전' },
   { value: 'PM', label: '오후' },
 ] as const;
+
+/**
+ * API 전송용 날짜/시간 포맷팅 (초/밀리초 제거)
+ * @param input Date 객체 또는 ISO 날짜 문자열
+ * @returns ISO 형식 문자열 (초/밀리초가 00.000으로 설정됨)
+ */
+export function formatDateTimeForApi(input: string | Date): string {
+  const date = typeof input === 'string' ? new Date(input) : new Date(input);
+  date.setSeconds(0, 0);
+  return date.toISOString();
+}

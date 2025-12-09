@@ -12,7 +12,7 @@ import {
   NOTIFICATION_OPTIONS,
 } from '@/entities/calendar/model/constants';
 import type { CreateCalendarMemoDto, NotifyBefore } from '@/entities/calendar/model/types';
-import { getHoursLater } from '@/shared/lib/format';
+import { formatDateTimeForApi, getHoursLater } from '@/shared/lib/format';
 
 import { DateTimePickerField } from './date-time-picker-field';
 
@@ -43,8 +43,8 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
   const getFormData = (): CreateCalendarMemoDto => ({
     title: titleRef.current.trim(),
-    startDate: startDateTime.toISOString(),
-    endDate: endDateTime.toISOString(),
+    startDate: formatDateTimeForApi(startDateTime),
+    endDate: formatDateTimeForApi(endDateTime),
     isAllDay,
     hasNotification: notifyBefore !== undefined,
     notifyBefore,
