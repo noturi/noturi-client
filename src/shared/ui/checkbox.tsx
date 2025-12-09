@@ -12,6 +12,10 @@ export interface CheckboxProps {
 }
 
 export function Checkbox({ label, checked, onCheckedChange, disabled = false }: CheckboxProps) {
+  const handleCheckedChange = (value: boolean | 'indeterminate') => {
+    onCheckedChange(value === true);
+  };
+
   return (
     <XStack alignItems="center" gap="$2" opacity={disabled ? 0.6 : 1}>
       <TamaguiCheckbox
@@ -20,8 +24,8 @@ export function Checkbox({ label, checked, onCheckedChange, disabled = false }: 
         borderWidth={2}
         checked={checked}
         disabled={disabled}
-        size="$6"
-        onCheckedChange={onCheckedChange}
+        size="$7"
+        onCheckedChange={handleCheckedChange}
       >
         <TamaguiCheckbox.Indicator>
           <Check color="white" size={14} />

@@ -14,10 +14,13 @@ export function Switch({ label, checked, onCheckedChange, disabled = false }: Sw
     <XStack alignItems="center" justifyContent="space-between">
       <Typography variant="footnote">{label}</Typography>
       <TamaguiSwitch
-        backgroundColor={checked ? '$primary' : '$border'}
+        unstyled
+        backgroundColor={checked ? '$primary' : '$backgroundSecondary'}
+        borderColor="transparent"
+        borderWidth={0}
         checked={checked}
         disabled={disabled}
-        size="$5"
+        size="$6"
         onCheckedChange={onCheckedChange}
       >
         <TamaguiSwitch.Thumb animation="quick" backgroundColor="white" />

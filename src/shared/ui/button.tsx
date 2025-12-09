@@ -7,12 +7,17 @@ export const Button = styled(TamaguiButton, {
   minWidth: 44,
   borderWidth: 1,
   borderColor: '$border',
+  overflow: 'visible',
 
   animation: 'bouncy',
 
   pressStyle: {
     scale: 0.96,
     opacity: 0.8,
+  },
+
+  disabledStyle: {
+    opacity: 0.5,
   },
 
   variants: {
@@ -106,8 +111,10 @@ export const Button = styled(TamaguiButton, {
         fontWeight: '400',
       },
       lg: {
-        height: 56,
+        minHeight: 56,
         paddingHorizontal: '$5',
+        paddingTop: 18,
+        paddingBottom: 14,
         fontSize: 17,
         fontWeight: '600',
       },
