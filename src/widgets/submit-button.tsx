@@ -1,6 +1,8 @@
-import { Spinner, Text, View, XStack } from 'tamagui';
+import { Spinner, View, XStack } from 'tamagui';
 import { useKeyboard } from '~/shared/lib';
-import { Button } from '~/shared/ui';
+import { Typography } from '~/shared/ui';
+
+import { Pressable, StyleSheet } from 'react-native';
 
 interface SubmitButtonProps {
   children: React.ReactNode;
@@ -10,16 +12,6 @@ interface SubmitButtonProps {
   loadingText?: string;
   position?: 'fixed' | 'static';
   followKeyboard?: boolean;
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'destructive'
-    | 'plain'
-    | 'filled'
-    | 'tinted'
-    | 'ghost'
-    | 'outlined';
-  size?: 'sm' | 'md' | 'lg';
   flex?: number;
 }
 
@@ -31,16 +23,36 @@ export const SubmitButton = ({
   loadingText = '처리중...',
   position = 'fixed',
   followKeyboard = true,
-  variant = 'primary',
-  ...props
+  flex,
 }: SubmitButtonProps) => {
   const { keyboardHeight } = useKeyboard();
 
-  const loadingContent = (
-    <XStack alignItems="center" gap="$2">
-      <Spinner color="white" size="small" />
-      <Text color="white">{loadingText}</Text>
-    </XStack>
+  const isDisabled = disabled || isLoading;
+
+  const buttonContent = (
+    <Pressable
+      disabled={isDisabled}
+      style={({ pressed }) => [
+        styles.button,
+        isDisabled && styles.disabled,
+        pressed && !isDisabled && styles.pressed,
+        flex !== undefined && { flex },
+      ]}
+      onPress={onPress}
+    >
+      {isLoading ? (
+        <XStack alignItems="center" gap="$2">
+          <Spinner color="white" size="small" />
+          <Typography color="white" variant="body">
+            {loadingText}
+          </Typography>
+        </XStack>
+      ) : (
+        <Typography color="white" fontWeight="600" variant="body">
+          {children}
+        </Typography>
+      )}
+    </Pressable>
   );
 
   if (position === 'fixed') {
@@ -57,29 +69,28 @@ export const SubmitButton = ({
         right={0}
         zIndex="$5"
       >
-        <Button
-          disabled={disabled || isLoading}
-          opacity={isLoading ? 0.8 : 1}
-          variant={variant}
-          onPress={onPress}
-          {...props}
-        >
-          {isLoading ? loadingContent : children}
-        </Button>
+        {buttonContent}
       </View>
     );
   }
 
-  return (
-    <Button
-      disabled={disabled || isLoading}
-      opacity={isLoading ? 0.8 : 1}
-      size="lg"
-      variant={variant}
-      onPress={onPress}
-      {...props}
-    >
-      {isLoading ? loadingContent : children}
-    </Button>
-  );
+  return buttonContent;
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#1d1d1d',
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.98 }],
+  },
+});
