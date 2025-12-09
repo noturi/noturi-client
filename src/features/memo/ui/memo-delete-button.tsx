@@ -1,3 +1,4 @@
+import { toast } from 'sonner-native';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
@@ -17,6 +18,7 @@ interface MemoDeleteButtonProps {
 export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButtonProps) => {
   const deleteMutation = useDeleteMemoMutation({
     onSuccess: () => {
+      toast.success('메모가 삭제되었습니다');
       onDelete?.();
       router.back();
     },
