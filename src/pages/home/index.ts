@@ -1,2 +1,2 @@
-export { useHomeCategories, useHomeMemos } from './lib';
+export { useHomeCategories, useHomeMemos } from './model';
 export { HomePage, HomeScreen } from './ui';

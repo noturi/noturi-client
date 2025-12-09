@@ -15,7 +15,7 @@ import { Suspense, useCallback, useRef, useState } from 'react';
 
 import { router } from 'expo-router';
 
-import { useHomeCategories, useHomeMemos } from '../lib';
+import { useHomeCategories, useHomeMemos } from '../model';
 
 interface MemoContentProps {
   selectedView: MemoViewType;
