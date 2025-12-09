@@ -5,11 +5,7 @@ import { Alert, Platform, View } from 'react-native';
 
 import * as AppleAuthentication from 'expo-apple-authentication';
 
-interface AppleButtonProps {
-  disabled?: boolean;
-}
-
-export function AppleButton({ disabled }: AppleButtonProps) {
+export function AppleButton() {
   const { handleLoginSuccess, clearError } = useLoginHandler();
 
   const appleLoginMutation = useAppleLoginMutation({
@@ -68,7 +64,7 @@ export function AppleButton({ disabled }: AppleButtonProps) {
   };
 
   return (
-    <View style={{ opacity: disabled ? 0.5 : 1 }} pointerEvents={disabled ? 'none' : 'auto'}>
+    <View>
       <AppleAuthentication.AppleAuthenticationButton
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}

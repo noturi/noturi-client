@@ -2,6 +2,7 @@ import type { Href } from 'expo-router';
 
 export const HREFS = {
   login: (): Href => '/login',
+  agreement: (): Href => '/agreement',
   tabs: (): Href => '/(tabs)',
   search: (): Href => '/search',
   memoDetail: (id: string): Href => `/memo/${id}`,

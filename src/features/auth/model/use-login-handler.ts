@@ -21,7 +21,13 @@ export function useLoginHandler() {
       refreshToken: loginResponse.tokens.refreshToken,
       user: loginResponse.user,
     });
-    router.replace(HREFS.tabs());
+
+    // 신규 회원이면 약관 동의 페이지로, 기존 회원이면 홈으로
+    if (loginResponse.isNewUser) {
+      router.replace(HREFS.agreement());
+    } else {
+      router.replace(HREFS.tabs());
+    }
   };
 
   return { handleLoginSuccess, clearError };

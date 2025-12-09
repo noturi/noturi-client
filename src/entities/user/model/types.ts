@@ -57,6 +57,7 @@ export type LoginResponseDto = {
     refreshToken: string;
   };
   user: Pick<User, 'id' | 'email' | 'name' | 'nickname' | 'avatarUrl'>;
+  isNewUser: boolean;
 };
 export type RefreshTokenDto = Pick<RefreshToken, 'refreshToken'>;
 export type RefreshTokenResponseDto = Omit<RefreshResult, 'expiresAt'>;
