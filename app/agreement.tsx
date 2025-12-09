@@ -1,6 +1,12 @@
 import { AgreementPage } from '~/pages/agreement';
 
-export default function Agreement() {
-  return <AgreementPage />;
-}
+import { Stack } from 'expo-router';
 
+export default function Agreement() {
+  return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <AgreementPage />
+    </>
+  );
+}

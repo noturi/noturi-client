@@ -1,2 +1,1 @@
 export { AgreementPage } from './ui';
-
