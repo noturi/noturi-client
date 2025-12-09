@@ -4,6 +4,7 @@ import { useAuth } from '~/application/providers/auth-provider';
 import { LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { NotificationToggle } from '~/features/notification';
+import { EXTERNAL_LINKS } from '~/shared/config';
 import { Card, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -18,7 +19,7 @@ export function SettingsPage() {
   const { isAuthenticated } = useAuth();
 
   const handlePrivacyPolicy = () => {
-    Linking.openURL('https://www.notion.so/noturi/Noturi-26835607f32980199ec9d064c0cb4627');
+    Linking.openURL(EXTERNAL_LINKS.PRIVACY_POLICY);
   };
 
   return (
