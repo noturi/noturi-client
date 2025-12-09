@@ -1,5 +1,5 @@
-import { Switch, XStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
+import { XStack } from 'tamagui';
+import { Switch, Typography } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
 import { Alert, Linking } from 'react-native';
@@ -66,15 +66,7 @@ export function NotificationToggle() {
       <Typography color="$textPrimary" flex={1} variant="callout">
         알림
       </Typography>
-      <Switch
-        backgroundColor={enabled ? '$primary' : '$border'}
-        checked={enabled}
-        disabled={loading}
-        size="$4"
-        onCheckedChange={handleToggle}
-      >
-        <Switch.Thumb animation="quick" backgroundColor="white" />
-      </Switch>
+      <Switch checked={enabled} disabled={loading} onCheckedChange={handleToggle} />
     </XStack>
   );
 }
