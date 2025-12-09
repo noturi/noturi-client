@@ -18,7 +18,11 @@ const ERROR_MESSAGES: Record<string, string | null> = {
   [statusCodes.PLAY_SERVICES_NOT_AVAILABLE]: 'Google Play Services를 사용할 수 없습니다.',
 };
 
-export function GoogleButton() {
+interface GoogleButtonProps {
+  disabled?: boolean;
+}
+
+export function GoogleButton({ disabled }: GoogleButtonProps) {
   const { handleLoginSuccess, clearError } = useLoginHandler();
 
   const googleLoginMutation = useGoogleLoginMutation({
@@ -66,7 +70,7 @@ export function GoogleButton() {
       backgroundColor="$surface"
       borderColor="$border"
       borderWidth={1}
-      disabled={googleLoginMutation.isPending}
+      disabled={disabled || googleLoginMutation.isPending}
       icon={<GoogleIcon height={24} width={24} />}
       size="$7"
       onPress={handlePress}

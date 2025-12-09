@@ -1,11 +1,15 @@
 import { useAppleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
-import { Alert, Platform } from 'react-native';
+import { Alert, Platform, View } from 'react-native';
 
 import * as AppleAuthentication from 'expo-apple-authentication';
 
-export function AppleButton() {
+interface AppleButtonProps {
+  disabled?: boolean;
+}
+
+export function AppleButton({ disabled }: AppleButtonProps) {
   const { handleLoginSuccess, clearError } = useLoginHandler();
 
   const appleLoginMutation = useAppleLoginMutation({
@@ -64,12 +68,14 @@ export function AppleButton() {
   };
 
   return (
-    <AppleAuthentication.AppleAuthenticationButton
-      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-      buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-      cornerRadius={22}
-      style={{ height: 44, width: 44 }}
-      onPress={handlePress}
-    />
+    <View style={{ opacity: disabled ? 0.5 : 1 }} pointerEvents={disabled ? 'none' : 'auto'}>
+      <AppleAuthentication.AppleAuthenticationButton
+        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+        cornerRadius={22}
+        style={{ height: 44, width: 44 }}
+        onPress={handlePress}
+      />
+    </View>
   );
 }
