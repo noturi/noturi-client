@@ -16,7 +16,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       modal
       animation="quick"
       open={isOpen}
-      snapPoints={[50, 30]}
+      snapPoints={[60, 40]}
       snapPointsMode="percent"
       onOpenChange={onClose}
     >
