@@ -163,7 +163,11 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
 
     return (
       <YStack flex={1} gap="$4" paddingBottom="$10" position="relative">
-        <ScrollView contentContainerStyle={{ paddingBottom: 100 }} flex={1}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 100 }}
+          flex={1}
+          showsVerticalScrollIndicator={false}
+        >
           <YStack gap="$4">
             <Card>
               <Calendar
