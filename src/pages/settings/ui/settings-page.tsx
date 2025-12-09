@@ -1,4 +1,3 @@
-import Constants from 'expo-constants';
 import { Separator, XStack, YStack } from 'tamagui';
 import { useAuth } from '~/application/providers/auth-provider';
 import { LogoutButton } from '~/features/auth/ui';
@@ -9,6 +8,8 @@ import { Card, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Linking } from 'react-native';
+
+import Constants from 'expo-constants';
 
 import { FileText, Info, Settings } from '@tamagui/lucide-icons';
 
