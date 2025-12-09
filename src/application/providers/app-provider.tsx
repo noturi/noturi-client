@@ -1,4 +1,7 @@
+import { Toaster } from 'sonner-native';
+
 import { ReactNode } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AuthProvider } from './auth-provider';
@@ -12,14 +15,19 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   return (
-    <QueryProvider>
-      <TamaguiProvider>
-        <KeyboardProvider>
-          <AuthProvider>
-            <NotificationProvider>{children}</NotificationProvider>
-          </AuthProvider>
-        </KeyboardProvider>
-      </TamaguiProvider>
-    </QueryProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryProvider>
+        <TamaguiProvider>
+          <KeyboardProvider>
+            <AuthProvider>
+              <NotificationProvider>
+                {children}
+                <Toaster />
+              </NotificationProvider>
+            </AuthProvider>
+          </KeyboardProvider>
+        </TamaguiProvider>
+      </QueryProvider>
+    </GestureHandlerRootView>
   );
 }
