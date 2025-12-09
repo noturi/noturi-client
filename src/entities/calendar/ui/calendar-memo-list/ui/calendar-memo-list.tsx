@@ -17,27 +17,39 @@ interface CalendarMemoListProps {
 }
 
 const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
+  const timeText = memo.isAllDay
+    ? '하루종일'
+    : `${formatTime(memo.startDate)} - ${formatTime(memo.endDate)}`;
+
   return (
     <Card position="relative">
-      <XStack alignItems="flex-start" justifyContent="space-between">
-        <YStack flex={1}>
-          <Typography color="$textPrimary" variant="callout">
-            {memo.title}
-          </Typography>
-
-          <Typography color="$textMuted" marginTop="$1" variant="caption2">
-            {formatTime(memo.startDate)} - {formatTime(memo.endDate)}
-          </Typography>
-
-          {memo.hasNotification && memo.notifyBefore && (
-            <XStack alignItems="center" gap="$1.5" marginTop="$1.5">
-              <Bell color="$blue10" size={12} />
-              <Typography color="$blue10" variant="caption2">
-                {NOTIFICATION_LABELS[memo.notifyBefore]} 알림
+      <XStack alignItems="center" justifyContent="space-between">
+        <XStack alignItems="center" flex={1} gap="$3">
+          <YStack
+            backgroundColor={memo.hasNotification ? '$blue10' : '$textMuted'}
+            borderRadius="$1"
+            height={36}
+            width={3}
+          />
+          <YStack flex={1} gap="$0.5">
+            <Typography color="$textPrimary" numberOfLines={1} variant="callout">
+              {memo.title}
+            </Typography>
+            <XStack alignItems="center" gap="$2">
+              <Typography color="$textMuted" variant="caption2">
+                {timeText}
               </Typography>
+              {memo.hasNotification && memo.notifyBefore && (
+                <XStack alignItems="center" gap="$1">
+                  <Bell color="$blue10" size={10} />
+                  <Typography color="$blue10" variant="caption2">
+                    {NOTIFICATION_LABELS[memo.notifyBefore]}
+                  </Typography>
+                </XStack>
+              )}
             </XStack>
-          )}
-        </YStack>
+          </YStack>
+        </XStack>
 
         <CalendarMemoDeleteButton memoId={memo.id} />
       </XStack>

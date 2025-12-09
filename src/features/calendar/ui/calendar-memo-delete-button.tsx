@@ -75,7 +75,7 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
                   backgroundColor: '$backgroundSecondary',
                 }}
                 paddingHorizontal="$3"
-                paddingVertical="$2"
+                paddingVertical="$3"
               >
                 <Trash2 color="$red10" size={16} />
                 <Typography color="$red10" variant="footnote">
