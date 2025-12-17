@@ -2,7 +2,7 @@ import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo/ui';
 import { Typography } from '~/shared/ui';
-import { FloatingButton, Loading, StarRating } from '~/widgets';
+import { FloatingButton, Loading, StarRating } from '~/shared/ui';
 
 import { router, useLocalSearchParams } from 'expo-router';
 

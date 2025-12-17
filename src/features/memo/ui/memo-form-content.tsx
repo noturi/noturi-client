@@ -7,7 +7,7 @@ import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { Button, Form, Input, TextArea } from '~/shared/ui';
-import { FloatingButton } from '~/widgets';
+import { FloatingButton } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';

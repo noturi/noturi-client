@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 
 import { useAuth } from '../src/application/providers/auth-provider';
 import { HREFS } from '../src/shared/config';
-import { Loading } from '../src/widgets';
+import { Loading } from '~/shared/ui';
 
 export default function IndexPage() {
   const { isAuthenticated, isInitialLoading } = useAuth();

@@ -8,8 +8,7 @@ import {
   type UIMemo,
 } from '~/entities/memo';
 import { HREFS } from '~/shared/config/routes';
-import { Card, Skeleton } from '~/shared/ui';
-import { ApiErrorBoundary, FloatingButton } from '~/widgets';
+import { ApiErrorBoundary, Card, FloatingButton, Skeleton } from '~/shared/ui';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
 

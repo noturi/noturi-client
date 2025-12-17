@@ -1,7 +1,8 @@
 import { XStack, useTheme } from 'tamagui';
-import { Typography } from '~/shared/ui';
 
 import { Star } from '@tamagui/lucide-icons';
+
+import { Typography } from './typography';
 
 interface StarRatingProps {
   rating: number;

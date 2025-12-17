@@ -1,4 +1,4 @@
-import { ApiErrorBoundary, Loading } from '~/widgets';
+import { ApiErrorBoundary, Loading } from '~/shared/ui';
 
 import { Suspense } from 'react';
 

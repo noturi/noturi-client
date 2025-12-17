@@ -2,7 +2,7 @@ import { ScrollView, YStack } from 'tamagui';
 import { categoryStatsQuery, overallStatsQuery } from '~/entities/statistics';
 import { CategoryStatsView, OverallStatsView } from '~/entities/statistics/ui/statistics/ui';
 import { Typography } from '~/shared/ui';
-import { Loading } from '~/widgets';
+import { Loading } from '~/shared/ui';
 
 import { useQuery } from '@tanstack/react-query';
 

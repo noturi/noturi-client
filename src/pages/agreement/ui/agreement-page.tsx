@@ -1,7 +1,7 @@
 import { YStack } from 'tamagui';
 import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
 import { Checkbox, Typography } from '~/shared/ui';
-import { SubmitButton } from '~/widgets';
+import { SubmitButton } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Linking } from 'react-native';

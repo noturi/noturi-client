@@ -6,7 +6,7 @@ import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/cat
 import { CategoryButton } from '~/features/categories/ui';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { Button, Form, Input, TextArea } from '~/shared/ui';
-import { FloatingButton, Loading } from '~/widgets';
+import { FloatingButton, Loading } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';

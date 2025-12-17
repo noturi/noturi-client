@@ -1,7 +1,7 @@
 import { toast } from 'sonner-native';
 import { ScrollView, Sheet, View, YStack } from 'tamagui';
 import { Form, Input, Select, Switch, Typography } from '~/shared/ui';
-import { FloatingButton } from '~/widgets/floating-button';
+import { FloatingButton } from '~/shared/ui';
 
 import { useRef, useState } from 'react';
 import type { TextInput } from 'react-native';

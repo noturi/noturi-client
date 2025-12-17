@@ -1,8 +1,9 @@
 import { Spinner, View, XStack } from 'tamagui';
 import { useKeyboard } from '~/shared/lib';
-import { Typography } from '~/shared/ui';
 
 import { Pressable, StyleSheet } from 'react-native';
+
+import { Typography } from './typography';
 
 interface SubmitButtonProps {
   children: React.ReactNode;

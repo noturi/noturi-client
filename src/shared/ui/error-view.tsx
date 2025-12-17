@@ -1,5 +1,6 @@
 import { YStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
+
+import { Typography } from './typography';
 
 interface ErrorViewProps {
   title?: string;

@@ -1,4 +1,4 @@
-import { SubmitButton } from '~/widgets/submit-button';
+import { SubmitButton } from '~/shared/ui';
 
 import type { ComponentProps } from 'react';
 

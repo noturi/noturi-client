@@ -1,5 +1,6 @@
 import { Spinner, YStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
+
+import { Typography } from './typography';
 
 interface LoadingProps {
   text?: string;
