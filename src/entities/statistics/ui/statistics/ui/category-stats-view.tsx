@@ -1,7 +1,7 @@
 import { Separator, XStack, YStack } from 'tamagui';
 import { CategoryStatsResponseDto } from '~/entities/statistics';
 import { Card, Typography } from '~/shared/ui';
-import { StarRating } from '~/widgets';
+import { StarRating } from '~/shared/ui';
 
 interface CategoryStatsViewProps {
   categories?: CategoryStatsResponseDto[];

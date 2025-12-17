@@ -1,7 +1,7 @@
 import { YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
+import { type RatingGroup, RatingGroupCard } from '~/entities/memo/ui';
 import { Typography } from '~/shared/ui';
-import { type RatingGroup, RatingGroupCard } from '~/widgets';
 
 import { useCallback, useEffect, useState } from 'react';
 
