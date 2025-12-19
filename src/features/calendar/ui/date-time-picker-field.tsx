@@ -1,6 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Text, View, XStack, YStack } from 'tamagui';
-import { CALENDAR_COLORS, CALENDAR_THEME } from '~/entities/calendar/ui/calendar-view/constants';
+import { CALENDAR_COLORS, CALENDAR_THEME } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
 

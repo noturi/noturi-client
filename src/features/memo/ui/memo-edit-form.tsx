@@ -3,7 +3,7 @@ import { memoDetailQuery } from '~/entities/memo/api';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { activeCategoriesQuery, useCreateCategoryMutation } from '~/features/categories/api';
-import { CategoryButton } from '~/features/categories/ui';
+import { CategoryButton } from '~/entities/category/ui';
 import { DEFAULT_COLORS } from '~/shared/config';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
