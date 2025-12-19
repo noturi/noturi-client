@@ -1,4 +1,4 @@
-import { useAuth } from '~/application/providers/auth-provider';
+import { useAuth } from '~/entities/auth';
 import type { LoginResponseDto } from '~/entities/user/model/types';
 import { HREFS } from '~/shared/config';
 

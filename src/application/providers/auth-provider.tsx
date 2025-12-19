@@ -1,31 +1,13 @@
-import { type AuthContextType, authStore } from '~/entities/auth';
+import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User } from '~/entities/user';
 import { refreshAccessToken as doRefreshToken } from '~/shared/api/token-refresh';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
 import { tokenEventManager } from '~/shared/model';
 
-import {
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useSyncExternalStore,
-} from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 
 import { router } from 'expo-router';
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const authState = useSyncExternalStore(authStore.subscribe, authStore.getSnapshot);

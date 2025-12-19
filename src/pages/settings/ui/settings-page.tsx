@@ -1,5 +1,5 @@
 import { Separator, XStack, YStack } from 'tamagui';
-import { useAuth } from '~/application/providers/auth-provider';
+import { useAuth } from '~/entities/auth';
 import { LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { NotificationToggle } from '~/features/notification';

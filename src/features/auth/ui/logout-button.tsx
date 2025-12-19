@@ -1,5 +1,5 @@
 import { XStack } from 'tamagui';
-import { useAuth } from '~/application/providers/auth-provider';
+import { useAuth } from '~/entities/auth';
 import { Typography } from '~/shared/ui';
 
 import { Alert } from 'react-native';
