@@ -1,6 +1,6 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
 import type { UICategory } from '~/entities/category/model/types';
-import { CategoryButton } from '~/features/categories/ui/category-button';
+import { CategoryButton } from '~/entities/category/ui/category-button';
 import { Card } from '~/shared/ui';
 
 type CategoryFilterBarProps = {

@@ -1,6 +1,6 @@
 import { XStack, YStack } from 'tamagui';
 import type { SortOption } from '~/entities/category/model/types';
-import { SortButton } from '~/features/categories/ui/sort-button';
+import { SortButton } from '~/entities/category/ui/sort-button';
 
 type SortOptionsBarProps = {
   options: SortOption[];

@@ -1,11 +1,13 @@
 import { ScrollView, XStack, YStack } from 'tamagui';
+import { CategoryButton } from '~/entities/category/ui/category-button';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
-import { CategoryButton } from '~/features/categories/ui/category-button';
 import { useCreateMemoMutation } from '~/features/memo/api/mutations';
+import { DEFAULT_COLORS } from '~/shared/config';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
+import { MESSAGES } from '~/shared/model';
 import { Button, Form, Input, TextArea } from '~/shared/ui';
 import { FloatingButton } from '~/shared/ui';
 
@@ -13,9 +15,6 @@ import { useEffect, useRef, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
-
-import { DEFAULT_COLORS } from '@/shared/config';
-import { MESSAGES } from '@/shared/model';
 
 import { RatingSelector } from './rating-selector';
 
