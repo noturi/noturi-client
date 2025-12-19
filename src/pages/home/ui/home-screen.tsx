@@ -1,5 +1,5 @@
 import { ScrollView, YStack } from 'tamagui';
-import { CalendarDateProvider, CalendarView, type CalendarViewRef } from '~/entities/calendar';
+import { CalendarDateProvider } from '~/entities/calendar';
 import {
   CategoryFilterBar,
   MemoRatingGroupView,
@@ -9,6 +9,7 @@ import {
 } from '~/entities/memo';
 import { HREFS } from '~/shared/config/routes';
 import { ApiErrorBoundary, Card, FloatingButton, Skeleton } from '~/shared/ui';
+import { CalendarView, type CalendarViewRef } from '~/widgets';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
 

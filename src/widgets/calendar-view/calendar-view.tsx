@@ -1,4 +1,7 @@
 import { ScrollView, YStack } from 'tamagui';
+import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
+import { useCalendarDate } from '~/entities/calendar/model';
+import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
 import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
 import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
@@ -10,11 +13,7 @@ import { Calendar, DateData } from 'react-native-calendars';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { calendarMemoMonthlyQuery } from '@/entities/calendar/api/queries';
-import type { CalendarMemo, CreateCalendarMemoDto } from '@/entities/calendar/model/types';
-
-import { useCalendarDate } from '../../model';
-import { CalendarMemoList } from '../calendar-memo-list/ui/calendar-memo-list';
+import { CalendarMemoList } from '../calendar-memo-list';
 import { CALENDAR_THEME } from './constants';
 import { useCalendarMarkings } from './use-calendar-markings';
 

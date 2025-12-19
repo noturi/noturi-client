@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { CalendarMemo } from '~/entities/calendar';
 
-import { CalendarMemo } from '@/entities/calendar';
+import { useMemo } from 'react';
 
 import { CALENDAR_COLORS } from './constants';
 
