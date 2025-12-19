@@ -1,18 +1,17 @@
 import { toast } from 'sonner-native';
 import { ScrollView, Sheet, View, YStack } from 'tamagui';
+import {
+  ALL_DAY_NOTIFICATION_OPTIONS,
+  NOTIFICATION_OPTIONS,
+} from '~/entities/calendar/model/constants';
+import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar/model/types';
+import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { Form, Input, Select, Switch, Typography } from '~/shared/ui';
 import { FloatingButton } from '~/shared/ui';
 
 import { useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
-
-import {
-  ALL_DAY_NOTIFICATION_OPTIONS,
-  NOTIFICATION_OPTIONS,
-} from '@/entities/calendar/model/constants';
-import type { CreateCalendarMemoDto, NotifyBefore } from '@/entities/calendar/model/types';
-import { formatDateTimeForApi, getHoursLater } from '@/shared/lib/format';
 
 import { DateTimePickerField } from './date-time-picker-field';
 

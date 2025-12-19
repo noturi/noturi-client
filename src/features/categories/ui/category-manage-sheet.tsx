@@ -1,6 +1,5 @@
 import { Sheet, YStack } from 'tamagui';
-
-import { Typography } from '@/shared/ui';
+import { Typography } from '~/shared/ui';
 
 import { CategoryManageContent } from './category-manage-content';
 

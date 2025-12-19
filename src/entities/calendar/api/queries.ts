@@ -1,11 +1,10 @@
-import { QUERY_KEYS } from '~/shared/lib';
-
-import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-
 import {
   CalendarMemoListParamsDto,
   CalendarMemoMonthlyParamsDto,
-} from '@/entities/calendar/model/types';
+} from '~/entities/calendar/model/types';
+import { QUERY_KEYS } from '~/shared/lib';
+
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import { calendarMemoApi } from './api';
 

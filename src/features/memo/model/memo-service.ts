@@ -1,6 +1,5 @@
 import { Memo, UIMemo, memoApi } from '~/entities/memo';
-
-import { formatTimeAgo } from '@/shared/lib/format';
+import { formatTimeAgo } from '~/shared/lib/format';
 
 /**
  * 메모 서비스 클래스

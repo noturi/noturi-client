@@ -1,11 +1,10 @@
 import { Sheet, View, XStack, YStack } from 'tamagui';
+import { HREFS } from '~/shared/config';
 import { Typography } from '~/shared/ui';
 
 import { router } from 'expo-router';
 
 import { FileText, Star } from '@tamagui/lucide-icons';
-
-import { HREFS } from '@/shared/config';
 
 interface MemoTypeSelectSheetProps {
   isOpen: boolean;

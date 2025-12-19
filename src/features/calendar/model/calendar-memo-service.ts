@@ -1,7 +1,6 @@
+import type { CreateCalendarMemoDto, UpdateCalendarMemoDto } from '~/entities/calendar/model/types';
 import { NativeCalendarService } from '~/shared/lib/calendar';
 import Logger from '~/shared/lib/logger';
-
-import type { CreateCalendarMemoDto, UpdateCalendarMemoDto } from '@/entities/calendar/model/types';
 
 export class CalendarMemoService {
   // 네이티브 캘린더에서 이벤트 삭제

@@ -1,13 +1,12 @@
 import { KyInstance } from 'ky';
-import { ENDPOINTS, api, toSearchParams } from '~/shared/api';
-
 import {
   CalendarMemo,
   CalendarMemoListParamsDto,
   CalendarMemoListResponseDto,
   CalendarMemoMonthlyParamsDto,
   CalendarMemoMonthlyResponseDto,
-} from '@/entities/calendar/model/types';
+} from '~/entities/calendar/model/types';
+import { ENDPOINTS, api, toSearchParams } from '~/shared/api';
 
 export class CalendarMemoApi {
   private api: KyInstance;
