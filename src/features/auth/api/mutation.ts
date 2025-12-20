@@ -56,3 +56,21 @@ export function useAppleLoginMutation(
     onSettled,
   });
 }
+
+export function useDeleteAccountMutation(
+  options: Pick<
+    UseMutationOptions<void, DefaultError, void>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+
+  return useMutation({
+    mutationKey: ['auth', 'delete-account', ...mutationKey],
+    mutationFn: () => authApi.deleteAccount(),
+    onMutate,
+    onSuccess,
+    onError,
+    onSettled,
+  });
+}

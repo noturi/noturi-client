@@ -1,6 +1,6 @@
 import { Separator, XStack, YStack } from 'tamagui';
 import { useAuth } from '~/entities/auth';
-import { LogoutButton } from '~/features/auth/ui';
+import { DeleteAccountButton, LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { NotificationToggle } from '~/features/notification';
 import { EXTERNAL_LINKS } from '~/shared/config';
@@ -95,6 +95,8 @@ export function SettingsPage() {
       </Card>
 
       <CategoryManageSheet isOpen={openManage} onClose={() => setOpenManage(false)} />
+
+      {isAuthenticated && <DeleteAccountButton />}
     </YStack>
   );
 }

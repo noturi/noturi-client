@@ -18,6 +18,10 @@ class AuthApi {
     const response = await this.api.post('auth/apple/native', { json: data });
     return response.json<LoginResponseDto>();
   }
+
+  async deleteAccount(): Promise<void> {
+    await this.api.delete('users/me');
+  }
 }
 
 export const authApi = new AuthApi(api);
