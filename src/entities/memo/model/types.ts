@@ -42,14 +42,13 @@ export interface MemoListResponseDto {
 export interface MemoListParamsDto {
   page?: number;
   limit?: number;
+  keyword?: string; // 검색 키워드 (제목 또는 내용)
   categoryId?: string;
-  categoryIds?: string[]; // 다중 카테고리 필터링 지원
+  categoryIds?: string[]; // 다중 카테고리 필터링 지원 (클라이언트용)
+  year?: number; // 년도로 필터링
   rating?: number;
   sortBy?: 'createdAt' | 'rating' | 'title';
   sortOrder?: 'asc' | 'desc';
-  search?: string;
-  startDate?: string;
-  endDate?: string;
 }
 
 // 메모 일괄 삭제 요청
