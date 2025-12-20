@@ -14,10 +14,6 @@
       "bundleIdentifier": "com.noturi.app",
       "config": {
         "usesNonExemptEncryption": false
-      },
-      "infoPlist": {
-        "NSCalendarsUsageDescription": "This app needs access to calendar to display events.",
-        "NSRemindersUsageDescription": "This app needs access to reminders to display events."
       }
     },
     "android": {
