@@ -1,5 +1,6 @@
 import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User } from '~/entities/user';
+import { queryClient } from '~/shared/api/query-client';
 import { refreshAccessToken as doRefreshToken } from '~/shared/api/token-refresh';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       authStore.setError(null);
       await authStore.clearAuthTokens();
+      queryClient.clear();
       router.replace(HREFS.login());
     } catch (e) {
       Logger.error('로그아웃 실패:', e);
