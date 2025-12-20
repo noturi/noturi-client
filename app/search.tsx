@@ -18,16 +18,13 @@ export default function SearchScreen() {
   const handleSearch = useCallback(() => {
     if (
       filters.debouncedSearchText.trim() ||
-      filters.selectedCategoryIds.length > 0 ||
+      filters.selectedCategoryId !== undefined ||
+      filters.selectedYear !== undefined ||
       filters.selectedRating !== undefined
     ) {
       memos.refetch();
     }
   }, [filters, memos]);
-
-  const handleClearSearch = useCallback(() => {
-    filters.clearAll();
-  }, [filters]);
 
   const onEndReached = useCallback(() => {
     if (memos.hasNextPage && !memos.isFetchingNextPage) memos.fetchNextPage();
@@ -51,11 +48,12 @@ export default function SearchScreen() {
 
           <ActiveFilters
             categories={categories.list}
-            selectedCategoryIds={filters.selectedCategoryIds}
+            selectedCategoryId={filters.selectedCategoryId}
             selectedRating={filters.selectedRating}
-            onClearAll={handleClearSearch}
-            onClearCategory={(id) => filters.toggleCategoryId(id)}
+            selectedYear={filters.selectedYear}
+            onClearCategory={() => filters.setSelectedCategoryId(undefined)}
             onClearRating={() => filters.setSelectedRating(undefined)}
+            onClearYear={() => filters.setSelectedYear(undefined)}
           />
         </YStack>
       </YStack>
@@ -68,7 +66,7 @@ export default function SearchScreen() {
         animation="quick"
         open={filters.showFilters}
         position={0}
-        snapPoints={[30, 50]}
+        snapPoints={[40, 60]}
         snapPointsMode="percent"
         onOpenChange={(open: boolean) => filters.setShowFilters(open)}
       >
@@ -87,11 +85,13 @@ export default function SearchScreen() {
         >
           <FilterOptions
             categories={categories.list}
-            selectedCategoryIds={filters.selectedCategoryIds}
+            selectedCategoryId={filters.selectedCategoryId}
             selectedRating={filters.selectedRating}
+            selectedYear={filters.selectedYear}
+            setSelectedCategoryId={filters.setSelectedCategoryId}
             setSelectedRating={filters.setSelectedRating}
+            setSelectedYear={filters.setSelectedYear}
             show={true}
-            toggleCategoryId={filters.toggleCategoryId}
           />
         </Sheet.Frame>
       </Sheet>

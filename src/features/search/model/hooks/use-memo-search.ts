@@ -13,8 +13,10 @@ interface FiltersNamespace {
   // state
   searchText: string;
   setSearchText: (text: string) => void;
-  selectedCategoryIds: string[];
-  toggleCategoryId: (id: string) => void;
+  selectedCategoryId: string | undefined;
+  setSelectedCategoryId: (id: string | undefined) => void;
+  selectedYear: number | undefined;
+  setSelectedYear: (year: number | undefined) => void;
   selectedRating: number | undefined;
   setSelectedRating: (rating: number | undefined) => void;
   showFilters: boolean;
@@ -50,8 +52,10 @@ export function useMemoSearch(): UseMemoSearchReturn {
   const {
     searchText,
     setSearchText,
-    selectedCategoryIds,
-    toggleCategoryId,
+    selectedCategoryId,
+    setSelectedCategoryId,
+    selectedYear,
+    setSelectedYear,
     selectedRating,
     setSelectedRating,
     showFilters,
@@ -69,7 +73,13 @@ export function useMemoSearch(): UseMemoSearchReturn {
   const enabled = hasSearchQuery;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch } =
-    useInfiniteMemos({ debouncedSearchText, selectedCategoryIds, selectedRating, enabled });
+    useInfiniteMemos({
+      debouncedSearchText,
+      selectedCategoryId,
+      selectedYear,
+      selectedRating,
+      enabled,
+    });
 
   const transformedMemos = useTransformMemos(data);
 
@@ -89,8 +99,10 @@ export function useMemoSearch(): UseMemoSearchReturn {
     filters: {
       searchText,
       setSearchText,
-      selectedCategoryIds,
-      toggleCategoryId,
+      selectedCategoryId,
+      setSelectedCategoryId,
+      selectedYear,
+      setSelectedYear,
       selectedRating,
       setSelectedRating,
       showFilters,

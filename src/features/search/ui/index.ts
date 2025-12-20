@@ -6,3 +6,4 @@ export * from './filter-options';
 export * from './memo-list';
 export * from './rating-chips';
 export * from './search-input-bar';
+export * from './year-chips';

@@ -8,42 +8,41 @@ interface CategoryLite {
 }
 
 interface ActiveFiltersProps {
-  selectedCategoryIds: string[];
+  selectedCategoryId: string | undefined;
+  selectedYear: number | undefined;
   selectedRating: number | undefined;
   categories: CategoryLite[];
-  onClearCategory: (id: string) => void;
+  onClearCategory: () => void;
+  onClearYear: () => void;
   onClearRating: () => void;
-  onClearAll: () => void;
 }
 
 export function ActiveFilters({
-  selectedCategoryIds,
+  selectedCategoryId,
+  selectedYear,
   selectedRating,
   categories,
   onClearCategory,
+  onClearYear,
   onClearRating,
-  onClearAll,
 }: ActiveFiltersProps) {
-  const hasActiveFilters = selectedCategoryIds.length > 0 || selectedRating !== undefined;
+  const hasActiveFilters =
+    selectedCategoryId !== undefined || selectedYear !== undefined || selectedRating !== undefined;
   if (!hasActiveFilters) return null;
+
+  const categoryName = categories.find((c) => c.id === selectedCategoryId)?.name;
 
   return (
     <XStack alignItems="center" flexWrap="wrap" gap="$1">
-      {selectedCategoryIds.map((id) => (
-        <ActiveFilterChip
-          key={id}
-          label={categories.find((c) => c.id === id)?.name ?? ''}
-          onClear={() => onClearCategory(id)}
-        />
-      ))}
+      {categoryName && <ActiveFilterChip label={categoryName} onClear={onClearCategory} />}
+
+      {selectedYear !== undefined && (
+        <ActiveFilterChip label={`${selectedYear}년`} onClear={onClearYear} />
+      )}
 
       {selectedRating !== undefined && (
         <ActiveFilterChip label={`★ ${selectedRating}`} onClear={onClearRating} />
       )}
-
-      {/* <Button borderRadius="$sm" color="$textSecondary" size="$2" onPress={onClearAll}>
-        모두 지우기
-      </Button> */}
     </XStack>
   );
 }

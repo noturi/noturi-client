@@ -8,15 +8,15 @@ interface CategoryLite {
 
 interface CategoryChipsProps {
   categories: CategoryLite[];
-  selectedCategoryIds?: string[];
-  onToggle: (id: string) => void;
+  selectedCategoryId?: string;
+  onSelect: (id: string | undefined) => void;
 }
 
-export function CategoryChips({
-  categories,
-  selectedCategoryIds = [],
-  onToggle,
-}: CategoryChipsProps) {
+export function CategoryChips({ categories, selectedCategoryId, onSelect }: CategoryChipsProps) {
+  const handlePress = (id: string) => {
+    onSelect(selectedCategoryId === id ? undefined : id);
+  };
+
   return (
     <YStack gap="$1">
       <Typography variant="callout">카테고리</Typography>
@@ -25,15 +25,13 @@ export function CategoryChips({
           {categories.map((category) => (
             <Button
               key={category.id}
-              backgroundColor={selectedCategoryIds.includes(category.id) ? '$primary' : '$surface'}
+              backgroundColor={selectedCategoryId === category.id ? '$primary' : '$surface'}
               borderRadius="$2"
-              color={
-                selectedCategoryIds.includes(category.id) ? '$textOnPrimary' : '$textSecondary'
-              }
+              color={selectedCategoryId === category.id ? '$textOnPrimary' : '$textSecondary'}
               height={32}
               justifyContent="center"
               paddingHorizontal="$1"
-              onPress={() => onToggle(category.id)}
+              onPress={() => handlePress(category.id)}
             >
               {category.name}
             </Button>

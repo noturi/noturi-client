@@ -6,8 +6,10 @@ export interface UseSearchFiltersReturn {
   // state
   searchText: string;
   setSearchText: (text: string) => void;
-  selectedCategoryIds: string[];
-  toggleCategoryId: (id: string) => void;
+  selectedCategoryId: string | undefined;
+  setSelectedCategoryId: (id: string | undefined) => void;
+  selectedYear: number | undefined;
+  setSelectedYear: (year: number | undefined) => void;
   selectedRating: number | undefined;
   setSelectedRating: (rating: number | undefined) => void;
   showFilters: boolean;
@@ -22,32 +24,31 @@ export interface UseSearchFiltersReturn {
 
 export function useSearchFilters(): UseSearchFiltersReturn {
   const [searchText, setSearchText] = useState<string>('');
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>();
+  const [selectedYear, setSelectedYear] = useState<number | undefined>();
   const [selectedRating, setSelectedRating] = useState<number | undefined>();
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
   const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), []);
   const clearAll = useCallback(() => {
     setSearchText('');
-    setSelectedCategoryIds([]);
+    setSelectedCategoryId(undefined);
+    setSelectedYear(undefined);
     setSelectedRating(undefined);
   }, []);
 
-  const toggleCategoryId = useCallback((id: string) => {
-    setSelectedCategoryIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
-  }, []);
-
   const debouncedSearchText = useDebounce(searchText, 500);
-  const hasActiveFilters = selectedCategoryIds.length > 0 || selectedRating !== undefined;
+  const hasActiveFilters =
+    selectedCategoryId !== undefined || selectedYear !== undefined || selectedRating !== undefined;
   const hasSearchQuery = debouncedSearchText.length > 0 || hasActiveFilters;
 
   return {
     searchText,
     setSearchText,
-    selectedCategoryIds,
-    toggleCategoryId,
+    selectedCategoryId,
+    setSelectedCategoryId,
+    selectedYear,
+    setSelectedYear,
     selectedRating,
     setSelectedRating,
     showFilters,

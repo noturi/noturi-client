@@ -4,14 +4,16 @@ import { type InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 interface Params {
   debouncedSearchText: string;
-  selectedCategoryIds: string[];
+  selectedCategoryId: string | undefined;
+  selectedYear: number | undefined;
   selectedRating: number | undefined;
   enabled: boolean;
 }
 
 export function useInfiniteMemos({
   debouncedSearchText,
-  selectedCategoryIds,
+  selectedCategoryId,
+  selectedYear,
   selectedRating,
   enabled,
 }: Params) {
@@ -19,22 +21,24 @@ export function useInfiniteMemos({
     MemoListResponseDto,
     Error,
     InfiniteData<MemoListResponseDto>,
-    [string, string, string, string, string],
+    [string, string, string, string, string, string],
     number
   >({
     queryKey: [
       'memos',
       'search',
       debouncedSearchText,
-      selectedCategoryIds.sort().join(','),
+      selectedCategoryId ?? '',
+      selectedYear?.toString() ?? '',
       selectedRating?.toString() ?? '',
     ],
     queryFn: ({ pageParam }) =>
       memoApi.getMemos({
         page: pageParam,
         limit: 20,
-        search: debouncedSearchText || undefined,
-        categoryIds: selectedCategoryIds,
+        keyword: debouncedSearchText || undefined,
+        categoryId: selectedCategoryId,
+        year: selectedYear,
         rating: selectedRating,
         sortBy: 'createdAt',
         sortOrder: 'desc',
