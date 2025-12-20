@@ -1,7 +1,6 @@
 import { YStack } from 'tamagui';
 import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
-import { Checkbox, Typography } from '~/shared/ui';
-import { SubmitButton } from '~/shared/ui';
+import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Linking } from 'react-native';
@@ -15,7 +14,7 @@ export function AgreementPage() {
   const [agreed, setAgreed] = useState(false);
   const insets = useSafeAreaInsets();
 
-  const handlePrivacyPress = () => {
+  const handleTermsPress = () => {
     Linking.openURL(EXTERNAL_LINKS.PRIVACY_POLICY);
   };
 
@@ -41,9 +40,9 @@ export function AgreementPage() {
 
         <YStack alignItems="center" flexDirection="row" gap="$3" onPress={() => setAgreed(!agreed)}>
           <Checkbox checked={agreed} onCheckedChange={setAgreed} />
-          <YStack alignItems="center" flexDirection="row" gap="$1" onPress={handlePrivacyPress}>
+          <YStack alignItems="center" flexDirection="row" gap="$1" onPress={handleTermsPress}>
             <Typography color="$blue10" variant="body">
-              개인정보처리방침
+              이용약관 및 개인정보처리방침
             </Typography>
             <ExternalLink color="$blue10" size={14} />
           </YStack>

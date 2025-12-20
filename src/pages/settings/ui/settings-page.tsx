@@ -88,7 +88,7 @@ export function SettingsPage() {
           >
             <FileText color="$textSecondary" size="$3" />
             <Typography color="$textPrimary" flex={1} variant="callout">
-              개인정보처리방침
+              이용약관 및 개인정보처리방침
             </Typography>
           </XStack>
         </YStack>
