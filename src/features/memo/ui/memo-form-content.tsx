@@ -8,8 +8,7 @@ import { useCreateMemoMutation } from '~/features/memo/api/mutations';
 import { DEFAULT_COLORS } from '~/shared/config';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
-import { Button, Form, Input, TextArea } from '~/shared/ui';
-import { FloatingButton } from '~/shared/ui';
+import { Button, FloatingButton, Form, Input, TextArea } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';

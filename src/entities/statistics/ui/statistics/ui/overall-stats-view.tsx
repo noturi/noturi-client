@@ -1,7 +1,6 @@
 import { XStack } from 'tamagui';
 import { OverallStatsResponseDto } from '~/entities/statistics';
-import { Card, Typography } from '~/shared/ui';
-import { StarRating } from '~/shared/ui';
+import { Card, StarRating, Typography } from '~/shared/ui';
 
 interface OverallStatsViewProps {
   stats: OverallStatsResponseDto;

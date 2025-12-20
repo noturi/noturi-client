@@ -1,11 +1,10 @@
 import { useTheme } from 'tamagui';
+import { useAuth } from '~/entities/auth';
+import { HREFS } from '~/shared/config';
 import { Loading } from '~/shared/ui';
 
 import { Redirect } from 'expo-router';
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
-
-import { useAuth } from '~/entities/auth';
-import { HREFS } from '~/shared/config';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
