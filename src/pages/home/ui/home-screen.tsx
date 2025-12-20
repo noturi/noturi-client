@@ -1,4 +1,4 @@
-import { ScrollView, YStack } from 'tamagui';
+import { ScrollView, XStack, YStack } from 'tamagui';
 import { CalendarDateProvider } from '~/entities/calendar';
 import {
   CategoryFilterBar,
@@ -9,7 +9,7 @@ import {
 } from '~/entities/memo';
 import { HREFS } from '~/shared/config/routes';
 import { ApiErrorBoundary, Card, FloatingButton, Skeleton } from '~/shared/ui';
-import { CalendarView, type CalendarViewRef } from '~/widgets';
+import { CalendarView, type CalendarViewRef, MemoListHeader } from '~/widgets';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
 
@@ -20,18 +20,40 @@ import { useHomeCategories, useHomeMemos } from '../model';
 interface MemoContentProps {
   selectedView: MemoViewType;
   selectedCategoryId: string | undefined;
+  selectedYear: number | undefined;
+  onYearChange: (year: number | undefined) => void;
   onMemoPress: (memo: UIMemo) => void;
 }
 
-function MemoContent({ selectedView, selectedCategoryId, onMemoPress }: MemoContentProps) {
-  const { memos } = useHomeMemos({ selectedView, selectedCategoryId });
+function MemoContent({
+  selectedView,
+  selectedCategoryId,
+  selectedYear,
+  onYearChange,
+  onMemoPress,
+}: MemoContentProps) {
+  const { memos } = useHomeMemos({ selectedView, selectedCategoryId, selectedYear });
 
-  return <MemoRatingGroupView memos={memos} onMemoPress={onMemoPress} />;
+  return (
+    <MemoRatingGroupView
+      header={<MemoListHeader selectedYear={selectedYear} onYearChange={onYearChange} />}
+      memos={memos}
+      onMemoPress={onMemoPress}
+    />
+  );
 }
 
 function MemoSkeleton() {
   return (
     <YStack gap="$3">
+      <XStack alignItems="center" justifyContent="space-between" paddingHorizontal="$3">
+        <Skeleton borderRadius={4} height={24} width={50} />
+        <XStack alignItems="center" gap="$2">
+          <Skeleton borderRadius={4} height={16} width={16} />
+          <Skeleton borderRadius={4} height={16} width={40} />
+          <Skeleton borderRadius={4} height={16} width={12} />
+        </XStack>
+      </XStack>
       <YStack gap="$4">
         {[1, 2, 3].map((i) => (
           <Card key={i}>
@@ -52,6 +74,7 @@ function MemoSkeleton() {
 
 export function HomeScreen() {
   const [selectedView, setSelectedView] = useState<MemoViewType>('rating');
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined);
   const calendarRef = useRef<CalendarViewRef>(null);
 
   const { categories, selectedCategoryId, handleCategoryPress } = useHomeCategories();
@@ -62,6 +85,10 @@ export function HomeScreen() {
 
   const handleViewChange = useCallback((view: MemoViewType) => {
     setSelectedView(view);
+  }, []);
+
+  const handleYearChange = useCallback((year: number | undefined) => {
+    setSelectedYear(year);
   }, []);
 
   const handleCreateMemoPress = useCallback(() => {
@@ -93,16 +120,16 @@ export function HomeScreen() {
             showsVerticalScrollIndicator={false}
           >
             <YStack gap="$6">
-              {/* 카테고리 필터바 - Suspense 바깥, 바로 보임 */}
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
 
-              {/* 메모 목록 - Suspense 안, 스켈레톤 표시 */}
               <ApiErrorBoundary>
                 <Suspense fallback={<MemoSkeleton />}>
                   <MemoContent
                     selectedCategoryId={selectedCategoryId}
                     selectedView={selectedView}
+                    selectedYear={selectedYear}
                     onMemoPress={handleMemoPress}
+                    onYearChange={handleYearChange}
                   />
                 </Suspense>
               </ApiErrorBoundary>

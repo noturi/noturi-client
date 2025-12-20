@@ -3,10 +3,11 @@ import type { UIMemo } from '~/entities/memo/model/types';
 import { type RatingGroup, RatingGroupCard } from '~/entities/memo/ui';
 import { Typography } from '~/shared/ui';
 
-import { useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 type MemoRatingGroupViewProps = {
   memos: UIMemo[];
+  header?: ReactNode;
   onMemoPress?: (memo: UIMemo) => void;
 };
 
@@ -27,9 +28,8 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
   return groups;
 };
 
-export function MemoRatingGroupView({ memos, onMemoPress }: MemoRatingGroupViewProps) {
+export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGroupViewProps) {
   const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
-
   const ratingGroups = groupMemosByRating(memos);
 
   useEffect(() => {
@@ -64,9 +64,7 @@ export function MemoRatingGroupView({ memos, onMemoPress }: MemoRatingGroupViewP
 
   return (
     <YStack gap="$3">
-      <Typography paddingLeft="$3" variant="headline">
-        메모
-      </Typography>
+      {header}
       <YStack gap="$4" marginBottom="$5">
         {ratingGroups.map((group) => (
           <RatingGroupCard
