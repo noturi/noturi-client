@@ -6,7 +6,6 @@ import {
 } from '~/entities/calendar/model/constants';
 import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar/model/types';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
 
@@ -31,9 +30,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   const [isAllDay, setIsAllDay] = useState(false);
   const [notifyBefore, setNotifyBefore] = useState<NotifyBefore | undefined>(undefined);
 
-  const { currentTheme } = useUserTheme();
-  const bgColor = rgbToHex(currentTheme.colors.bgSecondary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => ['90%'], []);
   const notificationOptions = isAllDay ? ALL_DAY_NOTIFICATION_OPTIONS : NOTIFICATION_OPTIONS;
@@ -101,13 +98,13 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgSecondary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}

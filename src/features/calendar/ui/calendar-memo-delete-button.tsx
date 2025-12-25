@@ -1,7 +1,6 @@
 import { MoreVertical, Trash2 } from 'lucide-react-native';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { useToast } from '~/shared/lib';
 import { Typography } from '~/shared/ui';
 
@@ -15,11 +14,7 @@ interface CalendarMemoDeleteButtonProps {
 export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonProps) {
   const [showMenu, setShowMenu] = useState(false);
   const toast = useToast();
-  const { currentTheme } = useUserTheme();
-
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
-  const bgPrimary = rgbToHex(currentTheme.colors.bgPrimary);
-  const borderColor = rgbToHex(currentTheme.colors.border);
+  const { hexColors } = useUserTheme();
 
   const deleteMutation = useDeleteCalendarMemo({
     onSuccess: () => {
@@ -50,7 +45,7 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
     <View className="relative">
       <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
         <View className="p-2">
-          <MoreVertical color={textMuted} size={18} />
+          <MoreVertical color={hexColors.textMuted} size={18} />
         </View>
       </TouchableOpacity>
 
@@ -59,8 +54,8 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
           <View
             className="absolute right-0 top-8 z-[999999] min-w-[120px] rounded-3"
             style={{
-              backgroundColor: bgPrimary,
-              borderColor: borderColor,
+              backgroundColor: hexColors.bgPrimary,
+              borderColor: hexColors.border,
               borderWidth: 1,
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 2 },

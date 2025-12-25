@@ -1,6 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { CALENDAR_COLORS, CALENDAR_THEME } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
@@ -29,11 +28,7 @@ export function DateTimePickerField({
 }: DateTimePickerFieldProps) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const { currentTheme } = useUserTheme();
-
-  const surfaceColor = rgbToHex(currentTheme.colors.surface);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const textColor = rgbToHex(currentTheme.colors.textPrimary);
+  const { hexColors } = useUserTheme();
 
   const handleDatePress = () => {
     setShowTimePicker(false);
@@ -74,10 +69,10 @@ export function DateTimePickerField({
           <Text
             className="h-11 rounded-5 text-center leading-[42px]"
             style={{
-              backgroundColor: surfaceColor,
-              borderColor: borderColor,
+              backgroundColor: hexColors.surface,
+              borderColor: hexColors.border,
               borderWidth: 1,
-              color: textColor,
+              color: hexColors.textPrimary,
               fontSize: 16,
             }}
           >
@@ -90,10 +85,10 @@ export function DateTimePickerField({
             <Text
               className="h-11 min-w-20 rounded-5 text-center leading-[42px]"
               style={{
-                backgroundColor: surfaceColor,
-                borderColor: borderColor,
+                backgroundColor: hexColors.surface,
+                borderColor: hexColors.border,
                 borderWidth: 1,
-                color: textColor,
+                color: hexColors.textPrimary,
                 fontSize: 16,
               }}
             >
@@ -105,7 +100,7 @@ export function DateTimePickerField({
 
       {showDatePicker && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View className="rounded-4 pt-3" style={{ backgroundColor: surfaceColor }}>
+          <View className="rounded-4 pt-3" style={{ backgroundColor: hexColors.surface }}>
             <Calendar
               current={dateTime.toISOString().split('T')[0]}
               markedDates={{
