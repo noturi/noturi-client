@@ -1,5 +1,4 @@
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, ScrollView, View } from 'react-native';
@@ -16,11 +15,7 @@ interface CategoryChipsProps {
 }
 
 export function CategoryChips({ categories, selectedCategoryId, onSelect }: CategoryChipsProps) {
-  const { currentTheme } = useUserTheme();
-  const primaryColor = rgbToHex(currentTheme.colors.primary);
-  const primaryTextColor = rgbToHex(currentTheme.colors.primaryText);
-  const surfaceColor = rgbToHex(currentTheme.colors.surface);
-  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
+  const { hexColors } = useUserTheme();
 
   const handlePress = (id: string) => {
     onSelect(selectedCategoryId === id ? undefined : id);
@@ -38,11 +33,14 @@ export function CategoryChips({ categories, selectedCategoryId, onSelect }: Cate
                 key={category.id}
                 className="h-8 items-center justify-center rounded-2 px-3"
                 style={{
-                  backgroundColor: isSelected ? primaryColor : surfaceColor,
+                  backgroundColor: isSelected ? hexColors.primary : hexColors.surface,
                 }}
                 onPress={() => handlePress(category.id)}
               >
-                <Typography color={isSelected ? primaryTextColor : textSecondary} variant="callout">
+                <Typography
+                  color={isSelected ? hexColors.primaryText : hexColors.textSecondary}
+                  variant="callout"
+                >
                   {category.name}
                 </Typography>
               </Pressable>

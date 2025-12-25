@@ -1,7 +1,6 @@
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Loading } from '~/shared/ui';
 
 import { useCallback } from 'react';
@@ -14,19 +13,18 @@ interface MemoListProps {
 }
 
 export function MemoList({ memos, onEndReached, isFetchingNextPage }: MemoListProps) {
-  const { currentTheme } = useUserTheme();
-  const borderColor = rgbToHex(currentTheme.colors.border);
+  const { hexColors } = useUserTheme();
 
   const renderItem = useCallback(
     ({ item, index }: { item: UIMemo; index: number }) => (
       <View key={item.id}>
         <MemoItem memo={item} />
         {index < memos.length - 1 && (
-          <View className="h-px" style={{ backgroundColor: borderColor }} />
+          <View className="h-px" style={{ backgroundColor: hexColors.border }} />
         )}
       </View>
     ),
-    [memos, borderColor],
+    [memos, hexColors.border],
   );
 
   const renderFooter = useCallback(() => {

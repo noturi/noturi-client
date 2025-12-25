@@ -1,6 +1,5 @@
 import { Star } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
@@ -11,12 +10,7 @@ interface RatingChipsProps {
 }
 
 export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
-  const { currentTheme } = useUserTheme();
-  const primaryColor = rgbToHex(currentTheme.colors.primary);
-  const primaryTextColor = rgbToHex(currentTheme.colors.primaryText);
-  const surfaceColor = rgbToHex(currentTheme.colors.surface);
-  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
-  const textPrimary = rgbToHex(currentTheme.colors.textPrimary);
+  const { hexColors } = useUserTheme();
 
   // Rating star color (amber)
   const starColor = '#f59e0b';
@@ -32,12 +26,15 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
               key={rating}
               className="h-8 flex-row items-center justify-center gap-1 rounded-5 px-2"
               style={{
-                backgroundColor: isSelected ? primaryColor : surfaceColor,
+                backgroundColor: isSelected ? hexColors.primary : hexColors.surface,
               }}
               onPress={() => onSelect(selectedRating === rating ? undefined : rating)}
             >
               <Star color={starColor} fill={starColor} size={16} />
-              <Typography color={isSelected ? primaryTextColor : textPrimary} variant="callout">
+              <Typography
+                color={isSelected ? hexColors.primaryText : hexColors.textPrimary}
+                variant="callout"
+              >
                 {rating}
               </Typography>
             </Pressable>
