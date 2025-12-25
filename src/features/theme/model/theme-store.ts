@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 export interface ThemePreset {
   id: string;
   name: string;
+  isDark: boolean;
   colors: {
     // 배경
     bgPrimary: string;
@@ -27,6 +28,7 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'light',
     name: '라이트',
+    isDark: false,
     colors: {
       bgPrimary: '255 255 255',
       bgSecondary: '245 245 245',
@@ -43,6 +45,7 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'dark',
     name: '다크',
+    isDark: true,
     colors: {
       bgPrimary: '18 18 18',
       bgSecondary: '30 30 30',
@@ -59,6 +62,7 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'sepia',
     name: '세피아',
+    isDark: false,
     colors: {
       bgPrimary: '251 248 241',
       bgSecondary: '245 240 230',
@@ -75,6 +79,7 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'navy',
     name: '네이비',
+    isDark: true,
     colors: {
       bgPrimary: '15 23 42',
       bgSecondary: '30 41 59',
@@ -91,6 +96,7 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'forest',
     name: '포레스트',
+    isDark: true,
     colors: {
       bgPrimary: '20 30 26',
       bgSecondary: '32 45 38',
@@ -171,4 +177,9 @@ function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
 // 프리셋 ID -> hex 색상 맵 (앱 시작 시 한번만 계산)
 export const PRESET_HEX_COLORS: Record<string, HexColors> = Object.fromEntries(
   THEME_PRESETS.map((preset) => [preset.id, convertColorsToHex(preset.colors)]),
+);
+
+// 프리셋 ID -> isDark 맵
+export const PRESET_IS_DARK: Record<string, boolean> = Object.fromEntries(
+  THEME_PRESETS.map((preset) => [preset.id, preset.isDark]),
 );

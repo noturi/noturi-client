@@ -16,6 +16,7 @@ import {
   DEFAULT_THEME_ID,
   HexColors,
   PRESET_HEX_COLORS,
+  PRESET_IS_DARK,
   THEME_PRESETS,
   ThemePreset,
   themeStore,
@@ -23,6 +24,7 @@ import {
 
 interface ThemeContextValue {
   hexColors: HexColors;
+  isDark: boolean;
   themeId: string;
   isLoading: boolean;
   setTheme: (themeId: string) => Promise<void>;
@@ -41,6 +43,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
   const hexColors = PRESET_HEX_COLORS[themeId];
+  const isDark = PRESET_IS_DARK[themeId];
 
   useEffect(() => {
     themeStore.getThemeId().then((stored) => {
@@ -57,12 +60,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const contextValue = useMemo(
     () => ({
       hexColors,
+      isDark,
       themeId,
       isLoading,
       setTheme,
       presets: THEME_PRESETS,
     }),
-    [hexColors, themeId, isLoading, setTheme],
+    [hexColors, isDark, themeId, isLoading, setTheme],
   );
 
   // Create CSS variables style object using NativeWind's vars()

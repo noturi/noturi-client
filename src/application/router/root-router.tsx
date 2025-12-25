@@ -9,14 +9,11 @@ import { StatusBar } from 'expo-status-bar';
 import { ROUTES } from '../../shared/config';
 
 export function RootRouter() {
-  const { hexColors, themeId } = useUserTheme();
-
-  // 어두운 테마인지 확인 (상태바 스타일 결정용)
-  const isDarkTheme = ['dark', 'navy', 'forest'].includes(themeId);
+  const { hexColors, isDark } = useUserTheme();
 
   return (
     <>
-      <StatusBar style={isDarkTheme ? 'light' : 'dark'} />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerStyle: {
