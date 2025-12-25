@@ -1,5 +1,6 @@
-import { useTheme } from 'tamagui';
 import { useAuth } from '~/entities/auth';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { HREFS } from '~/shared/config';
 import { Loading } from '~/shared/ui';
 
@@ -8,7 +9,7 @@ import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
-  const theme = useTheme();
+  const { currentTheme } = useUserTheme();
 
   if (isInitialLoading) {
     return <Loading />;
@@ -18,8 +19,25 @@ export function TabsRouter() {
     return <Redirect href={HREFS.login()} />;
   }
 
+  // 테마 색상을 hex로 변환
+  const primaryColor = rgbToHex(currentTheme.colors.primary);
+  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
+  const textMutedColor = rgbToHex(currentTheme.colors.textMuted);
+
   return (
-    <NativeTabs disableTransparentOnScrollEdge tintColor={String(theme.primary.val)}>
+    <NativeTabs
+      disableTransparentOnScrollEdge
+      backgroundColor={bgColor}
+      tintColor={primaryColor}
+      iconColor={{
+        default: textMutedColor,
+        selected: primaryColor,
+      }}
+      labelStyle={{
+        default: { color: textMutedColor },
+        selected: { color: primaryColor },
+      }}
+    >
       <NativeTabs.Trigger name="index">
         <Icon drawable="ic_menu_home" sf={{ default: 'house', selected: 'house.fill' }} />
         <Label>홈</Label>

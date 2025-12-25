@@ -1,4 +1,3 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { CalendarDateProvider } from '~/entities/calendar';
 import {
   CategoryFilterBar,
@@ -12,6 +11,7 @@ import { ApiErrorBoundary, Card, FloatingButton, Skeleton } from '~/shared/ui';
 import { CalendarView, type CalendarViewRef, MemoListHeader } from '~/widgets';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -45,30 +45,30 @@ function MemoContent({
 
 function MemoSkeleton() {
   return (
-    <YStack gap="$3">
-      <XStack alignItems="center" justifyContent="space-between" paddingHorizontal="$3">
+    <View className="gap-3">
+      <View className="flex-row items-center justify-between px-3">
         <Skeleton borderRadius={4} height={24} width={50} />
-        <XStack alignItems="center" gap="$2">
+        <View className="flex-row items-center gap-2">
           <Skeleton borderRadius={4} height={16} width={16} />
           <Skeleton borderRadius={4} height={16} width={40} />
           <Skeleton borderRadius={4} height={16} width={12} />
-        </XStack>
-      </XStack>
-      <YStack gap="$4">
+        </View>
+      </View>
+      <View className="gap-4">
         {[1, 2, 3].map((i) => (
           <Card key={i}>
-            <YStack gap="$3" padding="$3">
+            <View className="gap-3 p-3">
               <Skeleton borderRadius={4} height={20} width={80} />
-              <YStack gap="$2">
+              <View className="gap-2">
                 <Skeleton height={16} width="90%" />
                 <Skeleton height={16} width="75%" />
                 <Skeleton height={16} width="60%" />
-              </YStack>
-            </YStack>
+              </View>
+            </View>
           </Card>
         ))}
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }
 
@@ -100,26 +100,19 @@ export function HomeScreen() {
   }, [selectedView]);
 
   return (
-    <YStack
-      backgroundColor="$backgroundSecondary"
-      flex={1}
-      gap="$4"
-      paddingHorizontal="$4"
-      paddingTop="$4"
-      position="relative"
-    >
+    <View className="relative flex-1 gap-4 bg-bg-secondary px-4 pt-4">
       <Card>
         <MemoViewToggle selectedView={selectedView} onViewChange={handleViewChange} />
       </Card>
 
-      <YStack flex={1}>
+      <View className="flex-1">
         {selectedView === 'rating' && (
           <ScrollView
             contentContainerStyle={{ paddingBottom: 200 }}
-            flex={1}
+            style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
           >
-            <YStack gap="$6">
+            <View className="gap-6">
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
 
               <ApiErrorBoundary>
@@ -133,7 +126,7 @@ export function HomeScreen() {
                   />
                 </Suspense>
               </ApiErrorBoundary>
-            </YStack>
+            </View>
           </ScrollView>
         )}
 
@@ -142,11 +135,11 @@ export function HomeScreen() {
             <CalendarView ref={calendarRef} />
           </CalendarDateProvider>
         )}
-      </YStack>
+      </View>
 
-      <YStack bottom={140} position="absolute" right="$4">
+      <View className="absolute bottom-[140px] right-4">
         <FloatingButton onPress={handleCreateMemoPress} />
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

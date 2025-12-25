@@ -1,10 +1,10 @@
-import { XStack } from 'tamagui';
+import { Bell } from 'lucide-react-native';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Switch, Typography } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
-import { Alert, Linking } from 'react-native';
-
-import { Bell } from '@tamagui/lucide-icons';
+import { Alert, Linking, View } from 'react-native';
 
 import { notificationService } from '../model';
 
@@ -22,6 +22,9 @@ const showSettingsAlert = () => {
 export function NotificationToggle() {
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { currentTheme } = useUserTheme();
+
+  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
 
   useEffect(() => {
     notificationService.isNotificationEnabled().then(setEnabled);
@@ -55,18 +58,14 @@ export function NotificationToggle() {
   };
 
   return (
-    <XStack
-      alignItems="center"
-      borderRadius="$5"
-      gap="$3"
-      paddingHorizontal="$4"
-      paddingVertical="$3"
-    >
-      <Bell color="$textSecondary" size="$3" />
-      <Typography color="$textPrimary" flex={1} variant="callout">
-        알림
-      </Typography>
+    <View className="flex-row items-center gap-3 rounded-5 px-4 py-3">
+      <Bell color={textSecondary} size={20} />
+      <View className="flex-1">
+        <Typography className="text-text-primary" variant="callout">
+          알림
+        </Typography>
+      </View>
       <Switch checked={enabled} disabled={loading} onCheckedChange={handleToggle} />
-    </XStack>
+    </View>
   );
 }
