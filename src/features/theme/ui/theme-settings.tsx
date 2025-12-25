@@ -1,12 +1,12 @@
+import { Check, ChevronDown, ChevronUp, Palette } from 'lucide-react-native';
+import { Card } from '~/shared/ui/card';
+import { Typography } from '~/shared/ui/typography';
+
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { Check, ChevronDown, ChevronUp, Palette } from 'lucide-react-native';
-
-import { Card, Typography } from '~/shared/ui';
-
 import { useUserTheme } from '../model/theme-context';
-import { rgbToHex, ThemePreset } from '../model/theme-store';
+import { ThemePreset, rgbToHex } from '../model/theme-store';
 
 interface ThemePreviewProps {
   preset: ThemePreset;
@@ -35,10 +35,7 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
           className="h-[60px] w-full justify-center rounded-4 border p-2"
           style={{ backgroundColor: bgColor, borderColor }}
         >
-          <View
-            className="mb-1 h-2 w-[60%] rounded-2"
-            style={{ backgroundColor: accentColor }}
-          />
+          <View className="mb-1 h-2 w-[60%] rounded-2" style={{ backgroundColor: accentColor }} />
           <View
             className="h-1 w-[80%] rounded-1"
             style={{ backgroundColor: textColor, opacity: 0.6 }}

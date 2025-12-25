@@ -1,7 +1,8 @@
-import { Button, Typography } from '~/shared/ui';
-
 import React, { Component, ReactNode } from 'react';
 import { View } from 'react-native';
+
+import { Button } from './button';
+import { Typography } from './typography';
 
 interface Props {
   children: ReactNode;
