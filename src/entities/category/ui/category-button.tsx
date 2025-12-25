@@ -1,9 +1,10 @@
-import { XStack } from 'tamagui';
 import type { UICategory } from '~/entities/category/model/types';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 interface CategoryButtonProps {
   category: UICategory;
@@ -11,7 +12,17 @@ interface CategoryButtonProps {
 }
 
 export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+  const { currentTheme } = useUserTheme();
+
+  // 테마 색상
+  const accentColor = rgbToHex(currentTheme.colors.accent);
+  const surfaceBg = rgbToHex(currentTheme.colors.surface);
+  const borderColor = rgbToHex(currentTheme.colors.border);
+  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
+  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+
+  const isActive = category.active;
 
   return (
     <Pressable
@@ -21,52 +32,32 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         opacity: pressed ? 0.95 : 1,
       })}
       onPress={onPress}
-      onPressIn={() => setIsHovered(true)}
-      onPressOut={() => setIsHovered(false)}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
     >
-      <XStack
-        alignItems="center"
-        backgroundColor={
-          isHovered
-            ? category.active
-              ? '$primaryHover'
-              : '$surfaceHover'
-            : category.active
-              ? '$textPrimary'
-              : '$surface'
-        }
-        borderColor={
-          isHovered
-            ? category.active
-              ? '$primaryHover'
-              : '$borderHover'
-            : category.active
-              ? '$textPrimary'
-              : '$border'
-        }
-        borderRadius="$4"
-        borderWidth={1}
-        gap="$2"
-        paddingHorizontal="$3"
-        paddingVertical="$2"
+      <View
+        className="flex-row items-center gap-2 rounded-4 border px-3 py-2"
+        style={{
+          backgroundColor: surfaceBg,
+          borderColor: isActive ? accentColor : borderColor,
+          opacity: isPressed ? 0.8 : 1,
+        }}
       >
         <Typography
-          color={category.active ? '$textOnPrimary' : '$textSecondary'}
-          pointerEvents="none"
+          style={{ color: isActive ? accentColor : textSecondary }}
           variant="caption1"
         >
           {category.name}
         </Typography>
         {category.count > 0 && (
           <Typography
-            color={category.active ? '$textOnPrimary' : '$textMuted'}
-            pointerEvents="none"
+            style={{ color: isActive ? accentColor : textMuted }}
             variant="caption1"
           >
             {category.count}
           </Typography>
         )}
-      </XStack>
+      </View>
     </Pressable>
   );
 };

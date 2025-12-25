@@ -1,10 +1,10 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { z } from 'zod';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { useForm } from '~/shared/lib';
 import { Button, Form, Input } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import type { TextInput } from 'react-native';
 
 import { useQuery } from '@tanstack/react-query';
@@ -37,7 +37,6 @@ export const CategoryManageContent = ({
     }),
   });
 
-  // 자동 포커스 (shouldAutoFocus가 true일 때만)
   useEffect(() => {
     if (!shouldAutoFocus || !isFormVisible) return;
 
@@ -71,7 +70,7 @@ export const CategoryManageContent = ({
   };
 
   return (
-    <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
+    <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
       <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <Form>
           <Form.Field>
@@ -82,8 +81,8 @@ export const CategoryManageContent = ({
             )}
 
             {isFormVisible && (
-              <XStack alignItems="center" gap="$1" marginTop="$2">
-                <YStack flex={1}>
+              <View className="mt-2 flex-row items-center gap-1">
+                <View className="flex-1">
                   <Form.Field
                     error={
                       form.shouldShowError('categoryName') ? form.errors.categoryName : undefined
@@ -100,8 +99,8 @@ export const CategoryManageContent = ({
                       onFocus={() => form.clearError('categoryName')}
                     />
                   </Form.Field>
-                </YStack>
-                <XStack alignItems="center" gap="$1">
+                </View>
+                <View className="flex-row items-center gap-1">
                   <CategoryCreateButton
                     isValid={form.isValid}
                     name={form.values.categoryName}
@@ -111,14 +110,13 @@ export const CategoryManageContent = ({
                   <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
                     취소
                   </Button>
-                </XStack>
-              </XStack>
+                </View>
+              </View>
             )}
           </Form.Field>
 
-          {/* 기존 카테고리 목록 */}
           <Form.Field label="기존 카테고리">
-            <XStack flexWrap="wrap" gap="$3">
+            <View className="flex-row flex-wrap gap-3">
               {categories.map((category) => (
                 <CategoryDeleteButton
                   key={category.id}
@@ -127,10 +125,10 @@ export const CategoryManageContent = ({
                   disabled={categories.length <= 1}
                 />
               ))}
-            </XStack>
+            </View>
           </Form.Field>
         </Form>
       </ScrollView>
-    </YStack>
+    </View>
   );
 };

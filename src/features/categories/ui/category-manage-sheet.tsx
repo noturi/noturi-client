@@ -1,5 +1,10 @@
-import { Sheet, YStack } from 'tamagui';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
+
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { View } from 'react-native';
 
 import { CategoryManageContent } from './category-manage-content';
 
@@ -9,37 +14,71 @@ interface CategoryManageSheetProps {
 }
 
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
-  return (
-    <Sheet
-      dismissOnSnapToBottom
-      modal
-      animation="quick"
-      open={isOpen}
-      snapPoints={[60, 40]}
-      snapPointsMode="percent"
-      onOpenChange={onClose}
-    >
-      <Sheet.Overlay
-        animation="quick"
-        backgroundColor="$backgroundOverlay"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { currentTheme } = useUserTheme();
+
+  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
+  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+
+  const snapPoints = useMemo(() => ['40%', '60%'], []);
+
+  useEffect(() => {
+    if (isOpen) {
+      bottomSheetRef.current?.expand();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [isOpen]);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="close"
       />
-      <Sheet.Frame
-        backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$6"
-        borderTopRightRadius="$6"
-      >
-        <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
-          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
-        </YStack>
-        <YStack gap="$4" padding="$4" paddingBottom="$6">
-          <Typography textAlign="center" variant="headline">
+    ),
+    [],
+  );
+
+  const handleSheetChanges = useCallback(
+    (index: number) => {
+      if (index === -1) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
+
+  return (
+    <BottomSheet
+      ref={bottomSheetRef}
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{
+        backgroundColor: bgColor,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+      }}
+      enablePanDownToClose
+      handleIndicatorStyle={{
+        backgroundColor: textMuted,
+        width: 36,
+        height: 4,
+      }}
+      index={-1}
+      snapPoints={snapPoints}
+      onChange={handleSheetChanges}
+    >
+      <BottomSheetView style={{ flex: 1 }}>
+        <View className="gap-4 p-4 pb-6">
+          <Typography className="text-center" variant="headline">
             카테고리 관리
           </Typography>
-        </YStack>
+        </View>
         <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
-      </Sheet.Frame>
-    </Sheet>
+      </BottomSheetView>
+    </BottomSheet>
   );
 };

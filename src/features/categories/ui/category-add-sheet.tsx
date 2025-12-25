@@ -1,10 +1,12 @@
-import { Sheet, Spinner, XStack, YStack } from 'tamagui';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { X } from 'lucide-react-native';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { Button, Input, Typography } from '~/shared/ui';
 
-import { useState } from 'react';
-
-import { X } from '@tamagui/lucide-icons';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 interface CategoryAddSheetProps {
   isOpen: boolean;
@@ -13,7 +15,26 @@ interface CategoryAddSheetProps {
 }
 
 export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddSheetProps) => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const [categoryName, setCategoryName] = useState('');
+  const { currentTheme } = useUserTheme();
+
+  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
+  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const borderColor = rgbToHex(currentTheme.colors.border);
+  const accentColor = rgbToHex(currentTheme.colors.accent);
+  const surfaceColor = rgbToHex(currentTheme.colors.surface);
+  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
+
+  const snapPoints = useMemo(() => ['40%'], []);
+
+  useEffect(() => {
+    if (isOpen) {
+      bottomSheetRef.current?.expand();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [isOpen]);
 
   const createCategoryMutation = useCreateCategoryMutation({
     onSuccess: (newCategory) => {
@@ -35,94 +56,100 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
     onClose();
   };
 
-  return (
-    <Sheet
-      dismissOnSnapToBottom
-      modal
-      animation="quick"
-      open={isOpen}
-      snapPoints={[40]}
-      snapPointsMode="percent"
-      onOpenChange={handleClose}
-    >
-      <Sheet.Overlay
-        animation="quick"
-        backgroundColor="$backgroundOverlay"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="close"
       />
-      <Sheet.Frame
-        backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$2xl"
-        borderTopRightRadius="$2xl"
-      >
+    ),
+    [],
+  );
+
+  const handleSheetChanges = useCallback(
+    (index: number) => {
+      if (index === -1) {
+        handleClose();
+      }
+    },
+    [handleClose],
+  );
+
+  return (
+    <BottomSheet
+      ref={bottomSheetRef}
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{
+        backgroundColor: bgColor,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+      }}
+      enablePanDownToClose
+      handleIndicatorStyle={{
+        backgroundColor: textMuted,
+        width: 36,
+        height: 4,
+      }}
+      index={-1}
+      snapPoints={snapPoints}
+      onChange={handleSheetChanges}
+    >
+      <BottomSheetView style={{ flex: 1 }}>
         {/* Header */}
-        <XStack
-          alignItems="center"
-          borderBottomColor="$border"
-          borderBottomWidth={1}
-          justifyContent="space-between"
-          paddingHorizontal="$5"
-          paddingVertical="$4"
+        <View
+          className="flex-row items-center justify-between px-5 py-4"
+          style={{ borderBottomColor: borderColor, borderBottomWidth: 1 }}
         >
           <Typography variant="headline">새 카테고리 추가</Typography>
-          <Button
-            backgroundColor="$backgroundTransparent"
-            color="$textSecondary"
-            onPress={handleClose}
-          >
+          <Button variant="ghost" onPress={handleClose}>
             취소
           </Button>
-        </XStack>
+        </View>
 
         {/* Content */}
-        <YStack gap="$4" padding="$5">
-          <YStack gap="$2">
+        <View className="gap-4 p-5">
+          <View className="gap-2">
             <Typography variant="callout">카테고리 이름</Typography>
             <Input
-              backgroundColor="$backgroundPrimary"
-              borderColor="$border"
-              borderRadius="$4"
-              borderWidth={1}
-              color="$textPrimary"
-              fontSize="$3"
               maxLength={20}
-              paddingHorizontal="$4"
-              paddingVertical="$3"
               placeholder="카테고리 이름을 입력하세요"
-              placeholderTextColor="$textMuted"
               value={categoryName}
               onChangeText={setCategoryName}
             />
-          </YStack>
+          </View>
 
-          <XStack gap="$3" marginTop="$2">
+          <View className="mt-2 flex-row gap-3">
             <Button
-              backgroundColor="$surface"
-              borderColor="$border"
-              borderWidth={1}
-              color="$textSecondary"
-              flex={1}
-              icon={<X size="$3" />}
+              className="flex-1"
+              style={{
+                backgroundColor: surfaceColor,
+                borderColor: borderColor,
+                borderWidth: 1,
+              }}
               onPress={handleClose}
-            />
+            >
+              <X color={textSecondary} size={20} />
+            </Button>
             <Button
-              backgroundColor="$accent"
-              color="$textOnAccent"
+              className="flex-1"
               disabled={!categoryName.trim() || createCategoryMutation.isPending}
-              flex={1}
-              icon={
-                createCategoryMutation.isPending ? (
-                  <Spinner color="$textOnAccent" size="small" />
-                ) : undefined
-              }
+              style={{ backgroundColor: accentColor }}
               onPress={handleCreate}
             >
-              {createCategoryMutation.isPending ? '생성 중...' : '생성'}
+              {createCategoryMutation.isPending ? (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
+                <Typography color="white" variant="callout">
+                  생성
+                </Typography>
+              )}
             </Button>
-          </XStack>
-        </YStack>
-      </Sheet.Frame>
-    </Sheet>
+          </View>
+        </View>
+      </BottomSheetView>
+    </BottomSheet>
   );
 };

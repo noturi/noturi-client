@@ -1,6 +1,7 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { Category } from '~/entities/category/model/types';
 import { Button, Input, Typography } from '~/shared/ui';
+
+import { ScrollView, View } from 'react-native';
 
 interface CategorySelectorProps {
   categories: Category[];
@@ -18,35 +19,33 @@ export const CategorySelector = ({
   onNewCategoryChange,
 }: CategorySelectorProps) => {
   return (
-    <YStack gap="$2">
+    <View className="gap-2">
       <Typography variant="headline">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$2">
+        <View className="flex-row gap-2">
           {categories.map((category) => (
             <Button
               key={category.id}
-              size="$2"
+              size="sm"
               variant={selectedCategory === category.name ? 'primary' : 'ghost'}
               onPress={() => onSelectCategory(category.name)}
             >
               {category.name}
             </Button>
           ))}
-          <Button size="$2" variant="ghost" onPress={() => onSelectCategory('')}>
+          <Button size="sm" variant="ghost" onPress={() => onSelectCategory('')}>
             + 추가
           </Button>
-        </XStack>
+        </View>
       </ScrollView>
 
       {!selectedCategory && (
         <Input
-          paddingVertical="$2"
           placeholder="새 카테고리 입력"
-          placeholderTextColor="$textMuted"
           value={newCategory}
           onChangeText={onNewCategoryChange}
         />
       )}
-    </YStack>
+    </View>
   );
 };
