@@ -1,6 +1,5 @@
 import type { UICategory } from '~/entities/category/model/types';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -13,14 +12,7 @@ interface CategoryButtonProps {
 
 export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
-  const { currentTheme } = useUserTheme();
-
-  // 테마 색상
-  const accentColor = rgbToHex(currentTheme.colors.accent);
-  const surfaceBg = rgbToHex(currentTheme.colors.surface);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   const isActive = category.active;
 
@@ -38,16 +30,22 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
       <View
         className="flex-row items-center gap-2 rounded-4 border px-3 py-2"
         style={{
-          backgroundColor: surfaceBg,
-          borderColor: isActive ? accentColor : borderColor,
+          backgroundColor: hexColors.surface,
+          borderColor: isActive ? hexColors.accent : hexColors.border,
           opacity: isPressed ? 0.8 : 1,
         }}
       >
-        <Typography style={{ color: isActive ? accentColor : textSecondary }} variant="caption1">
+        <Typography
+          style={{ color: isActive ? hexColors.accent : hexColors.textSecondary }}
+          variant="caption1"
+        >
           {category.name}
         </Typography>
         {category.count > 0 && (
-          <Typography style={{ color: isActive ? accentColor : textMuted }} variant="caption1">
+          <Typography
+            style={{ color: isActive ? hexColors.accent : hexColors.textMuted }}
+            variant="caption1"
+          >
             {category.count}
           </Typography>
         )}

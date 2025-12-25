@@ -1,6 +1,5 @@
 import { Calendar, Star } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
@@ -51,29 +50,26 @@ function ToggleButton({
 }
 
 export function MemoViewToggle({ selectedView, onViewChange }: MemoViewToggleProps) {
-  const { currentTheme } = useUserTheme();
-  const accentColor = rgbToHex(currentTheme.colors.accent);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   return (
     <View className="flex-row gap-4 px-4 py-2">
       <ToggleButton
-        accentColor={accentColor}
-        borderColor={borderColor}
+        accentColor={hexColors.accent}
+        borderColor={hexColors.border}
         icon={<Star color="#ebd759" fill="#ebd759" size={16} />}
         isActive={selectedView === 'rating'}
         label="메모"
-        textMuted={textMuted}
+        textMuted={hexColors.textMuted}
         onPress={() => onViewChange('rating')}
       />
       <ToggleButton
-        accentColor={accentColor}
-        borderColor={borderColor}
+        accentColor={hexColors.accent}
+        borderColor={hexColors.border}
         icon={<Calendar color="#3b82f6" size={16} />}
         isActive={selectedView === 'calendar'}
         label="캘린더"
-        textMuted={textMuted}
+        textMuted={hexColors.textMuted}
         onPress={() => onViewChange('calendar')}
       />
     </View>
