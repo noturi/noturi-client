@@ -27,8 +27,7 @@ interface MemoListHeaderProps {
 
 export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderProps) {
   const [showYearSheet, setShowYearSheet] = useState(false);
-  const { currentTheme } = useUserTheme();
-  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
+  const { hexColors } = useUserTheme();
 
   const yearOptions = useMemo(() => getYearOptions(), []);
   const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
@@ -52,7 +51,7 @@ export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderPro
           <Typography className="text-text-muted" variant="callout">
             {selectedYearLabel}
           </Typography>
-          <ChevronDown color={mutedColor} size={12} />
+          <ChevronDown color={hexColors.textMuted} size={12} />
         </Pressable>
       </View>
 

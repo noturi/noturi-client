@@ -23,8 +23,7 @@ export function RatingGroupCard({
   onToggle,
   onMemoPress,
 }: RatingGroupCardProps) {
-  const { currentTheme } = useUserTheme();
-  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
+  const { hexColors } = useUserTheme();
 
   return (
     <Card className="p-4">
@@ -36,9 +35,9 @@ export function RatingGroupCard({
           </Typography>
         </View>
         {isExpanded ? (
-          <ChevronUp color={mutedColor} size={16} />
+          <ChevronUp color={hexColors.textMuted} size={16} />
         ) : (
-          <ChevronDown color={mutedColor} size={16} />
+          <ChevronDown color={hexColors.textMuted} size={16} />
         )}
       </Pressable>
 
