@@ -15,14 +15,14 @@ interface ThemePreviewProps {
 }
 
 function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
-  const { currentTheme } = useUserTheme();
+  const { hexColors } = useUserTheme();
   const bgColor = rgbToHex(preset.colors.bgPrimary);
   const textColor = rgbToHex(preset.colors.textPrimary);
   const accentColor = rgbToHex(preset.colors.accent);
   const borderColor = rgbToHex(preset.colors.border);
-  const currentAccent = rgbToHex(currentTheme.colors.accent);
-  const currentBorder = rgbToHex(currentTheme.colors.border);
-  const currentTextPrimary = rgbToHex(currentTheme.colors.textPrimary);
+  const currentAccent = hexColors.accent;
+  const currentBorder = hexColors.border;
+  const currentTextPrimary = hexColors.textPrimary;
 
   return (
     <Pressable onPress={onSelect}>
@@ -63,23 +63,20 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
 
 export function ThemeSettings() {
   const [isOpen, setIsOpen] = useState(false);
-  const { themeId, setTheme, presets, currentTheme } = useUserTheme();
-
-  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { themeId, setTheme, presets, hexColors } = useUserTheme();
 
   return (
     <Card>
       <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View className="flex-row items-center gap-3 px-4 py-3">
-          <Palette color={textSecondary} size={20} />
+          <Palette color={hexColors.textSecondary} size={20} />
           <Typography className="flex-1 text-text-primary" variant="callout">
             테마 설정
           </Typography>
           {isOpen ? (
-            <ChevronUp color={textMuted} size={20} />
+            <ChevronUp color={hexColors.textMuted} size={20} />
           ) : (
-            <ChevronDown color={textMuted} size={20} />
+            <ChevronDown color={hexColors.textMuted} size={20} />
           )}
         </View>
       </Pressable>
