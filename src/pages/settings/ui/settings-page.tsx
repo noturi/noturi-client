@@ -4,7 +4,6 @@ import { DeleteAccountButton, LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { NotificationToggle } from '~/features/notification';
 import { ThemeSettings, useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { EXTERNAL_LINKS } from '~/shared/config';
 import { Card, Typography } from '~/shared/ui';
 
@@ -18,8 +17,7 @@ const appVersion = Constants.expoConfig?.version ?? '1.0.0';
 export function SettingsPage() {
   const [openManage, setOpenManage] = useState(false);
   const { isAuthenticated } = useAuth();
-  const { currentTheme } = useUserTheme();
-  const iconColor = rgbToHex(currentTheme.colors.textSecondary);
+  const { hexColors } = useUserTheme();
 
   const handlePrivacyPolicy = () => {
     Linking.openURL(EXTERNAL_LINKS.PRIVACY_POLICY);
@@ -36,7 +34,7 @@ export function SettingsPage() {
               className="flex-row items-center gap-3 rounded-5 px-4 py-3 active:bg-bg-secondary"
               onPress={() => setOpenManage(true)}
             >
-              <Settings color={iconColor} size={20} />
+              <Settings color={hexColors.textSecondary} size={20} />
               <Typography className="flex-1 text-text-primary" variant="callout">
                 카테고리 관리
               </Typography>
@@ -53,7 +51,7 @@ export function SettingsPage() {
       <Card>
         <View className="gap-2">
           <View className="flex-row items-center gap-3 rounded-5 px-4 py-3">
-            <Info color={iconColor} size={20} />
+            <Info color={hexColors.textSecondary} size={20} />
             <Typography className="flex-1 text-text-primary" variant="callout">
               버전
             </Typography>
@@ -68,7 +66,7 @@ export function SettingsPage() {
             className="flex-row items-center gap-3 rounded-5 px-4 py-3 active:bg-bg-secondary"
             onPress={handlePrivacyPolicy}
           >
-            <FileText color={iconColor} size={20} />
+            <FileText color={hexColors.textSecondary} size={20} />
             <Typography className="flex-1 text-text-primary" variant="callout">
               이용약관 및 개인정보처리방침
             </Typography>

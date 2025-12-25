@@ -109,8 +109,8 @@ export function HomeScreen() {
         {selectedView === 'rating' && (
           <ScrollView
             contentContainerStyle={{ paddingBottom: 200 }}
-            style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
+            style={{ flex: 1 }}
           >
             <View className="gap-6">
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
