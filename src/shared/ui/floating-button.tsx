@@ -1,29 +1,39 @@
 import { Plus } from 'lucide-react-native';
+import { useUserTheme } from '~/features/theme';
 
+import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Typography } from './typography';
 
-interface FloatingButtonProps {
+interface FloatingButtonProps extends PressableProps {
   onPress: () => void;
-  disabled?: boolean;
   isLoading?: boolean;
   children?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  className?: string;
 }
+
+// accent 색상은 모두 밝은 계열이므로 어두운 아이콘 색상 사용
+const ICON_COLOR = '#1d1d1d';
 
 export function FloatingButton({
   onPress,
   disabled = false,
   isLoading = false,
   children,
+  style,
+  className,
+  ...props
 }: FloatingButtonProps) {
+  const { hexColors } = useUserTheme();
   const isDisabled = disabled || isLoading;
 
   const content = isLoading ? (
     <View className="flex-row items-center gap-2">
-      <ActivityIndicator color="white" size="small" />
+      <ActivityIndicator color={ICON_COLOR} size="small" />
       {children && (
-        <Typography className="text-white" variant="body">
+        <Typography style={{ color: ICON_COLOR }} variant="body">
           {children}
         </Typography>
       )}
@@ -31,19 +41,23 @@ export function FloatingButton({
   ) : children ? (
     children
   ) : (
-    <Plus color="white" size={24} />
+    <Plus color={ICON_COLOR} size={24} />
   );
 
   return (
     <Pressable
+      className={className}
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.button,
+        { backgroundColor: hexColors.accent },
         children ? styles.withText : styles.iconOnly,
         isDisabled && styles.disabled,
         pressed && !isDisabled && styles.pressed,
+        style,
       ]}
       onPress={onPress}
+      {...props}
     >
       {content}
     </Pressable>
@@ -52,9 +66,6 @@ export function FloatingButton({
 
 const styles = StyleSheet.create({
   button: {
-    position: 'absolute',
-    right: 16,
-    backgroundColor: '#1d1d1d',
     borderRadius: 22,
     height: 44,
     alignItems: 'center',

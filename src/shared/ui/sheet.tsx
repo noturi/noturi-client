@@ -4,7 +4,6 @@ import BottomSheet, {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 
 import { ReactNode, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -34,11 +33,7 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
     ref,
   ) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
-    const { currentTheme } = useUserTheme();
-
-    const bgColor = rgbToHex(currentTheme.colors.bgSecondary);
-    const borderColor = rgbToHex(currentTheme.colors.border);
-    const textMuted = rgbToHex(currentTheme.colors.textMuted);
+    const { hexColors } = useUserTheme();
 
     const snapPoints = useMemo(() => customSnapPoints || ['50%', '90%'], [customSnapPoints]);
 
@@ -70,15 +65,15 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
         ref={bottomSheetRef}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: bgColor,
+          backgroundColor: hexColors.bgSecondary,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           borderTopWidth: 1,
-          borderColor: borderColor,
+          borderColor: hexColors.border,
         }}
         enablePanDownToClose={enablePanDownToClose}
         handleIndicatorStyle={{
-          backgroundColor: textMuted,
+          backgroundColor: hexColors.textMuted,
           width: 36,
           height: 4,
         }}
@@ -111,11 +106,7 @@ export function ControlledSheet({
   scrollable = false,
 }: ControlledSheetProps) {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { currentTheme } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgSecondary);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => customSnapPoints || ['50%', '90%'], [customSnapPoints]);
 
@@ -148,15 +139,15 @@ export function ControlledSheet({
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgSecondary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         borderTopWidth: 1,
-        borderColor: borderColor,
+        borderColor: hexColors.border,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
@@ -171,12 +162,11 @@ export function ControlledSheet({
 
 // Handle component for manual placement
 export function SheetHandle() {
-  const { currentTheme } = useUserTheme();
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   return (
     <View className="items-center py-2">
-      <View className="rounded-2 h-1 w-9" style={{ backgroundColor: textMuted }} />
+      <View className="rounded-2 h-1 w-9" style={{ backgroundColor: hexColors.textMuted }} />
     </View>
   );
 }
