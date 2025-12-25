@@ -14,8 +14,22 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { DEFAULT_THEME_ID, THEME_PRESETS, ThemePreset, rgbToHex, themeStore } from './theme-store';
 
+interface HexColors {
+  bgPrimary: string;
+  bgSecondary: string;
+  surface: string;
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  border: string;
+  accent: string;
+  primary: string;
+  primaryText: string;
+}
+
 interface ThemeContextValue {
   currentTheme: ThemePreset;
+  hexColors: HexColors;
   themeId: string;
   isLoading: boolean;
   setTheme: (themeId: string) => Promise<void>;
@@ -34,6 +48,22 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
 
+  const hexColors = useMemo<HexColors>(
+    () => ({
+      bgPrimary: rgbToHex(currentTheme.colors.bgPrimary),
+      bgSecondary: rgbToHex(currentTheme.colors.bgSecondary),
+      surface: rgbToHex(currentTheme.colors.surface),
+      textPrimary: rgbToHex(currentTheme.colors.textPrimary),
+      textSecondary: rgbToHex(currentTheme.colors.textSecondary),
+      textMuted: rgbToHex(currentTheme.colors.textMuted),
+      border: rgbToHex(currentTheme.colors.border),
+      accent: rgbToHex(currentTheme.colors.accent),
+      primary: rgbToHex(currentTheme.colors.primary),
+      primaryText: rgbToHex(currentTheme.colors.primaryText),
+    }),
+    [currentTheme],
+  );
+
   useEffect(() => {
     themeStore.getThemeId().then((stored) => {
       setThemeId(stored);
@@ -49,12 +79,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const contextValue = useMemo(
     () => ({
       currentTheme,
+      hexColors,
       themeId,
       isLoading,
       setTheme,
       presets: THEME_PRESETS,
     }),
-    [currentTheme, themeId, isLoading, setTheme],
+    [currentTheme, hexColors, themeId, isLoading, setTheme],
   );
 
   // Create CSS variables style object using NativeWind's vars()
@@ -71,12 +102,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     '--color-primary-text': currentTheme.colors.primaryText,
   });
 
-  // 배경색을 직접 적용 (노치 영역까지 커버)
-  const backgroundColor = rgbToHex(currentTheme.colors.bgSecondary);
-
   return (
     <ThemeContext.Provider value={contextValue}>
-      <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: hexColors.bgSecondary }}>
         <View style={[{ flex: 1 }, themeVars]}>{children}</View>
       </GestureHandlerRootView>
     </ThemeContext.Provider>
