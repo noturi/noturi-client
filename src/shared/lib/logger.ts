@@ -51,15 +51,15 @@ class Logger {
     level: LogLevel,
     message: string,
     args: any[],
-    options: { color: string; label: string }
+    options: { color: string; label: string },
   ) {
     if (CURRENT_LOG_LEVEL <= level) {
       const timestamp = this.getTimestamp();
       const prefix = `${COLORS.fg.gray}[${timestamp}]${COLORS.reset}`;
       const label = `${options.color}[${options.label}]${COLORS.reset}`;
-      
+
       const content = [prefix, label, message, ...args];
-      
+
       switch (level) {
         case LOG_LEVELS.DEBUG:
           console.debug(...content);
