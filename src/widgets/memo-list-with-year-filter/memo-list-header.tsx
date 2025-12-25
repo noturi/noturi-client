@@ -1,9 +1,9 @@
-import { Sheet, XStack, YStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
-
+import { ChevronDown } from 'lucide-react-native';
 import { useCallback, useMemo, useState } from 'react';
+import { Pressable, View } from 'react-native';
 
-import { ChevronDown } from '@tamagui/lucide-icons';
+import { useUserTheme } from '~/features/theme';
+import { ControlledSheet, Typography } from '~/shared/ui';
 
 const APP_LAUNCH_YEAR = 2025;
 
@@ -27,6 +27,8 @@ interface MemoListHeaderProps {
 
 export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderProps) {
   const [showYearSheet, setShowYearSheet] = useState(false);
+  const { currentTheme } = useUserTheme();
+  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
 
   const yearOptions = useMemo(() => getYearOptions(), []);
   const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
@@ -41,70 +43,46 @@ export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderPro
 
   return (
     <>
-      <XStack alignItems="center" justifyContent="space-between" paddingHorizontal="$3">
+      <View className="flex-row items-center justify-between px-3">
         <Typography variant="headline">메모</Typography>
-        <XStack
-          alignItems="center"
-          gap="$2"
-          pressStyle={{ opacity: 0.7 }}
+        <Pressable
+          className="flex-row items-center gap-2 active:opacity-70"
           onPress={() => setShowYearSheet(true)}
         >
-          <Typography color="$textMuted" variant="callout">
+          <Typography className="text-text-muted" variant="callout">
             {selectedYearLabel}
           </Typography>
-          <ChevronDown color="$textMuted" size="$1" />
-        </XStack>
-      </XStack>
+          <ChevronDown color={mutedColor} size={12} />
+        </Pressable>
+      </View>
 
-      <Sheet
-        dismissOnOverlayPress
-        dismissOnSnapToBottom
-        modal
-        animation="quick"
-        open={showYearSheet}
-        snapPoints={[30]}
-        snapPointsMode="percent"
-        onOpenChange={setShowYearSheet}
+      <ControlledSheet
+        isOpen={showYearSheet}
+        snapPoints={['30%']}
+        onClose={() => setShowYearSheet(false)}
       >
-        <Sheet.Overlay
-          animation="quick"
-          backgroundColor="$backgroundOverlay"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
-        <Sheet.Frame
-          backgroundColor="$backgroundPrimary"
-          borderTopLeftRadius="$6"
-          borderTopRightRadius="$6"
-          padding="$4"
-        >
-          <YStack gap="$2">
-            <Typography paddingBottom="$2" textAlign="center" variant="headline">
-              년도 선택
-            </Typography>
-            {yearOptions.map((option) => (
-              <XStack
-                key={option.label}
-                alignItems="center"
-                backgroundColor={selectedYear === option.value ? '$primary' : 'transparent'}
-                borderRadius="$3"
-                gap="$2"
-                justifyContent="center"
-                paddingVertical="$3"
-                pressStyle={{ opacity: 0.7 }}
-                onPress={() => handleYearSelect(option.value)}
+        <View className="gap-2 p-4">
+          <Typography className="pb-2 text-center" variant="headline">
+            년도 선택
+          </Typography>
+          {yearOptions.map((option) => (
+            <Pressable
+              key={option.label}
+              className={`items-center justify-center py-3 rounded-3 active:opacity-70 ${
+                selectedYear === option.value ? 'bg-primary' : 'bg-transparent'
+              }`}
+              onPress={() => handleYearSelect(option.value)}
+            >
+              <Typography
+                className={selectedYear === option.value ? 'text-primary-text' : 'text-text-primary'}
+                variant="callout"
               >
-                <Typography
-                  color={selectedYear === option.value ? '$textOnPrimary' : '$textPrimary'}
-                  variant="callout"
-                >
-                  {option.label}
-                </Typography>
-              </XStack>
-            ))}
-          </YStack>
-        </Sheet.Frame>
-      </Sheet>
+                {option.label}
+              </Typography>
+            </Pressable>
+          ))}
+        </View>
+      </ControlledSheet>
     </>
   );
 }

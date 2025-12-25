@@ -1,4 +1,8 @@
-import { Sheet, YStack } from 'tamagui';
+import { Search } from 'lucide-react-native';
+import { useCallback } from 'react';
+import { View } from 'react-native';
+
+import { useUserTheme } from '~/features/theme';
 import { useMemoSearch } from '~/features/search/model';
 import {
   ActiveFilters,
@@ -7,13 +11,12 @@ import {
   MemoList,
   SearchInputBar,
 } from '~/features/search/ui';
-
-import { useCallback } from 'react';
-
-import { Search } from '@tamagui/lucide-icons';
+import { ControlledSheet } from '~/shared/ui';
 
 export default function SearchScreen() {
   const { filters, categories, memos } = useMemoSearch();
+  const { currentTheme } = useUserTheme();
+  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
 
   const handleSearch = useCallback(() => {
     if (
@@ -35,9 +38,9 @@ export default function SearchScreen() {
   const isEmpty = filters.hasSearchQuery && !memos.isLoading && memos.list.length === 0;
 
   return (
-    <YStack backgroundColor="$backgroundPrimary" flex={1}>
-      <YStack borderBottomColor="$border" borderBottomWidth={1}>
-        <YStack gap="$1" paddingHorizontal="$1" paddingVertical="$2">
+    <View className="flex-1 bg-bg-primary">
+      <View className="border-b border-border">
+        <View className="gap-1 px-1 py-2">
           <SearchInputBar
             hasActiveFilters={filters.hasActiveFilters}
             searchText={filters.searchText}
@@ -55,34 +58,15 @@ export default function SearchScreen() {
             onClearRating={() => filters.setSelectedRating(undefined)}
             onClearYear={() => filters.setSelectedYear(undefined)}
           />
-        </YStack>
-      </YStack>
+        </View>
+      </View>
 
-      {/* 필터 시트 */}
-      <Sheet
-        dismissOnOverlayPress
-        dismissOnSnapToBottom
-        modal
-        animation="quick"
-        open={filters.showFilters}
-        position={0}
-        snapPoints={[40, 60]}
-        snapPointsMode="percent"
-        onOpenChange={(open: boolean) => filters.setShowFilters(open)}
+      <ControlledSheet
+        isOpen={filters.showFilters}
+        snapPoints={['40%', '60%']}
+        onClose={() => filters.setShowFilters(false)}
       >
-        <Sheet.Overlay
-          animation="quick"
-          backgroundColor="$backgroundOverlay"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
-
-        <Sheet.Frame
-          backgroundColor="$backgroundPrimary"
-          borderTopLeftRadius="$6"
-          borderTopRightRadius="$6"
-          padding="$1"
-        >
+        <View className="p-1">
           <FilterOptions
             categories={categories.list}
             selectedCategoryId={filters.selectedCategoryId}
@@ -93,13 +77,13 @@ export default function SearchScreen() {
             setSelectedYear={filters.setSelectedYear}
             show={true}
           />
-        </Sheet.Frame>
-      </Sheet>
+        </View>
+      </ControlledSheet>
 
-      <YStack flex={1}>
+      <View className="flex-1">
         {isIdle && (
           <EmptyState
-            icon={<Search color="$textMuted" size="$5" />}
+            icon={<Search color={mutedColor} size={24} />}
             title="검색어를 입력하거나 필터를 선택해주세요"
           />
         )}
@@ -113,7 +97,7 @@ export default function SearchScreen() {
         )}
 
         {isEmpty && <EmptyState title="검색 결과가 없습니다" />}
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

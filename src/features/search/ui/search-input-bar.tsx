@@ -1,6 +1,8 @@
-import { Button, TextArea, XStack, YStack } from 'tamagui';
+import { Filter, Search } from 'lucide-react-native';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 
-import { Filter, Search } from '@tamagui/lucide-icons';
+import { Pressable, TextInput, View } from 'react-native';
 
 interface SearchInputBarProps {
   searchText: string;
@@ -17,39 +19,43 @@ export function SearchInputBar({
   onPressSearch,
   onToggleFilters,
 }: SearchInputBarProps) {
+  const { currentTheme } = useUserTheme();
+  const bgSecondary = rgbToHex(currentTheme.colors.bgSecondary);
+  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const textColor = rgbToHex(currentTheme.colors.textPrimary);
+  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
+
   return (
-    <XStack alignItems="center" gap="$1">
-      <YStack flex={1}>
-        <XStack
-          alignItems="center"
-          backgroundColor="$backgroundSecondary"
-          borderRadius="$6"
-          gap="$1"
-          height={48}
-          paddingHorizontal="$2"
+    <View className="flex-row items-center gap-1">
+      <View className="flex-1">
+        <View
+          className="h-12 flex-row items-center gap-1 rounded-6 px-2"
+          style={{ backgroundColor: bgSecondary }}
         >
-          <Search color="$textMuted" size="$4" />
-          <TextArea
+          <Search color={textMuted} size={20} />
+          <TextInput
             autoFocus
-            backgroundColor="$backgroundTransparent"
-            borderWidth={0}
-            color="$textPrimary"
-            flex={1}
-            fontSize="$4"
-            multiline={false}
+            className="flex-1"
             placeholder="제목 및 내용 검색"
-            placeholderTextColor="$textMuted"
+            placeholderTextColor={textMuted}
             returnKeyType="search"
+            style={{
+              color: textColor,
+              fontSize: 16,
+            }}
             value={searchText}
             onChangeText={onChangeSearchText}
             onSubmitEditing={onPressSearch}
           />
-        </XStack>
-      </YStack>
+        </View>
+      </View>
 
-      <Button circular color="$textOnPrimary" onPress={onToggleFilters}>
-        <Filter color="$textSecondary" size="$4" />
-      </Button>
-    </XStack>
+      <Pressable
+        className="h-12 w-12 items-center justify-center rounded-full"
+        onPress={onToggleFilters}
+      >
+        <Filter color={textSecondary} size={20} />
+      </Pressable>
+    </View>
   );
 }
