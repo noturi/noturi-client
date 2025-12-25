@@ -51,6 +51,7 @@ function resolveColor(color?: string): string | undefined {
 export function Card({
   children,
   style,
+  className,
   // Tamagui 호환 props
   padding,
   paddingHorizontal,
@@ -61,7 +62,7 @@ export function Card({
   gap,
   position,
   ...props
-}: CardProps) {
+}: CardProps & { className?: string }) {
   // Tamagui 호환 스타일 생성
   const extraStyles: ViewStyle = {};
   if (padding !== undefined) extraStyles.padding = resolveSpacing(padding);
@@ -75,7 +76,11 @@ export function Card({
   if (position) extraStyles.position = position;
 
   return (
-    <View className="bg-surface rounded-6 p-3" style={[extraStyles, style]} {...props}>
+    <View
+      className={`bg-surface rounded-6 p-3 ${className ?? ''}`}
+      style={[extraStyles, style]}
+      {...props}
+    >
       {children}
     </View>
   );
