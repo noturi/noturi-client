@@ -1,15 +1,17 @@
+import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
-import { ScrollView, Sheet, View, YStack } from 'tamagui';
 import {
   ALL_DAY_NOTIFICATION_OPTIONS,
   NOTIFICATION_OPTIONS,
 } from '~/entities/calendar/model/constants';
 import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar/model/types';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
 
-import { useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { TextInput, View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { DateTimePickerField } from './date-time-picker-field';
@@ -21,6 +23,7 @@ interface CalendarAddModalProps {
 }
 
 export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModalProps) {
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const titleRef = useRef('');
   const inputRef = useRef<TextInput>(null);
   const [startDateTime, setStartDateTime] = useState(new Date());
@@ -28,7 +31,20 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   const [isAllDay, setIsAllDay] = useState(false);
   const [notifyBefore, setNotifyBefore] = useState<NotifyBefore | undefined>(undefined);
 
+  const { currentTheme } = useUserTheme();
+  const bgColor = rgbToHex(currentTheme.colors.bgSecondary);
+  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+
+  const snapPoints = useMemo(() => ['90%'], []);
   const notificationOptions = isAllDay ? ALL_DAY_NOTIFICATION_OPTIONS : NOTIFICATION_OPTIONS;
+
+  useEffect(() => {
+    if (isOpen) {
+      bottomSheetRef.current?.expand();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [isOpen]);
 
   const resetForm = () => {
     titleRef.current = '';
@@ -58,130 +74,136 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
     onClose();
   };
 
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="close"
+      />
+    ),
+    [],
+  );
+
+  const handleSheetChanges = useCallback(
+    (index: number) => {
+      if (index === -1) {
+        handleClose();
+      }
+    },
+    [handleClose],
+  );
+
   return (
-    <>
-      <Sheet
-        dismissOnSnapToBottom
-        modal
-        animation="quick"
-        open={isOpen}
-        snapPoints={[90]}
-        snapPointsMode="percent"
-        zIndex={100000}
-        onOpenChange={onClose}
+    <BottomSheet
+      ref={bottomSheetRef}
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{
+        backgroundColor: bgColor,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+      }}
+      enablePanDownToClose
+      handleIndicatorStyle={{
+        backgroundColor: textMuted,
+        width: 36,
+        height: 4,
+      }}
+      index={-1}
+      snapPoints={snapPoints}
+      onChange={handleSheetChanges}
+    >
+      <BottomSheetScrollView
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
       >
-        <Sheet.Overlay
-          animation="quick"
-          backgroundColor="$backgroundOverlay"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
-        <Sheet.Frame
-          backgroundColor="$backgroundSecondary"
-          borderTopLeftRadius="$6"
-          borderTopRightRadius="$6"
-        >
-          <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
-            <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
-          </YStack>
+        <View className="gap-4 p-4 pb-6">
+          <Typography className="text-center" variant="headline">
+            새 일정
+          </Typography>
 
-          <ScrollView
-            flex={1}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <YStack gap="$4" padding="$4" paddingBottom="$6">
-              <Typography textAlign="center" variant="headline">
-                새 일정
-              </Typography>
+          <Form>
+            <Form.Field required label="제목">
+              <Input
+                ref={inputRef}
+                placeholder="일정 제목을 입력하세요"
+                size="lg"
+                onChangeText={(text) => {
+                  titleRef.current = text;
+                }}
+              />
+            </Form.Field>
 
-              <Form>
-                <Form.Field required label="제목">
-                  <Input
-                    ref={inputRef}
-                    placeholder="일정 제목을 입력하세요"
-                    size="lg"
-                    onChangeText={(text) => {
-                      titleRef.current = text;
-                    }}
-                  />
-                </Form.Field>
-
-                <Switch
-                  checked={isAllDay}
-                  label="하루종일"
-                  onCheckedChange={(checked) => {
-                    setIsAllDay(checked);
-                    setNotifyBefore(undefined);
-                  }}
-                />
-
-                <YStack gap="$4">
-                  <DateTimePickerField
-                    dateTime={startDateTime}
-                    isAllDay={isAllDay}
-                    label="시작"
-                    onDateTimeChange={setStartDateTime}
-                    onSyncDate={(date) => {
-                      const newEndDate = new Date(date);
-                      newEndDate.setHours(endDateTime.getHours());
-                      newEndDate.setMinutes(endDateTime.getMinutes());
-                      setEndDateTime(newEndDate);
-                    }}
-                  />
-
-                  <DateTimePickerField
-                    dateTime={endDateTime}
-                    isAllDay={isAllDay}
-                    label="종료"
-                    minDate={isAllDay ? undefined : startDateTime.toISOString().split('T')[0]}
-                    onDateTimeChange={setEndDateTime}
-                    onSyncDate={(date) => {
-                      const newStartDate = new Date(date);
-                      newStartDate.setHours(startDateTime.getHours());
-                      newStartDate.setMinutes(startDateTime.getMinutes());
-                      setStartDateTime(newStartDate);
-                    }}
-                  />
-                </YStack>
-
-                <Animated.View layout={LinearTransition}>
-                  <Form.Field label="알림 설정">
-                    <Select
-                      options={notificationOptions}
-                      placeholder="알림 시점을 선택하세요"
-                      value={notifyBefore || 'NONE'}
-                      onValueChange={(value) => {
-                        setNotifyBefore(value === 'NONE' ? undefined : (value as NotifyBefore));
-                      }}
-                    />
-                  </Form.Field>
-                </Animated.View>
-              </Form>
-            </YStack>
-          </ScrollView>
-
-          <View
-            alignItems="flex-end"
-            backgroundColor="transparent"
-            bottom={140}
-            left={0}
-            paddingHorizontal={24}
-            position="absolute"
-            right={0}
-            zIndex="$5"
-          >
-            <FloatingButton
-              onPress={() => {
-                if (titleRef.current.trim()) {
-                  onSubmit(getFormData());
-                  handleSuccess();
-                }
+            <Switch
+              checked={isAllDay}
+              label="하루종일"
+              onCheckedChange={(checked) => {
+                setIsAllDay(checked);
+                setNotifyBefore(undefined);
               }}
             />
-          </View>
-        </Sheet.Frame>
-      </Sheet>
-    </>
+
+            <View className="gap-4">
+              <DateTimePickerField
+                dateTime={startDateTime}
+                isAllDay={isAllDay}
+                label="시작"
+                onDateTimeChange={setStartDateTime}
+                onSyncDate={(date) => {
+                  const newEndDate = new Date(date);
+                  newEndDate.setHours(endDateTime.getHours());
+                  newEndDate.setMinutes(endDateTime.getMinutes());
+                  setEndDateTime(newEndDate);
+                }}
+              />
+
+              <DateTimePickerField
+                dateTime={endDateTime}
+                isAllDay={isAllDay}
+                label="종료"
+                minDate={isAllDay ? undefined : startDateTime.toISOString().split('T')[0]}
+                onDateTimeChange={setEndDateTime}
+                onSyncDate={(date) => {
+                  const newStartDate = new Date(date);
+                  newStartDate.setHours(startDateTime.getHours());
+                  newStartDate.setMinutes(startDateTime.getMinutes());
+                  setStartDateTime(newStartDate);
+                }}
+              />
+            </View>
+
+            <Animated.View layout={LinearTransition}>
+              <Form.Field label="알림 설정">
+                <Select
+                  options={notificationOptions}
+                  placeholder="알림 시점을 선택하세요"
+                  value={notifyBefore || 'NONE'}
+                  onValueChange={(value) => {
+                    setNotifyBefore(value === 'NONE' ? undefined : (value as NotifyBefore));
+                  }}
+                />
+              </Form.Field>
+            </Animated.View>
+          </Form>
+        </View>
+      </BottomSheetScrollView>
+
+      <View
+        className="absolute bottom-36 left-0 right-0 items-end px-6"
+        style={{ zIndex: 5 }}
+      >
+        <FloatingButton
+          onPress={() => {
+            if (titleRef.current.trim()) {
+              onSubmit(getFormData());
+              handleSuccess();
+            }
+          }}
+        />
+      </View>
+    </BottomSheet>
   );
 }

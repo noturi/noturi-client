@@ -1,11 +1,11 @@
-import { XStack, YStack } from 'tamagui';
+import { Bell } from 'lucide-react-native';
+import { View } from 'react-native';
+
 import type { CalendarMemo } from '~/entities/calendar';
 import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
 import { formatTime } from '~/shared/lib';
 import { Card, Typography } from '~/shared/ui';
-
-import { Bell } from '@tamagui/lucide-icons';
 
 interface CalendarMemoListProps {
   startDate: string;
@@ -21,44 +21,42 @@ const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
     : `${formatTime(memo.startDate)} - ${formatTime(memo.endDate)}`;
 
   return (
-    <Card position="relative">
-      <XStack alignItems="center" justifyContent="space-between">
-        <XStack alignItems="center" flex={1} gap="$3">
-          <YStack
-            backgroundColor={memo.hasNotification ? '$blue10' : '$textMuted'}
-            borderRadius="$1"
-            height={36}
-            width={3}
+    <Card className="relative">
+      <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center flex-1 gap-3">
+          <View
+            className="rounded-1 h-9 w-[3px]"
+            style={{ backgroundColor: memo.hasNotification ? '#3b82f6' : '#9e9e9e' }}
           />
-          <YStack flex={1} gap="$0.5">
-            <Typography color="$textPrimary" numberOfLines={1} variant="callout">
+          <View className="flex-1 gap-0.5">
+            <Typography className="text-text-primary" numberOfLines={1} variant="callout">
               {memo.title}
             </Typography>
-            <XStack alignItems="center" gap="$2">
-              <Typography color="$textMuted" variant="caption2">
+            <View className="flex-row items-center gap-2">
+              <Typography className="text-text-muted" variant="caption2">
                 {timeText}
               </Typography>
               {memo.hasNotification && memo.notifyBefore && (
-                <XStack alignItems="center" gap="$1">
-                  <Bell color="$blue10" size={10} />
-                  <Typography color="$blue10" variant="caption2">
+                <View className="flex-row items-center gap-1">
+                  <Bell color="#3b82f6" size={10} />
+                  <Typography className="text-blue-500" variant="caption2">
                     {NOTIFICATION_LABELS[memo.notifyBefore]}
                   </Typography>
-                </XStack>
+                </View>
               )}
-            </XStack>
-          </YStack>
-        </XStack>
+            </View>
+          </View>
+        </View>
 
         <CalendarMemoDeleteButton memoId={memo.id} />
-      </XStack>
+      </View>
     </Card>
   );
 };
 
 const EmptyState = ({ message }: { message: string }) => (
   <Card>
-    <Typography color="$textMuted" textAlign="center" variant="footnote">
+    <Typography className="text-text-muted text-center" variant="footnote">
       {message}
     </Typography>
   </Card>
@@ -66,7 +64,7 @@ const EmptyState = ({ message }: { message: string }) => (
 
 const ErrorState = () => (
   <Card>
-    <Typography color="$textMuted" textAlign="center">
+    <Typography className="text-text-muted text-center">
       일정을 불러오는데 실패했습니다.
     </Typography>
   </Card>
@@ -84,10 +82,10 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
   }
 
   return (
-    <YStack gap="$2">
+    <View className="gap-2">
       {memos.map((memo) => (
         <MemoCard key={memo.id} memo={memo} />
       ))}
-    </YStack>
+    </View>
   );
 }

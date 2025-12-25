@@ -1,4 +1,8 @@
-import { ScrollView, YStack } from 'tamagui';
+import { useQuery } from '@tanstack/react-query';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
+import { Alert, ScrollView, View } from 'react-native';
+import { Calendar, DateData } from 'react-native-calendars';
+
 import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
 import { useCalendarDate } from '~/entities/calendar/model';
 import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
@@ -6,12 +10,6 @@ import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
 import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
-
-import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
-import { Alert } from 'react-native';
-import { Calendar, DateData } from 'react-native-calendars';
-
-import { useQuery } from '@tanstack/react-query';
 
 import { CalendarMemoList } from '../calendar-memo-list';
 import { CALENDAR_THEME } from './constants';
@@ -161,13 +159,13 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     };
 
     return (
-      <YStack flex={1} gap="$4" paddingBottom="$10" position="relative">
+      <View className="flex-1 gap-4 pb-10 relative">
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          flex={1}
+          style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
         >
-          <YStack gap="$4">
+          <View className="gap-4">
             <Card>
               <Calendar
                 markedDates={markedDates}
@@ -178,9 +176,9 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
                 onMonthChange={handleMonthChange}
               />
             </Card>
-            <YStack gap="$2">
+            <View className="gap-2">
               {headerTitle && (
-                <Typography color="$textPrimary" variant="subheadline">
+                <Typography className="text-text-primary" variant="subheadline">
                   {headerTitle}
                 </Typography>
               )}
@@ -191,8 +189,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
                 memos={selectedMemos}
                 startDate={startDate}
               />
-            </YStack>
-          </YStack>
+            </View>
+          </View>
         </ScrollView>
 
         <CalendarAddModal
@@ -200,7 +198,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
           onClose={() => setIsAddModalOpen(false)}
           onSubmit={handleAddCalendarMemo}
         />
-      </YStack>
+      </View>
     );
   },
 );

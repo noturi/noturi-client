@@ -1,11 +1,12 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Text, View, XStack, YStack } from 'tamagui';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { CALENDAR_COLORS, CALENDAR_THEME } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
@@ -15,7 +16,6 @@ interface DateTimePickerFieldProps {
   onDateTimeChange: (date: Date) => void;
   isAllDay?: boolean;
   minDate?: string;
-  // 하루종일일 때 다른 날짜도 같이 변경
   onSyncDate?: (date: Date) => void;
 }
 
@@ -29,6 +29,11 @@ export function DateTimePickerField({
 }: DateTimePickerFieldProps) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const { currentTheme } = useUserTheme();
+
+  const surfaceColor = rgbToHex(currentTheme.colors.surface);
+  const borderColor = rgbToHex(currentTheme.colors.border);
+  const textColor = rgbToHex(currentTheme.colors.textPrimary);
 
   const handleDatePress = () => {
     setShowTimePicker(false);
@@ -62,20 +67,19 @@ export function DateTimePickerField({
   };
 
   return (
-    <YStack gap="$2">
+    <View className="gap-2">
       <Typography variant="footnote">{label}</Typography>
-      <XStack gap="$3">
+      <View className="flex-row gap-3">
         <Pressable style={{ flex: 1 }} onPress={handleDatePress}>
           <Text
-            backgroundColor="$surface"
-            borderColor="$border"
-            borderRadius="$5"
-            borderWidth={1}
-            color="$textPrimary"
-            fontSize="$4"
-            height={44}
-            lineHeight={42}
-            textAlign="center"
+            className="h-11 rounded-5 text-center leading-[42px]"
+            style={{
+              backgroundColor: surfaceColor,
+              borderColor: borderColor,
+              borderWidth: 1,
+              color: textColor,
+              fontSize: 16,
+            }}
           >
             {formatDate(dateTime)}
           </Text>
@@ -84,26 +88,27 @@ export function DateTimePickerField({
         {!isAllDay && (
           <Pressable onPress={handleTimePress}>
             <Text
-              backgroundColor="$surface"
-              borderColor="$border"
-              borderRadius="$5"
-              borderWidth={1}
-              color="$textPrimary"
-              fontSize="$4"
-              height={44}
-              lineHeight={42}
-              minWidth={80}
-              textAlign="center"
+              className="h-11 min-w-20 rounded-5 text-center leading-[42px]"
+              style={{
+                backgroundColor: surfaceColor,
+                borderColor: borderColor,
+                borderWidth: 1,
+                color: textColor,
+                fontSize: 16,
+              }}
             >
               {formatTime(dateTime)}
             </Text>
           </Pressable>
         )}
-      </XStack>
+      </View>
 
       {showDatePicker && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View backgroundColor="$surface" borderRadius="$4" paddingTop="$3">
+          <View
+            className="rounded-4 pt-3"
+            style={{ backgroundColor: surfaceColor }}
+          >
             <Calendar
               current={dateTime.toISOString().split('T')[0]}
               markedDates={{
@@ -123,7 +128,7 @@ export function DateTimePickerField({
 
       {!isAllDay && showTimePicker && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View paddingTop="$3">
+          <View className="pt-3">
             <DateTimePicker
               display="spinner"
               mode="time"
@@ -133,6 +138,6 @@ export function DateTimePickerField({
           </View>
         </Animated.View>
       )}
-    </YStack>
+    </View>
   );
 }
