@@ -1,4 +1,3 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { CategoryButton } from '~/entities/category/ui/category-button';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo/model/schemas';
 import { categoryFormSchema, memoFormSchema } from '~/entities/memo/model/schemas';
@@ -11,6 +10,7 @@ import { MESSAGES } from '~/shared/model';
 import { Button, FloatingButton, Form, Input, TextArea } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
@@ -39,12 +39,10 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
     },
     validationSchema: memoFormSchema,
     onSubmit: async (values) => {
-      // 첫 번째 줄을 제목으로, 나머지를 내용으로 분리
       const lines = values.text.split('\n');
       let title = lines[0].trim() || '제목 없음';
       let content = lines.slice(1).join('\n').trim();
 
-      // 제목이 30자를 넘으면 잘라서 나머지는 내용에 추가
       if (title.length > 30) {
         const truncatedTitle = title.substring(0, 30);
         const remainingText = title.substring(30);
@@ -52,7 +50,6 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
         content = remainingText + (content ? '\n' + content : '');
       }
 
-      // 카테고리가 선택된 경우에만 categoryId 포함
       const selectedCat = values.selectedCategory
         ? categories.find((cat) => cat.name === values.selectedCategory)
         : null;
@@ -62,12 +59,10 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
         content: content || '',
       };
 
-      // categoryId가 있을 때만 추가
       if (selectedCat?.id) {
         memoData.categoryId = selectedCat.id;
       }
 
-      // rating이 0보다 클 때만 추가
       if (values.rating > 0) {
         memoData.rating = values.rating;
       }
@@ -151,7 +146,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
 
   return (
     <>
-      <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
+      <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <Form>
             <Form.Field required error={textError} label="메모">
@@ -169,7 +164,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
 
             <Form.Field error={selectedCategoryError} label="카테고리">
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <XStack gap="$3">
+                <View className="flex-row gap-3">
                   {categories.map((category) => (
                     <CategoryButton
                       key={category.id}
@@ -191,12 +186,12 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
                       + 추가
                     </Button>
                   )}
-                </XStack>
+                </View>
               </ScrollView>
 
               {showAddCategory && (
-                <XStack alignItems="center" gap="$1" marginTop="$2">
-                  <YStack flex={1}>
+                <View className="mt-2 flex-row items-center gap-1">
+                  <View className="flex-1">
                     <Form.Field
                       error={
                         categoryForm.shouldShowError('name') ? categoryForm.errors.name : undefined
@@ -211,8 +206,8 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
                         onChangeText={(text) => categoryForm.setValue('name', text)}
                       />
                     </Form.Field>
-                  </YStack>
-                  <XStack alignItems="center" gap="$1">
+                  </View>
+                  <View className="flex-row items-center gap-1">
                     <Button
                       disabled={!categoryForm.isValid || createCategoryMutation.isPending}
                       size="sm"
@@ -224,8 +219,8 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
                     <Button size="sm" variant="ghost" onPress={handleCancelAddCategory}>
                       취소
                     </Button>
-                  </XStack>
-                </XStack>
+                  </View>
+                </View>
               )}
             </Form.Field>
 
@@ -237,7 +232,7 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
             </Form.Field>
           </Form>
         </ScrollView>
-      </YStack>
+      </View>
 
       <Animated.View
         pointerEvents="box-none"

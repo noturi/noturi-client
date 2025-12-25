@@ -1,8 +1,9 @@
-import { Separator, XStack, YStack } from 'tamagui';
-import type { UIMemo } from '~/entities/memo/model/types';
-import { Card, RatingStars, Typography } from '~/shared/ui';
+import { ChevronDown, ChevronUp } from 'lucide-react-native';
+import { Pressable, View } from 'react-native';
 
-import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import type { UIMemo } from '~/entities/memo/model/types';
+import { useUserTheme } from '~/features/theme';
+import { Card, RatingStars, Typography } from '~/shared/ui';
 
 export type RatingGroup = {
   rating: number;
@@ -22,46 +23,41 @@ export function RatingGroupCard({
   onToggle,
   onMemoPress,
 }: RatingGroupCardProps) {
+  const { currentTheme } = useUserTheme();
+  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
+
   return (
-    <Card padding="$4">
-      <XStack
-        alignItems="center"
-        gap="$2"
-        padding="$3"
-        pressStyle={{ opacity: 0.7 }}
-        onPress={onToggle}
-      >
-        <XStack alignItems="center" flex={1} gap="$2">
+    <Card className="p-4">
+      <Pressable className="flex-row items-center gap-2 p-3 active:opacity-70" onPress={onToggle}>
+        <View className="flex-row items-center flex-1 gap-2">
           <RatingStars rating={group.rating} />
-          <Typography color="$textMuted" variant="caption1">
+          <Typography className="text-text-muted" variant="caption1">
             ({group.memos.length}개)
           </Typography>
-        </XStack>
+        </View>
         {isExpanded ? (
-          <ChevronUp color="$textMuted" size="$3" />
+          <ChevronUp color={mutedColor} size={16} />
         ) : (
-          <ChevronDown color="$textMuted" size="$3" />
+          <ChevronDown color={mutedColor} size={16} />
         )}
-      </XStack>
+      </Pressable>
 
       {isExpanded && (
         <>
-          <Separator borderColor="$border" />
-          <YStack gap="$0" padding="$3">
+          <View className="h-px bg-border" />
+          <View className="p-3">
             {group.memos.map((memo) => (
-              <XStack
+              <Pressable
                 key={memo.id}
-                alignSelf="flex-start"
-                paddingVertical="$1"
-                pressStyle={{ opacity: 0.7 }}
+                className="self-start py-1 active:opacity-70"
                 onPress={() => onMemoPress?.(memo)}
               >
-                <Typography color="$textPrimary" variant="callout">
+                <Typography className="text-text-primary" variant="callout">
                   {memo.title}
                 </Typography>
-              </XStack>
+              </Pressable>
             ))}
-          </YStack>
+          </View>
         </>
       )}
     </Card>

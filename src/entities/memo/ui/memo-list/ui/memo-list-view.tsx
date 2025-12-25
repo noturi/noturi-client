@@ -1,10 +1,9 @@
-import { Separator, YStack } from 'tamagui';
+import { useCallback } from 'react';
+import { FlatList, View } from 'react-native';
+
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
 import { Loading, Typography } from '~/shared/ui';
-
-import { useCallback } from 'react';
-import { FlatList } from 'react-native';
 
 type MemoListViewProps = {
   memos: UIMemo[];
@@ -16,29 +15,29 @@ export function MemoListView({ memos, onEndReached, isFetchingNextPage }: MemoLi
   const renderFooter = useCallback(() => {
     if (!isFetchingNextPage) return null;
     return (
-      <YStack alignItems="center" paddingVertical="$1">
+      <View className="items-center py-1">
         <Loading />
-      </YStack>
+      </View>
     );
   }, [isFetchingNextPage]);
 
   const renderMemoItem = useCallback(
     ({ item, index }: { item: UIMemo; index: number }) => (
-      <YStack key={item.id}>
+      <View key={item.id}>
         <MemoItem memo={item} />
-        {index < memos.length - 1 && <Separator borderColor="$border" />}
-      </YStack>
+        {index < memos.length - 1 && <View className="h-px bg-border" />}
+      </View>
     ),
     [memos.length],
   );
 
   if (memos.length === 0) {
     return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted" variant="body">
+      <View className="flex-1 items-center justify-center">
+        <Typography className="text-text-muted" variant="body">
           작성된 메모가 없습니다
         </Typography>
-      </YStack>
+      </View>
     );
   }
 

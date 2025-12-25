@@ -1,11 +1,12 @@
+import { Trash2 } from 'lucide-react-native';
 import { toast } from 'sonner-native';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
 
 import { router } from 'expo-router';
-
-import { Trash2 } from '@tamagui/lucide-icons';
 
 import { useDeleteMemoMutation } from '../api/mutations';
 
@@ -16,6 +17,9 @@ interface MemoDeleteButtonProps {
 }
 
 export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButtonProps) => {
+  const { currentTheme } = useUserTheme();
+  const textColor = rgbToHex(currentTheme.colors.textPrimary);
+
   const deleteMutation = useDeleteMemoMutation({
     onSuccess: () => {
       toast.success('메모가 삭제되었습니다');
@@ -45,7 +49,7 @@ export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButt
 
   return (
     <Button disabled={deleteMutation.isPending} size="sm" variant="ghost" onPress={handleDelete}>
-      <Trash2 size={16} />
+      <Trash2 color={textColor} size={16} />
     </Button>
   );
 };

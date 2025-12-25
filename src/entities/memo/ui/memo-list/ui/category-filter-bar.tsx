@@ -1,4 +1,5 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
+import { ScrollView, View } from 'react-native';
+
 import type { UICategory } from '~/entities/category/model/types';
 import { CategoryButton } from '~/entities/category/ui/category-button';
 import { Card } from '~/shared/ui';
@@ -11,9 +12,9 @@ type CategoryFilterBarProps = {
 export function CategoryFilterBar({ categories, onPress }: CategoryFilterBarProps) {
   return (
     <Card>
-      <YStack justifyContent="center">
+      <View className="justify-center">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <XStack gap="$4" paddingHorizontal="$3" paddingVertical="$3">
+          <View className="flex-row gap-4 px-3 py-3">
             {categories.map((category) => (
               <CategoryButton
                 key={category.name}
@@ -21,9 +22,9 @@ export function CategoryFilterBar({ categories, onPress }: CategoryFilterBarProp
                 onPress={() => onPress(category.name)}
               />
             ))}
-          </XStack>
+          </View>
         </ScrollView>
-      </YStack>
+      </View>
     </Card>
   );
 }

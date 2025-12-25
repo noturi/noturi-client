@@ -1,4 +1,5 @@
-import { ScrollView, YStack } from 'tamagui';
+import { ScrollView, View } from 'react-native';
+
 import type { UICategory } from '~/entities/category';
 
 import type { UIMemo } from '../../../model/types';
@@ -16,13 +17,13 @@ export function RatingView({ categories, memos, onCategoryPress, onMemoPress }: 
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 200 }}
-      flex={1}
+      style={{ flex: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <YStack gap="$6">
+      <View className="gap-6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />
         <MemoRatingGroupView memos={memos} onMemoPress={onMemoPress} />
-      </YStack>
+      </View>
     </ScrollView>
   );
 }

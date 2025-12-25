@@ -1,43 +1,40 @@
-import { XStack } from 'tamagui';
+import { X } from 'lucide-react-native';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
-import { X } from '@tamagui/lucide-icons';
+import { Pressable, View } from 'react-native';
 
 interface MemoFormHeaderProps {
   onClose: () => void;
 }
 
 export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
+  const { currentTheme } = useUserTheme();
+  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
+  const borderColor = rgbToHex(currentTheme.colors.border);
+  const primaryColor = rgbToHex(currentTheme.colors.primary);
+
   return (
-    <XStack
-      alignItems="center"
-      backgroundColor="$backgroundPrimary"
-      borderBottomColor="$borderPrimary"
-      borderBottomWidth={0.5}
-      height={44}
-      justifyContent="center"
-      paddingHorizontal="$4"
-      position="relative"
+    <View
+      className="h-11 flex-row items-center justify-center px-4"
+      style={{
+        backgroundColor: bgColor,
+        borderBottomColor: borderColor,
+        borderBottomWidth: 0.5,
+      }}
     >
-      <XStack
-        alignItems="center"
-        backgroundColor="transparent"
-        borderRadius="$2"
-        height={44}
-        justifyContent="center"
-        left="$4"
-        paddingHorizontal="$2"
-        position="absolute"
-        pressStyle={{ opacity: 0.5 }}
-        width={44}
+      <Pressable
+        className="absolute left-4 h-11 w-11 items-center justify-center rounded-2"
+        style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
         onPress={onClose}
       >
-        <X color="$primary" size="$5" strokeWidth={2} />
-      </XStack>
+        <X color={primaryColor} size={20} strokeWidth={2} />
+      </Pressable>
 
-      <Typography color="$textPrimary" fontWeight="600" variant="headline">
+      <Typography className="font-semibold text-text-primary" variant="headline">
         새 메모
       </Typography>
-    </XStack>
+    </View>
   );
 };

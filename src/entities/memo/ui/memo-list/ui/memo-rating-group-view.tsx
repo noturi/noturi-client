@@ -1,9 +1,9 @@
-import { YStack } from 'tamagui';
+import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { View } from 'react-native';
+
 import type { UIMemo } from '~/entities/memo/model/types';
 import { type RatingGroup, RatingGroupCard } from '~/entities/memo/ui';
 import { Typography } from '~/shared/ui';
-
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 type MemoRatingGroupViewProps = {
   memos: UIMemo[];
@@ -17,7 +17,6 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
       rating,
       memos: memos.filter((memo) => {
         if (rating === 0) {
-          // 평점이 없거나 0인 메모들
           return !memo.rating || memo.rating === 0;
         }
         return Math.floor(memo.rating) === rating;
@@ -54,18 +53,18 @@ export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGr
 
   if (memos.length === 0) {
     return (
-      <YStack alignItems="center" flex={1} justifyContent="center">
-        <Typography color="$textMuted" variant="callout">
+      <View className="flex-1 items-center justify-center">
+        <Typography className="text-text-muted" variant="callout">
           작성된 메모가 없습니다
         </Typography>
-      </YStack>
+      </View>
     );
   }
 
   return (
-    <YStack gap="$3">
+    <View className="gap-3">
       {header}
-      <YStack gap="$4" marginBottom="$5">
+      <View className="gap-4 mb-5">
         {ratingGroups.map((group) => (
           <RatingGroupCard
             key={group.rating}
@@ -75,7 +74,7 @@ export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGr
             onToggle={() => handleToggle(group.rating)}
           />
         ))}
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }
