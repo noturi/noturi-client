@@ -1,4 +1,3 @@
-import { logErrorResponse } from './logger';
 import { ApiError, ErrorResponseBody } from './types';
 
 export const getErrorMessage = (body: ErrorResponseBody | undefined): string => {
@@ -14,10 +13,7 @@ export const getErrorMessage = (body: ErrorResponseBody | undefined): string => 
 };
 
 export const handleErrorResponse = async (request: Request, response: Response) => {
-  await logErrorResponse(request, response);
-
   const body: ErrorResponseBody = await response
-    .clone()
     .json()
     .catch(() => ({ statusCode: response.status, message: ERROR_MESSAGES.DEFAULT }));
 

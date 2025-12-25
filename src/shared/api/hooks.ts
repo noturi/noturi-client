@@ -2,7 +2,6 @@ import { HTTPError } from 'ky';
 
 import { getToken } from './auth';
 import { handleErrorResponse } from './errors';
-import { logRequest } from './logger';
 import { refreshAccessToken } from './token-refresh';
 
 export const beforeRequestHook = async (request: Request) => {
@@ -13,8 +12,6 @@ export const beforeRequestHook = async (request: Request) => {
 };
 
 export const afterResponseHook = async (request: Request, _options: any, response: Response) => {
-  logRequest(request, response);
-
   if (!response.ok && response.status !== 401) {
     await handleErrorResponse(request, response);
   }
