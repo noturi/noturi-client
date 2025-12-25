@@ -105,10 +105,7 @@ export function DateTimePickerField({
 
       {showDatePicker && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View
-            className="rounded-4 pt-3"
-            style={{ backgroundColor: surfaceColor }}
-          >
+          <View className="rounded-4 pt-3" style={{ backgroundColor: surfaceColor }}>
             <Calendar
               current={dateTime.toISOString().split('T')[0]}
               markedDates={{

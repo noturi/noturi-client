@@ -6,7 +6,7 @@ import BottomSheet, {
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
 
-import { forwardRef, ReactNode, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
+import { ReactNode, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 export interface SheetRef {
@@ -23,7 +23,16 @@ interface SheetProps {
 }
 
 export const Sheet = forwardRef<SheetRef, SheetProps>(
-  ({ children, snapPoints: customSnapPoints, onClose, enablePanDownToClose = true, scrollable = false }, ref) => {
+  (
+    {
+      children,
+      snapPoints: customSnapPoints,
+      onClose,
+      enablePanDownToClose = true,
+      scrollable = false,
+    },
+    ref,
+  ) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const { currentTheme } = useUserTheme();
 
@@ -40,12 +49,7 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
 
     const renderBackdrop = useCallback(
       (props: any) => (
-        <BottomSheetBackdrop
-          {...props}
-          appearsOnIndex={0}
-          disappearsOnIndex={-1}
-          opacity={0.5}
-        />
+        <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} />
       ),
       [],
     );
@@ -82,9 +86,7 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
       >
-        <ContentComponent style={styles.contentContainer}>
-          {children}
-        </ContentComponent>
+        <ContentComponent style={styles.contentContainer}>{children}</ContentComponent>
       </BottomSheet>
     );
   },
@@ -162,9 +164,7 @@ export function ControlledSheet({
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
     >
-      <ContentComponent style={styles.contentContainer}>
-        {children}
-      </ContentComponent>
+      <ContentComponent style={styles.contentContainer}>{children}</ContentComponent>
     </BottomSheet>
   );
 }
@@ -176,10 +176,7 @@ export function SheetHandle() {
 
   return (
     <View className="items-center py-2">
-      <View
-        className="rounded-2 h-1 w-9"
-        style={{ backgroundColor: textMuted }}
-      />
+      <View className="rounded-2 h-1 w-9" style={{ backgroundColor: textMuted }} />
     </View>
   );
 }

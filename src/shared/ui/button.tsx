@@ -1,11 +1,6 @@
-import { Pressable, PressableProps, Text, View, ViewStyle } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
-
 import React from 'react';
+import { Pressable, PressableProps, Text, View, ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -62,9 +57,9 @@ const sizeClasses: Record<ButtonSize, string> = {
   md: 'h-11 px-4',
   lg: 'min-h-14 px-5',
   // Tamagui 호환 사이즈
-  '$2': 'h-8 px-3',
-  '$3': 'h-11 px-4',
-  '$4': 'min-h-14 px-5',
+  $2: 'h-8 px-3',
+  $3: 'h-11 px-4',
+  $4: 'min-h-14 px-5',
 };
 
 const sizeTextStyles: Record<ButtonSize, { fontSize: number; fontFamily: string }> = {
@@ -72,9 +67,9 @@ const sizeTextStyles: Record<ButtonSize, { fontSize: number; fontFamily: string 
   md: { fontSize: 17, fontFamily: 'Pretendard-Regular' },
   lg: { fontSize: 17, fontFamily: 'Pretendard-SemiBold' },
   // Tamagui 호환 사이즈
-  '$2': { fontSize: 13, fontFamily: 'Pretendard-Regular' },
-  '$3': { fontSize: 17, fontFamily: 'Pretendard-Regular' },
-  '$4': { fontSize: 17, fontFamily: 'Pretendard-SemiBold' },
+  $2: { fontSize: 13, fontFamily: 'Pretendard-Regular' },
+  $3: { fontSize: 17, fontFamily: 'Pretendard-Regular' },
+  $4: { fontSize: 17, fontFamily: 'Pretendard-SemiBold' },
 };
 
 // Tamagui 색상값을 실제 색상으로 변환
@@ -82,14 +77,14 @@ function resolveColor(color?: string): string | undefined {
   if (!color) return undefined;
   if (color.startsWith('$')) {
     const colorMap: Record<string, string> = {
-      '$primary': '#1d1d1d',
-      '$accent': '#ffc107',
-      '$error': '#f44336',
-      '$textPrimary': '#212121',
-      '$textSecondary': '#757575',
-      '$border': '#e0e0e0',
-      '$backgroundPrimary': '#ffffff',
-      '$backgroundSecondary': '#f5f5f5',
+      $primary: '#1d1d1d',
+      $accent: '#ffc107',
+      $error: '#f44336',
+      $textPrimary: '#212121',
+      $textSecondary: '#757575',
+      $border: '#e0e0e0',
+      $backgroundPrimary: '#ffffff',
+      $backgroundSecondary: '#f5f5f5',
     };
     return colorMap[color] || color;
   }

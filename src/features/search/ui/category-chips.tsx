@@ -42,10 +42,7 @@ export function CategoryChips({ categories, selectedCategoryId, onSelect }: Cate
                 }}
                 onPress={() => handlePress(category.id)}
               >
-                <Typography
-                  color={isSelected ? primaryTextColor : textSecondary}
-                  variant="callout"
-                >
+                <Typography color={isSelected ? primaryTextColor : textSecondary} variant="callout">
                   {category.name}
                 </Typography>
               </Pressable>

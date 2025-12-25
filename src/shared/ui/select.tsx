@@ -1,15 +1,15 @@
+import { ChevronDown } from 'lucide-react-native';
+
 import React, { useRef, useState } from 'react';
 import {
   Dimensions,
   Pressable,
+  View as RNView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  View as RNView,
 } from 'react-native';
-
-import { ChevronDown } from 'lucide-react-native';
 
 import { Typography } from './typography';
 
@@ -133,9 +133,7 @@ export function Select({
       )}
 
       {/* 배경 터치 시 닫기 */}
-      {isOpen && (
-        <TouchableOpacity style={styles.backdrop} onPress={() => setIsOpen(false)} />
-      )}
+      {isOpen && <TouchableOpacity style={styles.backdrop} onPress={() => setIsOpen(false)} />}
     </View>
   );
 }

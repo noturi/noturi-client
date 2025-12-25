@@ -191,10 +191,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         </View>
       </BottomSheetScrollView>
 
-      <View
-        className="absolute bottom-36 left-0 right-0 items-end px-6"
-        style={{ zIndex: 5 }}
-      >
+      <View className="absolute bottom-36 left-0 right-0 items-end px-6" style={{ zIndex: 5 }}>
         <FloatingButton
           onPress={() => {
             if (titleRef.current.trim()) {

@@ -1,6 +1,6 @@
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
-
 import { Plus } from 'lucide-react-native';
+
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Typography } from './typography';
 

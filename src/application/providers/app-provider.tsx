@@ -1,9 +1,8 @@
 import { Toaster } from 'sonner-native';
+import { ThemeProvider } from '~/features/theme';
 
 import { ReactNode } from 'react';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-
-import { ThemeProvider } from '~/features/theme';
 
 import { AuthProvider } from './auth-provider';
 import { NotificationProvider } from './notification-provider';

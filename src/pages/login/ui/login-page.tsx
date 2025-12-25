@@ -1,7 +1,7 @@
-import { Platform, View } from 'react-native';
-
 import { AppleButton, GoogleButton } from '~/features/auth/ui';
 import { Typography } from '~/shared/ui';
+
+import { Platform, View } from 'react-native';
 
 export function LoginPage() {
   return (

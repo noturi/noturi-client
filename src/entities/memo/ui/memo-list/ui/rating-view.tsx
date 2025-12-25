@@ -1,6 +1,6 @@
-import { ScrollView, View } from 'react-native';
-
 import type { UICategory } from '~/entities/category';
+
+import { ScrollView, View } from 'react-native';
 
 import type { UIMemo } from '../../../model/types';
 import { CategoryFilterBar } from './category-filter-bar';

@@ -1,8 +1,8 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { X } from 'lucide-react-native';
+import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
-import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

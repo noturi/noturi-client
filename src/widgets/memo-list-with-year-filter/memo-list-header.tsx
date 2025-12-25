@@ -1,9 +1,9 @@
 import { ChevronDown } from 'lucide-react-native';
-import { useCallback, useMemo, useState } from 'react';
-import { Pressable, View } from 'react-native';
-
 import { useUserTheme } from '~/features/theme';
 import { ControlledSheet, Typography } from '~/shared/ui';
+
+import { useCallback, useMemo, useState } from 'react';
+import { Pressable, View } from 'react-native';
 
 const APP_LAUNCH_YEAR = 2025;
 
@@ -74,7 +74,9 @@ export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderPro
               onPress={() => handleYearSelect(option.value)}
             >
               <Typography
-                className={selectedYear === option.value ? 'text-primary-text' : 'text-text-primary'}
+                className={
+                  selectedYear === option.value ? 'text-primary-text' : 'text-text-primary'
+                }
                 variant="callout"
               >
                 {option.label}

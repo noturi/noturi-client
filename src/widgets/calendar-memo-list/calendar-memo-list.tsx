@@ -1,11 +1,11 @@
 import { Bell } from 'lucide-react-native';
-import { View } from 'react-native';
-
 import type { CalendarMemo } from '~/entities/calendar';
 import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
 import { formatTime } from '~/shared/lib';
 import { Card, Typography } from '~/shared/ui';
+
+import { View } from 'react-native';
 
 interface CalendarMemoListProps {
   startDate: string;
@@ -64,9 +64,7 @@ const EmptyState = ({ message }: { message: string }) => (
 
 const ErrorState = () => (
   <Card>
-    <Typography className="text-text-muted text-center">
-      일정을 불러오는데 실패했습니다.
-    </Typography>
+    <Typography className="text-text-muted text-center">일정을 불러오는데 실패했습니다.</Typography>
   </Card>
 );
 

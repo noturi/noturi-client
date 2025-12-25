@@ -1,8 +1,8 @@
 import { X } from 'lucide-react-native';
 import { toast } from 'sonner-native';
+import { useDeleteCategoryMutation } from '~/features/categories/api/mutations';
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
-import { useDeleteCategoryMutation } from '~/features/categories/api/mutations';
 import { Typography } from '~/shared/ui';
 
 import { Alert, Pressable, View } from 'react-native';

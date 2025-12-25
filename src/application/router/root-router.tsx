@@ -1,3 +1,4 @@
+import { ChevronLeft } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
 
@@ -5,7 +6,6 @@ import { Pressable } from 'react-native';
 
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { ChevronLeft } from 'lucide-react-native';
 
 import { ROUTES } from '../../shared/config';
 

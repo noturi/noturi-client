@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, View } from 'react-native';
-
 import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo/ui';
 import { HREFS } from '~/shared/config';
 import { FloatingButton, Loading, StarRating, Typography } from '~/shared/ui';
+
+import { ScrollView, View } from 'react-native';
+
+import { router, useLocalSearchParams } from 'expo-router';
+
+import { useQuery } from '@tanstack/react-query';
 
 export default function MemoDetailScreen() {
   const { id } = useLocalSearchParams();

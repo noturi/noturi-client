@@ -1,6 +1,6 @@
-import { View } from 'react-native';
-
 import { Star } from 'lucide-react-native';
+
+import { View } from 'react-native';
 
 import { Typography } from './typography';
 

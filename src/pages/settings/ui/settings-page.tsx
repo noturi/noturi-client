@@ -1,9 +1,4 @@
-import { useState } from 'react';
-import { Linking, Pressable, View } from 'react-native';
-
-import Constants from 'expo-constants';
 import { FileText, Info, Settings } from 'lucide-react-native';
-
 import { useAuth } from '~/entities/auth';
 import { DeleteAccountButton, LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
@@ -12,6 +7,11 @@ import { ThemeSettings, useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
 import { EXTERNAL_LINKS } from '~/shared/config';
 import { Card, Typography } from '~/shared/ui';
+
+import { useState } from 'react';
+import { Linking, Pressable, View } from 'react-native';
+
+import Constants from 'expo-constants';
 
 const appVersion = Constants.expoConfig?.version ?? '1.0.0';
 

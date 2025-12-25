@@ -1,11 +1,12 @@
-import { router } from 'expo-router';
 import { ExternalLink } from 'lucide-react-native';
+import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
+import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
+
 import { useState } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
-import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
+import { router } from 'expo-router';
 
 export function AgreementPage() {
   const [agreed, setAgreed] = useState(false);

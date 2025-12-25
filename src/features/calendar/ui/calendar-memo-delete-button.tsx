@@ -1,7 +1,7 @@
 import { MoreVertical, Trash2 } from 'lucide-react-native';
+import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
-import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
 import { Typography } from '~/shared/ui';
 

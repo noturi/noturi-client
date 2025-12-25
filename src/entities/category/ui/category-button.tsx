@@ -43,17 +43,11 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
           opacity: isPressed ? 0.8 : 1,
         }}
       >
-        <Typography
-          style={{ color: isActive ? accentColor : textSecondary }}
-          variant="caption1"
-        >
+        <Typography style={{ color: isActive ? accentColor : textSecondary }} variant="caption1">
           {category.name}
         </Typography>
         {category.count > 0 && (
-          <Typography
-            style={{ color: isActive ? accentColor : textMuted }}
-            variant="caption1"
-          >
+          <Typography style={{ color: isActive ? accentColor : textMuted }} variant="caption1">
             {category.count}
           </Typography>
         )}

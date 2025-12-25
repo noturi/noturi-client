@@ -1,7 +1,8 @@
 import { vars } from 'nativewind';
+
 import {
-  createContext,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -11,13 +12,7 @@ import {
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import {
-  DEFAULT_THEME_ID,
-  rgbToHex,
-  ThemePreset,
-  themeStore,
-  THEME_PRESETS,
-} from './theme-store';
+import { DEFAULT_THEME_ID, THEME_PRESETS, ThemePreset, rgbToHex, themeStore } from './theme-store';
 
 interface ThemeContextValue {
   currentTheme: ThemePreset;
@@ -37,10 +32,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentTheme = useMemo(
-    () => themeStore.getPreset(themeId),
-    [themeId],
-  );
+  const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
 
   useEffect(() => {
     themeStore.getThemeId().then((stored) => {

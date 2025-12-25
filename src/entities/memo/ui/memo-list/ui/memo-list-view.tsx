@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
-import { FlatList, View } from 'react-native';
-
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
 import { Loading, Typography } from '~/shared/ui';
+
+import { useCallback } from 'react';
+import { FlatList, View } from 'react-native';
 
 type MemoListViewProps = {
   memos: UIMemo[];

@@ -37,10 +37,7 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
               onPress={() => onSelect(selectedRating === rating ? undefined : rating)}
             >
               <Star color={starColor} fill={starColor} size={16} />
-              <Typography
-                color={isSelected ? primaryTextColor : textPrimary}
-                variant="callout"
-              >
+              <Typography color={isSelected ? primaryTextColor : textPrimary} variant="callout">
                 {rating}
               </Typography>
             </Pressable>

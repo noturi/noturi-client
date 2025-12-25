@@ -39,10 +39,7 @@ export function YearChips({ selectedYear, onSelect }: YearChipsProps) {
                 }}
                 onPress={() => handlePress(year)}
               >
-                <Typography
-                  color={isSelected ? primaryTextColor : textSecondary}
-                  variant="callout"
-                >
+                <Typography color={isSelected ? primaryTextColor : textSecondary} variant="callout">
                   {year}년
                 </Typography>
               </Pressable>

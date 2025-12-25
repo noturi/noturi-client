@@ -1,8 +1,8 @@
-import { ScrollView, View } from 'react-native';
-
 import type { UICategory } from '~/entities/category/model/types';
 import { CategoryButton } from '~/entities/category/ui/category-button';
 import { Card } from '~/shared/ui';
+
+import { ScrollView, View } from 'react-native';
 
 type CategoryFilterBarProps = {
   categories: UICategory[];

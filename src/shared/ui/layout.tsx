@@ -10,11 +10,7 @@ export function Screen({ children, style, ...props }: ViewProps) {
 
 export function LayoutCard({ children, style, ...props }: ViewProps) {
   return (
-    <View
-      className="bg-surface border border-border rounded-6 p-6"
-      style={style}
-      {...props}
-    >
+    <View className="bg-surface border border-border rounded-6 p-6" style={style} {...props}>
       {children}
     </View>
   );

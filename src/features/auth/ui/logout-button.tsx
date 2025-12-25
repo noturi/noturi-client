@@ -1,11 +1,10 @@
-import { Alert, Pressable, View } from 'react-native';
-
 import { LogOut } from 'lucide-react-native';
-
 import { useAuth } from '~/entities/auth';
 import { useUserTheme } from '~/features/theme';
 import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
+
+import { Alert, Pressable, View } from 'react-native';
 
 export function LogoutButton() {
   const { logout } = useAuth();

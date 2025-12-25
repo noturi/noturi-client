@@ -1,6 +1,5 @@
-import { TextInput, TextInputProps, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-
 import React, { forwardRef, useState } from 'react';
+import { StyleSheet, TextInput, TextInputProps, TextStyle, ViewStyle } from 'react-native';
 
 type TextAreaSize = 'sm' | 'md' | 'lg';
 type TextAreaVariant = 'default' | 'outlined';
@@ -32,14 +31,14 @@ function resolveColor(color?: string): string | undefined {
   if (!color) return undefined;
   if (color.startsWith('$')) {
     const colorMap: Record<string, string> = {
-      '$primary': '#1d1d1d',
-      '$accent': '#ffc107',
-      '$error': '#f44336',
-      '$textPrimary': '#212121',
-      '$textSecondary': '#757575',
-      '$border': '#e0e0e0',
-      '$backgroundPrimary': '#ffffff',
-      '$backgroundSecondary': '#f5f5f5',
+      $primary: '#1d1d1d',
+      $accent: '#ffc107',
+      $error: '#f44336',
+      $textPrimary: '#212121',
+      $textSecondary: '#757575',
+      $border: '#e0e0e0',
+      $backgroundPrimary: '#ffffff',
+      $backgroundSecondary: '#f5f5f5',
     };
     return colorMap[color] || color;
   }
@@ -51,13 +50,13 @@ function resolveSpacing(value?: string | number): number | undefined {
   if (value === undefined) return undefined;
   if (typeof value === 'number') return value;
   const spacingMap: Record<string, number> = {
-    '$1': 2,
-    '$2': 4,
-    '$3': 8,
-    '$4': 12,
-    '$5': 16,
-    '$6': 24,
-    '$7': 32,
+    $1: 2,
+    $2: 4,
+    $3: 8,
+    $4: 12,
+    $5: 16,
+    $6: 24,
+    $7: 32,
   };
   return spacingMap[value];
 }
@@ -82,7 +81,7 @@ export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
     color,
     ...props
   },
-  ref
+  ref,
 ) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -96,11 +95,7 @@ export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
     onBlur?.(e);
   };
 
-  const borderClass = hasError
-    ? 'border-error'
-    : isFocused
-      ? 'border-primary'
-      : 'border-border';
+  const borderClass = hasError ? 'border-error' : isFocused ? 'border-primary' : 'border-border';
 
   const borderWidthClass = variant === 'default' ? 'border' : 'border-0';
 
@@ -111,7 +106,8 @@ export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
   if (borderColor) extraStyles.borderColor = resolveColor(borderColor);
   if (borderRadius !== undefined) extraStyles.borderRadius = resolveSpacing(borderRadius);
   if (borderWidth !== undefined) extraStyles.borderWidth = borderWidth;
-  if (paddingHorizontal !== undefined) extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
+  if (paddingHorizontal !== undefined)
+    extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
   if (paddingVertical !== undefined) extraStyles.paddingVertical = resolveSpacing(paddingVertical);
   if (fontSize !== undefined) extraStyles.fontSize = resolveSpacing(fontSize);
   if (color) extraStyles.color = resolveColor(color);

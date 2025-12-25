@@ -1,7 +1,7 @@
-import { View } from 'react-native';
-
 import type { SortOption } from '~/entities/category/model/types';
 import { SortButton } from '~/entities/category/ui/sort-button';
+
+import { View } from 'react-native';
 
 type SortOptionsBarProps = {
   options: SortOption[];

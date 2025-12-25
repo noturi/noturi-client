@@ -95,10 +95,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     >
       <BottomSheetView style={{ flex: 1 }}>
         <View className="items-center py-2">
-          <View
-            className="h-1 w-9 rounded-2"
-            style={{ backgroundColor: textMuted }}
-          />
+          <View className="h-1 w-9 rounded-2" style={{ backgroundColor: textMuted }} />
         </View>
         <MemoFormHeader onClose={onClose} />
         <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />

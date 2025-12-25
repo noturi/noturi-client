@@ -1,6 +1,5 @@
-import { Text, TextProps, TextStyle, StyleProp } from 'react-native';
-
 import React from 'react';
+import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
 
 export type TypographyVariant =
   | 'largeTitle'
@@ -130,18 +129,18 @@ function resolveColor(color?: string): string | undefined {
   if (!color) return undefined;
   if (color.startsWith('$')) {
     const colorMap: Record<string, string> = {
-      '$textPrimary': '#212121',
-      '$textSecondary': '#757575',
-      '$textMuted': '#9e9e9e',
-      '$accent': '#ffc107',
-      '$primary': '#1d1d1d',
-      '$error': '#f44336',
-      '$star': '#ffc107',
-      '$rating1': '#ff6b35',
-      '$rating2': '#ffa726',
-      '$rating3': '#9ccc65',
-      '$rating4': '#66bb6a',
-      '$rating5': '#42a5f5',
+      $textPrimary: '#212121',
+      $textSecondary: '#757575',
+      $textMuted: '#9e9e9e',
+      $accent: '#ffc107',
+      $primary: '#1d1d1d',
+      $error: '#f44336',
+      $star: '#ffc107',
+      $rating1: '#ff6b35',
+      $rating2: '#ffa726',
+      $rating3: '#9ccc65',
+      $rating4: '#66bb6a',
+      $rating5: '#42a5f5',
     };
     return colorMap[color] || color;
   }
@@ -152,9 +151,9 @@ function resolveColor(color?: string): string | undefined {
 function resolveFontWeight(fontWeight?: string | number): string | undefined {
   if (!fontWeight) return undefined;
   const weightMap: Record<string, string> = {
-    '$4': 'Pretendard-Regular',
-    '$5': 'Pretendard-Medium',
-    '$6': 'Pretendard-SemiBold',
+    $4: 'Pretendard-Regular',
+    $5: 'Pretendard-Medium',
+    $6: 'Pretendard-SemiBold',
     '600': 'Pretendard-SemiBold',
     '500': 'Pretendard-Medium',
     '400': 'Pretendard-Regular',
@@ -167,13 +166,13 @@ function resolveSpacing(value?: string | number): number | undefined {
   if (value === undefined) return undefined;
   if (typeof value === 'number') return value;
   const spacingMap: Record<string, number> = {
-    '$1': 2,
-    '$2': 4,
-    '$3': 8,
-    '$4': 12,
-    '$5': 16,
-    '$6': 24,
-    '$7': 32,
+    $1: 2,
+    $2: 4,
+    $3: 8,
+    $4: 12,
+    $5: 16,
+    $6: 24,
+    $7: 32,
   };
   return spacingMap[value];
 }
@@ -183,14 +182,14 @@ function resolveFontSize(value?: string | number): number | undefined {
   if (value === undefined) return undefined;
   if (typeof value === 'number') return value;
   const sizeMap: Record<string, number> = {
-    '$1': 11,
-    '$2': 12,
-    '$3': 13,
-    '$4': 14,
-    '$5': 17,
-    '$6': 20,
-    '$7': 24,
-    '$8': 28,
+    $1: 11,
+    $2: 12,
+    $3: 13,
+    $4: 14,
+    $5: 17,
+    $6: 20,
+    $7: 24,
+    $8: 28,
   };
   return sizeMap[value];
 }
@@ -278,7 +277,8 @@ export const Typography = ({
   if (paddingLeft !== undefined) extraStyles.paddingLeft = resolveSpacing(paddingLeft);
   if (paddingRight !== undefined) extraStyles.paddingRight = resolveSpacing(paddingRight);
   if (paddingVertical !== undefined) extraStyles.paddingVertical = resolveSpacing(paddingVertical);
-  if (paddingHorizontal !== undefined) extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
+  if (paddingHorizontal !== undefined)
+    extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
   if (flex !== undefined) extraStyles.flex = flex;
   if (maxWidth !== undefined) extraStyles.maxWidth = maxWidth;
   if (opacity !== undefined) extraStyles.opacity = opacity;

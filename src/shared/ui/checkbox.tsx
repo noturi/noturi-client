@@ -1,6 +1,6 @@
-import { Pressable, View } from 'react-native';
-
 import { Check } from 'lucide-react-native';
+
+import { Pressable, View } from 'react-native';
 
 import { Typography } from './typography';
 

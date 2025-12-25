@@ -1,9 +1,9 @@
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
-import { Pressable, View } from 'react-native';
-
 import type { UIMemo } from '~/entities/memo/model/types';
 import { useUserTheme } from '~/features/theme';
 import { Card, RatingStars, Typography } from '~/shared/ui';
+
+import { Pressable, View } from 'react-native';
 
 export type RatingGroup = {
   rating: number;

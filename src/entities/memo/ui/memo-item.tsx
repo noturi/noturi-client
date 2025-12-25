@@ -1,9 +1,10 @@
-import { router } from 'expo-router';
-import { Pressable, View } from 'react-native';
-
 import type { UIMemo } from '~/entities/memo/model/types';
 import { HREFS } from '~/shared/config';
 import { StarRating, Typography } from '~/shared/ui';
+
+import { Pressable, View } from 'react-native';
+
+import { router } from 'expo-router';
 
 interface MemoItemProps {
   memo: UIMemo;
@@ -19,10 +20,7 @@ export const MemoItem = ({ memo }: MemoItemProps) => (
     <View className="flex-row items-start justify-between mb-1">
       <View className="flex-1">
         <View className="flex-row items-center gap-1 mb-1">
-          <View
-            className="rounded-2 px-2 py-2"
-            style={{ backgroundColor: memo.category.color }}
-          >
+          <View className="rounded-2 px-2 py-2" style={{ backgroundColor: memo.category.color }}>
             <Typography className="font-medium" variant="caption1">
               {memo.category.name}
             </Typography>

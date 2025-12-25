@@ -3,10 +3,10 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { useGoogleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 
 import { useEffect } from 'react';
 import { Alert, Platform, Pressable } from 'react-native';
