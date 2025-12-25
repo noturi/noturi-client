@@ -22,7 +22,6 @@ import {
 } from './theme-store';
 
 interface ThemeContextValue {
-  currentTheme: ThemePreset;
   hexColors: HexColors;
   themeId: string;
   isLoading: boolean;
@@ -57,14 +56,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   const contextValue = useMemo(
     () => ({
-      currentTheme,
       hexColors,
       themeId,
       isLoading,
       setTheme,
       presets: THEME_PRESETS,
     }),
-    [currentTheme, hexColors, themeId, isLoading, setTheme],
+    [hexColors, themeId, isLoading, setTheme],
   );
 
   // Create CSS variables style object using NativeWind's vars()

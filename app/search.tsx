@@ -15,8 +15,7 @@ import { View } from 'react-native';
 
 export default function SearchScreen() {
   const { filters, categories, memos } = useMemoSearch();
-  const { currentTheme } = useUserTheme();
-  const mutedColor = `rgb(${currentTheme.colors.textMuted})`;
+  const { hexColors } = useUserTheme();
 
   const handleSearch = useCallback(() => {
     if (
@@ -83,7 +82,7 @@ export default function SearchScreen() {
       <View className="flex-1">
         {isIdle && (
           <EmptyState
-            icon={<Search color={mutedColor} size={24} />}
+            icon={<Search color={hexColors.textMuted} size={24} />}
             title="검색어를 입력하거나 필터를 선택해주세요"
           />
         )}
