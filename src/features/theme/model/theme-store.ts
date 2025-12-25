@@ -138,3 +138,37 @@ export function rgbToHex(rgb: string): string {
   const [r, g, b] = rgb.split(' ').map(Number);
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
+
+// 프리셋별 hex 색상 (미리 계산)
+export type HexColors = {
+  bgPrimary: string;
+  bgSecondary: string;
+  surface: string;
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  border: string;
+  accent: string;
+  primary: string;
+  primaryText: string;
+};
+
+function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
+  return {
+    bgPrimary: rgbToHex(colors.bgPrimary),
+    bgSecondary: rgbToHex(colors.bgSecondary),
+    surface: rgbToHex(colors.surface),
+    textPrimary: rgbToHex(colors.textPrimary),
+    textSecondary: rgbToHex(colors.textSecondary),
+    textMuted: rgbToHex(colors.textMuted),
+    border: rgbToHex(colors.border),
+    accent: rgbToHex(colors.accent),
+    primary: rgbToHex(colors.primary),
+    primaryText: rgbToHex(colors.primaryText),
+  };
+}
+
+// 프리셋 ID -> hex 색상 맵 (앱 시작 시 한번만 계산)
+export const PRESET_HEX_COLORS: Record<string, HexColors> = Object.fromEntries(
+  THEME_PRESETS.map((preset) => [preset.id, convertColorsToHex(preset.colors)]),
+);

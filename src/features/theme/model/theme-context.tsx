@@ -12,20 +12,14 @@ import {
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { DEFAULT_THEME_ID, THEME_PRESETS, ThemePreset, rgbToHex, themeStore } from './theme-store';
-
-interface HexColors {
-  bgPrimary: string;
-  bgSecondary: string;
-  surface: string;
-  textPrimary: string;
-  textSecondary: string;
-  textMuted: string;
-  border: string;
-  accent: string;
-  primary: string;
-  primaryText: string;
-}
+import {
+  DEFAULT_THEME_ID,
+  HexColors,
+  PRESET_HEX_COLORS,
+  THEME_PRESETS,
+  ThemePreset,
+  themeStore,
+} from './theme-store';
 
 interface ThemeContextValue {
   currentTheme: ThemePreset;
@@ -47,22 +41,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
-
-  const hexColors = useMemo<HexColors>(
-    () => ({
-      bgPrimary: rgbToHex(currentTheme.colors.bgPrimary),
-      bgSecondary: rgbToHex(currentTheme.colors.bgSecondary),
-      surface: rgbToHex(currentTheme.colors.surface),
-      textPrimary: rgbToHex(currentTheme.colors.textPrimary),
-      textSecondary: rgbToHex(currentTheme.colors.textSecondary),
-      textMuted: rgbToHex(currentTheme.colors.textMuted),
-      border: rgbToHex(currentTheme.colors.border),
-      accent: rgbToHex(currentTheme.colors.accent),
-      primary: rgbToHex(currentTheme.colors.primary),
-      primaryText: rgbToHex(currentTheme.colors.primaryText),
-    }),
-    [currentTheme],
-  );
+  const hexColors = PRESET_HEX_COLORS[themeId];
 
   useEffect(() => {
     themeStore.getThemeId().then((stored) => {
