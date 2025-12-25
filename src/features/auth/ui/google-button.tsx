@@ -3,12 +3,13 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { Button } from 'tamagui';
+import { useUserTheme } from '~/features/theme';
+import { rgbToHex } from '~/features/theme/model/theme-store';
 import { useGoogleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
 import { useEffect } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert, Platform, Pressable } from 'react-native';
 
 import { GoogleIcon } from './google-icon';
 
@@ -20,6 +21,10 @@ const ERROR_MESSAGES: Record<string, string | null> = {
 
 export function GoogleButton() {
   const { handleLoginSuccess, clearError } = useLoginHandler();
+  const { currentTheme } = useUserTheme();
+
+  const surfaceColor = rgbToHex(currentTheme.colors.surface);
+  const borderColor = rgbToHex(currentTheme.colors.border);
 
   const googleLoginMutation = useGoogleLoginMutation({
     onSuccess: handleLoginSuccess,
@@ -61,15 +66,18 @@ export function GoogleButton() {
   };
 
   return (
-    <Button
-      circular
-      backgroundColor="$surface"
-      borderColor="$border"
-      borderWidth={1}
+    <Pressable
+      className="h-14 w-14 items-center justify-center rounded-full"
       disabled={googleLoginMutation.isPending}
-      icon={<GoogleIcon height={24} width={24} />}
-      size="$7"
+      style={{
+        backgroundColor: surfaceColor,
+        borderColor: borderColor,
+        borderWidth: 1,
+        opacity: googleLoginMutation.isPending ? 0.5 : 1,
+      }}
       onPress={handlePress}
-    />
+    >
+      <GoogleIcon height={24} width={24} />
+    </Pressable>
   );
 }

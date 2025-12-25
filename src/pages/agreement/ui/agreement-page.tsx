@@ -1,14 +1,11 @@
-import { YStack } from 'tamagui';
-import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
-import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
-
+import { router } from 'expo-router';
+import { ExternalLink } from 'lucide-react-native';
 import { useState } from 'react';
-import { Linking } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { router } from 'expo-router';
-
-import { ExternalLink } from '@tamagui/lucide-icons';
+import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
+import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
 
 export function AgreementPage() {
   const [agreed, setAgreed] = useState(false);
@@ -19,42 +16,37 @@ export function AgreementPage() {
   };
 
   const handleAgree = () => {
-    // TODO: 서버에 동의 정보 전송 (필요한 경우)
     router.replace(HREFS.tabs());
   };
 
   return (
-    <YStack
-      backgroundColor="$backgroundPrimary"
-      flex={1}
-      justifyContent="space-between"
-      paddingBottom={insets.bottom + 20}
-      paddingHorizontal="$5"
-      paddingTop="$5"
+    <View
+      className="flex-1 justify-between bg-bg-primary px-5 pt-5"
+      style={{ paddingBottom: insets.bottom + 20 }}
     >
-      <YStack flex={1} gap="$6" justifyContent="center" marginTop={-80}>
-        <YStack gap="$2">
+      <View className="flex-1 gap-6 justify-center" style={{ marginTop: -80 }}>
+        <View className="gap-2">
           <Typography variant="title1">서비스 이용을 위해</Typography>
           <Typography variant="title1">약관에 동의해주세요</Typography>
-        </YStack>
+        </View>
 
-        <YStack alignItems="center" flexDirection="row" gap="$3" onPress={() => setAgreed(!agreed)}>
+        <Pressable className="flex-row items-center gap-3" onPress={() => setAgreed(!agreed)}>
           <Checkbox checked={agreed} onCheckedChange={setAgreed} />
-          <YStack alignItems="center" flexDirection="row" gap="$1" onPress={handleTermsPress}>
-            <Typography color="$blue10" variant="body">
+          <Pressable className="flex-row items-center gap-1" onPress={handleTermsPress}>
+            <Typography className="text-blue-500" variant="body">
               이용약관 및 개인정보처리방침
             </Typography>
-            <ExternalLink color="$blue10" size={14} />
-          </YStack>
-          <Typography color="$textSecondary" variant="body">
+            <ExternalLink color="#3b82f6" size={14} />
+          </Pressable>
+          <Typography className="text-text-secondary" variant="body">
             에 동의합니다
           </Typography>
-        </YStack>
-      </YStack>
+        </Pressable>
+      </View>
 
       <SubmitButton disabled={!agreed} position="static" onPress={handleAgree}>
         시작하기
       </SubmitButton>
-    </YStack>
+    </View>
   );
 }
