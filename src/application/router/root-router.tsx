@@ -1,6 +1,5 @@
 import { ChevronLeft } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 
 import { Pressable } from 'react-native';
 
@@ -10,10 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ROUTES } from '../../shared/config';
 
 export function RootRouter() {
-  const { currentTheme, themeId } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgSecondary);
-  const textColor = rgbToHex(currentTheme.colors.textPrimary);
+  const { hexColors, themeId } = useUserTheme();
 
   // 어두운 테마인지 확인 (상태바 스타일 결정용)
   const isDarkTheme = ['dark', 'navy', 'forest'].includes(themeId);
@@ -24,9 +20,9 @@ export function RootRouter() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: bgColor,
+            backgroundColor: hexColors.bgSecondary,
           },
-          headerTintColor: textColor,
+          headerTintColor: hexColors.textPrimary,
           headerTitleStyle: {
             fontWeight: '600',
             fontSize: 16,
@@ -34,7 +30,7 @@ export function RootRouter() {
           headerShadowVisible: false,
           headerBackTitle: '',
           contentStyle: {
-            backgroundColor: bgColor,
+            backgroundColor: hexColors.bgSecondary,
           },
         }}
       >
@@ -70,7 +66,7 @@ export function RootRouter() {
             headerBackButtonMenuEnabled: false,
             headerLeft: () => (
               <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
-                <ChevronLeft color={textColor} size={24} />
+                <ChevronLeft color={hexColors.textPrimary} size={24} />
               </Pressable>
             ),
           }}
