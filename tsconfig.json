@@ -4,17 +4,43 @@
     "strict": true,
     "jsx": "react-native",
     "paths": {
-      "@/*": ["./src/*"],
-      "~/application/*": ["./src/application/*"],
-      "~/app/*": ["./src/app/*"],
-      "~/pages/*": ["./src/pages/*"],
-      "~/widgets/*": ["./src/widgets/*"],
-      "~/widgets": ["./src/widgets"],
-      "~/features/*": ["./src/features/*"],
-      "~/entities/*": ["./src/entities/*"],
-      "~/shared/*": ["./src/shared/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "~/application/*": [
+        "./src/application/*"
+      ],
+      "~/app/*": [
+        "./src/app/*"
+      ],
+      "~/pages/*": [
+        "./src/pages/*"
+      ],
+      "~/widgets/*": [
+        "./src/widgets/*"
+      ],
+      "~/widgets": [
+        "./src/widgets"
+      ],
+      "~/features/*": [
+        "./src/features/*"
+      ],
+      "~/entities/*": [
+        "./src/entities/*"
+      ],
+      "~/shared/*": [
+        "./src/shared/*"
+      ]
     }
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+  ]
 }
