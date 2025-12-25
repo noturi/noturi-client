@@ -1,9 +1,17 @@
-import { ScrollView, Text, View, XStack, YStack } from 'tamagui';
-
 import React, { useRef, useState } from 'react';
-import { Dimensions, View as RNView, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  View as RNView,
+} from 'react-native';
 
-import { ChevronDown } from '@tamagui/lucide-icons';
+import { ChevronDown } from 'lucide-react-native';
+
+import { Typography } from './typography';
 
 export interface SelectOption {
   value: string;
@@ -43,13 +51,12 @@ export function Select({
 
   const calculatePosition = () => {
     if (triggerRef.current) {
-      triggerRef.current.measureInWindow((x: number, y: number, width: number, height: number) => {
+      triggerRef.current.measureInWindow((x: number, y: number, _width: number, height: number) => {
         const screenHeight = Dimensions.get('window').height;
         const dropdownHeight = Math.min(options.length * 40, 200);
         const spaceBelow = screenHeight - (y + height);
         const spaceAbove = y;
 
-        // 아래 공간이 충분하지 않고 위 공간이 더 크면 위로 표시
         if (spaceBelow < dropdownHeight + 20 && spaceAbove > spaceBelow) {
           setDropdownPosition('top');
         } else {
@@ -69,100 +76,92 @@ export function Select({
   };
 
   return (
-    <YStack position="relative" width={width}>
+    <View style={[styles.container, { width: width as any }]}>
       {/* Trigger */}
       <RNView ref={triggerRef} collapsable={false}>
         <TouchableOpacity activeOpacity={1} disabled={disabled} onPress={toggleOpen}>
-          <XStack
-            alignItems="center"
-            backgroundColor="$surface"
-            borderColor={isOpen ? '$borderActive' : '$border'}
-            borderRadius="$5"
-            borderWidth={1}
-            height={height}
-            justifyContent="space-between"
-            opacity={disabled ? 0.5 : 1}
-            paddingHorizontal="$3"
-            width="100%"
+          <View
+            className={`flex-row items-center justify-between rounded-5 border bg-surface px-3 ${
+              isOpen ? 'border-border-active' : 'border-border'
+            }`}
+            style={[{ height }, disabled && styles.disabled]}
           >
-            <View flex={1}>
-              <Text color={selectedOption ? '$textPrimary' : '$textMuted'} fontSize="$4">
+            <View className="flex-1">
+              <Typography
+                className={selectedOption ? 'text-text-primary' : 'text-text-muted'}
+                variant="body"
+              >
                 {displayText}
-              </Text>
+              </Typography>
             </View>
             <ChevronDown
-              color="$textMuted"
-              size="$1"
-              transform={isOpen ? [{ rotate: '180deg' }] : undefined}
+              color="#9e9e9e"
+              size={16}
+              style={isOpen ? { transform: [{ rotate: '180deg' }] } : undefined}
             />
-          </XStack>
+          </View>
         </TouchableOpacity>
       </RNView>
 
       {/* Dropdown */}
       {isOpen && (
-        <YStack
-          backgroundColor="$backgroundPrimary"
-          borderColor="$border"
-          borderRadius="$4"
-          borderWidth={1}
-          bottom={dropdownPosition === 'top' ? '100%' : undefined}
-          elevation={5}
-          left={0}
-          marginBottom={dropdownPosition === 'top' ? '$1' : undefined}
-          marginTop={dropdownPosition === 'bottom' ? '$1' : undefined}
-          maxHeight={200}
-          overflow="hidden"
-          position="absolute"
-          right={0}
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={8}
-          top={dropdownPosition === 'bottom' ? '100%' : undefined}
-          zIndex={999999}
+        <View
+          className="absolute left-0 right-0 overflow-hidden rounded-4 border border-border bg-bg-primary"
+          style={[
+            styles.dropdown,
+            dropdownPosition === 'top'
+              ? { bottom: '100%', marginBottom: 4 }
+              : { top: '100%', marginTop: 4 },
+          ]}
         >
-          <ScrollView maxHeight={200} showsVerticalScrollIndicator={false}>
+          <ScrollView style={{ maxHeight: 200 }} showsVerticalScrollIndicator={false}>
             {options.map((option) => (
-              <TouchableOpacity
+              <Pressable
                 key={option.value}
-                activeOpacity={0.7}
+                className={`min-h-[40px] flex-row items-center px-3 py-2 ${
+                  option.value === value ? 'bg-bg-secondary' : ''
+                }`}
                 onPress={() => handleSelect(option.value)}
               >
-                <XStack
-                  alignItems="center"
-                  backgroundColor={option.value === value ? '$backgroundSecondary' : 'transparent'}
-                  hoverStyle={{
-                    backgroundColor: '$backgroundSecondary',
-                  }}
-                  minHeight={40}
-                  paddingHorizontal="$3"
-                  paddingVertical="$2"
-                >
-                  <Text color="$textPrimary" fontSize="$4">
-                    {option.label}
-                  </Text>
-                </XStack>
-              </TouchableOpacity>
+                <Typography className="text-text-primary" variant="body">
+                  {option.label}
+                </Typography>
+              </Pressable>
             ))}
           </ScrollView>
-        </YStack>
+        </View>
       )}
 
       {/* 배경 터치 시 닫기 */}
       {isOpen && (
-        <TouchableOpacity
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 999998,
-          }}
-          onPress={() => setIsOpen(false)}
-        />
+        <TouchableOpacity style={styles.backdrop} onPress={() => setIsOpen(false)} />
       )}
-    </YStack>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'relative',
+    zIndex: 10,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  dropdown: {
+    zIndex: 999999,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  backdrop: {
+    position: 'absolute',
+    top: -1000,
+    left: -1000,
+    right: -1000,
+    bottom: -1000,
+    zIndex: 999998,
+  },
+});

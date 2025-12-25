@@ -1,24 +1,33 @@
-import { YStack, styled } from 'tamagui';
+import { View, ViewProps } from 'react-native';
 
-export const Screen = styled(YStack, {
-  flex: 1,
-  backgroundColor: '$background',
-  padding: '$10',
-});
+export function Screen({ children, style, ...props }: ViewProps) {
+  return (
+    <View className="flex-1 bg-bg-primary p-10" style={style} {...props}>
+      {children}
+    </View>
+  );
+}
 
-export const Card = styled(YStack, {
-  backgroundColor: '$surface',
-  borderColor: '$border',
-  borderWidth: 1,
-  borderRadius: '$6',
-  padding: '$6',
-});
+export function LayoutCard({ children, style, ...props }: ViewProps) {
+  return (
+    <View
+      className="bg-surface border border-border rounded-6 p-6"
+      style={style}
+      {...props}
+    >
+      {children}
+    </View>
+  );
+}
 
-export const Logo = styled(YStack, {
-  width: 60,
-  height: 60,
-  backgroundColor: '$primary',
-  borderRadius: '$5',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+export function Logo({ children, style, ...props }: ViewProps) {
+  return (
+    <View
+      className="w-[60px] h-[60px] bg-primary rounded-5 justify-center items-center"
+      style={style}
+      {...props}
+    >
+      {children}
+    </View>
+  );
+}

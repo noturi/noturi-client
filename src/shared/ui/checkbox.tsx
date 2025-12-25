@@ -1,6 +1,6 @@
-import { Checkbox as TamaguiCheckbox, XStack } from 'tamagui';
+import { Pressable, View } from 'react-native';
 
-import { Check } from '@tamagui/lucide-icons';
+import { Check } from 'lucide-react-native';
 
 import { Typography } from './typography';
 
@@ -12,34 +12,24 @@ export interface CheckboxProps {
 }
 
 export function Checkbox({ label, checked, onCheckedChange, disabled = false }: CheckboxProps) {
-  const handleCheckedChange = (value: boolean | 'indeterminate') => {
-    onCheckedChange(value === true);
-  };
-
   return (
-    <XStack alignItems="center" gap="$2" opacity={disabled ? 0.6 : 1}>
-      <TamaguiCheckbox
-        backgroundColor={checked ? '$primary' : 'transparent'}
-        borderColor={checked ? '$primary' : '$border'}
-        borderWidth={2}
-        checked={checked}
-        disabled={disabled}
-        size="$7"
-        onCheckedChange={handleCheckedChange}
+    <Pressable
+      className={`flex-row items-center gap-2 ${disabled ? 'opacity-60' : ''}`}
+      disabled={disabled}
+      onPress={() => onCheckedChange(!checked)}
+    >
+      <View
+        className={`w-5 h-5 rounded-1 border-2 items-center justify-center ${
+          checked ? 'bg-primary border-primary' : 'bg-transparent border-border'
+        }`}
       >
-        <TamaguiCheckbox.Indicator>
-          <Check color="white" size={14} />
-        </TamaguiCheckbox.Indicator>
-      </TamaguiCheckbox>
+        {checked && <Check color="white" size={14} />}
+      </View>
       {label && (
-        <Typography
-          color="$textSecondary"
-          variant="footnote"
-          onPress={() => !disabled && onCheckedChange(!checked)}
-        >
+        <Typography variant="footnote" className="text-text-secondary">
           {label}
         </Typography>
       )}
-    </XStack>
+    </Pressable>
   );
 }

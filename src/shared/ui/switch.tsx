@@ -1,4 +1,4 @@
-import { Switch as TamaguiSwitch, XStack } from 'tamagui';
+import { Switch as RNSwitch, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -11,16 +11,13 @@ export interface SwitchProps {
 
 export function Switch({ label, checked, onCheckedChange, disabled = false }: SwitchProps) {
   const switchElement = (
-    <TamaguiSwitch
-      backgroundColor={checked ? '$primary' : '$backgroundSecondary'}
-      borderColor={checked ? '$primary' : '$border'}
-      checked={checked}
+    <RNSwitch
+      value={checked}
+      onValueChange={onCheckedChange}
       disabled={disabled}
-      size="$5"
-      onCheckedChange={onCheckedChange}
-    >
-      <TamaguiSwitch.Thumb animation="quick" backgroundColor="white" borderWidth={0} />
-    </TamaguiSwitch>
+      trackColor={{ false: '#e0e0e0', true: '#1d1d1d' }}
+      thumbColor="#ffffff"
+    />
   );
 
   if (!label) {
@@ -28,9 +25,9 @@ export function Switch({ label, checked, onCheckedChange, disabled = false }: Sw
   }
 
   return (
-    <XStack alignItems="center" justifyContent="space-between">
+    <View className="flex-row items-center justify-between">
       <Typography variant="footnote">{label}</Typography>
       {switchElement}
-    </XStack>
+    </View>
   );
 }

@@ -1,70 +1,139 @@
-import { Input as TamaguiInput, styled } from 'tamagui';
+import { TextInput, TextInputProps, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
-export const Input = styled(TamaguiInput, {
-  backgroundColor: '$surface',
-  borderRadius: '$5',
-  borderWidth: 1,
-  borderColor: '$border',
-  color: '$textPrimary',
-  fontSize: 14,
-  fontWeight: '$4',
-  height: 36,
-  paddingHorizontal: '$3',
-  placeholderTextColor: '$textMuted',
-  textAlignVertical: 'center',
+import React, { forwardRef, useState } from 'react';
 
-  // 한글 입력 문제 해결을 위한 설정
-  autoCorrect: false,
-  autoCapitalize: 'none',
-  autoComplete: 'off',
-  spellCheck: false,
+type InputSize = 'sm' | 'md' | 'lg';
+type InputVariant = 'default' | 'outlined';
 
-  focusStyle: {
-    borderWidth: 1,
-    borderColor: '$primary',
+export interface InputProps extends TextInputProps {
+  hasError?: boolean;
+  size?: InputSize;
+  variant?: InputVariant;
+  // Tamagui 호환 props
+  backgroundColor?: string;
+  borderColor?: string;
+  borderRadius?: string | number;
+  borderWidth?: number;
+  paddingHorizontal?: string | number;
+  paddingVertical?: string | number;
+  fontSize?: string | number;
+  color?: string;
+}
+
+const sizeStyles = {
+  sm: { height: 28, fontSize: 12 },
+  md: { height: 36, fontSize: 14 },
+  lg: { height: 44, fontSize: 16 },
+};
+
+// Tamagui 색상값을 실제 색상으로 변환
+function resolveColor(color?: string): string | undefined {
+  if (!color) return undefined;
+  if (color.startsWith('$')) {
+    const colorMap: Record<string, string> = {
+      '$primary': '#1d1d1d',
+      '$accent': '#ffc107',
+      '$error': '#f44336',
+      '$textPrimary': '#212121',
+      '$textSecondary': '#757575',
+      '$border': '#e0e0e0',
+      '$backgroundPrimary': '#ffffff',
+      '$backgroundSecondary': '#f5f5f5',
+    };
+    return colorMap[color] || color;
+  }
+  return color;
+}
+
+// Tamagui spacing 변환
+function resolveSpacing(value?: string | number): number | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value === 'number') return value;
+  const spacingMap: Record<string, number> = {
+    '$1': 2,
+    '$2': 4,
+    '$3': 8,
+    '$4': 12,
+    '$5': 16,
+    '$6': 24,
+    '$7': 32,
+  };
+  return spacingMap[value];
+}
+
+export const Input = forwardRef<TextInput, InputProps>(function Input(
+  {
+    hasError = false,
+    size = 'md',
+    variant = 'default',
+    style,
+    onFocus,
+    onBlur,
+    // Tamagui 호환 props
+    backgroundColor,
+    borderColor,
+    borderRadius,
+    borderWidth,
+    paddingHorizontal,
+    paddingVertical,
+    fontSize,
+    color,
+    ...props
   },
+  ref
+) {
+  const [isFocused, setIsFocused] = useState(false);
 
-  variants: {
-    hasError: {
-      true: {
-        borderWidth: 1,
-        borderColor: '$error',
-        focusStyle: {
-          borderColor: '$error',
-        },
-      },
-    },
+  const handleFocus = (e: any) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
 
-    size: {
-      sm: {
-        height: 28,
-        fontSize: '$2',
-      },
-      md: {
-        height: 36,
-        fontSize: '$3',
-      },
-      lg: {
-        height: 44,
-        fontSize: '$4',
-      },
-    },
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
 
-    variant: {
-      default: {
-        backgroundColor: '$backgroundPrimary',
-        borderWidth: 1,
-      },
-      outlined: {
-        backgroundColor: '$backgroundTransparent',
-        borderWidth: 0,
-      },
-    },
-  } as const,
+  const borderClass = hasError
+    ? 'border-error'
+    : isFocused
+      ? 'border-primary'
+      : 'border-border';
 
-  defaultVariants: {
-    variant: 'default',
-    hasError: false,
-    size: 'md',
+  const bgClass = variant === 'default' ? 'bg-bg-primary' : 'bg-transparent';
+  const borderWidthClass = variant === 'default' ? 'border' : 'border-0';
+
+  // Tamagui 호환 스타일 생성
+  const extraStyles: ViewStyle & TextStyle = {};
+  if (backgroundColor) extraStyles.backgroundColor = resolveColor(backgroundColor);
+  if (borderColor) extraStyles.borderColor = resolveColor(borderColor);
+  if (borderRadius !== undefined) extraStyles.borderRadius = resolveSpacing(borderRadius);
+  if (borderWidth !== undefined) extraStyles.borderWidth = borderWidth;
+  if (paddingHorizontal !== undefined) extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
+  if (paddingVertical !== undefined) extraStyles.paddingVertical = resolveSpacing(paddingVertical);
+  if (fontSize !== undefined) extraStyles.fontSize = resolveSpacing(fontSize);
+  if (color) extraStyles.color = resolveColor(color);
+
+  return (
+    <TextInput
+      ref={ref}
+      className={`${bgClass} ${borderWidthClass} ${borderClass} rounded-5 px-3 text-text-primary`}
+      style={[sizeStyles[size], styles.input, extraStyles, style]}
+      placeholderTextColor="#9e9e9e"
+      autoCorrect={false}
+      autoCapitalize="none"
+      autoComplete="off"
+      spellCheck={false}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      {...props}
+    />
+  );
+});
+
+const styles = StyleSheet.create({
+  input: {
+    fontFamily: 'Pretendard-Medium',
+    textAlignVertical: 'center',
   },
 });

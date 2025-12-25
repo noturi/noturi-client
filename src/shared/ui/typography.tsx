@@ -1,4 +1,4 @@
-import { H1, H2, H3, H4, H5, Paragraph, SizableText } from 'tamagui';
+import { Text, TextProps, TextStyle, StyleProp } from 'react-native';
 
 import React from 'react';
 
@@ -18,160 +18,280 @@ export type TypographyVariant =
   | 'label'
   | 'number';
 
-const getComponentByVariant = (variant: TypographyVariant) => {
-  switch (variant) {
-    case 'largeTitle':
-      return H1;
-    case 'title1':
-      return H2;
-    case 'title2':
-      return H3;
-    case 'title3':
-      return H4;
-    case 'headline':
-      return H5;
-    case 'body':
-    case 'callout':
-    case 'subheadline':
-      return Paragraph;
-    case 'footnote':
-    case 'caption1':
-    case 'caption2':
-    case 'link':
-    case 'label':
-    case 'number':
-    default:
-      return SizableText;
-  }
-};
-
-const variantStyles = {
-  // iOS Typography Scale - https://developer.apple.com/design/human-interface-guidelines/typography
+// iOS Typography Scale - https://developer.apple.com/design/human-interface-guidelines/typography
+const variantStyles: Record<TypographyVariant, TextStyle> = {
   largeTitle: {
-    fontSize: 34, // 34pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 41, // 41pt
-    color: '$textPrimary',
+    fontSize: 34,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 41,
     letterSpacing: 0.37,
   },
   title1: {
-    fontSize: 28, // 28pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 34, // 34pt
-    color: '$textPrimary',
+    fontSize: 28,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 34,
     letterSpacing: 0.36,
   },
   title2: {
-    fontSize: 22, // 22pt
-    fontWeight: '$5', // 600 - semibold
-    lineHeight: 28, // 28pt
-    color: '$textPrimary',
+    fontSize: 22,
+    fontFamily: 'Pretendard-SemiBold',
+    lineHeight: 28,
     letterSpacing: 0.35,
   },
   title3: {
-    fontSize: 20, // 20pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 25, // 25pt
-    color: '$textPrimary',
+    fontSize: 20,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 25,
     letterSpacing: 0.38,
   },
   headline: {
-    fontSize: 17, // 17pt
-    fontWeight: '$4', // 600 - semibold
-    lineHeight: 22, // 22pt
-    color: '$textPrimary',
+    fontSize: 17,
+    fontFamily: 'Pretendard-Medium',
+    lineHeight: 22,
     letterSpacing: -0.41,
   },
   body: {
-    fontSize: 17, // 17pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 22, // 22pt
-    color: '$textPrimary',
+    fontSize: 17,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 22,
     letterSpacing: -0.41,
   },
   callout: {
-    fontSize: 16, // 16pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 21, // 21pt
-    color: '$textPrimary',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 21,
     letterSpacing: -0.32,
   },
   subheadline: {
-    fontSize: 15, // 15pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 20, // 20pt
-    color: '$textPrimary',
+    fontSize: 15,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 20,
     letterSpacing: -0.24,
   },
   footnote: {
-    fontSize: 13, // 13pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 18, // 18pt
-    color: '$textPrimary',
+    fontSize: 13,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 18,
     letterSpacing: -0.08,
   },
   caption1: {
-    fontSize: 12, // 12pt
-    fontWeight: '$4',
-    lineHeight: 16, // 16pt
-    color: '$textSecondary',
+    fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
+    lineHeight: 16,
     letterSpacing: 0,
   },
   caption2: {
-    fontSize: 11, // 11pt
-    fontWeight: '$3', // 400 - regular
-    lineHeight: 13, // 13pt
-    color: '$textMuted',
+    fontSize: 11,
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 13,
     letterSpacing: 0.07,
   },
-
-  // 특수 용도
   link: {
-    fontSize: 17, // body와 동일
-    fontWeight: '$3', // 400 - regular
+    fontSize: 17,
+    fontFamily: 'Pretendard-Regular',
     lineHeight: 22,
-    color: '$accent',
-    textDecorationLine: 'none',
     letterSpacing: -0.41,
   },
   label: {
-    fontSize: 11, // 11pt
-    fontWeight: '$4', // 500 - medium
+    fontSize: 11,
+    fontFamily: 'Pretendard-Medium',
     lineHeight: 13,
-    color: '$textPrimary',
-    textTransform: 'uppercase',
     letterSpacing: 0.07,
+    textTransform: 'uppercase',
   },
   number: {
-    fontSize: 15, // 17pt
-    fontWeight: '$4', // 700 - bold
-    lineHeight: 22, // 22pt
-    color: '$textNumber',
+    fontSize: 15,
+    fontFamily: 'Pretendard-Medium',
+    lineHeight: 22,
     letterSpacing: -0.41,
   },
-} as const;
+};
 
-export interface TypographyProps {
-  variant?: TypographyVariant;
-  children: React.ReactNode;
-  [key: string]: any;
+// 기본 색상 클래스 매핑
+const variantColorClass: Record<TypographyVariant, string> = {
+  largeTitle: 'text-text-primary',
+  title1: 'text-text-primary',
+  title2: 'text-text-primary',
+  title3: 'text-text-primary',
+  headline: 'text-text-primary',
+  body: 'text-text-primary',
+  callout: 'text-text-primary',
+  subheadline: 'text-text-primary',
+  footnote: 'text-text-primary',
+  caption1: 'text-text-secondary',
+  caption2: 'text-text-muted',
+  link: 'text-accent',
+  label: 'text-text-primary',
+  number: 'text-[#2196f3]',
+};
+
+// Tamagui 색상값을 실제 색상으로 변환
+function resolveColor(color?: string): string | undefined {
+  if (!color) return undefined;
+  if (color.startsWith('$')) {
+    const colorMap: Record<string, string> = {
+      '$textPrimary': '#212121',
+      '$textSecondary': '#757575',
+      '$textMuted': '#9e9e9e',
+      '$accent': '#ffc107',
+      '$primary': '#1d1d1d',
+      '$error': '#f44336',
+      '$star': '#ffc107',
+      '$rating1': '#ff6b35',
+      '$rating2': '#ffa726',
+      '$rating3': '#9ccc65',
+      '$rating4': '#66bb6a',
+      '$rating5': '#42a5f5',
+    };
+    return colorMap[color] || color;
+  }
+  return color;
 }
 
-export const Typography = ({ variant = 'body', children, ...props }: TypographyProps) => {
-  const Component = getComponentByVariant(variant);
-  const styles = variantStyles[variant];
+// Tamagui fontWeight 변환
+function resolveFontWeight(fontWeight?: string | number): string | undefined {
+  if (!fontWeight) return undefined;
+  const weightMap: Record<string, string> = {
+    '$4': 'Pretendard-Regular',
+    '$5': 'Pretendard-Medium',
+    '$6': 'Pretendard-SemiBold',
+    '600': 'Pretendard-SemiBold',
+    '500': 'Pretendard-Medium',
+    '400': 'Pretendard-Regular',
+  };
+  return weightMap[String(fontWeight)];
+}
+
+// Tamagui spacing 변환
+function resolveSpacing(value?: string | number): number | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value === 'number') return value;
+  const spacingMap: Record<string, number> = {
+    '$1': 2,
+    '$2': 4,
+    '$3': 8,
+    '$4': 12,
+    '$5': 16,
+    '$6': 24,
+    '$7': 32,
+  };
+  return spacingMap[value];
+}
+
+// Tamagui fontSize 변환
+function resolveFontSize(value?: string | number): number | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value === 'number') return value;
+  const sizeMap: Record<string, number> = {
+    '$1': 11,
+    '$2': 12,
+    '$3': 13,
+    '$4': 14,
+    '$5': 17,
+    '$6': 20,
+    '$7': 24,
+    '$8': 28,
+  };
+  return sizeMap[value];
+}
+
+export interface TypographyProps extends TextProps {
+  variant?: TypographyVariant;
+  children: React.ReactNode;
+  color?: string;
+  // Tamagui 호환 props
+  marginTop?: string | number;
+  marginBottom?: string | number;
+  marginLeft?: string | number;
+  marginRight?: string | number;
+  paddingTop?: string | number;
+  paddingBottom?: string | number;
+  paddingLeft?: string | number;
+  paddingRight?: string | number;
+  paddingVertical?: string | number;
+  paddingHorizontal?: string | number;
+  fontWeight?: string | number;
+  textAlign?: TextStyle['textAlign'] | string;
+  fontSize?: string | number;
+  lineHeight?: string | number;
+  flex?: number;
+  maxWidth?: number;
+  opacity?: number;
+  textDecorationLine?: TextStyle['textDecorationLine'];
+  pointerEvents?: 'auto' | 'none' | 'box-none' | 'box-only';
+  // deprecated props (ignored)
+  pressable?: boolean;
+  as?: string;
+  size?: string;
+}
+
+export const Typography = ({
+  variant = 'body',
+  children,
+  style,
+  color,
+  className,
+  // Tamagui 호환 props
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  paddingTop,
+  paddingBottom,
+  paddingLeft,
+  paddingRight,
+  paddingVertical,
+  paddingHorizontal,
+  fontWeight,
+  textAlign,
+  fontSize,
+  lineHeight,
+  flex,
+  maxWidth,
+  opacity,
+  textDecorationLine,
+  pointerEvents,
+  // ignored props
+  pressable: _pressable,
+  as: _as,
+  size: _size,
+  ...props
+}: TypographyProps) => {
+  const baseStyle = variantStyles[variant];
+  const colorClass = variantColorClass[variant];
+  const resolvedColor = resolveColor(color);
+  const resolvedFontFamily = resolveFontWeight(fontWeight);
+
+  // 추가 스타일 생성
+  const extraStyles: TextStyle = {};
+  if (resolvedColor) extraStyles.color = resolvedColor;
+  if (resolvedFontFamily) extraStyles.fontFamily = resolvedFontFamily;
+  if (textAlign) extraStyles.textAlign = textAlign as TextStyle['textAlign'];
+  if (fontSize !== undefined) extraStyles.fontSize = resolveFontSize(fontSize);
+  if (lineHeight !== undefined) extraStyles.lineHeight = resolveSpacing(lineHeight);
+  if (marginTop !== undefined) extraStyles.marginTop = resolveSpacing(marginTop);
+  if (marginBottom !== undefined) extraStyles.marginBottom = resolveSpacing(marginBottom);
+  if (marginLeft !== undefined) extraStyles.marginLeft = resolveSpacing(marginLeft);
+  if (marginRight !== undefined) extraStyles.marginRight = resolveSpacing(marginRight);
+  if (paddingTop !== undefined) extraStyles.paddingTop = resolveSpacing(paddingTop);
+  if (paddingBottom !== undefined) extraStyles.paddingBottom = resolveSpacing(paddingBottom);
+  if (paddingLeft !== undefined) extraStyles.paddingLeft = resolveSpacing(paddingLeft);
+  if (paddingRight !== undefined) extraStyles.paddingRight = resolveSpacing(paddingRight);
+  if (paddingVertical !== undefined) extraStyles.paddingVertical = resolveSpacing(paddingVertical);
+  if (paddingHorizontal !== undefined) extraStyles.paddingHorizontal = resolveSpacing(paddingHorizontal);
+  if (flex !== undefined) extraStyles.flex = flex;
+  if (maxWidth !== undefined) extraStyles.maxWidth = maxWidth;
+  if (opacity !== undefined) extraStyles.opacity = opacity;
+  if (textDecorationLine) extraStyles.textDecorationLine = textDecorationLine;
 
   return (
-    <Component
-      {...styles}
-      margin={
-        variant === 'body' || variant === 'callout' || variant === 'subheadline' ? 0 : undefined
-      }
-      pointerEvents="none"
-      pressStyle={variant === 'link' ? { opacity: 0.7 } : undefined}
+    <Text
+      className={`${colorClass} ${className ?? ''}`}
+      style={[baseStyle, extraStyles, style] as StyleProp<TextStyle>}
+      pointerEvents={pointerEvents}
       {...props}
     >
       {children}
-    </Component>
+    </Text>
   );
 };

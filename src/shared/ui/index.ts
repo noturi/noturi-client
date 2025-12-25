@@ -13,6 +13,7 @@ export * from './select';
 export * from './skeleton';
 export * from './star-rating';
 export * from './submit-button';
+export * from './sheet';
 export * from './switch';
 export * from './text-area';
 export * from './typography';

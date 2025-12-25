@@ -1,7 +1,6 @@
-import { Spinner, View, XStack } from 'tamagui';
 import { useKeyboard } from '~/shared/lib';
 
-import { Pressable, StyleSheet } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -42,14 +41,14 @@ export const SubmitButton = ({
       onPress={onPress}
     >
       {isLoading ? (
-        <XStack alignItems="center" gap="$2">
-          <Spinner color="white" size="small" />
-          <Typography color="white" variant="body">
+        <View className="flex-row items-center gap-2">
+          <ActivityIndicator color="white" size="small" />
+          <Typography className="text-white" variant="body">
             {loadingText}
           </Typography>
-        </XStack>
+        </View>
       ) : (
-        <Typography color="white" fontWeight="600" variant="body">
+        <Typography className="text-white font-sans-semibold" variant="body">
           {children}
         </Typography>
       )}
@@ -59,16 +58,12 @@ export const SubmitButton = ({
   if (position === 'fixed') {
     return (
       <View
-        alignItems="flex-end"
-        backgroundColor="transparent"
-        bottom={followKeyboard ? keyboardHeight : 0}
-        left={0}
-        paddingBottom={followKeyboard && keyboardHeight > 0 ? 12 : 24}
-        paddingHorizontal={24}
-        paddingTop={12}
-        position="absolute"
-        right={0}
-        zIndex="$5"
+        className="absolute left-0 right-0 items-end bg-transparent px-6 pt-3"
+        style={{
+          bottom: followKeyboard ? keyboardHeight : 0,
+          paddingBottom: followKeyboard && keyboardHeight > 0 ? 12 : 24,
+          zIndex: 50,
+        }}
       >
         {buttonContent}
       </View>

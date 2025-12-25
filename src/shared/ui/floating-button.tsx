@@ -1,8 +1,8 @@
-import { Button, Spinner, Text, XStack } from 'tamagui';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
-import { StyleSheet } from 'react-native';
+import { Plus } from 'lucide-react-native';
 
-import { Plus } from '@tamagui/lucide-icons';
+import { Typography } from './typography';
 
 interface FloatingButtonProps {
   onPress: () => void;
@@ -17,47 +17,66 @@ export function FloatingButton({
   isLoading = false,
   children,
 }: FloatingButtonProps) {
+  const isDisabled = disabled || isLoading;
+
   const content = isLoading ? (
-    <XStack alignItems="center" gap="$2">
-      <Spinner color="white" size="small" />
-      {children && <Text color="white">{children}</Text>}
-    </XStack>
+    <View className="flex-row items-center gap-2">
+      <ActivityIndicator color="white" size="small" />
+      {children && (
+        <Typography className="text-white" variant="body">
+          {children}
+        </Typography>
+      )}
+    </View>
   ) : children ? (
     children
   ) : (
-    <Plus color="white" size="$1.5" />
+    <Plus color="white" size={24} />
   );
 
   return (
-    <Button
-      backgroundColor="$primary"
-      borderRadius={children ? 22 : 22}
-      disabled={disabled || isLoading}
-      height={44}
-      minWidth={44}
-      opacity={disabled || isLoading ? 0.6 : 1}
-      paddingHorizontal={children ? '$3' : 0}
-      position="absolute"
-      pressStyle={{
-        opacity: 0.8,
-        transform: [{ scale: 1.05 }],
-      }}
-      right="$4"
-      style={styles.shadow}
-      width={children ? 'auto' : 44}
+    <Pressable
+      disabled={isDisabled}
+      style={({ pressed }) => [
+        styles.button,
+        children ? styles.withText : styles.iconOnly,
+        isDisabled && styles.disabled,
+        pressed && !isDisabled && styles.pressed,
+      ]}
       onPress={onPress}
     >
       {content}
-    </Button>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  shadow: {
+  button: {
+    position: 'absolute',
+    right: 16,
+    backgroundColor: '#1d1d1d',
+    borderRadius: 22,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 5,
+  },
+  iconOnly: {
+    width: 44,
+  },
+  withText: {
+    minWidth: 44,
+    paddingHorizontal: 12,
+  },
+  disabled: {
+    opacity: 0.6,
+  },
+  pressed: {
+    opacity: 0.8,
+    transform: [{ scale: 1.05 }],
   },
 });
