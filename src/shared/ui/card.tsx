@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { View, ViewProps, ViewStyle } from 'react-native';
 
 export interface CardProps extends ViewProps {
@@ -76,11 +77,7 @@ export function Card({
   if (position) extraStyles.position = position;
 
   return (
-    <View
-      className={`bg-surface rounded-6 p-3 ${className ?? ''}`}
-      style={[extraStyles, style]}
-      {...props}
-    >
+    <View className={clsx('bg-surface rounded-6 p-3', className)} style={[extraStyles, style]} {...props}>
       {children}
     </View>
   );
