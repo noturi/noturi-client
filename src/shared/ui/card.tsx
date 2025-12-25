@@ -75,7 +75,7 @@ export function Card({
   if (position) extraStyles.position = position;
 
   return (
-    <View className="bg-bg-primary rounded-6 p-3" style={[extraStyles, style]} {...props}>
+    <View className="bg-surface rounded-6 p-3" style={[extraStyles, style]} {...props}>
       {children}
     </View>
   );

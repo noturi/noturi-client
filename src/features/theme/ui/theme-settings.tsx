@@ -29,7 +29,10 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
           className="h-[60px] w-full justify-center rounded-4 border p-2"
           style={{ backgroundColor: presetHex.bgPrimary, borderColor: presetHex.border }}
         >
-          <View className="mb-1 h-2 w-[60%] rounded-2" style={{ backgroundColor: presetHex.accent }} />
+          <View
+            className="mb-1 h-2 w-[60%] rounded-2"
+            style={{ backgroundColor: presetHex.accent }}
+          />
           <View
             className="h-1 w-[80%] rounded-1"
             style={{ backgroundColor: presetHex.textPrimary, opacity: 0.6 }}
