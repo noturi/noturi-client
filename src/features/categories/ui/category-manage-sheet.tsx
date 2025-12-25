@@ -1,6 +1,5 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -15,10 +14,7 @@ interface CategoryManageSheetProps {
 
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { currentTheme } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => ['40%', '60%'], []);
 
@@ -57,13 +53,13 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgPrimary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}

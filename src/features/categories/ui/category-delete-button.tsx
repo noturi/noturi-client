@@ -2,7 +2,6 @@ import { X } from 'lucide-react-native';
 import { toast } from 'sonner-native';
 import { useDeleteCategoryMutation } from '~/features/categories/api/mutations';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Typography } from '~/shared/ui';
 
 import { Alert, Pressable, View } from 'react-native';
@@ -18,9 +17,7 @@ export function CategoryDeleteButton({
   categoryName,
   disabled = false,
 }: CategoryDeleteButtonProps) {
-  const { currentTheme } = useUserTheme();
-  const surfaceColor = rgbToHex(currentTheme.colors.surface);
-  const borderColor = rgbToHex(currentTheme.colors.border);
+  const { hexColors } = useUserTheme();
 
   const deleteCategoryMutation = useDeleteCategoryMutation({
     onSuccess: () => {
@@ -51,8 +48,8 @@ export function CategoryDeleteButton({
       <View
         className="flex-row items-center gap-2 rounded-4 px-3 py-2"
         style={{
-          backgroundColor: surfaceColor,
-          borderColor: borderColor,
+          backgroundColor: hexColors.surface,
+          borderColor: hexColors.border,
           borderWidth: 1,
         }}
       >

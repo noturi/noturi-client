@@ -2,7 +2,6 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/botto
 import { X } from 'lucide-react-native';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -17,14 +16,7 @@ interface CategoryAddSheetProps {
 export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [categoryName, setCategoryName] = useState('');
-  const { currentTheme } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const accentColor = rgbToHex(currentTheme.colors.accent);
-  const surfaceColor = rgbToHex(currentTheme.colors.surface);
-  const textSecondary = rgbToHex(currentTheme.colors.textSecondary);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => ['40%'], []);
 
@@ -83,13 +75,13 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgPrimary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
@@ -101,7 +93,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         {/* Header */}
         <View
           className="flex-row items-center justify-between px-5 py-4"
-          style={{ borderBottomColor: borderColor, borderBottomWidth: 1 }}
+          style={{ borderBottomColor: hexColors.border, borderBottomWidth: 1 }}
         >
           <Typography variant="headline">새 카테고리 추가</Typography>
           <Button variant="ghost" onPress={handleClose}>
@@ -125,18 +117,18 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
             <Button
               className="flex-1"
               style={{
-                backgroundColor: surfaceColor,
-                borderColor: borderColor,
+                backgroundColor: hexColors.surface,
+                borderColor: hexColors.border,
                 borderWidth: 1,
               }}
               onPress={handleClose}
             >
-              <X color={textSecondary} size={20} />
+              <X color={hexColors.textSecondary} size={20} />
             </Button>
             <Button
               className="flex-1"
               disabled={!categoryName.trim() || createCategoryMutation.isPending}
-              style={{ backgroundColor: accentColor }}
+              style={{ backgroundColor: hexColors.accent }}
               onPress={handleCreate}
             >
               {createCategoryMutation.isPending ? (
