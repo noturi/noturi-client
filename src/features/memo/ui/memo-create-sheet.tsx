@@ -1,6 +1,5 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, Platform, View } from 'react-native';
@@ -16,10 +15,7 @@ interface MemoCreateSheetProps {
 export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const { currentTheme } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(
     () => (keyboardHeight > 0 ? ['85%'] : ['50%', '85%']),
@@ -77,13 +73,13 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgPrimary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
@@ -95,7 +91,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     >
       <BottomSheetView style={{ flex: 1 }}>
         <View className="items-center py-2">
-          <View className="h-1 w-9 rounded-2" style={{ backgroundColor: textMuted }} />
+          <View className="h-1 w-9 rounded-2" style={{ backgroundColor: hexColors.textMuted }} />
         </View>
         <MemoFormHeader onClose={onClose} />
         <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />

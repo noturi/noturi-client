@@ -1,7 +1,6 @@
 import { Trash2 } from 'lucide-react-native';
 import { toast } from 'sonner-native';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
@@ -17,8 +16,7 @@ interface MemoDeleteButtonProps {
 }
 
 export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButtonProps) => {
-  const { currentTheme } = useUserTheme();
-  const textColor = rgbToHex(currentTheme.colors.textPrimary);
+  const { hexColors } = useUserTheme();
 
   const deleteMutation = useDeleteMemoMutation({
     onSuccess: () => {
@@ -49,7 +47,7 @@ export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButt
 
   return (
     <Button disabled={deleteMutation.isPending} size="sm" variant="ghost" onPress={handleDelete}>
-      <Trash2 color={textColor} size={16} />
+      <Trash2 color={hexColors.textPrimary} size={16} />
     </Button>
   );
 };

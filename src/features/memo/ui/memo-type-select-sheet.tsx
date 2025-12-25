@@ -1,7 +1,6 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { FileText, Star } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
-import { rgbToHex } from '~/features/theme/model/theme-store';
 import { HREFS } from '~/shared/config';
 import { Typography } from '~/shared/ui';
 
@@ -17,14 +16,7 @@ interface MemoTypeSelectSheetProps {
 
 export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { currentTheme } = useUserTheme();
-
-  const bgColor = rgbToHex(currentTheme.colors.bgPrimary);
-  const bgSecondary = rgbToHex(currentTheme.colors.bgSecondary);
-  const borderColor = rgbToHex(currentTheme.colors.border);
-  const textMuted = rgbToHex(currentTheme.colors.textMuted);
-  const primaryColor = rgbToHex(currentTheme.colors.primary);
-  const accentColor = rgbToHex(currentTheme.colors.accent);
+  const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => ['45%'], []);
 
@@ -75,15 +67,15 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
   return (
     <BottomSheet
       ref={bottomSheetRef}
+      enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: bgColor,
+        backgroundColor: hexColors.bgPrimary,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
       }}
-      enablePanDownToClose
       handleIndicatorStyle={{
-        backgroundColor: textMuted,
+        backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
@@ -105,8 +97,8 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           <Pressable
             className="flex-row items-center gap-4 rounded-4 p-4"
             style={({ pressed }) => ({
-              backgroundColor: bgSecondary,
-              borderColor: borderColor,
+              backgroundColor: hexColors.bgSecondary,
+              borderColor: hexColors.border,
               borderWidth: 1,
               transform: [{ scale: pressed ? 0.98 : 1 }],
             })}
@@ -114,7 +106,7 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           >
             <View
               className="items-center justify-center rounded-3 p-3"
-              style={{ backgroundColor: primaryColor }}
+              style={{ backgroundColor: hexColors.primary }}
             >
               <Star color="white" fill="white" size={24} />
             </View>
@@ -129,8 +121,8 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           <Pressable
             className="flex-row items-center gap-4 rounded-4 p-4"
             style={({ pressed }) => ({
-              backgroundColor: bgSecondary,
-              borderColor: borderColor,
+              backgroundColor: hexColors.bgSecondary,
+              borderColor: hexColors.border,
               borderWidth: 1,
               transform: [{ scale: pressed ? 0.98 : 1 }],
             })}
@@ -138,7 +130,7 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           >
             <View
               className="items-center justify-center rounded-3 p-3"
-              style={{ backgroundColor: accentColor }}
+              style={{ backgroundColor: hexColors.accent }}
             >
               <FileText color="white" size={24} />
             </View>
