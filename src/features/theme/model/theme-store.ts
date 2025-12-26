@@ -18,6 +18,7 @@ export interface ThemePreset {
     border: string;
     // 액센트 (포인트 색상)
     accent: string;
+    accentText: string;
     // 버튼
     primary: string;
     primaryText: string;
@@ -40,6 +41,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '158 158 158',
       border: '224 224 224',
       accent: '255 193 7',
+      accentText: '29 29 29',
       primary: '29 29 29',
       primaryText: '255 255 255',
       selection: '29 29 29',
@@ -58,6 +60,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '128 128 128',
       border: '64 64 64',
       accent: '255 193 7',
+      accentText: '29 29 29',
       primary: '255 255 255',
       primaryText: '18 18 18',
       selection: '255 255 255',
@@ -76,6 +79,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '195 140 120',
       border: '250 200 175',
       accent: '255 100 65',
+      accentText: '255 247 240',
       primary: '100 45 35',
       primaryText: '255 247 240',
       selection: '100 45 35',
@@ -94,6 +98,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '130 155 190',
       border: '71 85 105',
       accent: '56 189 248',
+      accentText: '15 23 42',
       primary: '225 240 255',
       primaryText: '15 23 42',
       selection: '56 189 248',
@@ -112,6 +117,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '125 165 145',
       border: '60 80 70',
       accent: '74 222 128',
+      accentText: '20 30 26',
       primary: '225 250 235',
       primaryText: '20 30 26',
       selection: '74 222 128',
@@ -130,6 +136,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '155 140 190',
       border: '70 60 95',
       accent: '180 130 255',
+      accentText: '25 20 35',
       primary: '240 230 255',
       primaryText: '25 20 35',
       selection: '180 130 255',
@@ -180,6 +187,7 @@ export type HexColors = {
   textMuted: string;
   border: string;
   accent: string;
+  accentText: string;
   primary: string;
   primaryText: string;
   selection: string;
@@ -195,6 +203,7 @@ function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
     textMuted: rgbToHex(colors.textMuted),
     border: rgbToHex(colors.border),
     accent: rgbToHex(colors.accent),
+    accentText: rgbToHex(colors.accentText),
     primary: rgbToHex(colors.primary),
     primaryText: rgbToHex(colors.primaryText),
     selection: rgbToHex(colors.selection),

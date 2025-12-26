@@ -14,9 +14,6 @@ interface FloatingButtonProps extends PressableProps {
   className?: string;
 }
 
-// accent 색상은 모두 밝은 계열이므로 어두운 아이콘 색상 사용
-const ICON_COLOR = '#1d1d1d';
-
 export function FloatingButton({
   onPress,
   disabled = false,
@@ -29,19 +26,24 @@ export function FloatingButton({
   const { hexColors } = useUserTheme();
   const isDisabled = disabled || isLoading;
 
+  const bgColor = hexColors.accent;
+  const iconColor = hexColors.accentText;
+
   const content = isLoading ? (
     <View className="flex-row items-center gap-2">
-      <ActivityIndicator color={ICON_COLOR} size="small" />
+      <ActivityIndicator color={iconColor} size="small" />
       {children && (
-        <Typography style={{ color: ICON_COLOR }} variant="body">
+        <Typography style={{ color: iconColor }} variant="body">
           {children}
         </Typography>
       )}
     </View>
   ) : children ? (
-    children
+    <Typography style={{ color: iconColor }} variant="body">
+      {children}
+    </Typography>
   ) : (
-    <Plus color={ICON_COLOR} size={24} />
+    <Plus color={iconColor} size={24} />
   );
 
   return (
@@ -50,7 +52,7 @@ export function FloatingButton({
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: hexColors.accent },
+        { backgroundColor: bgColor, shadowColor: '#000' },
         children ? styles.withText : styles.iconOnly,
         isDisabled && styles.disabled,
         pressed && !isDisabled && styles.pressed,
@@ -70,7 +72,6 @@ const styles = StyleSheet.create({
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
