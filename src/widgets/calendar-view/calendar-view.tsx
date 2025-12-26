@@ -3,6 +3,7 @@ import { useCalendarDate } from '~/entities/calendar/model';
 import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
 import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
 import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
+import { useUserTheme } from '~/features/theme';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
 
@@ -13,7 +14,7 @@ import { Calendar, DateData } from 'react-native-calendars';
 import { useQuery } from '@tanstack/react-query';
 
 import { CalendarMemoList } from '../calendar-memo-list';
-import { CALENDAR_THEME } from './constants';
+import { createCalendarTheme } from './constants';
 import { useCalendarMarkings } from './use-calendar-markings';
 
 setupKoreanLocale();
@@ -31,6 +32,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
   ({ onDateSelect, onDateRangeSelect }, ref) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const createCalendarMemoMutation = useCreateCalendarMemo();
+    const { hexColors } = useUserTheme();
+    const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
 
     useImperativeHandle(ref, () => ({
       handleFloatingButtonPress,
@@ -65,7 +68,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
       [calendarMemosData],
     );
 
-    const markedDates = useCalendarMarkings(allMemos, startDate, endDate);
+    const markedDates = useCalendarMarkings(allMemos, startDate, endDate, hexColors);
 
     const handleDayPress = (day: DateData) => {
       const selectedDateString = day.dateString;
@@ -169,10 +172,11 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
           <View className="gap-4">
             <Card>
               <Calendar
+                key={hexColors.bgPrimary}
                 markedDates={markedDates}
                 markingType="period"
                 monthFormat="yyyy년 MM월"
-                theme={CALENDAR_THEME}
+                theme={calendarTheme}
                 onDayPress={handleDayPress}
                 onMonthChange={handleMonthChange}
               />

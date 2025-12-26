@@ -1,10 +1,10 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUserTheme } from '~/features/theme';
-import { CALENDAR_COLORS, CALENDAR_THEME } from '~/shared/config';
+import { createCalendarTheme } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
@@ -29,6 +29,7 @@ export function DateTimePickerField({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const { hexColors } = useUserTheme();
+  const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
 
   const handleDatePress = () => {
     setShowTimePicker(false);
@@ -102,16 +103,17 @@ export function DateTimePickerField({
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
           <View className="rounded-4 pt-3" style={{ backgroundColor: hexColors.surface }}>
             <Calendar
+              key={hexColors.bgPrimary}
               current={dateTime.toISOString().split('T')[0]}
               markedDates={{
                 [dateTime.toISOString().split('T')[0]]: {
                   selected: true,
-                  selectedColor: CALENDAR_COLORS.SELECTION,
-                  selectedTextColor: '#ffffff',
+                  selectedColor: hexColors.primary,
+                  selectedTextColor: hexColors.primaryText,
                 },
               }}
               minDate={minDate}
-              theme={CALENDAR_THEME}
+              theme={calendarTheme}
               onDayPress={handleDayPress}
             />
           </View>

@@ -1,8 +1,15 @@
 import { CalendarMemo } from '~/entities/calendar';
+import type { HexColors } from '~/features/theme/model/theme-store';
 
 import { useMemo } from 'react';
 
-import { CALENDAR_COLORS } from './constants';
+// 일정 밀도 색상 (고정 - 테마와 무관)
+const SCHEDULE_COLORS = {
+  LIGHT: '#007AFF',
+  MODERATE: '#FFC107',
+  BUSY: '#FF9800',
+  OVERLOAD: '#FF5722',
+} as const;
 
 const SCHEDULE_DENSITY_THRESHOLDS = {
   LIGHT: 1,
@@ -63,28 +70,28 @@ const determineScheduleVisualization = (density: number) => {
   if (density >= SCHEDULE_DENSITY_THRESHOLDS.OVERLOAD) {
     return {
       type: 'OVERLOAD' as const,
-      color: CALENDAR_COLORS.SCHEDULE_OVERLOAD,
+      color: SCHEDULE_COLORS.OVERLOAD,
       text: `${density}+`,
       description: '과부하 상태',
     };
   } else if (density === SCHEDULE_DENSITY_THRESHOLDS.BUSY) {
     return {
       type: 'BUSY' as const,
-      color: CALENDAR_COLORS.SCHEDULE_BUSY,
+      color: SCHEDULE_COLORS.BUSY,
       text: density.toString(),
       description: '바쁜 상태',
     };
   } else if (density === SCHEDULE_DENSITY_THRESHOLDS.MODERATE) {
     return {
       type: 'MODERATE' as const,
-      color: CALENDAR_COLORS.SCHEDULE_MODERATE,
+      color: SCHEDULE_COLORS.MODERATE,
       text: density.toString(),
       description: '보통 상태',
     };
   } else if (density === SCHEDULE_DENSITY_THRESHOLDS.LIGHT) {
     return {
       type: 'LIGHT' as const,
-      color: CALENDAR_COLORS.SCHEDULE_LIGHT,
+      color: SCHEDULE_COLORS.LIGHT,
       text: null,
       description: '여유 상태',
     };
@@ -98,6 +105,7 @@ const createCalendarMarkingsWithSelection = (
   userSelectedStartDate: string,
   userSelectedEndDate: string,
   scheduleDensityByDate: Record<string, number>,
+  hexColors: HexColors,
 ): Record<string, any> => {
   const markings: Record<string, any> = {};
 
@@ -126,7 +134,7 @@ const createCalendarMarkingsWithSelection = (
   });
 
   // 2단계: 사용자 선택 영역 표시 (일정 표시 위에 오버레이)
-  applyUserSelectionOverlay(markings, userSelectedStartDate, userSelectedEndDate);
+  applyUserSelectionOverlay(markings, userSelectedStartDate, userSelectedEndDate, hexColors);
 
   return markings;
 };
@@ -136,6 +144,7 @@ const applyUserSelectionOverlay = (
   markings: Record<string, any>,
   startDate: string,
   endDate: string,
+  hexColors: HexColors,
 ): void => {
   const hasDateRangeSelection = startDate && endDate;
   const hasSingleDateSelection = startDate && !endDate;
@@ -155,30 +164,30 @@ const applyUserSelectionOverlay = (
         markings[date] = {
           ...markings[date],
           selected: true,
-          selectedColor: CALENDAR_COLORS.SELECTION,
+          selectedColor: hexColors.primary,
         };
       } else if (isFirstDate) {
         // 기간 선택 시작일
         markings[date] = {
           ...markings[date],
           startingDay: true,
-          color: CALENDAR_COLORS.SELECTION,
-          textColor: 'white',
+          color: hexColors.primary,
+          textColor: hexColors.primaryText,
         };
       } else if (isLastDate) {
         // 기간 선택 종료일
         markings[date] = {
           ...markings[date],
           endingDay: true,
-          color: CALENDAR_COLORS.SELECTION,
-          textColor: 'white',
+          color: hexColors.primary,
+          textColor: hexColors.primaryText,
         };
       } else {
         // 기간 선택 중간 날짜
         markings[date] = {
           ...markings[date],
-          color: CALENDAR_COLORS.SELECTION,
-          textColor: 'white',
+          color: hexColors.primary,
+          textColor: hexColors.primaryText,
         };
       }
     });
@@ -189,8 +198,8 @@ const applyUserSelectionOverlay = (
       ...markings[startDate],
       startingDay: true,
       endingDay: true,
-      color: CALENDAR_COLORS.SELECTION,
-      textColor: 'white',
+      color: hexColors.primary,
+      textColor: hexColors.primaryText,
     };
   }
 };
@@ -200,6 +209,7 @@ export const useCalendarMarkings = (
   memos: CalendarMemo[],
   userSelectedStartDate: string,
   userSelectedEndDate: string,
+  hexColors: HexColors,
 ) => {
   return useMemo(() => {
     // 1단계: 일정 데이터 분석 - 각 날짜별 일정 밀도 계산
@@ -210,6 +220,7 @@ export const useCalendarMarkings = (
       userSelectedStartDate,
       userSelectedEndDate,
       scheduleDensityByDate,
+      hexColors,
     );
-  }, [memos, userSelectedStartDate, userSelectedEndDate]);
+  }, [memos, userSelectedStartDate, userSelectedEndDate, hexColors]);
 };
