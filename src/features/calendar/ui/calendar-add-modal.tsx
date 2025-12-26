@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
 import {
   ALL_DAY_NOTIFICATION_OPTIONS,
@@ -22,7 +22,7 @@ interface CalendarAddModalProps {
 }
 
 export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModalProps) {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const titleRef = useRef('');
   const inputRef = useRef<TextInput>(null);
   const [startDateTime, setStartDateTime] = useState(new Date());
@@ -37,9 +37,9 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
   useEffect(() => {
     if (isOpen) {
-      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.present();
     } else {
-      bottomSheetRef.current?.close();
+      bottomSheetRef.current?.dismiss();
     }
   }, [isOpen]);
 
@@ -84,23 +84,17 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        handleClose();
-      }
-    },
-    [handleClose],
-  );
-
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: hexColors.bgSecondary,
+        backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
@@ -108,9 +102,8 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         width: 36,
         height: 4,
       }}
-      index={-1}
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={handleClose}
     >
       <BottomSheetScrollView
         keyboardShouldPersistTaps="handled"
@@ -198,6 +191,6 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
           }}
         />
       </View>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 }

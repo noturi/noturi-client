@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { FileText, Star } from 'lucide-react-native';
 import { useUserTheme } from '~/features/theme';
 import { HREFS } from '~/shared/config';
@@ -15,16 +15,16 @@ interface MemoTypeSelectSheetProps {
 }
 
 export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(() => ['45%'], []);
+  const snapPoints = useMemo(() => ['50%'], []);
 
   useEffect(() => {
     if (isOpen) {
-      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.present();
     } else {
-      bottomSheetRef.current?.close();
+      bottomSheetRef.current?.dismiss();
     }
   }, [isOpen]);
 
@@ -55,33 +55,26 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onClose();
-      }
-    },
-    [onClose],
-  );
-
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: hexColors.bgPrimary,
+        backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
       }}
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
-      index={-1}
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={onClose}
     >
       <BottomSheetView style={{ flex: 1, padding: 16 }}>
         <View className="pb-6">
@@ -143,6 +136,6 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           </Pressable>
         </View>
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };

@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { X } from 'lucide-react-native';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { useUserTheme } from '~/features/theme';
@@ -14,17 +14,17 @@ interface CategoryAddSheetProps {
 }
 
 export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [categoryName, setCategoryName] = useState('');
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(() => ['40%'], []);
+  const snapPoints = useMemo(() => ['50%'], []);
 
   useEffect(() => {
     if (isOpen) {
-      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.present();
     } else {
-      bottomSheetRef.current?.close();
+      bottomSheetRef.current?.dismiss();
     }
   }, [isOpen]);
 
@@ -61,23 +61,17 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        handleClose();
-      }
-    },
-    [handleClose],
-  );
-
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: hexColors.bgPrimary,
+        backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
@@ -85,9 +79,8 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         width: 36,
         height: 4,
       }}
-      index={-1}
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={handleClose}
     >
       <BottomSheetView style={{ flex: 1 }}>
         {/* Header */}
@@ -142,6 +135,6 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
           </View>
         </View>
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };

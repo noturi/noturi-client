@@ -1,8 +1,8 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/features/theme';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, Platform, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { View } from 'react-native';
 
 import { MemoFormContent } from './memo-form-content';
 import { MemoFormHeader } from './memo-form-header';
@@ -13,38 +13,18 @@ interface MemoCreateSheetProps {
 }
 
 export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(
-    () => (keyboardHeight > 0 ? ['85%'] : ['50%', '85%']),
-    [keyboardHeight],
-  );
+  const snapPoints = useMemo(() => ['85%'], []);
 
   useEffect(() => {
     if (isOpen) {
-      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.present();
     } else {
-      bottomSheetRef.current?.close();
+      bottomSheetRef.current?.dismiss();
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
-
-    const showListener = Keyboard.addListener(showEvent, (e) => {
-      const height = Platform.OS === 'ios' ? e.endCoordinates.height : e.endCoordinates.height + 20;
-      setKeyboardHeight(height);
-    });
-    const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
-
-    return () => {
-      showListener?.remove();
-      hideListener?.remove();
-    };
-  }, []);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -59,23 +39,17 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onClose();
-      }
-    },
-    [onClose],
-  );
-
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: hexColors.bgPrimary,
+        backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
@@ -83,11 +57,10 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
         width: 36,
         height: 4,
       }}
-      index={-1}
       keyboardBehavior="interactive"
       keyboardBlurBehavior="restore"
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={onClose}
     >
       <BottomSheetView style={{ flex: 1 }}>
         <View className="items-center py-2">
@@ -96,6 +69,6 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
         <MemoFormHeader onClose={onClose} />
         <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };

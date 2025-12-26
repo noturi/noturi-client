@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Toaster } from 'sonner-native';
 import { ThemeProvider } from '~/features/theme';
 
@@ -16,14 +17,16 @@ export function AppProvider({ children }: AppProviderProps) {
   return (
     <QueryProvider>
       <ThemeProvider>
-        <KeyboardProvider>
-          <AuthProvider>
-            <NotificationProvider>
-              {children}
-              <Toaster />
-            </NotificationProvider>
-          </AuthProvider>
-        </KeyboardProvider>
+        <BottomSheetModalProvider>
+          <KeyboardProvider>
+            <AuthProvider>
+              <NotificationProvider>
+                {children}
+                <Toaster />
+              </NotificationProvider>
+            </AuthProvider>
+          </KeyboardProvider>
+        </BottomSheetModalProvider>
       </ThemeProvider>
     </QueryProvider>
   );

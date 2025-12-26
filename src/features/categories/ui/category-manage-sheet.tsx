@@ -1,4 +1,4 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/features/theme';
 import { Typography } from '~/shared/ui';
 
@@ -13,16 +13,16 @@ interface CategoryManageSheetProps {
 }
 
 export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(() => ['40%', '60%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
 
   useEffect(() => {
     if (isOpen) {
-      bottomSheetRef.current?.expand();
+      bottomSheetRef.current?.present();
     } else {
-      bottomSheetRef.current?.close();
+      bottomSheetRef.current?.dismiss();
     }
   }, [isOpen]);
 
@@ -39,23 +39,17 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onClose();
-      }
-    },
-    [onClose],
-  );
-
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       backgroundStyle={{
-        backgroundColor: hexColors.bgPrimary,
+        backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
       }}
       enablePanDownToClose
       handleIndicatorStyle={{
@@ -63,9 +57,8 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         width: 36,
         height: 4,
       }}
-      index={-1}
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={onClose}
     >
       <BottomSheetView style={{ flex: 1 }}>
         <View className="gap-4 p-4 pb-6">
@@ -75,6 +68,6 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         </View>
         <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };
