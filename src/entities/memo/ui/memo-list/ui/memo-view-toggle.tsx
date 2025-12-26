@@ -55,18 +55,18 @@ export function MemoViewToggle({ selectedView, onViewChange }: MemoViewTogglePro
   return (
     <View className="flex-row gap-4 px-4 py-2">
       <ToggleButton
-        accentColor={hexColors.accent}
+        accentColor={hexColors.selection}
         borderColor={hexColors.border}
-        icon={<Star color="#ebd759" fill="#ebd759" size={16} />}
+        icon={<Star color={hexColors.textSecondary} fill={hexColors.textSecondary} size={16} />}
         isActive={selectedView === 'rating'}
         label="메모"
         textMuted={hexColors.textMuted}
         onPress={() => onViewChange('rating')}
       />
       <ToggleButton
-        accentColor={hexColors.accent}
+        accentColor={hexColors.selection}
         borderColor={hexColors.border}
-        icon={<Calendar color="#3b82f6" size={16} />}
+        icon={<Calendar color={hexColors.textSecondary} size={16} />}
         isActive={selectedView === 'calendar'}
         label="캘린더"
         textMuted={hexColors.textMuted}

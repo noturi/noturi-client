@@ -21,13 +21,15 @@ export interface ThemePreset {
     // 버튼
     primary: string;
     primaryText: string;
+    // 선택 상태 (보더, 텍스트)
+    selection: string;
   };
 }
 
 export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'light',
-    name: '라이트',
+    name: '화이트',
     isDark: false,
     colors: {
       bgPrimary: '255 255 255',
@@ -40,11 +42,12 @@ export const THEME_PRESETS: ThemePreset[] = [
       accent: '255 193 7',
       primary: '29 29 29',
       primaryText: '255 255 255',
+      selection: '29 29 29',
     },
   },
   {
     id: 'dark',
-    name: '다크',
+    name: '블랙',
     isDark: true,
     colors: {
       bgPrimary: '18 18 18',
@@ -57,23 +60,25 @@ export const THEME_PRESETS: ThemePreset[] = [
       accent: '255 193 7',
       primary: '255 255 255',
       primaryText: '18 18 18',
+      selection: '255 255 255',
     },
   },
   {
     id: 'sepia',
-    name: '세피아',
+    name: '선셋',
     isDark: false,
     colors: {
-      bgPrimary: '251 248 241',
-      bgSecondary: '245 240 230',
-      surface: '251 248 241',
-      textPrimary: '62 50 37',
-      textSecondary: '107 90 70',
-      textMuted: '148 132 112',
-      border: '220 210 190',
-      accent: '180 120 60',
-      primary: '62 50 37',
-      primaryText: '251 248 241',
+      bgPrimary: '255 247 240',
+      bgSecondary: '255 238 228',
+      surface: '255 247 240',
+      textPrimary: '100 45 35',
+      textSecondary: '160 95 75',
+      textMuted: '195 140 120',
+      border: '250 200 175',
+      accent: '255 100 65',
+      primary: '100 45 35',
+      primaryText: '255 247 240',
+      selection: '100 45 35',
     },
   },
   {
@@ -84,13 +89,14 @@ export const THEME_PRESETS: ThemePreset[] = [
       bgPrimary: '15 23 42',
       bgSecondary: '30 41 59',
       surface: '51 65 85',
-      textPrimary: '241 245 249',
-      textSecondary: '203 213 225',
-      textMuted: '148 163 184',
+      textPrimary: '225 240 255',
+      textSecondary: '175 200 230',
+      textMuted: '130 155 190',
       border: '71 85 105',
       accent: '56 189 248',
-      primary: '241 245 249',
+      primary: '225 240 255',
       primaryText: '15 23 42',
+      selection: '56 189 248',
     },
   },
   {
@@ -101,13 +107,32 @@ export const THEME_PRESETS: ThemePreset[] = [
       bgPrimary: '20 30 26',
       bgSecondary: '32 45 38',
       surface: '45 60 52',
-      textPrimary: '236 253 245',
-      textSecondary: '187 220 200',
-      textMuted: '134 170 150',
+      textPrimary: '225 250 235',
+      textSecondary: '175 215 190',
+      textMuted: '125 165 145',
       border: '60 80 70',
       accent: '74 222 128',
-      primary: '236 253 245',
+      primary: '225 250 235',
       primaryText: '20 30 26',
+      selection: '74 222 128',
+    },
+  },
+  {
+    id: 'lavender',
+    name: '퍼플',
+    isDark: true,
+    colors: {
+      bgPrimary: '25 20 35',
+      bgSecondary: '35 28 50',
+      surface: '48 40 65',
+      textPrimary: '240 230 255',
+      textSecondary: '200 185 230',
+      textMuted: '155 140 190',
+      border: '70 60 95',
+      accent: '180 130 255',
+      primary: '240 230 255',
+      primaryText: '25 20 35',
+      selection: '180 130 255',
     },
   },
 ];
@@ -157,6 +182,7 @@ export type HexColors = {
   accent: string;
   primary: string;
   primaryText: string;
+  selection: string;
 };
 
 function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
@@ -171,6 +197,7 @@ function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
     accent: rgbToHex(colors.accent),
     primary: rgbToHex(colors.primary),
     primaryText: rgbToHex(colors.primaryText),
+    selection: rgbToHex(colors.selection),
   };
 }
 

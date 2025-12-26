@@ -22,7 +22,7 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
     <Pressable onPress={onSelect}>
       <View
         className="w-[100px] items-center gap-2 rounded-5 border-2 p-2"
-        style={{ borderColor: isSelected ? hexColors.accent : hexColors.border }}
+        style={{ borderColor: isSelected ? hexColors.selection : hexColors.border }}
       >
         {/* 테마 미리보기 박스 */}
         <View
@@ -31,7 +31,7 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
         >
           <View
             className="mb-1 h-2 w-[60%] rounded-2"
-            style={{ backgroundColor: presetHex.accent }}
+            style={{ backgroundColor: presetHex.selection }}
           />
           <View
             className="h-1 w-[80%] rounded-1"
@@ -45,9 +45,9 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
 
         {/* 테마 이름 */}
         <View className="flex-row items-center gap-1">
-          {isSelected && <Check color={hexColors.accent} size={14} />}
+          {isSelected && <Check color={hexColors.selection} size={14} />}
           <Typography
-            style={{ color: isSelected ? hexColors.accent : hexColors.textPrimary }}
+            style={{ color: isSelected ? hexColors.selection : hexColors.textPrimary }}
             variant="footnote"
           >
             {preset.name}

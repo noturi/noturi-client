@@ -81,6 +81,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     '--color-accent': currentTheme.colors.accent,
     '--color-primary': currentTheme.colors.primary,
     '--color-primary-text': currentTheme.colors.primaryText,
+    '--color-selection': currentTheme.colors.selection,
   });
 
   return (

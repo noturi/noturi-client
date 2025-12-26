@@ -9,6 +9,7 @@ module.exports = {
         primary: 'rgb(var(--color-primary) / <alpha-value>)',
         'primary-text': 'rgb(var(--color-primary-text) / <alpha-value>)',
         accent: 'rgb(var(--color-accent) / <alpha-value>)',
+        selection: 'rgb(var(--color-selection) / <alpha-value>)',
         surface: 'rgb(var(--color-surface) / <alpha-value>)',
 
         // 배경 (CSS 변수)
