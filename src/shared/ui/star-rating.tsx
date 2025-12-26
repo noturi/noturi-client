@@ -8,13 +8,13 @@ interface StarRatingProps {
   rating: number;
 }
 
-const RATING_CONFIG = {
-  0: { color: '#9e9e9e', bgColor: 'bg-rating-0-bg' }, // 회색 (평가 안함)
-  1: { color: '#ff6b35', bgColor: 'bg-rating-1-bg' }, // 주황 (나쁨)
-  2: { color: '#ffa726', bgColor: 'bg-rating-2-bg' }, // 노랑 (부족함)
-  3: { color: '#9ccc65', bgColor: 'bg-rating-3-bg' }, // 연두 (보통)
-  4: { color: '#66bb6a', bgColor: 'bg-rating-4-bg' }, // 초록 (좋음)
-  5: { color: '#42a5f5', bgColor: 'bg-rating-5-bg' }, // 파랑 (최고)
+const RATING_COLORS = {
+  0: '#9e9e9e', // 회색 (평가 안함)
+  1: '#ff6b35', // 주황 (나쁨)
+  2: '#ffa726', // 노랑 (부족함)
+  3: '#9ccc65', // 연두 (보통)
+  4: '#66bb6a', // 초록 (좋음)
+  5: '#42a5f5', // 파랑 (최고)
 } as const;
 
 const RATING_TEXT_COLORS = {
@@ -26,9 +26,9 @@ const RATING_TEXT_COLORS = {
   5: 'text-rating-5',
 } as const;
 
-const getRatingConfig = (rating: number) => {
-  const integerPart = Math.floor(rating) as keyof typeof RATING_CONFIG;
-  return RATING_CONFIG[integerPart] || RATING_CONFIG[0];
+const getRatingColor = (rating: number) => {
+  const integerPart = Math.floor(rating) as keyof typeof RATING_COLORS;
+  return RATING_COLORS[integerPart] || RATING_COLORS[0];
 };
 
 const getRatingTextColor = (rating: number) => {
@@ -47,12 +47,12 @@ export function StarRating({ rating }: StarRatingProps) {
     safeRating = !isNaN(parsed) ? parsed : 0;
   }
 
-  const config = getRatingConfig(safeRating);
+  const ratingColor = getRatingColor(safeRating);
   const textColorClass = getRatingTextColor(safeRating);
 
   return (
-    <View className={`flex-row items-center gap-2 rounded-4 px-2 py-2 ${config.bgColor}`}>
-      <Star color={config.color} fill={config.color} size={12} />
+    <View className="flex-row items-center gap-2 rounded-4 bg-surface px-2 py-2">
+      <Star color={ratingColor} fill={ratingColor} size={12} />
       <Typography className={textColorClass} variant="caption1">
         {safeRating.toFixed(1)}
       </Typography>

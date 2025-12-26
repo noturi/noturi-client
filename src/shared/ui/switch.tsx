@@ -1,5 +1,7 @@
 import { Switch as RNSwitch, View } from 'react-native';
 
+import { useUserTheme } from '@/features/theme';
+
 import { Typography } from './typography';
 
 export interface SwitchProps {
@@ -10,13 +12,14 @@ export interface SwitchProps {
 }
 
 export function Switch({ label, checked, onCheckedChange, disabled = false }: SwitchProps) {
+  const { hexColors } = useUserTheme();
   const switchElement = (
     <RNSwitch
+      disabled={disabled}
+      thumbColor={hexColors.primary}
+      trackColor={{ false: hexColors.border, true: hexColors.primary }}
       value={checked}
       onValueChange={onCheckedChange}
-      disabled={disabled}
-      trackColor={{ false: '#e0e0e0', true: '#1d1d1d' }}
-      thumbColor="#ffffff"
     />
   );
 

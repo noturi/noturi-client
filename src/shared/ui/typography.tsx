@@ -121,7 +121,7 @@ const variantColorClass: Record<TypographyVariant, string> = {
   caption2: 'text-text-muted',
   link: 'text-accent',
   label: 'text-text-primary',
-  number: 'text-[#2196f3]',
+  number: 'text-accent',
 };
 
 // Tamagui 색상값을 실제 색상으로 변환
