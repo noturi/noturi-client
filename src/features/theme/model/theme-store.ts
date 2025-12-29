@@ -79,7 +79,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       textMuted: '195 140 120',
       border: '250 200 175',
       accent: '255 100 65',
-      accentText: '255 247 240',
+      accentText: '80 30 20',
       primary: '100 45 35',
       primaryText: '255 247 240',
       selection: '100 45 35',

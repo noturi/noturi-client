@@ -26,33 +26,30 @@ export function FloatingButton({
   const { hexColors } = useUserTheme();
   const isDisabled = disabled || isLoading;
 
-  const bgColor = hexColors.accent;
-  const iconColor = hexColors.accentText;
-
   const content = isLoading ? (
     <View className="flex-row items-center gap-2">
-      <ActivityIndicator color={iconColor} size="small" />
+      <ActivityIndicator color={hexColors.primaryText} size="small" />
       {children && (
-        <Typography style={{ color: iconColor }} variant="body">
+        <Typography style={{ color: hexColors.primaryText }} variant="body">
           {children}
         </Typography>
       )}
     </View>
   ) : children ? (
-    <Typography style={{ color: iconColor }} variant="body">
+    <Typography style={{ color: hexColors.primaryText }} variant="body">
       {children}
     </Typography>
   ) : (
-    <Plus color={iconColor} size={24} />
+    <Plus color={hexColors.primaryText} size={24} />
   );
 
   return (
     <Pressable
-      className={className}
+      className={`bg-primary rounded-full ${className ?? ''}`}
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: bgColor, shadowColor: '#000' },
+        { shadowColor: '#000' },
         children ? styles.withText : styles.iconOnly,
         isDisabled && styles.disabled,
         pressed && !isDisabled && styles.pressed,
