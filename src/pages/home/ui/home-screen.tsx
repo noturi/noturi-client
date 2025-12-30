@@ -7,7 +7,7 @@ import {
   type UIMemo,
 } from '~/entities/memo';
 import { HREFS } from '~/shared/config/routes';
-import { ApiErrorBoundary, Card, FloatingButton, Skeleton } from '~/shared/ui';
+import { Card, FloatingButton, Skeleton } from '~/shared/ui';
 import { CalendarView, type CalendarViewRef, MemoListHeader } from '~/widgets';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
@@ -115,17 +115,15 @@ export function HomeScreen() {
             <View className="gap-6">
               <CategoryFilterBar categories={categories} onPress={handleCategoryPress} />
 
-              <ApiErrorBoundary>
-                <Suspense fallback={<MemoSkeleton />}>
-                  <MemoContent
-                    selectedCategoryId={selectedCategoryId}
-                    selectedView={selectedView}
-                    selectedYear={selectedYear}
-                    onMemoPress={handleMemoPress}
-                    onYearChange={handleYearChange}
-                  />
-                </Suspense>
-              </ApiErrorBoundary>
+              <Suspense fallback={<MemoSkeleton />}>
+                <MemoContent
+                  selectedCategoryId={selectedCategoryId}
+                  selectedView={selectedView}
+                  selectedYear={selectedYear}
+                  onMemoPress={handleMemoPress}
+                  onYearChange={handleYearChange}
+                />
+              </Suspense>
             </View>
           </ScrollView>
         )}
