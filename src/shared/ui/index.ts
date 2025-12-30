@@ -8,6 +8,7 @@ export * from './floating-button';
 export * from './form';
 export * from './input';
 export * from './loading';
+export * from './memo-skeleton';
 export * from './rating-stars';
 export * from './select';
 export * from './skeleton';
