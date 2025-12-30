@@ -1,5 +1,5 @@
 import { ChevronLeft } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { Pressable } from 'react-native';
 

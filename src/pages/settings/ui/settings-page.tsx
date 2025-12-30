@@ -1,9 +1,10 @@
 import { FileText, Info, Settings } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useAuth } from '~/entities/auth';
 import { DeleteAccountButton, LogoutButton } from '~/features/auth/ui';
 import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
 import { NotificationToggle } from '~/features/notification';
-import { ThemeSettings, useUserTheme } from '~/features/theme';
+import { ThemeSettings } from '~/features/user';
 import { EXTERNAL_LINKS } from '~/shared/config';
 import { Card, Typography } from '~/shared/ui';
 

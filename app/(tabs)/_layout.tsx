@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 

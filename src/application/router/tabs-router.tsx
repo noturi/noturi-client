@@ -1,5 +1,5 @@
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useAuth } from '~/entities/auth';
-import { useUserTheme } from '~/features/theme';
 import { HREFS } from '~/shared/config';
 import { Loading } from '~/shared/ui';
 
