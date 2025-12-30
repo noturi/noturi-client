@@ -1,4 +1,5 @@
 import { useUserTheme } from '~/application/providers/theme-provider';
+import { ApiErrorBoundary } from '~/shared/ui';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,7 +16,9 @@ export default function TabsLayout() {
         backgroundColor: hexColors.bgSecondary,
       }}
     >
-      <TabsRouter />
+      <ApiErrorBoundary>
+        <TabsRouter />
+      </ApiErrorBoundary>
     </SafeAreaView>
   );
 }
