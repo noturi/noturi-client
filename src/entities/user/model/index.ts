@@ -17,4 +17,12 @@ export type {
 
 export type { AuthTokens } from './auth';
 
+export type {
+  ThemeId,
+  Language,
+  UserSettings,
+  UpdateUserSettingsDto,
+  UserSettingsResponseDto,
+} from './settings-types';
+
 export { isUser, parseUser, isValidToken, isAuthenticated } from './auth';

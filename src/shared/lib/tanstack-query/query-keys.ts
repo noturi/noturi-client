@@ -26,6 +26,9 @@ export const QUERY_KEYS = {
   calendarMemosInfinite: (params: Record<string, unknown>) =>
     ['calendar-memos', 'infinite', params] as const,
 
+  // 사용자 설정
+  userSettings: ['user', 'settings'] as const,
+
   // 통계
   statisticsMemos: ['statistics', 'memos'] as const,
   statisticsCategories: ['statistics', 'categories'] as const,
