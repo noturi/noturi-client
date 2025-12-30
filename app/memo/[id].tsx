@@ -54,7 +54,7 @@ export default function MemoDetailScreen() {
   return (
     <>
       <View className="flex-1 bg-bg-secondary p-4">
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
           <View className="gap-1 p-1">
             <View className="gap-2">
               <View className="flex-row items-start justify-between">
