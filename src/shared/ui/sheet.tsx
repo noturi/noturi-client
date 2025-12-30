@@ -3,7 +3,7 @@ import BottomSheet, {
   BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { ReactNode, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -137,6 +137,7 @@ export function ControlledSheet({
   return (
     <BottomSheet
       ref={bottomSheetRef}
+      enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.bgSecondary,
@@ -145,7 +146,6 @@ export function ControlledSheet({
         borderTopWidth: 1,
         borderColor: hexColors.border,
       }}
-      enablePanDownToClose
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,

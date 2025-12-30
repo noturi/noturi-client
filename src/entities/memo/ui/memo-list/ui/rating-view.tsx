@@ -17,8 +17,8 @@ export function RatingView({ categories, memos, onCategoryPress, onMemoPress }: 
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 200 }}
-      style={{ flex: 1 }}
       showsVerticalScrollIndicator={false}
+      style={{ flex: 1 }}
     >
       <View className="gap-6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />

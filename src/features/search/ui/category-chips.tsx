@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, ScrollView, View } from 'react-native';

@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { createCalendarTheme } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';

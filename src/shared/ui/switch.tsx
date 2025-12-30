@@ -1,6 +1,6 @@
-import { Switch as RNSwitch, View } from 'react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
-import { useUserTheme } from '@/features/theme';
+import { Switch as RNSwitch, View } from 'react-native';
 
 import { Typography } from './typography';
 

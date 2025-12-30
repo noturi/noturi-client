@@ -3,9 +3,9 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useGoogleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
-import { useUserTheme } from '~/features/theme';
 
 import { useEffect } from 'react';
 import { Alert, Platform, Pressable } from 'react-native';

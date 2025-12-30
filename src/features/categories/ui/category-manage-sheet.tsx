@@ -1,5 +1,5 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -42,6 +42,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
+      enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
@@ -51,7 +52,6 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         borderColor: hexColors.border,
         borderBottomWidth: 0,
       }}
-      enablePanDownToClose
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,

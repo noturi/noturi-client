@@ -137,10 +137,6 @@ export function Button({
 
   return (
     <AnimatedPressable
-      style={[animatedStyle, extraStyles, style]}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      disabled={disabled}
       className={`
         flex-row items-center justify-center rounded-5 border
         ${variantClasses[variant]}
@@ -148,6 +144,10 @@ export function Button({
         ${fullWidth ? 'flex-1 self-stretch' : ''}
         ${disabled ? 'opacity-50' : ''}
       `}
+      disabled={disabled}
+      style={[animatedStyle, extraStyles, style]}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       {...props}
     >
       {icon && <View className="mr-2">{icon}</View>}

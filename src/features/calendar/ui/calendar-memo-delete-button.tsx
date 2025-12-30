@@ -1,6 +1,6 @@
 import { MoreVertical, Trash2 } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
-import { useUserTheme } from '~/features/theme';
 import { useToast } from '~/shared/lib';
 import { Typography } from '~/shared/ui';
 

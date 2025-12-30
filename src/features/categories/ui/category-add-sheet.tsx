@@ -1,7 +1,7 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { X } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
-import { useUserTheme } from '~/features/theme';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -64,6 +64,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
+      enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
@@ -73,7 +74,6 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         borderColor: hexColors.border,
         borderBottomWidth: 0,
       }}
-      enablePanDownToClose
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,

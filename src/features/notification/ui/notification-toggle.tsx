@@ -1,5 +1,5 @@
 import { Bell } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { Switch, Typography } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';

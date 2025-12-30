@@ -1,6 +1,6 @@
 import { LogOut } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useAuth } from '~/entities/auth';
-import { useUserTheme } from '~/features/theme';
 import { Typography } from '~/shared/ui';
 
 import { Alert, Pressable, View } from 'react-native';

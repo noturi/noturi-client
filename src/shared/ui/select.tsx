@@ -114,7 +114,7 @@ export function Select({
               : { top: '100%', marginTop: 4 },
           ]}
         >
-          <ScrollView style={{ maxHeight: 200 }} showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 200 }}>
             {options.map((option) => (
               <Pressable
                 key={option.value}

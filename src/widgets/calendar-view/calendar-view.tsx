@@ -1,9 +1,9 @@
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
 import { useCalendarDate } from '~/entities/calendar/model';
 import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
 import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
 import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
-import { useUserTheme } from '~/features/theme';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
 
@@ -166,8 +166,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
       <View className="flex-1 gap-4 pb-10 relative">
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
         >
           <View className="gap-4">
             <Card>

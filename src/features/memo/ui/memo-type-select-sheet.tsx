@@ -1,6 +1,6 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { FileText, Star } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { HREFS } from '~/shared/config';
 import { Typography } from '~/shared/ui';
 

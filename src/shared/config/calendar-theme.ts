@@ -1,4 +1,4 @@
-import type { HexColors } from '~/features/theme/model/theme-store';
+import type { HexColors } from '~/shared/config/theme';
 
 // 캘린더 테마 생성 함수
 export function createCalendarTheme(hexColors: HexColors) {

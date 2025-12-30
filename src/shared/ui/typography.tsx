@@ -287,8 +287,8 @@ export const Typography = ({
   return (
     <Text
       className={`${colorClass} ${className ?? ''}`}
-      style={[baseStyle, extraStyles, style] as StyleProp<TextStyle>}
       pointerEvents={pointerEvents}
+      style={[baseStyle, extraStyles, style] as StyleProp<TextStyle>}
       {...props}
     >
       {children}

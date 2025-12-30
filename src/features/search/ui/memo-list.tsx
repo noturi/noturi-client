@@ -1,6 +1,6 @@
+import { useUserTheme } from '~/application/providers/theme-provider';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
-import { useUserTheme } from '~/features/theme';
 import { Loading } from '~/shared/ui';
 
 import { useCallback } from 'react';

@@ -1,5 +1,5 @@
 import { X } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';

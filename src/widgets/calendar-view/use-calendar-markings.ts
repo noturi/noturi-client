@@ -1,5 +1,5 @@
 import { CalendarMemo } from '~/entities/calendar';
-import type { HexColors } from '~/features/theme/model/theme-store';
+import type { HexColors } from '~/shared/config/theme';
 
 import { useMemo } from 'react';
 

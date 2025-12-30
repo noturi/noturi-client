@@ -26,7 +26,7 @@ export function Checkbox({ label, checked, onCheckedChange, disabled = false }: 
         {checked && <Check color="white" size={14} />}
       </View>
       {label && (
-        <Typography variant="footnote" className="text-text-secondary">
+        <Typography className="text-text-secondary" variant="footnote">
           {label}
         </Typography>
       )}

@@ -1,11 +1,11 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import {
   ALL_DAY_NOTIFICATION_OPTIONS,
   NOTIFICATION_OPTIONS,
 } from '~/entities/calendar/model/constants';
 import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar/model/types';
-import { useUserTheme } from '~/features/theme';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
 
@@ -87,6 +87,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
+      enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
@@ -96,7 +97,6 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         borderColor: hexColors.border,
         borderBottomWidth: 0,
       }}
-      enablePanDownToClose
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,

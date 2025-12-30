@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';

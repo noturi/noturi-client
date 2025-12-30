@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react-native';
 import { toast } from 'sonner-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';

@@ -113,15 +113,15 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
   return (
     <TextInput
       ref={ref}
-      className={`${bgClass} ${borderWidthClass} ${borderClass} rounded-5 px-3 text-text-primary`}
-      style={[sizeStyles[size], styles.input, extraStyles, style]}
-      placeholderTextColor="#9e9e9e"
-      autoCorrect={false}
       autoCapitalize="none"
       autoComplete="off"
+      autoCorrect={false}
+      className={`${bgClass} ${borderWidthClass} ${borderClass} rounded-5 px-3 text-text-primary`}
+      placeholderTextColor="#9e9e9e"
       spellCheck={false}
-      onFocus={handleFocus}
+      style={[sizeStyles[size], styles.input, extraStyles, style]}
       onBlur={handleBlur}
+      onFocus={handleFocus}
       {...props}
     />
   );

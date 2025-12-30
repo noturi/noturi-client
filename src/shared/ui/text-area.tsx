@@ -115,15 +115,15 @@ export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
   return (
     <TextInput
       ref={ref}
-      className={`bg-bg-primary ${borderWidthClass} ${borderClass} rounded-5 px-2 py-3 text-text-primary`}
-      style={[sizeStyles[size], styles.textArea, extraStyles, style]}
-      placeholderTextColor="#9e9e9e"
       multiline
-      textAlignVertical="top"
-      autoCorrect={false}
       autoCapitalize="none"
-      onFocus={handleFocus}
+      autoCorrect={false}
+      className={`bg-bg-primary ${borderWidthClass} ${borderClass} rounded-5 px-2 py-3 text-text-primary`}
+      placeholderTextColor="#9e9e9e"
+      style={[sizeStyles[size], styles.textArea, extraStyles, style]}
+      textAlignVertical="top"
       onBlur={handleBlur}
+      onFocus={handleFocus}
       {...props}
     />
   );

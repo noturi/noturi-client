@@ -1,5 +1,5 @@
 import { Filter, Search } from 'lucide-react-native';
-import { useUserTheme } from '~/features/theme';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { Pressable, TextInput, View } from 'react-native';
 

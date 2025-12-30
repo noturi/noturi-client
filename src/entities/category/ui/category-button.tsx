@@ -1,5 +1,5 @@
+import { useUserTheme } from '~/application/providers/theme-provider';
 import type { UICategory } from '~/entities/category/model/types';
-import { useUserTheme } from '~/features/theme';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
