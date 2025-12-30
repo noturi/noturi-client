@@ -65,8 +65,8 @@ export const CategoryManageContent = ({
     onSuccess?.();
   };
 
-  const handleCreateError = (error: Error) => {
-    handleCategoryFormError(error, form);
+  const handleCreateError = async (error: Error) => {
+    await handleCategoryFormError(error, form);
   };
 
   return (

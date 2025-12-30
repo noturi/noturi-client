@@ -1,7 +1,7 @@
 import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User } from '~/entities/user';
+import { refreshAccessToken as doRefreshToken } from '~/shared/api/auth';
 import { queryClient } from '~/shared/api/query-client';
-import { refreshAccessToken as doRefreshToken } from '~/shared/api/token-refresh';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
 import { tokenEventManager } from '~/shared/model';
@@ -43,14 +43,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const refreshAccessToken = useCallback(async (): Promise<boolean> => {
-    authStore.setError(null);
     const success = await doRefreshToken();
 
     if (success) {
       authStore.setAuthenticated(true);
-    } else {
-      authStore.setError('토큰 갱신에 실패했습니다.');
     }
+    // 실패 시 tokenEventManager.emitTokenExpired()가 로그아웃 처리함
 
     return success;
   }, []);

@@ -1,4 +1,5 @@
-import { ApiError } from '~/shared/api/types';
+import { HTTPError } from 'ky';
+import { getErrorBody } from '~/shared/api/errors';
 
 export interface CategoryFormHandler {
   setError: (field: any, error: { message: string }) => void;
@@ -16,14 +17,17 @@ const CATEGORY_FORM_ERROR_MAP: Record<number, string> = {
   [CATEGORY_ERROR_CODES.CATEGORY_HAS_MEMOS]: 'categoryDeleteError',
 };
 
-export const handleCategoryFormError = (error: unknown, form: CategoryFormHandler) => {
-  if (!(error instanceof ApiError)) return;
+export const handleCategoryFormError = async (error: unknown, form: CategoryFormHandler) => {
+  if (!(error instanceof HTTPError)) return;
 
-  const fieldName = error.code ? CATEGORY_FORM_ERROR_MAP[error.code] : null;
+  const body = await getErrorBody(error);
+  if (!body?.code) return;
+
+  const fieldName = CATEGORY_FORM_ERROR_MAP[body.code];
 
   if (fieldName) {
     form.setError(fieldName, {
-      message: error.message,
+      message: body.message,
     });
   }
 };

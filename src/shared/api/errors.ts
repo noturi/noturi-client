@@ -1,32 +1,3 @@
-import { ApiError, ErrorResponseBody } from './types';
-
-export const getErrorMessage = (body: ErrorResponseBody | undefined): string => {
-  if (!body?.message) {
-    return ERROR_MESSAGES.DEFAULT;
-  }
-
-  if (body.code && ERROR_CODE_MESSAGES[body.code]) {
-    return body.message;
-  }
-
-  return body.message || ERROR_MESSAGES.DEFAULT;
-};
-
-export const handleErrorResponse = async (request: Request, response: Response) => {
-  const body: ErrorResponseBody = await response
-    .json()
-    .catch(() => ({ statusCode: response.status, message: ERROR_MESSAGES.DEFAULT }));
-
-  if (!body.statusCode) {
-    body.statusCode = response.status;
-  }
-  if (!body.message) {
-    body.message = getErrorMessage(body);
-  }
-
-  throw new ApiError(body);
-};
-
 export const ERROR_MESSAGES = {
   DEFAULT: '요청 처리 중 오류가 발생했습니다.',
   UNAUTHORIZED: '인증이 필요합니다.',
@@ -41,3 +12,22 @@ export const ERROR_CODE_MESSAGES: Record<number, string> = {
   4091: ERROR_MESSAGES.DUPLICATE_CATEGORY,
   4092: ERROR_MESSAGES.CATEGORY_HAS_MEMOS,
 };
+
+export interface ErrorResponseBody {
+  statusCode: number;
+  code?: number;
+  message: string;
+  details?: unknown;
+}
+
+export async function getErrorBody(error: unknown): Promise<ErrorResponseBody | null> {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const response = (error as { response: Response }).response;
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
