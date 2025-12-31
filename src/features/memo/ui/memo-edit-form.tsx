@@ -177,13 +177,8 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                     />
                   ))}
                   {!showAddCategory && (
-                    <Button
-                      borderStyle="dashed"
-                      size="sm"
-                      variant="ghost"
-                      onPress={() => setShowAddCategory(true)}
-                    >
-                      + 추가
+                    <Button size="sm" variant="ghost" onPress={() => setShowAddCategory(true)}>
+                      <Button.Label>+ 추가</Button.Label>
                     </Button>
                   )}
                 </View>
@@ -209,14 +204,14 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                   </View>
                   <View className="flex-row items-center gap-1">
                     <Button
-                      disabled={!categoryForm.isValid || createCategoryMutation.isPending}
+                      isDisabled={!categoryForm.isValid || createCategoryMutation.isPending}
                       size="sm"
                       onPress={handleAddCategory}
                     >
-                      추가
+                      <Button.Label>추가</Button.Label>
                     </Button>
-                    <Button size="sm" onPress={handleCancelAddCategory}>
-                      취소
+                    <Button size="sm" variant="ghost" onPress={handleCancelAddCategory}>
+                      <Button.Label>취소</Button.Label>
                     </Button>
                   </View>
                 </View>

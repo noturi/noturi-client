@@ -30,11 +30,11 @@ export const CategorySelector = ({
               variant={selectedCategory === category.name ? 'primary' : 'ghost'}
               onPress={() => onSelectCategory(category.name)}
             >
-              {category.name}
+              <Button.Label>{category.name}</Button.Label>
             </Button>
           ))}
           <Button size="sm" variant="ghost" onPress={() => onSelectCategory('')}>
-            + 추가
+            <Button.Label>+ 추가</Button.Label>
           </Button>
         </View>
       </ScrollView>

@@ -32,12 +32,12 @@ export function CategoryCreateButton({
 
   return (
     <Button
-      disabled={!isValid || createCategoryMutation.isPending}
+      isDisabled={!isValid || createCategoryMutation.isPending}
       size="sm"
       variant="primary"
       onPress={handlePress}
     >
-      추가
+      <Button.Label>추가</Button.Label>
     </Button>
   );
 }

@@ -46,7 +46,13 @@ export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButt
   };
 
   return (
-    <Button disabled={deleteMutation.isPending} size="sm" variant="ghost" onPress={handleDelete}>
+    <Button
+      isIconOnly
+      isDisabled={deleteMutation.isPending}
+      size="sm"
+      variant="ghost"
+      onPress={handleDelete}
+    >
       <Trash2 color={hexColors.textPrimary} size={16} />
     </Button>
   );

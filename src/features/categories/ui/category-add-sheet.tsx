@@ -5,7 +5,7 @@ import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
 interface CategoryAddSheetProps {
   isOpen: boolean;
@@ -90,7 +90,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
         >
           <Typography variant="headline">새 카테고리 추가</Typography>
           <Button variant="ghost" onPress={handleClose}>
-            취소
+            <Button.Label>취소</Button.Label>
           </Button>
         </View>
 
@@ -107,30 +107,17 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
           </View>
 
           <View className="mt-2 flex-row gap-3">
-            <Button
-              className="flex-1"
-              style={{
-                backgroundColor: hexColors.surface,
-                borderColor: hexColors.border,
-                borderWidth: 1,
-              }}
-              onPress={handleClose}
-            >
+            <Button isIconOnly className="flex-1" variant="ghost" onPress={handleClose}>
               <X color={hexColors.textSecondary} size={20} />
             </Button>
             <Button
               className="flex-1"
-              disabled={!categoryName.trim() || createCategoryMutation.isPending}
+              isDisabled={!categoryName.trim() || createCategoryMutation.isPending}
+              isLoading={createCategoryMutation.isPending}
               style={{ backgroundColor: hexColors.accent }}
               onPress={handleCreate}
             >
-              {createCategoryMutation.isPending ? (
-                <ActivityIndicator color="white" size="small" />
-              ) : (
-                <Typography color="white" variant="callout">
-                  생성
-                </Typography>
-              )}
+              <Button.Label>생성</Button.Label>
             </Button>
           </View>
         </View>

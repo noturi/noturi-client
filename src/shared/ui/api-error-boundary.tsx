@@ -54,8 +54,8 @@ export class ApiErrorBoundary extends Component<Props, State> {
               : '예상치 못한 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.'}
           </Typography>
 
-          <Button variant="outlined" onPress={this.handleRetry}>
-            다시 시도
+          <Button variant="ghost" onPress={this.handleRetry}>
+            <Button.Label>다시 시도</Button.Label>
           </Button>
         </View>
       );

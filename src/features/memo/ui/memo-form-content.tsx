@@ -177,13 +177,8 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
                     />
                   ))}
                   {!showAddCategory && (
-                    <Button
-                      borderStyle="dashed"
-                      size="sm"
-                      variant="ghost"
-                      onPress={() => setShowAddCategory(true)}
-                    >
-                      + 추가
+                    <Button size="sm" variant="ghost" onPress={() => setShowAddCategory(true)}>
+                      <Button.Label>+ 추가</Button.Label>
                     </Button>
                   )}
                 </View>
@@ -209,15 +204,15 @@ export const MemoFormContent = ({ onSuccess, shouldAutoFocus = false }: MemoForm
                   </View>
                   <View className="flex-row items-center gap-1">
                     <Button
-                      disabled={!categoryForm.isValid || createCategoryMutation.isPending}
+                      isDisabled={!categoryForm.isValid || createCategoryMutation.isPending}
                       size="sm"
                       variant="primary"
                       onPress={handleAddCategory}
                     >
-                      추가
+                      <Button.Label>추가</Button.Label>
                     </Button>
                     <Button size="sm" variant="ghost" onPress={handleCancelAddCategory}>
-                      취소
+                      <Button.Label>취소</Button.Label>
                     </Button>
                   </View>
                 </View>

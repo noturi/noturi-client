@@ -75,8 +75,8 @@ export const CategoryManageContent = ({
         <Form>
           <Form.Field>
             {!isFormVisible && (
-              <Button borderStyle="dashed" size="md" variant="ghost" onPress={handleShowForm}>
-                + 추가
+              <Button size="md" variant="ghost" onPress={handleShowForm}>
+                <Button.Label>+ 추가</Button.Label>
               </Button>
             )}
 
@@ -108,7 +108,7 @@ export const CategoryManageContent = ({
                     onSuccess={handleCreateSuccess}
                   />
                   <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
-                    취소
+                    <Button.Label>취소</Button.Label>
                   </Button>
                 </View>
               </View>

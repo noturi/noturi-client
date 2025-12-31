@@ -1,6 +1,7 @@
 // 순수 UI 컴포넌트들만 export
 export * from './api-error-boundary';
 export * from './button';
+export * from './pressable-feedback';
 export * from './card';
 export * from './checkbox';
 export * from './error-view';
