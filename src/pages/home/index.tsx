@@ -10,10 +10,10 @@ import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
 import { HREFS } from '~/shared/config/routes';
-import { Card, FloatingButton } from '~/shared/ui';
+import { Card, FloatingButton, MemoSkeleton } from '~/shared/ui';
 import { CalendarView, type CalendarViewRef, MemoListHeader } from '~/widgets';
 
-import { useMemo, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { router } from 'expo-router';
@@ -24,12 +24,15 @@ const LIMIT = 1000;
 const SORT_BY = 'createdAt';
 const SORT_ORDER = 'desc';
 
-export function HomePage() {
-  const [view, setView] = useState<MemoViewType>('rating');
-  const [year, setYear] = useState<number>();
-  const [category, setCategory] = useState('전체');
-  const calendarRef = useRef<CalendarViewRef>(null);
+// 메모 목록 컴포넌트 (Suspense 내부)
+interface MemoListContentProps {
+  category: string;
+  year?: number;
+  onCategoryChange: (category: string) => void;
+  onYearChange: (year?: number) => void;
+}
 
+function MemoListContent({ category, year, onCategoryChange, onYearChange }: MemoListContentProps) {
   const { data: categoriesData } = useSuspenseQuery(activeCategoriesQuery());
   const { data: memosData } = useSuspenseInfiniteQuery(
     infiniteMemoListQuery({
@@ -51,6 +54,30 @@ export function HomePage() {
     return MemoService.transformToUIMemos(memosData.pages.flatMap((page) => page?.data || []));
   }, [memosData]);
 
+  return (
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 200 }}
+      showsVerticalScrollIndicator={false}
+      style={{ flex: 1 }}
+    >
+      <View className="gap-6">
+        <CategoryFilterBar categories={categories} onPress={onCategoryChange} />
+        <MemoRatingGroupView
+          header={<MemoListHeader selectedYear={year} onYearChange={onYearChange} />}
+          memos={memos}
+          onMemoPress={(memo) => router.push(`/memo/${memo.id}`)}
+        />
+      </View>
+    </ScrollView>
+  );
+}
+
+export function HomePage() {
+  const [view, setView] = useState<MemoViewType>('rating');
+  const [year, setYear] = useState<number>();
+  const [category, setCategory] = useState('전체');
+  const calendarRef = useRef<CalendarViewRef>(null);
+
   const handleCreate = () => {
     if (view === 'rating') {
       router.push(HREFS.memoCreate());
@@ -67,20 +94,14 @@ export function HomePage() {
 
       <View className="flex-1">
         {view === 'rating' ? (
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 200 }}
-            showsVerticalScrollIndicator={false}
-            style={{ flex: 1 }}
-          >
-            <View className="gap-6">
-              <CategoryFilterBar categories={categories} onPress={setCategory} />
-              <MemoRatingGroupView
-                header={<MemoListHeader selectedYear={year} onYearChange={setYear} />}
-                memos={memos}
-                onMemoPress={(memo) => router.push(`/memo/${memo.id}`)}
-              />
-            </View>
-          </ScrollView>
+          <Suspense fallback={<MemoSkeleton />}>
+            <MemoListContent
+              category={category}
+              year={year}
+              onCategoryChange={setCategory}
+              onYearChange={setYear}
+            />
+          </Suspense>
         ) : (
           <CalendarDateProvider>
             <CalendarView ref={calendarRef} />
