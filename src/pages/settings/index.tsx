@@ -12,7 +12,7 @@ import { Linking, Pressable, View } from 'react-native';
 
 import Constants from 'expo-constants';
 
-const appVersion = Constants.expoConfig?.version ?? '1.0.0';
+const appVersion = Constants.expoConfig?.version;
 
 export function SettingsPage() {
   const [openManage, setOpenManage] = useState(false);
