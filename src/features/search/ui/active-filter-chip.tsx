@@ -1,8 +1,7 @@
-import { X } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 
 interface ActiveFilterChipProps {
   label: string;
@@ -10,21 +9,15 @@ interface ActiveFilterChipProps {
 }
 
 export function ActiveFilterChip({ label, onClear }: ActiveFilterChipProps) {
-  const { hexColors } = useUserTheme();
-
   return (
     <Pressable
-      className="flex-row items-center rounded-7 px-2 py-1"
-      style={{
-        borderColor: hexColors.border,
-        borderWidth: 1,
-      }}
+      className="flex-row items-center rounded-7 border border-border px-2 py-1"
       onPress={onClear}
     >
       <Typography className="text-text-primary" variant="callout">
         {label}
       </Typography>
-      <X color={hexColors.textPrimary} size={14} />
+      <X className="text-text-primary" size={14} />
     </Pressable>
   );
 }

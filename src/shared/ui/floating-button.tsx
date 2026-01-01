@@ -1,5 +1,4 @@
-import { Plus } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { Plus } from '~/shared/lib/icons';
 
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
@@ -23,24 +22,23 @@ export function FloatingButton({
   className,
   ...props
 }: FloatingButtonProps) {
-  const { hexColors } = useUserTheme();
   const isDisabled = disabled || isLoading;
 
   const content = isLoading ? (
     <View className="flex-row items-center gap-2">
-      <ActivityIndicator color={hexColors.primaryText} size="small" />
+      <ActivityIndicator color="white" size="small" />
       {children && (
-        <Typography style={{ color: hexColors.primaryText }} variant="body">
+        <Typography className="text-primary-text" variant="body">
           {children}
         </Typography>
       )}
     </View>
   ) : children ? (
-    <Typography style={{ color: hexColors.primaryText }} variant="body">
+    <Typography className="text-primary-text" variant="body">
       {children}
     </Typography>
   ) : (
-    <Plus color={hexColors.primaryText} size={24} />
+    <Plus className="text-primary-text" size={24} />
   );
 
   return (

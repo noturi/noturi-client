@@ -1,4 +1,3 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, ScrollView, View } from 'react-native';
@@ -12,8 +11,6 @@ const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
 export function YearChips({ selectedYear, onSelect }: YearChipsProps) {
-  const { hexColors } = useUserTheme();
-
   const handlePress = (year: number) => {
     onSelect(selectedYear === year ? undefined : year);
   };
@@ -28,14 +25,13 @@ export function YearChips({ selectedYear, onSelect }: YearChipsProps) {
             return (
               <Pressable
                 key={year}
-                className="h-8 items-center justify-center rounded-2 px-3"
-                style={{
-                  backgroundColor: isSelected ? hexColors.primary : hexColors.surface,
-                }}
+                className={`h-8 items-center justify-center rounded-2 px-3 ${
+                  isSelected ? 'bg-primary' : 'bg-surface'
+                }`}
                 onPress={() => handlePress(year)}
               >
                 <Typography
-                  color={isSelected ? hexColors.primaryText : hexColors.textSecondary}
+                  className={isSelected ? 'text-primary-text' : 'text-text-secondary'}
                   variant="callout"
                 >
                   {year}년

@@ -1,5 +1,5 @@
-import { ExternalLink } from 'lucide-react-native';
 import { EXTERNAL_LINKS, HREFS } from '~/shared/config';
+import { ExternalLink } from '~/shared/lib/icons';
 import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
 
 import { useState } from 'react';

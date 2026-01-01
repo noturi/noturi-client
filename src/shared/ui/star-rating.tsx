@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react-native';
+import { Star } from '~/shared/lib/icons';
 
 import { View } from 'react-native';
 

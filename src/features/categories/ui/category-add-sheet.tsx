@@ -1,7 +1,7 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { X } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
+import { X } from '~/shared/lib/icons';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -84,10 +84,7 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
     >
       <BottomSheetView style={{ flex: 1 }}>
         {/* Header */}
-        <View
-          className="flex-row items-center justify-between px-5 py-4"
-          style={{ borderBottomColor: hexColors.border, borderBottomWidth: 1 }}
-        >
+        <View className="flex-row items-center justify-between border-b border-border px-5 py-4">
           <Typography variant="headline">새 카테고리 추가</Typography>
           <Button variant="ghost" onPress={handleClose}>
             <Button.Label>취소</Button.Label>
@@ -108,13 +105,12 @@ export const CategoryAddSheet = ({ isOpen, onClose, onSuccess }: CategoryAddShee
 
           <View className="mt-2 flex-row gap-3">
             <Button isIconOnly className="flex-1" variant="ghost" onPress={handleClose}>
-              <X color={hexColors.textSecondary} size={20} />
+              <X className="text-text-secondary" size={20} />
             </Button>
             <Button
-              className="flex-1"
+              className="flex-1 bg-accent"
               isDisabled={!categoryName.trim() || createCategoryMutation.isPending}
               isLoading={createCategoryMutation.isPending}
-              style={{ backgroundColor: hexColors.accent }}
               onPress={handleCreate}
             >
               <Button.Label>생성</Button.Label>

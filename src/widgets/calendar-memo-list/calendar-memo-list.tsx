@@ -1,8 +1,8 @@
-import { Bell } from 'lucide-react-native';
 import type { CalendarMemo } from '~/entities/calendar';
 import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
 import { formatTime } from '~/shared/lib';
+import { Bell } from '~/shared/lib/icons';
 import { Card, Typography } from '~/shared/ui';
 
 import { View } from 'react-native';

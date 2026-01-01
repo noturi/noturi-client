@@ -1,7 +1,7 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { FileText, Star } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { HREFS } from '~/shared/config';
+import { FileText, Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -88,19 +88,10 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
 
         <View className="gap-3">
           <Pressable
-            className="flex-row items-center gap-4 rounded-4 p-4"
-            style={({ pressed }) => ({
-              backgroundColor: hexColors.bgSecondary,
-              borderColor: hexColors.border,
-              borderWidth: 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
-            })}
+            className="flex-row items-center gap-4 rounded-4 border border-border bg-bg-secondary p-4 active:scale-[0.98]"
             onPress={handleSelectRatingMemo}
           >
-            <View
-              className="items-center justify-center rounded-3 p-3"
-              style={{ backgroundColor: hexColors.primary }}
-            >
+            <View className="items-center justify-center rounded-3 bg-primary p-3">
               <Star color="white" fill="white" size={24} />
             </View>
             <View className="flex-1">
@@ -112,19 +103,10 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
           </Pressable>
 
           <Pressable
-            className="flex-row items-center gap-4 rounded-4 p-4"
-            style={({ pressed }) => ({
-              backgroundColor: hexColors.bgSecondary,
-              borderColor: hexColors.border,
-              borderWidth: 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
-            })}
+            className="flex-row items-center gap-4 rounded-4 border border-border bg-bg-secondary p-4 active:scale-[0.98]"
             onPress={handleSelectTextMemo}
           >
-            <View
-              className="items-center justify-center rounded-3 p-3"
-              style={{ backgroundColor: hexColors.accent }}
-            >
+            <View className="items-center justify-center rounded-3 bg-accent p-3">
               <FileText color="white" size={24} />
             </View>
             <View className="flex-1">

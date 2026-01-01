@@ -1,5 +1,4 @@
-import { Bell } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { Bell } from '~/shared/lib/icons';
 import { Switch, Typography } from '~/shared/ui';
 
 import { useEffect, useState } from 'react';
@@ -21,7 +20,6 @@ const showSettingsAlert = () => {
 export function NotificationToggle() {
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { hexColors } = useUserTheme();
 
   useEffect(() => {
     notificationService.isNotificationEnabled().then(setEnabled);
@@ -56,7 +54,7 @@ export function NotificationToggle() {
 
   return (
     <View className="flex-row items-center gap-3 rounded-5 px-4 py-3">
-      <Bell color={hexColors.textSecondary} size={20} />
+      <Bell className="text-text-secondary" size={20} />
       <View className="flex-1">
         <Typography className="text-text-primary" variant="callout">
           알림

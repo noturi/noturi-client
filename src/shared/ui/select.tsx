@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react-native';
+import { ChevronDown } from '~/shared/lib/icons';
 
 import React, { useRef, useState } from 'react';
 import {
@@ -95,7 +95,7 @@ export function Select({
               </Typography>
             </View>
             <ChevronDown
-              color="#9e9e9e"
+              className="text-text-muted"
               size={16}
               style={isOpen ? { transform: [{ rotate: '180deg' }] } : undefined}
             />

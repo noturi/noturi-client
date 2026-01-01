@@ -1,5 +1,4 @@
-import { Filter, Search } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { Filter, Search } from '~/shared/lib/icons';
 
 import { Pressable, TextInput, View } from 'react-native';
 
@@ -18,26 +17,17 @@ export function SearchInputBar({
   onPressSearch,
   onToggleFilters,
 }: SearchInputBarProps) {
-  const { hexColors } = useUserTheme();
-
   return (
     <View className="flex-row items-center gap-1">
       <View className="flex-1">
-        <View
-          className="h-12 flex-row items-center gap-1 rounded-6 px-2"
-          style={{ backgroundColor: hexColors.bgSecondary }}
-        >
-          <Search color={hexColors.textMuted} size={20} />
+        <View className="h-12 flex-row items-center gap-1 rounded-6 bg-bg-secondary px-2">
+          <Search className="text-text-muted" size={20} />
           <TextInput
             autoFocus
-            className="flex-1"
+            className="flex-1 text-text-primary text-base"
             placeholder="제목 및 내용 검색"
-            placeholderTextColor={hexColors.textMuted}
+            placeholderClassName="text-text-muted"
             returnKeyType="search"
-            style={{
-              color: hexColors.textPrimary,
-              fontSize: 16,
-            }}
             value={searchText}
             onChangeText={onChangeSearchText}
             onSubmitEditing={onPressSearch}
@@ -49,7 +39,7 @@ export function SearchInputBar({
         className="h-12 w-12 items-center justify-center rounded-full"
         onPress={onToggleFilters}
       >
-        <Filter color={hexColors.textSecondary} size={20} />
+        <Filter className="text-text-secondary" size={20} />
       </Pressable>
     </View>
   );

@@ -1,5 +1,4 @@
-import { X } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
@@ -9,23 +8,14 @@ interface MemoFormHeaderProps {
 }
 
 export const MemoFormHeader = ({ onClose }: MemoFormHeaderProps) => {
-  const { hexColors } = useUserTheme();
-
   return (
-    <View
-      className="h-11 flex-row items-center justify-center px-4"
-      style={{
-        backgroundColor: hexColors.bgPrimary,
-        borderBottomColor: hexColors.border,
-        borderBottomWidth: 0.5,
-      }}
-    >
+    <View className="h-11 flex-row items-center justify-center bg-bg-primary border-b border-border px-4">
       <Pressable
         className="absolute left-4 h-11 w-11 items-center justify-center rounded-2"
         style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
         onPress={onClose}
       >
-        <X color={hexColors.primary} size={20} strokeWidth={2} />
+        <X className="text-primary" size={20} strokeWidth={2} />
       </Pressable>
 
       <Typography className="font-semibold text-text-primary" variant="headline">

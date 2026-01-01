@@ -1,4 +1,3 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, ScrollView, View } from 'react-native';
@@ -15,8 +14,6 @@ interface CategoryChipsProps {
 }
 
 export function CategoryChips({ categories, selectedCategoryId, onSelect }: CategoryChipsProps) {
-  const { hexColors } = useUserTheme();
-
   const handlePress = (id: string) => {
     onSelect(selectedCategoryId === id ? undefined : id);
   };
@@ -31,14 +28,13 @@ export function CategoryChips({ categories, selectedCategoryId, onSelect }: Cate
             return (
               <Pressable
                 key={category.id}
-                className="h-8 items-center justify-center rounded-2 px-3"
-                style={{
-                  backgroundColor: isSelected ? hexColors.primary : hexColors.surface,
-                }}
+                className={`h-8 items-center justify-center rounded-2 px-3 ${
+                  isSelected ? 'bg-primary' : 'bg-surface'
+                }`}
                 onPress={() => handlePress(category.id)}
               >
                 <Typography
-                  color={isSelected ? hexColors.primaryText : hexColors.textSecondary}
+                  className={isSelected ? 'text-primary-text' : 'text-text-secondary'}
                   variant="callout"
                 >
                   {category.name}

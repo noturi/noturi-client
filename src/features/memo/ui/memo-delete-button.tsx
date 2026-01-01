@@ -1,6 +1,5 @@
-import { Trash2 } from 'lucide-react-native';
 import { toast } from 'sonner-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { Trash2 } from '~/shared/lib/icons';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
@@ -16,8 +15,6 @@ interface MemoDeleteButtonProps {
 }
 
 export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButtonProps) => {
-  const { hexColors } = useUserTheme();
-
   const deleteMutation = useDeleteMemoMutation({
     onSuccess: () => {
       toast.success('메모가 삭제되었습니다');
@@ -53,7 +50,7 @@ export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButt
       variant="ghost"
       onPress={handleDelete}
     >
-      <Trash2 color={hexColors.textPrimary} size={16} />
+      <Trash2 className="text-text-primary" size={16} />
     </Button>
   );
 };

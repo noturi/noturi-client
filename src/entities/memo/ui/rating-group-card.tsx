@@ -1,6 +1,5 @@
-import { ChevronDown, ChevronUp } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
 import type { UIMemo } from '~/entities/memo/model/types';
+import { ChevronDown, ChevronUp } from '~/shared/lib/icons';
 import { Card, RatingStars, Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
@@ -23,8 +22,6 @@ export function RatingGroupCard({
   onToggle,
   onMemoPress,
 }: RatingGroupCardProps) {
-  const { hexColors } = useUserTheme();
-
   return (
     <Card className="p-4">
       <Pressable className="flex-row items-center gap-2 p-3 active:opacity-70" onPress={onToggle}>
@@ -35,9 +32,9 @@ export function RatingGroupCard({
           </Typography>
         </View>
         {isExpanded ? (
-          <ChevronUp color={hexColors.textMuted} size={16} />
+          <ChevronUp className="text-text-muted" size={16} />
         ) : (
-          <ChevronDown color={hexColors.textMuted} size={16} />
+          <ChevronDown className="text-text-muted" size={16} />
         )}
       </Pressable>
 

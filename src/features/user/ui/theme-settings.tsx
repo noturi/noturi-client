@@ -1,6 +1,6 @@
-import { Check, ChevronDown, ChevronUp, Palette } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { PRESET_HEX_COLORS, ThemePreset } from '~/shared/config/theme';
+import { Check, ChevronDown, ChevronUp, Palette } from '~/shared/lib/icons';
 import { Card } from '~/shared/ui/card';
 import { Typography } from '~/shared/ui/typography';
 
@@ -14,14 +14,14 @@ interface ThemePreviewProps {
 }
 
 function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
-  const { hexColors } = useUserTheme();
   const presetHex = PRESET_HEX_COLORS[preset.id];
 
   return (
     <Pressable onPress={onSelect}>
       <View
-        className="w-[100px] items-center gap-2 rounded-5 border-2 p-2"
-        style={{ borderColor: isSelected ? hexColors.selection : hexColors.border }}
+        className={`w-[100px] items-center gap-2 rounded-5 border-2 p-2 ${
+          isSelected ? 'border-selection' : 'border-border'
+        }`}
       >
         {/* 테마 미리보기 박스 */}
         <View
@@ -44,9 +44,9 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
 
         {/* 테마 이름 */}
         <View className="flex-row items-center gap-1">
-          {isSelected && <Check color={hexColors.selection} size={14} />}
+          {isSelected && <Check className="text-selection" size={14} />}
           <Typography
-            style={{ color: isSelected ? hexColors.selection : hexColors.textPrimary }}
+            className={isSelected ? 'text-selection' : 'text-text-primary'}
             variant="footnote"
           >
             {preset.name}
@@ -59,20 +59,20 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
 
 export function ThemeSettings() {
   const [isOpen, setIsOpen] = useState(false);
-  const { themeId, setTheme, presets, hexColors } = useUserTheme();
+  const { themeId, setTheme, presets } = useUserTheme();
 
   return (
     <Card>
       <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View className="flex-row items-center gap-3 px-4 py-3">
-          <Palette color={hexColors.textSecondary} size={20} />
+          <Palette className="text-text-secondary" size={20} />
           <Typography className="flex-1 text-text-primary" variant="callout">
             테마 설정
           </Typography>
           {isOpen ? (
-            <ChevronUp color={hexColors.textMuted} size={20} />
+            <ChevronUp className="text-text-muted" size={20} />
           ) : (
-            <ChevronDown color={hexColors.textMuted} size={20} />
+            <ChevronDown className="text-text-muted" size={20} />
           )}
         </View>
       </Pressable>

@@ -1,5 +1,5 @@
-import { ChevronLeft } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
+import { ChevronLeft } from '~/shared/lib/icons';
 
 import { Pressable } from 'react-native';
 
@@ -63,7 +63,7 @@ export function RootRouter() {
             headerBackButtonMenuEnabled: false,
             headerLeft: () => (
               <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
-                <ChevronLeft color={hexColors.textPrimary} size={24} />
+                <ChevronLeft className="text-text-primary" size={24} />
               </Pressable>
             ),
           }}

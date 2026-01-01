@@ -3,7 +3,6 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useUserTheme } from '~/application/providers/theme-provider';
 import { useGoogleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
@@ -20,7 +19,6 @@ const ERROR_MESSAGES: Record<string, string | null> = {
 
 export function GoogleButton() {
   const { handleLoginSuccess, clearError } = useLoginHandler();
-  const { hexColors } = useUserTheme();
 
   const googleLoginMutation = useGoogleLoginMutation({
     onSuccess: handleLoginSuccess,
@@ -63,14 +61,9 @@ export function GoogleButton() {
 
   return (
     <Pressable
-      className="h-14 w-14 items-center justify-center rounded-full"
+      className="h-14 w-14 items-center justify-center rounded-full border border-border bg-surface"
       disabled={googleLoginMutation.isPending}
-      style={{
-        backgroundColor: hexColors.surface,
-        borderColor: hexColors.border,
-        borderWidth: 1,
-        opacity: googleLoginMutation.isPending ? 0.5 : 1,
-      }}
+      style={{ opacity: googleLoginMutation.isPending ? 0.5 : 1 }}
       onPress={handlePress}
     >
       <GoogleIcon height={24} width={24} />

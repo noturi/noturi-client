@@ -1,5 +1,4 @@
-import { ChevronDown } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { ChevronDown } from '~/shared/lib/icons';
 import { ControlledSheet, Typography } from '~/shared/ui';
 
 import { useCallback, useMemo, useState } from 'react';
@@ -27,7 +26,6 @@ interface MemoListHeaderProps {
 
 export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderProps) {
   const [showYearSheet, setShowYearSheet] = useState(false);
-  const { hexColors } = useUserTheme();
 
   const yearOptions = useMemo(() => getYearOptions(), []);
   const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
@@ -51,7 +49,7 @@ export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderPro
           <Typography className="text-text-muted" variant="callout">
             {selectedYearLabel}
           </Typography>
-          <ChevronDown color={hexColors.textMuted} size={12} />
+          <ChevronDown className="text-text-muted" size={12} />
         </Pressable>
       </View>
 

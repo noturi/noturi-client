@@ -1,7 +1,7 @@
-import { MoreVertical, Trash2 } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
+import { MoreVertical, Trash2 } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -45,18 +45,15 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
     <View className="relative">
       <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
         <View className="p-2">
-          <MoreVertical color={hexColors.textMuted} size={18} />
+          <MoreVertical className="text-text-muted" size={18} />
         </View>
       </TouchableOpacity>
 
       {showMenu && (
         <>
           <View
-            className="absolute right-0 top-8 z-[999999] min-w-[120px] rounded-3"
+            className="absolute right-0 top-8 z-[999999] min-w-[120px] rounded-3 border border-border bg-bg-primary"
             style={{
-              backgroundColor: hexColors.bgPrimary,
-              borderColor: hexColors.border,
-              borderWidth: 1,
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
