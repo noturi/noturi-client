@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
-import { DateTimePickerField } from './date-time-picker-field';
+import { ActivePicker, DateTimePickerField, PickerType } from './date-time-picker-field';
 
 interface CalendarAddModalProps {
   isOpen: boolean;
@@ -29,10 +29,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   const [endDateTime, setEndDateTime] = useState(getHoursLater(1));
   const [isAllDay, setIsAllDay] = useState(false);
   const [notifyBefore, setNotifyBefore] = useState<NotifyBefore | undefined>(undefined);
+  const [activePicker, setActivePicker] = useState<ActivePicker>(null);
 
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(() => ['90%'], []);
+  const snapPoints = useMemo(() => ['85%'], []);
   const notificationOptions = isAllDay ? ALL_DAY_NOTIFICATION_OPTIONS : NOTIFICATION_OPTIONS;
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
     setEndDateTime(getHoursLater(1));
     setIsAllDay(false);
     setNotifyBefore(undefined);
+    setActivePicker(null);
   };
 
   const getFormData = (): CreateCalendarMemoDto => ({
@@ -97,6 +99,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         borderColor: hexColors.border,
         borderBottomWidth: 0,
       }}
+      enableDynamicSizing={false}
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,
@@ -138,10 +141,22 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
 
             <View className="gap-4">
               <DateTimePickerField
+                activePicker={
+                  activePicker === 'start-date'
+                    ? 'date'
+                    : activePicker === 'start-time'
+                      ? 'time'
+                      : null
+                }
                 dateTime={startDateTime}
                 isAllDay={isAllDay}
                 label="시작"
                 onDateTimeChange={setStartDateTime}
+                onPickerChange={(picker: PickerType) => {
+                  if (picker === 'date') setActivePicker('start-date');
+                  else if (picker === 'time') setActivePicker('start-time');
+                  else setActivePicker(null);
+                }}
                 onSyncDate={(date) => {
                   const newEndDate = new Date(date);
                   newEndDate.setHours(endDateTime.getHours());
@@ -151,11 +166,19 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
               />
 
               <DateTimePickerField
+                activePicker={
+                  activePicker === 'end-date' ? 'date' : activePicker === 'end-time' ? 'time' : null
+                }
                 dateTime={endDateTime}
                 isAllDay={isAllDay}
                 label="종료"
                 minDate={isAllDay ? undefined : startDateTime.toISOString().split('T')[0]}
                 onDateTimeChange={setEndDateTime}
+                onPickerChange={(picker: PickerType) => {
+                  if (picker === 'date') setActivePicker('end-date');
+                  else if (picker === 'time') setActivePicker('end-time');
+                  else setActivePicker(null);
+                }}
                 onSyncDate={(date) => {
                   const newStartDate = new Date(date);
                   newStartDate.setHours(startDateTime.getHours());

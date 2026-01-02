@@ -52,6 +52,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
         borderColor: hexColors.border,
         borderBottomWidth: 0,
       }}
+      enableDynamicSizing={false}
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,

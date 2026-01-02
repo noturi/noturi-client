@@ -9,6 +9,9 @@ import { Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
+export type PickerType = 'date' | 'time' | null;
+export type ActivePicker = 'start-date' | 'start-time' | 'end-date' | 'end-time' | null;
+
 interface DateTimePickerFieldProps {
   label: string;
   dateTime: Date;
@@ -16,6 +19,8 @@ interface DateTimePickerFieldProps {
   isAllDay?: boolean;
   minDate?: string;
   onSyncDate?: (date: Date) => void;
+  activePicker?: PickerType;
+  onPickerChange?: (picker: PickerType) => void;
 }
 
 export function DateTimePickerField({
@@ -25,20 +30,24 @@ export function DateTimePickerField({
   isAllDay = false,
   minDate,
   onSyncDate,
+  activePicker,
+  onPickerChange,
 }: DateTimePickerFieldProps) {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const isControlled = activePicker !== undefined && onPickerChange !== undefined;
+  const [internalPicker, setInternalPicker] = useState<PickerType>(null);
+
+  const currentPicker = isControlled ? activePicker : internalPicker;
+  const setPicker = isControlled ? onPickerChange : setInternalPicker;
+
   const { hexColors } = useUserTheme();
   const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
 
   const handleDatePress = () => {
-    setShowTimePicker(false);
-    setShowDatePicker(!showDatePicker);
+    setPicker(currentPicker === 'date' ? null : 'date');
   };
 
   const handleTimePress = () => {
-    setShowDatePicker(false);
-    setShowTimePicker(!showTimePicker);
+    setPicker(currentPicker === 'time' ? null : 'time');
   };
 
   const handleDayPress = (day: { dateString: string }) => {
@@ -50,7 +59,7 @@ export function DateTimePickerField({
     if (isAllDay && onSyncDate) {
       onSyncDate(newDate);
     }
-    setShowDatePicker(false);
+    setPicker(null);
   };
 
   const handleTimeChange = (_: unknown, selectedTime?: Date) => {
@@ -66,16 +75,10 @@ export function DateTimePickerField({
     <View className="gap-2">
       <Typography variant="footnote">{label}</Typography>
       <View className="flex-row gap-3">
-        <Pressable style={{ flex: 1 }} onPress={handleDatePress}>
+        <Pressable className="flex-1" onPress={handleDatePress}>
           <Text
-            className="h-11 rounded-5 text-center leading-[42px]"
-            style={{
-              backgroundColor: hexColors.surface,
-              borderColor: hexColors.border,
-              borderWidth: 1,
-              color: hexColors.textPrimary,
-              fontSize: 16,
-            }}
+            className="rounded-5 border border-border bg-surface text-center text-text-primary"
+            style={{ height: 44, lineHeight: 42, fontSize: 16 }}
           >
             {formatDate(dateTime)}
           </Text>
@@ -84,14 +87,8 @@ export function DateTimePickerField({
         {!isAllDay && (
           <Pressable onPress={handleTimePress}>
             <Text
-              className="h-11 min-w-20 rounded-5 text-center leading-[42px]"
-              style={{
-                backgroundColor: hexColors.surface,
-                borderColor: hexColors.border,
-                borderWidth: 1,
-                color: hexColors.textPrimary,
-                fontSize: 16,
-              }}
+              className="min-w-[80px] rounded-5 border border-border bg-surface text-center text-text-primary"
+              style={{ height: 44, lineHeight: 42, fontSize: 16 }}
             >
               {formatTime(dateTime)}
             </Text>
@@ -99,12 +96,13 @@ export function DateTimePickerField({
         )}
       </View>
 
-      {showDatePicker && (
+      {currentPicker === 'date' && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
           <View className="rounded-4 pt-3" style={{ backgroundColor: hexColors.surface }}>
             <Calendar
               key={hexColors.bgPrimary}
               current={dateTime.toISOString().split('T')[0]}
+              monthFormat="yyyy년 MM월"
               markedDates={{
                 [dateTime.toISOString().split('T')[0]]: {
                   selected: true,
@@ -120,12 +118,13 @@ export function DateTimePickerField({
         </Animated.View>
       )}
 
-      {!isAllDay && showTimePicker && (
+      {!isAllDay && currentPicker === 'time' && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
           <View className="pt-3">
             <DateTimePicker
               display="spinner"
               mode="time"
+              textColor={hexColors.textPrimary}
               value={dateTime}
               onChange={handleTimeChange}
             />
