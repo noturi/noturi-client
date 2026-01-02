@@ -20,8 +20,7 @@ export function TabsRouter() {
 
   return (
     <NativeTabs
-      disableTransparentOnScrollEdge
-      backgroundColor={hexColors.bgPrimary}
+      backgroundColor={hexColors.bgSecondary}
       iconColor={{
         default: hexColors.textMuted,
         selected: hexColors.primary,

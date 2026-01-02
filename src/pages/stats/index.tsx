@@ -37,7 +37,7 @@ export function StatsPage() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-bg-secondary">
+    <ScrollView className="flex-1 bg-bg-secondary" contentInsetAdjustmentBehavior="never">
       <View className="gap-6 px-4 pt-4">
         {overallStats && <OverallStatsView stats={overallStats} />}
 

@@ -1,4 +1,3 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
 import { Loading } from '~/shared/ui';
@@ -13,18 +12,14 @@ interface MemoListProps {
 }
 
 export function MemoList({ memos, onEndReached, isFetchingNextPage }: MemoListProps) {
-  const { hexColors } = useUserTheme();
-
   const renderItem = useCallback(
     ({ item, index }: { item: UIMemo; index: number }) => (
       <View key={item.id}>
         <MemoItem memo={item} />
-        {index < memos.length - 1 && (
-          <View className="h-px" style={{ backgroundColor: hexColors.border }} />
-        )}
+        {index < memos.length - 1 && <View className="h-px bg-border" />}
       </View>
     ),
-    [memos, hexColors.border],
+    [memos.length],
   );
 
   const renderFooter = useCallback(() => {
