@@ -34,7 +34,7 @@ export function DeleteAccountButton() {
 
   return (
     <Pressable
-      className="items-center py-4"
+      className="self-center py-4"
       style={{ opacity: isPending ? 0.5 : 1 }}
       onPress={isPending ? undefined : confirmDelete}
     >

@@ -64,7 +64,7 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
             <TouchableOpacity onPress={handleDelete}>
               <View className="flex-row items-center gap-2 px-3 py-3">
                 <Trash2 color="#ef4444" size={16} />
-                <Typography color="#ef4444" variant="footnote">
+                <Typography className="text-error" variant="footnote">
                   삭제
                 </Typography>
               </View>
