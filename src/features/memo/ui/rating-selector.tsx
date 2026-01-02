@@ -17,14 +17,14 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
       const isEmpty = rating < i - 0.5;
 
       stars.push(
-        <View key={i} className="relative h-[30px] w-[30px] items-center">
+        <View key={i} className="relative h-[34px] w-[34px] items-center justify-center">
           {/* 왼쪽 반쪽 클릭 영역 */}
           <Pressable
             style={{
               position: 'absolute',
               left: 0,
-              width: 15,
-              height: 30,
+              width: 17,
+              height: 34,
               zIndex: 2,
             }}
             onPress={() => onRatingChange(i - 0.5)}
@@ -35,25 +35,25 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
             style={{
               position: 'absolute',
               right: 0,
-              width: 15,
-              height: 30,
+              width: 17,
+              height: 34,
               zIndex: 2,
             }}
             onPress={() => onRatingChange(i)}
           />
 
-          {isFilled && <Star color="#f59e0b" fill="#f59e0b" size={24} />}
+          {isFilled && <Star color="#f59e0b" fill="#f59e0b" size={28} />}
 
           {isHalfFilled && (
             <>
-              <Star color="#fef3c7" fill="#fef3c7" size={24} />
-              <View className="absolute left-0 h-[30px] w-[15px] overflow-hidden">
-                <Star color="#f59e0b" fill="#f59e0b" size={24} />
+              <Star color="#fef3c7" fill="#fef3c7" size={28} />
+              <View className="absolute overflow-hidden" style={{ left: 3, width: 14, height: 28 }}>
+                <Star color="#f59e0b" fill="#f59e0b" size={28} />
               </View>
             </>
           )}
 
-          {isEmpty && <Star color="#fef3c7" fill="#fef3c7" size={24} />}
+          {isEmpty && <Star color="#fef3c7" fill="#fef3c7" size={28} />}
         </View>,
       );
     }
