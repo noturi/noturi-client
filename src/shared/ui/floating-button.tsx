@@ -1,7 +1,7 @@
 import { Plus } from '~/shared/lib/icons';
 
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -12,6 +12,14 @@ interface FloatingButtonProps extends PressableProps {
   style?: StyleProp<ViewStyle>;
   className?: string;
 }
+
+const shadowStyle = {
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 8,
+  elevation: 5,
+};
 
 export function FloatingButton({
   onPress,
@@ -24,66 +32,34 @@ export function FloatingButton({
 }: FloatingButtonProps) {
   const isDisabled = disabled || isLoading;
 
-  const content = isLoading ? (
-    <View className="flex-row items-center gap-2">
-      <ActivityIndicator color="white" size="small" />
-      {children && (
-        <Typography className="text-primary-text" variant="body">
-          {children}
-        </Typography>
-      )}
-    </View>
-  ) : children ? (
-    <Typography className="text-primary-text" variant="body">
-      {children}
-    </Typography>
-  ) : (
-    <Plus className="text-primary-text" size={24} />
-  );
-
   return (
     <Pressable
-      className={`bg-primary rounded-full ${className ?? ''}`}
+      className={`h-[44px] items-center justify-center rounded-full bg-primary ${children ? 'min-w-[44px] px-3' : 'w-[44px]'} ${isDisabled ? 'opacity-60' : ''} ${className ?? ''}`}
       disabled={isDisabled}
       style={({ pressed }) => [
-        styles.button,
-        { shadowColor: '#000' },
-        children ? styles.withText : styles.iconOnly,
-        isDisabled && styles.disabled,
-        pressed && !isDisabled && styles.pressed,
+        shadowStyle,
+        pressed && !isDisabled && { opacity: 0.8, transform: [{ scale: 1.05 }] },
         style,
       ]}
       onPress={onPress}
       {...props}
     >
-      {content}
+      {isLoading ? (
+        <View className="flex-row items-center gap-2">
+          <ActivityIndicator color="white" size="small" />
+          {children && (
+            <Typography className="text-primary-text" variant="body">
+              {children}
+            </Typography>
+          )}
+        </View>
+      ) : children ? (
+        <Typography className="text-primary-text" variant="body">
+          {children}
+        </Typography>
+      ) : (
+        <Plus className="text-primary-text" size={24} />
+      )}
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 22,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  iconOnly: {
-    width: 44,
-  },
-  withText: {
-    minWidth: 44,
-    paddingHorizontal: 12,
-  },
-  disabled: {
-    opacity: 0.6,
-  },
-  pressed: {
-    opacity: 0.8,
-    transform: [{ scale: 1.05 }],
-  },
-});

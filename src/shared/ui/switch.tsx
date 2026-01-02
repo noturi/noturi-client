@@ -1,6 +1,6 @@
 import { useUserTheme } from '~/application/providers/theme-provider';
 
-import { Switch as RNSwitch, View } from 'react-native';
+import { Platform, Switch as RNSwitch, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -13,11 +13,14 @@ export interface SwitchProps {
 
 export function Switch({ label, checked, onCheckedChange, disabled = false }: SwitchProps) {
   const { hexColors } = useUserTheme();
+
   const switchElement = (
     <RNSwitch
       disabled={disabled}
-      thumbColor={hexColors.primary}
-      trackColor={{ false: hexColors.border, true: hexColors.primary }}
+      ios_backgroundColor={hexColors.border}
+      style={Platform.OS === 'ios' ? { transform: [{ scale: 0.75 }] } : undefined}
+      thumbColor={Platform.OS === 'android' ? (checked ? hexColors.accent : '#f4f4f4') : undefined}
+      trackColor={{ false: hexColors.border, true: hexColors.accent }}
       value={checked}
       onValueChange={onCheckedChange}
     />

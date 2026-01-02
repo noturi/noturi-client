@@ -162,11 +162,9 @@ export function ControlledSheet({
 
 // Handle component for manual placement
 export function SheetHandle() {
-  const { hexColors } = useUserTheme();
-
   return (
     <View className="items-center py-2">
-      <View className="rounded-2 h-1 w-9" style={{ backgroundColor: hexColors.textMuted }} />
+      <View className="h-1 w-9 rounded-2 bg-text-muted" />
     </View>
   );
 }
