@@ -1,14 +1,23 @@
 import { z } from 'zod';
+import type { Category } from '~/entities/category';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { useForm } from '~/shared/lib';
+import { GripVertical } from '~/shared/lib/icons';
 import { Button, Form, Input } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type { TextInput } from 'react-native';
+
+import DraggableFlatList, {
+  type RenderItemParams,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { useReorderCategoriesMutation } from '../api/mutations';
 import { handleCategoryFormError } from '../model/form-error-handler';
 import { CategoryCreateButton } from './category-create-button';
 import { CategoryDeleteButton } from './category-delete-button';
@@ -27,6 +36,8 @@ export const CategoryManageContent = ({
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
+
+  const reorderMutation = useReorderCategoriesMutation();
 
   const form = useForm({
     initialValues: {
@@ -69,9 +80,36 @@ export const CategoryManageContent = ({
     await handleCategoryFormError(error, form);
   };
 
+  const handleDragEnd = ({ data }: { data: Category[] }) => {
+    const reorderData = {
+      categories: data.map((cat, index) => ({
+        id: cat.id,
+        sortOrder: index,
+      })),
+    };
+    reorderMutation.mutate(reorderData);
+  };
+
+  const renderItem = ({ item, drag, isActive }: RenderItemParams<Category>) => (
+    <ScaleDecorator>
+      <Pressable
+        className={`flex-row items-center gap-2 py-2 ${isActive ? 'opacity-80' : ''}`}
+        disabled={isActive}
+        onLongPress={drag}
+      >
+        <GripVertical className="text-text-muted" size={16} />
+        <CategoryDeleteButton
+          categoryId={item.id}
+          categoryName={item.name}
+          disabled={categories.length <= 1}
+        />
+      </Pressable>
+    </ScaleDecorator>
+  );
+
   return (
-    <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
-      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <Form>
           <Form.Field>
             {!isFormVisible && (
@@ -115,20 +153,19 @@ export const CategoryManageContent = ({
             )}
           </Form.Field>
 
-          <Form.Field label="기존 카테고리">
-            <View className="flex-row flex-wrap gap-3">
-              {categories.map((category) => (
-                <CategoryDeleteButton
-                  key={category.id}
-                  categoryId={category.id}
-                  categoryName={category.name}
-                  disabled={categories.length <= 1}
-                />
-              ))}
+          <Form.Field label="카테고리 (길게 눌러서 순서 변경)">
+            <View style={{ maxHeight: 300 }}>
+              <DraggableFlatList
+                data={categories}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator
+                onDragEnd={handleDragEnd}
+              />
             </View>
           </Form.Field>
         </Form>
-      </ScrollView>
-    </View>
+      </View>
+    </GestureHandlerRootView>
   );
 };
