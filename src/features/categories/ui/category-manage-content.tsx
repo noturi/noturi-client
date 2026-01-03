@@ -6,9 +6,8 @@ import { GripVertical } from '~/shared/lib/icons';
 import { Button, Form, Input } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
 import type { TextInput } from 'react-native';
-
+import { Pressable, View } from 'react-native';
 import DraggableFlatList, {
   type RenderItemParams,
   ScaleDecorator,
@@ -156,10 +155,10 @@ export const CategoryManageContent = ({
           <Form.Field label="카테고리 (길게 눌러서 순서 변경)">
             <View style={{ maxHeight: 300 }}>
               <DraggableFlatList
+                showsVerticalScrollIndicator
                 data={categories}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
-                showsVerticalScrollIndicator
                 onDragEnd={handleDragEnd}
               />
             </View>
