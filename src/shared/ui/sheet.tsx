@@ -1,11 +1,12 @@
 import BottomSheet, {
   BottomSheetBackdrop,
+  BottomSheetModal,
   BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/application/providers/theme-provider';
 
-import { ReactNode, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
+import { ReactNode, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 export interface SheetRef {
@@ -89,7 +90,7 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
 
 Sheet.displayName = 'Sheet';
 
-// Controlled Sheet that uses open state
+// Controlled Sheet that uses BottomSheetModal (renders above tabs via Portal)
 interface ControlledSheetProps {
   children: ReactNode;
   isOpen: boolean;
@@ -105,10 +106,18 @@ export function ControlledSheet({
   snapPoints: customSnapPoints,
   scrollable = false,
 }: ControlledSheetProps) {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => customSnapPoints || ['50%', '90%'], [customSnapPoints]);
+
+  useEffect(() => {
+    if (isOpen) {
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [isOpen]);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -123,19 +132,10 @@ export function ControlledSheet({
     [],
   );
 
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onClose();
-      }
-    },
-    [onClose],
-  );
-
   const ContentComponent = scrollable ? BottomSheetScrollView : BottomSheetView;
 
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
       backdropComponent={renderBackdrop}
@@ -146,17 +146,17 @@ export function ControlledSheet({
         borderTopWidth: 1,
         borderColor: hexColors.border,
       }}
+      enableDynamicSizing={false}
       handleIndicatorStyle={{
         backgroundColor: hexColors.textMuted,
         width: 36,
         height: 4,
       }}
-      index={isOpen ? 0 : -1}
       snapPoints={snapPoints}
-      onChange={handleSheetChanges}
+      onDismiss={onClose}
     >
       <ContentComponent style={styles.contentContainer}>{children}</ContentComponent>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 }
 
