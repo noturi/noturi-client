@@ -21,30 +21,24 @@ const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
     : `${formatTime(memo.startDate)} - ${formatTime(memo.endDate)}`;
 
   return (
-    <Card className="relative">
-      <View className="flex-row items-center justify-between">
-        <View className="flex-row items-center flex-1 gap-3">
-          <View
-            className="rounded-1 h-9 w-[3px]"
-            style={{ backgroundColor: memo.hasNotification ? '#3b82f6' : '#9e9e9e' }}
-          />
-          <View className="flex-1 gap-0.5">
-            <Typography className="text-text-primary" numberOfLines={1} variant="callout">
-              {memo.title}
+    <Card>
+      <View className="flex-row items-center justify-between p-1">
+        <View className="flex-1 gap-1">
+          <Typography className="text-text-primary" numberOfLines={1} variant="callout">
+            {memo.title}
+          </Typography>
+          <View className="flex-row items-center gap-2">
+            <Typography className="text-text-muted" variant="caption2">
+              {timeText}
             </Typography>
-            <View className="flex-row items-center gap-2">
-              <Typography className="text-text-muted" variant="caption2">
-                {timeText}
-              </Typography>
-              {memo.hasNotification && memo.notifyBefore && (
-                <View className="flex-row items-center gap-1">
-                  <Bell color="#3b82f6" size={10} />
-                  <Typography className="text-blue-500" variant="caption2">
-                    {NOTIFICATION_LABELS[memo.notifyBefore]}
-                  </Typography>
-                </View>
-              )}
-            </View>
+            {memo.hasNotification && memo.notifyBefore && (
+              <View className="flex-row items-center gap-1 rounded-2 bg-accent-soft px-2 py-0.5">
+                <Bell className="text-accent" size={10} />
+                <Typography className="text-accent-soft-text" variant="caption2">
+                  {NOTIFICATION_LABELS[memo.notifyBefore]}
+                </Typography>
+              </View>
+            )}
           </View>
         </View>
 
