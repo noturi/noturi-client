@@ -1,10 +1,10 @@
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { PRESET_HEX_COLORS, ThemePreset } from '~/shared/config/theme';
-import { Check, ChevronDown, ChevronUp, Palette } from '~/shared/lib/icons';
+import { Check, Palette } from '~/shared/lib/icons';
+import { Accordion } from '~/shared/ui/accordion';
 import { Card } from '~/shared/ui/card';
 import { Typography } from '~/shared/ui/typography';
 
-import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 interface ThemePreviewProps {
@@ -58,27 +58,15 @@ function ThemePreview({ preset, isSelected, onSelect }: ThemePreviewProps) {
 }
 
 export function ThemeSettings() {
-  const [isOpen, setIsOpen] = useState(false);
   const { themeId, setTheme, presets } = useUserTheme();
 
   return (
     <Card>
-      <Pressable onPress={() => setIsOpen(!isOpen)}>
-        <View className="flex-row items-center gap-3 px-4 py-3">
-          <Palette className="text-text-secondary" size={20} />
-          <Typography className="flex-1 text-text-primary" variant="callout">
-            테마 설정
-          </Typography>
-          {isOpen ? (
-            <ChevronUp className="text-text-muted" size={20} />
-          ) : (
-            <ChevronDown className="text-text-muted" size={20} />
-          )}
-        </View>
-      </Pressable>
-
-      {isOpen && (
-        <View className="flex-row flex-wrap justify-center gap-3 px-3 pb-4">
+      <Accordion
+        icon={<Palette className="text-text-secondary" size={20} />}
+        title="테마 설정"
+      >
+        <View className="flex-row flex-wrap justify-center gap-3 px-3 pb-4 pt-2">
           {presets.map((preset) => (
             <ThemePreview
               key={preset.id}
@@ -88,7 +76,7 @@ export function ThemeSettings() {
             />
           ))}
         </View>
-      )}
+      </Accordion>
     </Card>
   );
 }
