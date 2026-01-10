@@ -233,6 +233,44 @@ export class CategoryService {
   }
 
   /**
+   * 메모 목록 기반으로 카테고리별 개수를 계산하여 UI 카테고리로 변환
+   * 년도 필터 등이 적용된 메모 목록에서 정확한 개수를 보여줄 때 사용
+   */
+  static transformToUICategoriesWithMemoCount(
+    backendCategories: Category[] | undefined,
+    memos: { category: { id: string } }[],
+    selectedCategory: string,
+  ): UICategory[] {
+    if (!backendCategories) return [];
+
+    // 메모 목록에서 카테고리별 개수 계산
+    const categoryCountMap = new Map<string, number>();
+    memos.forEach((memo) => {
+      const categoryId = memo.category?.id;
+      if (categoryId) {
+        categoryCountMap.set(categoryId, (categoryCountMap.get(categoryId) || 0) + 1);
+      }
+    });
+
+    const totalCount = memos.length;
+
+    return [
+      {
+        id: 'all',
+        name: '전체',
+        count: totalCount,
+        active: selectedCategory === '전체',
+      },
+      ...backendCategories.map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+        count: categoryCountMap.get(cat.id) || 0,
+        active: selectedCategory === cat.name,
+      })),
+    ];
+  }
+
+  /**
    * 선택된 카테고리명으로부터 카테고리 ID를 찾기
    */
   static getCategoryIdByName(
