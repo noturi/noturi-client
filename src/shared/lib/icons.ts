@@ -26,6 +26,7 @@ import {
   Settings,
   Star,
   Trash2,
+  User,
   X,
 } from 'lucide-react-native';
 import { cssInterop } from 'nativewind';
@@ -52,6 +53,7 @@ const icons = [
   Settings,
   Star,
   Trash2,
+  User,
   X,
 ];
 
@@ -87,5 +89,6 @@ export {
   Settings,
   Star,
   Trash2,
+  User,
   X,
 };

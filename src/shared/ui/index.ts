@@ -1,4 +1,5 @@
 // 순수 UI 컴포넌트들만 export
+export * from './accordion';
 export * from './api-error-boundary';
 export * from './button';
 export * from './pressable-feedback';
