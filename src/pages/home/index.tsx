@@ -65,7 +65,9 @@ function MemoListContent({ category, year, onCategoryChange, onPressYear }: Memo
   const memos = useMemo(() => {
     const categoryId = CategoryService.getCategoryIdByName(category, categoriesData?.categories);
     const filteredMemos = categoryId
-      ? allMemos.filter((memo) => memo.category?.id === categoryId || memo.categoryId === categoryId)
+      ? allMemos.filter(
+          (memo) => memo.category?.id === categoryId || memo.categoryId === categoryId,
+        )
       : allMemos;
     return MemoService.transformToUIMemos(filteredMemos);
   }, [allMemos, category, categoriesData?.categories]);

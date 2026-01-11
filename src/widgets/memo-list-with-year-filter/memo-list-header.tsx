@@ -32,10 +32,7 @@ export function MemoListHeader({ selectedYear, onPressYear }: MemoListHeaderProp
   return (
     <View className="flex-row items-center justify-between px-3">
       <Typography variant="headline">메모</Typography>
-      <Pressable
-        className="flex-row items-center gap-2 active:opacity-70"
-        onPress={onPressYear}
-      >
+      <Pressable className="flex-row items-center gap-2 active:opacity-70" onPress={onPressYear}>
         <Typography className="text-text-muted" variant="callout">
           {selectedYearLabel}
         </Typography>

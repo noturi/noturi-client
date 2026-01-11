@@ -62,10 +62,7 @@ export function ThemeSettings() {
 
   return (
     <Card>
-      <Accordion
-        icon={<Palette className="text-text-secondary" size={20} />}
-        title="테마 설정"
-      >
+      <Accordion icon={<Palette className="text-text-secondary" size={20} />} title="테마 설정">
         <View className="flex-row flex-wrap justify-center gap-3 px-3 pb-4 pt-2">
           {presets.map((preset) => (
             <ThemePreview

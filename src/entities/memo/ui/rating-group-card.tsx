@@ -67,7 +67,7 @@ export function RatingGroupCard({
   }));
 
   const contentStyle = useAnimatedStyle(() => ({
-    height: contentHeight > 0 ? height.value * contentHeight : (isExpanded ? undefined : 0),
+    height: contentHeight > 0 ? height.value * contentHeight : isExpanded ? undefined : 0,
     opacity: opacity.value,
     overflow: 'hidden',
   }));

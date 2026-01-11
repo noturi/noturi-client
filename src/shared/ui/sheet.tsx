@@ -6,7 +6,15 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/application/providers/theme-provider';
 
-import { ReactNode, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import {
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 
 export interface SheetRef {
