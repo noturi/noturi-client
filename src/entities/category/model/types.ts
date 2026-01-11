@@ -47,9 +47,9 @@ export interface CategoryStatsDto {
 
 // 카테고리 순서 변경 요청
 export interface ReorderCategoriesDto {
-  categoryOrders: {
+  categories: {
     id: string;
-    order: number;
+    sortOrder: number;
   }[];
 }
 

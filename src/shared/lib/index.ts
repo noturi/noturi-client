@@ -1,4 +1,5 @@
 export * from './cache';
+export * from './icons';
 export * from './calendar';
 export * from './format';
 export { useGradualAnimation } from './hooks/useGradualAnimation';

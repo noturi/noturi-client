@@ -1,20 +1,21 @@
-import { XStack, YStack } from 'tamagui';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
+import { MoreVertical, Pencil, Trash2 } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
-
-import { MoreVertical, Trash2 } from '@tamagui/lucide-icons';
+import { Alert, Pressable, TouchableOpacity, View } from 'react-native';
 
 interface CalendarMemoDeleteButtonProps {
   memoId: string;
+  onEdit?: () => void;
 }
 
-export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonProps) {
+export function CalendarMemoDeleteButton({ memoId, onEdit }: CalendarMemoDeleteButtonProps) {
   const [showMenu, setShowMenu] = useState(false);
   const toast = useToast();
+  const { hexColors } = useUserTheme();
 
   const deleteMutation = useDeleteCalendarMemo({
     onSuccess: () => {
@@ -25,6 +26,11 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
       toast.showError('일정 삭제에 실패했습니다.');
     },
   });
+
+  const handleEdit = () => {
+    setShowMenu(false);
+    onEdit?.();
+  };
 
   const handleDelete = () => {
     Alert.alert('일정 삭제', '이 일정을 삭제하시겠습니까?', [
@@ -42,62 +48,56 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
   };
 
   return (
-    <XStack position="relative">
+    <View className="relative">
       <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
-        <YStack padding="$2">
-          <MoreVertical color="$textMuted" size={18} />
-        </YStack>
+        <View className="p-2">
+          <MoreVertical className="text-text-muted" size={18} />
+        </View>
       </TouchableOpacity>
 
       {showMenu && (
         <>
-          <YStack
-            backgroundColor="$backgroundPrimary"
-            borderColor="$border"
-            borderRadius="$3"
-            borderWidth={1}
-            elevation={5}
-            minWidth={120}
-            position="absolute"
-            right={0}
-            shadowColor="$shadowColor"
-            shadowOffset={{ width: 0, height: 2 }}
-            shadowOpacity={0.1}
-            shadowRadius={8}
-            top={32}
-            zIndex={999999}
+          <View
+            className="absolute right-0 top-8 z-[999999] min-w-[120px] rounded-3 border border-border bg-bg-primary"
+            style={{
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              elevation: 5,
+            }}
           >
+            <TouchableOpacity onPress={handleEdit}>
+              <View className="flex-row items-center gap-2 border-b border-border px-3 py-3">
+                <Pencil className="text-text-primary" size={16} />
+                <Typography className="text-text-primary" variant="footnote">
+                  수정
+                </Typography>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleDelete}>
-              <XStack
-                alignItems="center"
-                gap="$2"
-                hoverStyle={{
-                  backgroundColor: '$backgroundSecondary',
-                }}
-                paddingHorizontal="$3"
-                paddingVertical="$3"
-              >
-                <Trash2 color="$red10" size={16} />
-                <Typography color="$red10" variant="footnote">
+              <View className="flex-row items-center gap-2 px-3 py-3">
+                <Trash2 color="#ef4444" size={16} />
+                <Typography className="text-error" variant="footnote">
                   삭제
                 </Typography>
-              </XStack>
+              </View>
             </TouchableOpacity>
-          </YStack>
+          </View>
 
-          <TouchableOpacity
+          <Pressable
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              position: 'absolute',
+              top: -1000,
+              left: -1000,
+              right: -1000,
+              bottom: -1000,
               zIndex: 999998,
             }}
             onPress={() => setShowMenu(false)}
           />
         </>
       )}
-    </XStack>
+    </View>
   );
 }

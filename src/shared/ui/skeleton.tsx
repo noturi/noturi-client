@@ -1,5 +1,3 @@
-import { useTheme } from 'tamagui';
-
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -16,7 +14,6 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ width = '100%', height = 16, borderRadius = 8, circle }: SkeletonProps) {
-  const theme = useTheme();
   const opacity = useSharedValue(0.5);
 
   useEffect(() => {
@@ -31,12 +28,12 @@ export function Skeleton({ width = '100%', height = 16, borderRadius = 8, circle
 
   return (
     <Animated.View
+      className="bg-border"
       style={[
         {
           width: circle ? size : width,
           height,
           borderRadius: circle ? height / 2 : borderRadius,
-          backgroundColor: theme.border?.val,
         },
         animatedStyle,
       ]}

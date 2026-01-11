@@ -1,5 +1,6 @@
-import { YStack } from 'tamagui';
 import { MemoFormContent } from '~/features/memo/ui/memo-form-content';
+
+import { View } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -9,8 +10,8 @@ export default function RatingMemoCreateScreen() {
   };
 
   return (
-    <YStack backgroundColor="$backgroundSecondary" flex={1}>
+    <View className="flex-1 bg-bg-secondary">
       <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
-    </YStack>
+    </View>
   );
 }

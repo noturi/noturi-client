@@ -2,8 +2,6 @@ import { Platform } from 'react-native';
 
 import * as SecureStore from 'expo-secure-store';
 
-import Logger from './logger';
-
 export interface TokenCache {
   getToken: (key: string) => Promise<string | null>;
   saveToken: (key: string, token: string) => Promise<void>;
@@ -14,81 +12,18 @@ export interface TokenCache {
 const TOKEN_KEYS = ['accessToken', 'refreshToken', 'user'] as const;
 
 const createNativeTokenCache = (): TokenCache => ({
-  getToken: async (key) => {
-    try {
-      return await SecureStore.getItemAsync(key);
-    } catch (error) {
-      Logger.error(`토큰 조회 실패 [${key}]:`, error);
-      await SecureStore.deleteItemAsync(key).catch(() => {});
-      return null;
-    }
-  },
-
-  saveToken: async (key, token) => {
-    try {
-      await SecureStore.setItemAsync(key, token);
-    } catch (error) {
-      Logger.error(`토큰 저장 실패 [${key}]:`, error);
-      throw error;
-    }
-  },
-
-  deleteToken: async (key) => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-    } catch (error) {
-      Logger.error(`토큰 삭제 실패 [${key}]:`, error);
-      throw error;
-    }
-  },
-
-  clearAllTokens: async () => {
-    try {
-      await Promise.all(TOKEN_KEYS.map((key) => SecureStore.deleteItemAsync(key)));
-    } catch (error) {
-      Logger.error('전체 토큰 삭제 실패:', error);
-      throw error;
-    }
-  },
+  getToken: (key) => SecureStore.getItemAsync(key),
+  saveToken: (key, token) => SecureStore.setItemAsync(key, token),
+  deleteToken: (key) => SecureStore.deleteItemAsync(key),
+  clearAllTokens: () =>
+    Promise.all(TOKEN_KEYS.map((key) => SecureStore.deleteItemAsync(key))).then(() => {}),
 });
 
 const createWebTokenCache = (): TokenCache => ({
-  getToken: async (key) => {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      Logger.error(`토큰 조회 실패 [${key}]:`, error);
-      localStorage.removeItem(key);
-      return null;
-    }
-  },
-
-  saveToken: async (key, token) => {
-    try {
-      localStorage.setItem(key, token);
-    } catch (error) {
-      Logger.error(`토큰 저장 실패 [${key}]:`, error);
-      throw error;
-    }
-  },
-
-  deleteToken: async (key) => {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      Logger.error(`토큰 삭제 실패 [${key}]:`, error);
-      throw error;
-    }
-  },
-
-  clearAllTokens: async () => {
-    try {
-      TOKEN_KEYS.forEach((key) => localStorage.removeItem(key));
-    } catch (error) {
-      Logger.error('전체 토큰 삭제 실패:', error);
-      throw error;
-    }
-  },
+  getToken: async (key) => localStorage.getItem(key),
+  saveToken: async (key, token) => localStorage.setItem(key, token),
+  deleteToken: async (key) => localStorage.removeItem(key),
+  clearAllTokens: async () => TOKEN_KEYS.forEach((key) => localStorage.removeItem(key)),
 });
 
 export const tokenCache: TokenCache =

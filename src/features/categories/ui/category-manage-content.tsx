@@ -1,14 +1,22 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { z } from 'zod';
+import type { Category } from '~/entities/category';
 import { activeCategoriesQuery } from '~/features/categories/api/queries';
 import { useForm } from '~/shared/lib';
+import { GripVertical } from '~/shared/lib/icons';
 import { Button, Form, Input } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
+import { Pressable, View } from 'react-native';
+import DraggableFlatList, {
+  type RenderItemParams,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { useReorderCategoriesMutation } from '../api/mutations';
 import { handleCategoryFormError } from '../model/form-error-handler';
 import { CategoryCreateButton } from './category-create-button';
 import { CategoryDeleteButton } from './category-delete-button';
@@ -28,6 +36,8 @@ export const CategoryManageContent = ({
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
+  const reorderMutation = useReorderCategoriesMutation();
+
   const form = useForm({
     initialValues: {
       categoryName: '',
@@ -37,7 +47,6 @@ export const CategoryManageContent = ({
     }),
   });
 
-  // 자동 포커스 (shouldAutoFocus가 true일 때만)
   useEffect(() => {
     if (!shouldAutoFocus || !isFormVisible) return;
 
@@ -66,24 +75,51 @@ export const CategoryManageContent = ({
     onSuccess?.();
   };
 
-  const handleCreateError = (error: Error) => {
-    handleCategoryFormError(error, form);
+  const handleCreateError = async (error: Error) => {
+    await handleCategoryFormError(error, form);
   };
 
+  const handleDragEnd = ({ data }: { data: Category[] }) => {
+    const reorderData = {
+      categories: data.map((cat, index) => ({
+        id: cat.id,
+        sortOrder: index,
+      })),
+    };
+    reorderMutation.mutate(reorderData);
+  };
+
+  const renderItem = ({ item, drag, isActive }: RenderItemParams<Category>) => (
+    <ScaleDecorator>
+      <Pressable
+        className={`flex-row items-center gap-2 py-2 ${isActive ? 'opacity-80' : ''}`}
+        disabled={isActive}
+        onLongPress={drag}
+      >
+        <GripVertical className="text-text-muted" size={16} />
+        <CategoryDeleteButton
+          categoryId={item.id}
+          categoryName={item.name}
+          disabled={categories.length <= 1}
+        />
+      </Pressable>
+    </ScaleDecorator>
+  );
+
   return (
-    <YStack flex={1} padding="$4" onStartShouldSetResponder={() => true}>
-      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <Form>
           <Form.Field>
             {!isFormVisible && (
-              <Button borderStyle="dashed" size="md" variant="ghost" onPress={handleShowForm}>
-                + 추가
+              <Button size="md" variant="ghost" onPress={handleShowForm}>
+                <Button.Label>+ 추가</Button.Label>
               </Button>
             )}
 
             {isFormVisible && (
-              <XStack alignItems="center" gap="$1" marginTop="$2">
-                <YStack flex={1}>
+              <View className="mt-2 flex-row items-center gap-1">
+                <View className="flex-1">
                   <Form.Field
                     error={
                       form.shouldShowError('categoryName') ? form.errors.categoryName : undefined
@@ -100,8 +136,8 @@ export const CategoryManageContent = ({
                       onFocus={() => form.clearError('categoryName')}
                     />
                   </Form.Field>
-                </YStack>
-                <XStack alignItems="center" gap="$1">
+                </View>
+                <View className="flex-row items-center gap-1">
                   <CategoryCreateButton
                     isValid={form.isValid}
                     name={form.values.categoryName}
@@ -109,28 +145,26 @@ export const CategoryManageContent = ({
                     onSuccess={handleCreateSuccess}
                   />
                   <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
-                    취소
+                    <Button.Label>취소</Button.Label>
                   </Button>
-                </XStack>
-              </XStack>
+                </View>
+              </View>
             )}
           </Form.Field>
 
-          {/* 기존 카테고리 목록 */}
-          <Form.Field label="기존 카테고리">
-            <XStack flexWrap="wrap" gap="$3">
-              {categories.map((category) => (
-                <CategoryDeleteButton
-                  key={category.id}
-                  categoryId={category.id}
-                  categoryName={category.name}
-                  disabled={categories.length <= 1}
-                />
-              ))}
-            </XStack>
+          <Form.Field label="카테고리 (길게 눌러서 순서 변경)">
+            <View style={{ maxHeight: 300 }}>
+              <DraggableFlatList
+                showsVerticalScrollIndicator
+                data={categories}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+                onDragEnd={handleDragEnd}
+              />
+            </View>
           </Form.Field>
         </Form>
-      </ScrollView>
-    </YStack>
+      </View>
+    </GestureHandlerRootView>
   );
 };

@@ -1,4 +1,4 @@
-import { ScrollView, YStack } from 'tamagui';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
 import { useCalendarDate } from '~/entities/calendar/model';
 import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
@@ -8,13 +8,13 @@ import { setupKoreanLocale } from '~/shared/config/calendar-locale';
 import { Card, Typography } from '~/shared/ui';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { CalendarMemoList } from '../calendar-memo-list';
-import { CALENDAR_THEME } from './constants';
+import { createCalendarTheme } from './constants';
 import { useCalendarMarkings } from './use-calendar-markings';
 
 setupKoreanLocale();
@@ -32,6 +32,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
   ({ onDateSelect, onDateRangeSelect }, ref) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const createCalendarMemoMutation = useCreateCalendarMemo();
+    const { hexColors } = useUserTheme();
+    const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
 
     useImperativeHandle(ref, () => ({
       handleFloatingButtonPress,
@@ -66,7 +68,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
       [calendarMemosData],
     );
 
-    const markedDates = useCalendarMarkings(allMemos, startDate, endDate);
+    const markedDates = useCalendarMarkings(allMemos, startDate, endDate, hexColors);
 
     const handleDayPress = (day: DateData) => {
       const selectedDateString = day.dateString;
@@ -161,26 +163,27 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     };
 
     return (
-      <YStack flex={1} gap="$4" paddingBottom="$10" position="relative">
+      <View className="flex-1 gap-4 pb-10 relative">
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          flex={1}
           showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
         >
-          <YStack gap="$4">
+          <View className="gap-4">
             <Card>
               <Calendar
+                key={hexColors.bgPrimary}
                 markedDates={markedDates}
                 markingType="period"
                 monthFormat="yyyy년 MM월"
-                theme={CALENDAR_THEME}
+                theme={calendarTheme}
                 onDayPress={handleDayPress}
                 onMonthChange={handleMonthChange}
               />
             </Card>
-            <YStack gap="$2">
+            <View className="gap-2">
               {headerTitle && (
-                <Typography color="$textPrimary" variant="subheadline">
+                <Typography className="text-text-primary" variant="subheadline">
                   {headerTitle}
                 </Typography>
               )}
@@ -191,16 +194,18 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
                 memos={selectedMemos}
                 startDate={startDate}
               />
-            </YStack>
-          </YStack>
+            </View>
+          </View>
         </ScrollView>
 
         <CalendarAddModal
+          initialEndDate={endDate}
+          initialStartDate={startDate}
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSubmit={handleAddCalendarMemo}
         />
-      </YStack>
+      </View>
     );
   },
 );

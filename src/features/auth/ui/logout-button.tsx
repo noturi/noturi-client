@@ -1,10 +1,8 @@
-import { XStack } from 'tamagui';
 import { useAuth } from '~/entities/auth';
+import { LogOut } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { Alert } from 'react-native';
-
-import { LogOut } from '@tamagui/lucide-icons';
+import { Alert, Pressable, View } from 'react-native';
 
 export function LogoutButton() {
   const { logout } = useAuth();
@@ -21,19 +19,16 @@ export function LogoutButton() {
   };
 
   return (
-    <XStack
-      alignItems="center"
-      borderRadius="$5"
-      gap="$3"
-      paddingHorizontal="$4"
-      paddingVertical="$3"
-      pressStyle={{ backgroundColor: '$backgroundSecondary' }}
+    <Pressable
+      className="flex-row items-center gap-3 rounded-5 px-4 py-3 active:bg-bg-secondary"
       onPress={confirmLogout}
     >
-      <LogOut color="$textPrimary" size="$3" />
-      <Typography color="$textPrimary" flex={1} variant="callout">
-        로그아웃
-      </Typography>
-    </XStack>
+      <LogOut className="text-text-secondary" size={20} />
+      <View className="flex-1">
+        <Typography className="text-text-primary" variant="callout">
+          로그아웃
+        </Typography>
+      </View>
+    </Pressable>
   );
 }

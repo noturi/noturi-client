@@ -1,8 +1,9 @@
-import { ScrollView, XStack, YStack } from 'tamagui';
 import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo/ui';
 import { HREFS } from '~/shared/config';
 import { FloatingButton, Loading, StarRating, Typography } from '~/shared/ui';
+
+import { ScrollView, View } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
 
@@ -20,31 +21,25 @@ export default function MemoDetailScreen() {
 
   if (isLoading) {
     return (
-      <YStack backgroundColor="$backgroundPrimary" flex={1}>
+      <View className="flex-1 bg-bg-primary">
         <Loading text="메모를 불러오는 중..." />
-      </YStack>
+      </View>
     );
   }
 
   if (error || !memo) {
     return (
-      <YStack
-        alignItems="center"
-        backgroundColor="$backgroundPrimary"
-        flex={1}
-        justifyContent="center"
-      >
-        <Typography color="$textPrimary" variant="body">
+      <View className="flex-1 items-center justify-center bg-bg-primary">
+        <Typography className="text-text-primary" variant="body">
           메모를 찾을 수 없습니다
         </Typography>
-        <Typography color="$textMuted" marginTop="$1" variant="footnote">
+        <Typography className="text-text-muted mt-1" variant="footnote">
           {error?.message || '요청한 메모가 존재하지 않습니다'}
         </Typography>
-      </YStack>
+      </View>
     );
   }
 
-  // 날짜 포맷팅 함수
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR', {
@@ -58,51 +53,49 @@ export default function MemoDetailScreen() {
 
   return (
     <>
-      <YStack backgroundColor="$backgroundSecondary" flex={1} padding="$4">
-        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-          <YStack gap="$1" padding="$1">
-            <YStack gap="$2">
-              <XStack alignItems="flex-start" justifyContent="space-between">
-                <XStack alignItems="center" flex={1} gap="$4">
+      <View className="flex-1 bg-bg-secondary p-4">
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          <View className="gap-1 p-1">
+            <View className="gap-2">
+              <View className="flex-row items-start justify-between">
+                <View className="flex-row items-center flex-1 gap-4">
                   {memo.category && (
-                    <YStack
-                      backgroundColor={memo.category.color}
-                      borderRadius="$2"
-                      paddingHorizontal="$3"
-                      paddingVertical="$2"
+                    <View
+                      className="rounded-2 px-3 py-2"
+                      style={{ backgroundColor: memo.category.color }}
                     >
-                      <Typography color="white" fontSize="$2" fontWeight="$4" variant="caption2">
+                      <Typography className="text-white text-2 font-medium" variant="caption2">
                         {memo.category.name}
                       </Typography>
-                    </YStack>
+                    </View>
                   )}
-                  <Typography color="$textMuted" variant="caption2">
+                  <Typography className="text-text-muted" variant="caption2">
                     {formatDate(memo.createdAt)}
                   </Typography>
-                </XStack>
-                <XStack alignItems="center" gap="$2">
+                </View>
+                <View className="flex-row items-center gap-2">
                   {memo.rating > 0 && <StarRating rating={memo.rating} />}
                   <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
-                </XStack>
-              </XStack>
+                </View>
+              </View>
 
-              <Typography color="$textPrimary" variant="headline">
+              <Typography className="text-text-primary" variant="headline">
                 {memo.title}
               </Typography>
-            </YStack>
+            </View>
 
-            <YStack gap="$2" marginTop="$2">
-              <Typography color="$textPrimary" variant="callout">
+            <View className="gap-2 mt-2">
+              <Typography className="text-text-primary" variant="callout">
                 {memo.content}
               </Typography>
-            </YStack>
-          </YStack>
+            </View>
+          </View>
         </ScrollView>
-      </YStack>
+      </View>
 
-      <YStack bottom={140} position="absolute" right="$4">
+      <View className="absolute bottom-[140px] right-4">
         <FloatingButton onPress={handleEdit} />
-      </YStack>
+      </View>
     </>
   );
 }

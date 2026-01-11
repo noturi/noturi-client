@@ -1,4 +1,4 @@
-import { YStack } from 'tamagui';
+import { View } from 'react-native';
 
 import { CategoryChips } from './category-chips';
 import { RatingChips } from './rating-chips';
@@ -33,7 +33,7 @@ export function FilterOptions({
   if (!show) return null;
 
   return (
-    <YStack gap="$4">
+    <View className="gap-4">
       <CategoryChips
         categories={categories}
         selectedCategoryId={selectedCategoryId}
@@ -41,6 +41,6 @@ export function FilterOptions({
       />
       <YearChips selectedYear={selectedYear} onSelect={setSelectedYear} />
       <RatingChips selectedRating={selectedRating} onSelect={setSelectedRating} />
-    </YStack>
+    </View>
   );
 }

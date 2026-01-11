@@ -1,70 +1,50 @@
-import { Input as TamaguiInput, styled } from 'tamagui';
+import { forwardRef, useState } from 'react';
+import { TextInput, TextInputProps } from 'react-native';
 
-export const Input = styled(TamaguiInput, {
-  backgroundColor: '$surface',
-  borderRadius: '$5',
-  borderWidth: 1,
-  borderColor: '$border',
-  color: '$textPrimary',
-  fontSize: 14,
-  fontWeight: '$4',
-  height: 36,
-  paddingHorizontal: '$3',
-  placeholderTextColor: '$textMuted',
-  textAlignVertical: 'center',
+type InputSize = 'sm' | 'md' | 'lg';
 
-  // 한글 입력 문제 해결을 위한 설정
-  autoCorrect: false,
-  autoCapitalize: 'none',
-  autoComplete: 'off',
-  spellCheck: false,
+export interface InputProps extends TextInputProps {
+  hasError?: boolean;
+  size?: InputSize;
+}
 
-  focusStyle: {
-    borderWidth: 1,
-    borderColor: '$primary',
-  },
+const sizeStyles = {
+  sm: { height: 28, fontSize: 12 },
+  md: { height: 36, fontSize: 14 },
+  lg: { height: 44, fontSize: 16 },
+};
 
-  variants: {
-    hasError: {
-      true: {
-        borderWidth: 1,
-        borderColor: '$error',
-        focusStyle: {
-          borderColor: '$error',
-        },
-      },
-    },
+export const Input = forwardRef<TextInput, InputProps>(function Input(
+  { hasError = false, size = 'md', style, className, onFocus, onBlur, ...props },
+  ref,
+) {
+  const [isFocused, setIsFocused] = useState(false);
 
-    size: {
-      sm: {
-        height: 28,
-        fontSize: '$2',
-      },
-      md: {
-        height: 36,
-        fontSize: '$3',
-      },
-      lg: {
-        height: 44,
-        fontSize: '$4',
-      },
-    },
+  const handleFocus = (e: any) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
 
-    variant: {
-      default: {
-        backgroundColor: '$backgroundPrimary',
-        borderWidth: 1,
-      },
-      outlined: {
-        backgroundColor: '$backgroundTransparent',
-        borderWidth: 0,
-      },
-    },
-  } as const,
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
 
-  defaultVariants: {
-    variant: 'default',
-    hasError: false,
-    size: 'md',
-  },
+  const borderClass = hasError ? 'border-error' : isFocused ? 'border-primary' : 'border-border';
+
+  return (
+    <TextInput
+      ref={ref}
+      autoCapitalize="none"
+      autoComplete="off"
+      autoCorrect={false}
+      className={`border bg-bg-primary ${borderClass} rounded-5 px-3 font-sans-medium text-text-primary ${className ?? ''}`}
+      placeholderTextColor="#9e9e9e"
+      spellCheck={false}
+      style={[sizeStyles[size], { textAlignVertical: 'center' }, style]}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
+      {...props}
+    />
+  );
 });

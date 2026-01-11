@@ -1,9 +1,9 @@
-import { Sheet, XStack, YStack } from 'tamagui';
-import { Typography } from '~/shared/ui';
+import { useUserTheme } from '~/application/providers/theme-provider';
+import { ChevronDown } from '~/shared/lib/icons';
+import { ControlledSheet, Typography } from '~/shared/ui';
 
-import { useCallback, useMemo, useState } from 'react';
-
-import { ChevronDown } from '@tamagui/lucide-icons';
+import { useCallback, useMemo } from 'react';
+import { Pressable, View } from 'react-native';
 
 const APP_LAUNCH_YEAR = 2025;
 
@@ -13,7 +13,8 @@ function getYearOptions(): { value: number | undefined; label: string }[] {
     { value: undefined, label: '전체' },
   ];
 
-  for (let year = currentYear; year >= APP_LAUNCH_YEAR; year--) {
+  // 오름차순: 2025, 2026, ...
+  for (let year = APP_LAUNCH_YEAR; year <= currentYear; year++) {
     years.push({ value: year, label: `${year}년` });
   }
 
@@ -22,89 +23,78 @@ function getYearOptions(): { value: number | undefined; label: string }[] {
 
 interface MemoListHeaderProps {
   selectedYear: number | undefined;
+  onPressYear: () => void;
+}
+
+export function MemoListHeader({ selectedYear, onPressYear }: MemoListHeaderProps) {
+  const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
+
+  return (
+    <View className="flex-row items-center justify-between px-3">
+      <Typography variant="headline">메모</Typography>
+      <Pressable className="flex-row items-center gap-2 active:opacity-70" onPress={onPressYear}>
+        <Typography className="text-text-muted" variant="callout">
+          {selectedYearLabel}
+        </Typography>
+        <ChevronDown className="text-text-muted" size={12} />
+      </Pressable>
+    </View>
+  );
+}
+
+interface YearSelectSheetProps {
+  isOpen: boolean;
+  selectedYear: number | undefined;
+  onClose: () => void;
   onYearChange: (year: number | undefined) => void;
 }
 
-export function MemoListHeader({ selectedYear, onYearChange }: MemoListHeaderProps) {
-  const [showYearSheet, setShowYearSheet] = useState(false);
-
+export function YearSelectSheet({
+  isOpen,
+  selectedYear,
+  onClose,
+  onYearChange,
+}: YearSelectSheetProps) {
+  const { hexColors } = useUserTheme();
   const yearOptions = useMemo(() => getYearOptions(), []);
-  const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
 
   const handleYearSelect = useCallback(
     (value: number | undefined) => {
       onYearChange(value);
-      setShowYearSheet(false);
+      onClose();
     },
-    [onYearChange],
+    [onYearChange, onClose],
   );
 
   return (
-    <>
-      <XStack alignItems="center" justifyContent="space-between" paddingHorizontal="$3">
-        <Typography variant="headline">메모</Typography>
-        <XStack
-          alignItems="center"
-          gap="$2"
-          pressStyle={{ opacity: 0.7 }}
-          onPress={() => setShowYearSheet(true)}
-        >
-          <Typography color="$textMuted" variant="callout">
-            {selectedYearLabel}
-          </Typography>
-          <ChevronDown color="$textMuted" size="$1" />
-        </XStack>
-      </XStack>
-
-      <Sheet
-        dismissOnOverlayPress
-        dismissOnSnapToBottom
-        modal
-        animation="quick"
-        open={showYearSheet}
-        snapPoints={[30]}
-        snapPointsMode="percent"
-        onOpenChange={setShowYearSheet}
-      >
-        <Sheet.Overlay
-          animation="quick"
-          backgroundColor="$backgroundOverlay"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
-        <Sheet.Frame
-          backgroundColor="$backgroundPrimary"
-          borderTopLeftRadius="$6"
-          borderTopRightRadius="$6"
-          padding="$4"
-        >
-          <YStack gap="$2">
-            <Typography paddingBottom="$2" textAlign="center" variant="headline">
-              년도 선택
-            </Typography>
-            {yearOptions.map((option) => (
-              <XStack
-                key={option.label}
-                alignItems="center"
-                backgroundColor={selectedYear === option.value ? '$primary' : 'transparent'}
-                borderRadius="$3"
-                gap="$2"
-                justifyContent="center"
-                paddingVertical="$3"
-                pressStyle={{ opacity: 0.7 }}
-                onPress={() => handleYearSelect(option.value)}
+    <ControlledSheet isOpen={isOpen} scrollable snapPoints={['40%']} onClose={onClose}>
+      <View className="gap-2 p-4 pb-8">
+        <Typography className="pb-2 text-center" variant="headline">
+          년도 선택
+        </Typography>
+        {yearOptions.map((option) => {
+          const isSelected = selectedYear === option.value;
+          return (
+            <Pressable
+              key={option.label}
+              className="items-center justify-center py-3 rounded-3 active:opacity-70"
+              style={{
+                backgroundColor: isSelected ? hexColors.primary : 'transparent',
+              }}
+              onPress={() => handleYearSelect(option.value)}
+            >
+              <Typography
+                style={{
+                  color: isSelected ? hexColors.primaryText : hexColors.textPrimary,
+                }}
+                variant="callout"
               >
-                <Typography
-                  color={selectedYear === option.value ? '$textOnPrimary' : '$textPrimary'}
-                  variant="callout"
-                >
-                  {option.label}
-                </Typography>
-              </XStack>
-            ))}
-          </YStack>
-        </Sheet.Frame>
-      </Sheet>
-    </>
+                {option.label}
+              </Typography>
+            </Pressable>
+          );
+        })}
+      </View>
+    </ControlledSheet>
   );
 }

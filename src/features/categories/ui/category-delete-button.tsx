@@ -1,11 +1,9 @@
 import { toast } from 'sonner-native';
-import { XStack } from 'tamagui';
 import { useDeleteCategoryMutation } from '~/features/categories/api/mutations';
+import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { Alert, Pressable } from 'react-native';
-
-import { X } from '@tamagui/lucide-icons';
+import { Alert, Pressable, View } from 'react-native';
 
 interface CategoryDeleteButtonProps {
   categoryId: string;
@@ -44,19 +42,10 @@ export function CategoryDeleteButton({
       })}
       onPress={handlePress}
     >
-      <XStack
-        alignItems="center"
-        backgroundColor="$surface"
-        borderColor="$border"
-        borderRadius="$4"
-        borderWidth={1}
-        gap="$2"
-        paddingHorizontal="$3"
-        paddingVertical="$2"
-      >
+      <View className="flex-row items-center gap-2 rounded-4 border border-border bg-surface px-3 py-2">
         <Typography variant="caption1">{categoryName}</Typography>
-        <X color="$error" size="$2" />
-      </XStack>
+        <X color="#ef4444" size={14} />
+      </View>
     </Pressable>
   );
 }

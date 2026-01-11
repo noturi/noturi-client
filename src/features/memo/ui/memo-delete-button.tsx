@@ -1,11 +1,10 @@
 import { toast } from 'sonner-native';
+import { Trash2 } from '~/shared/lib/icons';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
 
 import { router } from 'expo-router';
-
-import { Trash2 } from '@tamagui/lucide-icons';
 
 import { useDeleteMemoMutation } from '../api/mutations';
 
@@ -44,8 +43,14 @@ export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButt
   };
 
   return (
-    <Button disabled={deleteMutation.isPending} size="sm" variant="ghost" onPress={handleDelete}>
-      <Trash2 size={16} />
+    <Button
+      isIconOnly
+      isDisabled={deleteMutation.isPending}
+      size="sm"
+      variant="ghost"
+      onPress={handleDelete}
+    >
+      <Trash2 className="text-text-primary" size={16} />
     </Button>
   );
 };

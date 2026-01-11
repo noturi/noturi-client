@@ -1,16 +1,13 @@
-import type { YStackProps } from 'tamagui';
-import { YStack, styled } from 'tamagui';
+import { View, ViewProps } from 'react-native';
 
-const StyledCard = styled(YStack, {
-  backgroundColor: '$backgroundPrimary',
-  borderRadius: '$6',
-  padding: '$3',
-});
-
-export interface CardProps extends YStackProps {
+export interface CardProps extends ViewProps {
   children: React.ReactNode;
 }
 
-export function Card({ children, ...props }: CardProps) {
-  return <StyledCard {...props}>{children}</StyledCard>;
+export function Card({ children, style, className, ...props }: CardProps) {
+  return (
+    <View className={`rounded-6 bg-surface p-3 ${className ?? ''}`} style={style} {...props}>
+      {children}
+    </View>
+  );
 }

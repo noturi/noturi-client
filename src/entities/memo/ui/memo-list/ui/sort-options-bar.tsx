@@ -1,6 +1,7 @@
-import { XStack, YStack } from 'tamagui';
 import type { SortOption } from '~/entities/category/model/types';
 import { SortButton } from '~/entities/category/ui/sort-button';
+
+import { View } from 'react-native';
 
 type SortOptionsBarProps = {
   options: SortOption[];
@@ -9,12 +10,12 @@ type SortOptionsBarProps = {
 
 export function SortOptionsBar({ options, onPress }: SortOptionsBarProps) {
   return (
-    <YStack height={45} justifyContent="center">
-      <XStack paddingHorizontal="$4" position="relative">
+    <View className="h-[45px] justify-center">
+      <View className="flex-row px-4 relative">
         {options.map((option) => (
           <SortButton key={option.name} option={option} onPress={() => onPress(option.name)} />
         ))}
-      </XStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

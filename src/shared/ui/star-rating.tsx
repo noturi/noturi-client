@@ -1,6 +1,6 @@
-import { XStack, useTheme } from 'tamagui';
+import { Star } from '~/shared/lib/icons';
 
-import { Star } from '@tamagui/lucide-icons';
+import { View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -8,18 +8,32 @@ interface StarRatingProps {
   rating: number;
 }
 
-const RATING_CONFIG = {
-  0: { colorKey: 'textMuted', bgColor: '$rating0Background' }, // 회색 (평가 안함)
-  1: { colorKey: 'rating1', bgColor: '$rating1Background' }, // 주황 (나쁨)
-  2: { colorKey: 'rating2', bgColor: '$rating2Background' }, // 노랑 (부족함)
-  3: { colorKey: 'rating3', bgColor: '$rating3Background' }, // 연두 (보통)
-  4: { colorKey: 'rating4', bgColor: '$rating4Background' }, // 초록 (좋음)
-  5: { colorKey: 'rating5', bgColor: '$rating5Background' }, // 파랑 (최고)
+const RATING_COLORS = {
+  0: '#9e9e9e', // 회색 (평가 안함)
+  1: '#ff6b35', // 주황 (나쁨)
+  2: '#ffa726', // 노랑 (부족함)
+  3: '#9ccc65', // 연두 (보통)
+  4: '#66bb6a', // 초록 (좋음)
+  5: '#42a5f5', // 파랑 (최고)
 } as const;
 
-const getRatingConfig = (rating: number) => {
-  const integerPart = Math.floor(rating) as keyof typeof RATING_CONFIG;
-  return RATING_CONFIG[integerPart] || RATING_CONFIG[0];
+const RATING_TEXT_COLORS = {
+  0: 'text-text-muted',
+  1: 'text-rating-1',
+  2: 'text-rating-2',
+  3: 'text-rating-3',
+  4: 'text-rating-4',
+  5: 'text-rating-5',
+} as const;
+
+const getRatingColor = (rating: number) => {
+  const integerPart = Math.floor(rating) as keyof typeof RATING_COLORS;
+  return RATING_COLORS[integerPart] || RATING_COLORS[0];
+};
+
+const getRatingTextColor = (rating: number) => {
+  const integerPart = Math.floor(rating) as keyof typeof RATING_TEXT_COLORS;
+  return RATING_TEXT_COLORS[integerPart] || RATING_TEXT_COLORS[0];
 };
 
 export function StarRating({ rating }: StarRatingProps) {
@@ -33,23 +47,15 @@ export function StarRating({ rating }: StarRatingProps) {
     safeRating = !isNaN(parsed) ? parsed : 0;
   }
 
-  const theme = useTheme();
-  const config = getRatingConfig(safeRating);
-  const starColor = theme[config.colorKey as keyof typeof theme]?.val;
+  const ratingColor = getRatingColor(safeRating);
+  const textColorClass = getRatingTextColor(safeRating);
 
   return (
-    <XStack
-      alignItems="center"
-      backgroundColor={config.bgColor}
-      borderRadius="$4"
-      gap="$2"
-      paddingHorizontal="$2"
-      paddingVertical="$2"
-    >
-      <Star color={starColor} fill={starColor} size="$3" />
-      <Typography color={`$${config.colorKey}`} variant="caption1">
+    <View className="flex-row items-center gap-2 rounded-4 bg-surface px-2 py-2">
+      <Star color={ratingColor} fill={ratingColor} size={12} />
+      <Typography className={textColorClass} variant="caption1">
         {safeRating.toFixed(1)}
       </Typography>
-    </XStack>
+    </View>
   );
 }

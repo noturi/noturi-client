@@ -1,19 +1,20 @@
-import { XStack, useTheme } from 'tamagui';
+import { Star } from '~/shared/lib/icons';
 
-import { Star } from '@tamagui/lucide-icons';
+import { View } from 'react-native';
 
 interface RatingStarsProps {
   rating: number;
 }
 
-export function RatingStars({ rating }: RatingStarsProps) {
-  const theme = useTheme();
+// 테마에서 star 색상 사용 (accent와 동일)
+const STAR_COLOR = '#ffc107';
 
+export function RatingStars({ rating }: RatingStarsProps) {
   return (
-    <XStack alignItems="center" gap="$1" pointerEvents="none">
+    <View className="flex-row items-center gap-1" pointerEvents="none">
       {Array.from({ length: rating }, (_, i) => (
-        <Star key={i} color="$star" fill={theme.star.val} size="$3" />
+        <Star key={i} color={STAR_COLOR} fill={STAR_COLOR} size={12} />
       ))}
-    </XStack>
+    </View>
   );
 }

@@ -1,10 +1,13 @@
-import { Sheet, View, XStack, YStack } from 'tamagui';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { HREFS } from '~/shared/config';
+import { FileText, Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { router } from 'expo-router';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Pressable, View } from 'react-native';
 
-import { FileText, Star } from '@tamagui/lucide-icons';
+import { router } from 'expo-router';
 
 interface MemoTypeSelectSheetProps {
   isOpen: boolean;
@@ -12,8 +15,20 @@ interface MemoTypeSelectSheetProps {
 }
 
 export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProps) => {
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const { hexColors } = useUserTheme();
+
+  const snapPoints = useMemo(() => ['50%'], []);
+
+  useEffect(() => {
+    if (isOpen) {
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [isOpen]);
+
   const handleSelectRatingMemo = () => {
-    console.log('Rating memo clicked');
     onClose();
     setTimeout(() => {
       router.push(HREFS.memoCreate());
@@ -21,113 +36,88 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
   };
 
   const handleSelectTextMemo = () => {
-    console.log('Text memo clicked');
     onClose();
     setTimeout(() => {
       router.push(HREFS.memoCreate());
     }, 100);
   };
 
-  return (
-    <Sheet
-      dismissOnSnapToBottom
-      modal
-      animation="quick"
-      open={isOpen}
-      snapPoints={[45]}
-      snapPointsMode="percent"
-      onOpenChange={onClose}
-    >
-      <Sheet.Overlay
-        animation="quick"
-        backgroundColor="$backgroundOverlay"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="close"
       />
-      <Sheet.Frame
-        backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$6"
-        borderTopRightRadius="$6"
-      >
-        <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
-          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
-        </YStack>
+    ),
+    [],
+  );
 
-        <YStack padding="$4">
-          <YStack paddingBottom="$6">
-            <Typography textAlign="center" variant="title2">
-              어떤 메모를 작성할까요?
-            </Typography>
-            <Typography marginTop="$2" textAlign="center" variant="caption1">
-              메모 타입을 선택하세요
-            </Typography>
-          </YStack>
+  return (
+    <BottomSheetModal
+      ref={bottomSheetRef}
+      enablePanDownToClose
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{
+        backgroundColor: hexColors.surface,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
+      }}
+      handleIndicatorStyle={{
+        backgroundColor: hexColors.textMuted,
+        width: 36,
+        height: 4,
+      }}
+      snapPoints={snapPoints}
+      onDismiss={onClose}
+    >
+      <BottomSheetView style={{ flex: 1, padding: 16 }}>
+        <View className="pb-6">
+          <Typography className="text-center" variant="title2">
+            어떤 메모를 작성할까요?
+          </Typography>
+          <Typography className="mt-2 text-center" variant="caption1">
+            메모 타입을 선택하세요
+          </Typography>
+        </View>
 
-          <YStack gap="$3">
-            <XStack
-              alignItems="center"
-              backgroundColor="$backgroundSecondary"
-              borderColor="$borderPrimary"
-              borderRadius="$4"
-              borderWidth={1}
-              gap="$4"
-              padding="$4"
-              pressStyle={{
-                backgroundColor: '$backgroundTertiary',
-                transform: [{ scale: 0.98 }],
-              }}
-              onPress={handleSelectRatingMemo}
-            >
-              <View
-                alignItems="center"
-                backgroundColor="$primary"
-                borderRadius="$3"
-                justifyContent="center"
-                padding="$3"
-              >
-                <Star color="white" fill="white" size="$6" />
-              </View>
-              <YStack flex={1}>
-                <Typography variant="callout">별점 메모</Typography>
-                <Typography marginTop="$1" variant="caption2">
-                  별점과 함께 경험을 기록하세요
-                </Typography>
-              </YStack>
-            </XStack>
+        <View className="gap-3">
+          <Pressable
+            className="flex-row items-center gap-4 rounded-4 border border-border bg-bg-secondary p-4 active:scale-[0.98]"
+            onPress={handleSelectRatingMemo}
+          >
+            <View className="items-center justify-center rounded-3 bg-primary p-3">
+              <Star color="white" fill="white" size={24} />
+            </View>
+            <View className="flex-1">
+              <Typography variant="callout">별점 메모</Typography>
+              <Typography className="mt-1" variant="caption2">
+                별점과 함께 경험을 기록하세요
+              </Typography>
+            </View>
+          </Pressable>
 
-            <XStack
-              alignItems="center"
-              backgroundColor="$backgroundSecondary"
-              borderColor="$borderPrimary"
-              borderRadius="$4"
-              borderWidth={1}
-              gap="$4"
-              padding="$4"
-              pressStyle={{
-                backgroundColor: '$backgroundTertiary',
-                transform: [{ scale: 0.98 }],
-              }}
-              onPress={handleSelectTextMemo}
-            >
-              <View
-                alignItems="center"
-                backgroundColor="$secondary"
-                borderRadius="$3"
-                justifyContent="center"
-                padding="$3"
-              >
-                <FileText color="white" size="$6" />
-              </View>
-              <YStack flex={1}>
-                <Typography variant="callout">일반 메모</Typography>
-                <Typography marginTop="$1" variant="caption2">
-                  자유롭게 생각을 기록하세요
-                </Typography>
-              </YStack>
-            </XStack>
-          </YStack>
-        </YStack>
-      </Sheet.Frame>
-    </Sheet>
+          <Pressable
+            className="flex-row items-center gap-4 rounded-4 border border-border bg-bg-secondary p-4 active:scale-[0.98]"
+            onPress={handleSelectTextMemo}
+          >
+            <View className="items-center justify-center rounded-3 bg-accent p-3">
+              <FileText color="white" size={24} />
+            </View>
+            <View className="flex-1">
+              <Typography variant="callout">일반 메모</Typography>
+              <Typography className="mt-1" variant="caption2">
+                자유롭게 생각을 기록하세요
+              </Typography>
+            </View>
+          </Pressable>
+        </View>
+      </BottomSheetView>
+    </BottomSheetModal>
   );
 };

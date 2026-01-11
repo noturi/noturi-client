@@ -1,5 +1,6 @@
-import { Button, ScrollView, XStack, YStack } from 'tamagui';
 import { Typography } from '~/shared/ui';
+
+import { Pressable, ScrollView, View } from 'react-native';
 
 interface YearChipsProps {
   selectedYear?: number;
@@ -15,26 +16,31 @@ export function YearChips({ selectedYear, onSelect }: YearChipsProps) {
   };
 
   return (
-    <YStack gap="$1">
+    <View className="gap-1">
       <Typography variant="callout">년도</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$1">
-          {years.map((year) => (
-            <Button
-              key={year}
-              backgroundColor={selectedYear === year ? '$primary' : '$surface'}
-              borderRadius="$2"
-              color={selectedYear === year ? '$textOnPrimary' : '$textSecondary'}
-              height={32}
-              justifyContent="center"
-              paddingHorizontal="$1"
-              onPress={() => handlePress(year)}
-            >
-              {year}년
-            </Button>
-          ))}
-        </XStack>
+        <View className="flex-row gap-1">
+          {years.map((year) => {
+            const isSelected = selectedYear === year;
+            return (
+              <Pressable
+                key={year}
+                className={`h-8 items-center justify-center rounded-2 px-3 ${
+                  isSelected ? 'bg-primary' : 'bg-surface'
+                }`}
+                onPress={() => handlePress(year)}
+              >
+                <Typography
+                  className={isSelected ? 'text-primary-text' : 'text-text-secondary'}
+                  variant="callout"
+                >
+                  {year}년
+                </Typography>
+              </Pressable>
+            );
+          })}
+        </View>
       </ScrollView>
-    </YStack>
+    </View>
   );
 }

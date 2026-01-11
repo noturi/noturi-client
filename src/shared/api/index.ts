@@ -1,10 +1,9 @@
 import ky from 'ky';
 
-import { afterResponseHook, beforeRequestHook, beforeRetryHook } from './hooks';
+import { requestInterceptor, retryInterceptor } from './interceptors';
 
 export { ENDPOINTS } from './endpoints';
 
-// API Instance
 export const api = ky.create({
   prefixUrl: process.env.EXPO_PUBLIC_BASE_URL + '/client',
   timeout: 3000,
@@ -13,12 +12,11 @@ export const api = ky.create({
   },
   retry: {
     limit: 1,
-    statusCodes: [401], // 401일 때만 재시도
+    statusCodes: [401],
   },
   hooks: {
-    beforeRequest: [beforeRequestHook],
-    afterResponse: [afterResponseHook],
-    beforeRetry: [beforeRetryHook],
+    beforeRequest: [requestInterceptor],
+    beforeRetry: [retryInterceptor],
   },
 });
 

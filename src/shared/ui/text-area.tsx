@@ -1,69 +1,42 @@
-import { TextArea as TamaguiTextArea, styled } from 'tamagui';
+import { forwardRef, useState } from 'react';
+import { TextInput, TextInputProps } from 'react-native';
 
-export const TextArea = styled(TamaguiTextArea, {
-  // 기본 스타일
-  backgroundColor: '$backgroundPrimary',
-  borderRadius: '$5',
-  borderWidth: 1,
-  borderColor: '$border',
-  color: '$textPrimary',
-  fontSize: 14,
+export interface TextAreaProps extends TextInputProps {
+  hasError?: boolean;
+  minHeight?: number;
+}
 
-  paddingHorizontal: '$2',
-  paddingVertical: '$3',
-  placeholderTextColor: '$textMuted',
+export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
+  { hasError = false, minHeight = 120, style, className, onFocus, onBlur, ...props },
+  ref,
+) {
+  const [isFocused, setIsFocused] = useState(false);
 
-  // 한글 입력 문제 해결을 위한 설정
-  autoCorrect: false,
-  autoCapitalize: 'none',
-  keyboardType: 'default',
+  const handleFocus = (e: any) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
 
-  // 포커스 스타일
-  focusStyle: {
-    borderWidth: 1,
-    borderColor: '$primary',
-  },
+  const handleBlur = (e: any) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
 
-  variants: {
-    hasError: {
-      true: {
-        borderWidth: 1,
-        borderColor: '$error',
-        focusStyle: {
-          borderColor: '$error',
-        },
-      },
-    },
+  const borderClass = hasError ? 'border-error' : isFocused ? 'border-primary' : 'border-border';
 
-    size: {
-      sm: {
-        minHeight: 80,
-        fontSize: '$2',
-      },
-      md: {
-        minHeight: 120,
-        fontSize: '$3',
-      },
-      lg: {
-        minHeight: 160,
-        fontSize: '$4',
-      },
-    },
-
-    variant: {
-      default: {
-        backgroundColor: '$backgroundPrimary',
-        borderWidth: 1,
-      },
-      outlined: {
-        backgroundColor: '$backgroundPrimary',
-        borderWidth: 0,
-      },
-    },
-  } as const,
-
-  defaultVariants: {
-    variant: 'default',
-    hasError: false,
-  },
+  return (
+    <TextInput
+      ref={ref}
+      multiline
+      autoCapitalize="none"
+      autoCorrect={false}
+      className={`border bg-bg-primary ${borderClass} rounded-5 px-3 py-3 font-sans text-text-primary ${className ?? ''}`}
+      placeholderTextColor="#9e9e9e"
+      style={[{ minHeight }, style]}
+      textAlignVertical="top"
+      onBlur={handleBlur}
+      onFocus={handleFocus}
+      {...props}
+    />
+  );
 });

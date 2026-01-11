@@ -3,12 +3,11 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { Button } from 'tamagui';
 import { useGoogleLoginMutation } from '~/features/auth/api';
 import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
 import { useEffect } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert, Platform, Pressable } from 'react-native';
 
 import { GoogleIcon } from './google-icon';
 
@@ -61,15 +60,13 @@ export function GoogleButton() {
   };
 
   return (
-    <Button
-      circular
-      backgroundColor="$surface"
-      borderColor="$border"
-      borderWidth={1}
+    <Pressable
+      className="h-14 w-14 items-center justify-center rounded-full border border-border bg-surface"
       disabled={googleLoginMutation.isPending}
-      icon={<GoogleIcon height={24} width={24} />}
-      size="$7"
+      style={{ opacity: googleLoginMutation.isPending ? 0.5 : 1 }}
       onPress={handlePress}
-    />
+    >
+      <GoogleIcon height={24} width={24} />
+    </Pressable>
   );
 }

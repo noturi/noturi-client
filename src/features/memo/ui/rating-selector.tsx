@@ -1,9 +1,7 @@
-import { XStack } from 'tamagui';
+import { Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { Pressable } from 'react-native';
-
-import { Star } from '@tamagui/lucide-icons';
+import { Pressable, View } from 'react-native';
 
 interface RatingSelectorProps {
   rating: number;
@@ -19,14 +17,14 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
       const isEmpty = rating < i - 0.5;
 
       stars.push(
-        <XStack key={i} alignItems="center" height={30} position="relative" width={30}>
+        <View key={i} className="relative h-[34px] w-[34px] items-center justify-center">
           {/* 왼쪽 반쪽 클릭 영역 */}
           <Pressable
             style={{
               position: 'absolute',
               left: 0,
-              width: 15,
-              height: 30,
+              width: 17,
+              height: 34,
               zIndex: 2,
             }}
             onPress={() => onRatingChange(i - 0.5)}
@@ -37,37 +35,37 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
             style={{
               position: 'absolute',
               right: 0,
-              width: 15,
-              height: 30,
+              width: 17,
+              height: 34,
               zIndex: 2,
             }}
             onPress={() => onRatingChange(i)}
           />
 
-          {isFilled && <Star color="#f59e0b" fill="#f59e0b" size="$6" />}
+          {isFilled && <Star color="#f59e0b" fill="#f59e0b" size={28} />}
 
           {isHalfFilled && (
             <>
-              <Star color="#fef3c7" fill="#fef3c7" size="$6" />
-              <XStack height={30} left={0} overflow="hidden" position="absolute" width={15}>
-                <Star color="#f59e0b" fill="#f59e0b" size="$6" />
-              </XStack>
+              <Star color="#fef3c7" fill="#fef3c7" size={28} />
+              <View className="absolute overflow-hidden" style={{ left: 3, width: 14, height: 28 }}>
+                <Star color="#f59e0b" fill="#f59e0b" size={28} />
+              </View>
             </>
           )}
 
-          {isEmpty && <Star color="#fef3c7" fill="#fef3c7" size="$6" />}
-        </XStack>,
+          {isEmpty && <Star color="#fef3c7" fill="#fef3c7" size={28} />}
+        </View>,
       );
     }
     return stars;
   };
 
   return (
-    <XStack alignItems="center" gap="$4">
-      <XStack gap="$0">{renderStars()}</XStack>
-      <Typography color="$textMuted" variant="caption1">
+    <View className="flex-row items-center gap-4">
+      <View className="flex-row">{renderStars()}</View>
+      <Typography className="text-text-muted" variant="caption1">
         {rating > 0 ? `${rating} / 5` : '평점을 선택하세요'}
       </Typography>
-    </XStack>
+    </View>
   );
 };

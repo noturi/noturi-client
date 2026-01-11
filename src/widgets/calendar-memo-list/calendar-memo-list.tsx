@@ -1,11 +1,14 @@
-import { XStack, YStack } from 'tamagui';
-import type { CalendarMemo } from '~/entities/calendar';
+import type { CalendarMemo, UpdateCalendarMemoDto } from '~/entities/calendar';
 import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
+import { useUpdateCalendarMemo } from '~/features/calendar/api';
+import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
-import { formatTime } from '~/shared/lib';
+import { formatTime, useToast } from '~/shared/lib';
+import { Bell } from '~/shared/lib/icons';
 import { Card, Typography } from '~/shared/ui';
 
-import { Bell } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import { View } from 'react-native';
 
 interface CalendarMemoListProps {
   startDate: string;
@@ -15,50 +18,48 @@ interface CalendarMemoListProps {
   isError: boolean;
 }
 
-const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
+const MemoCard = ({
+  memo,
+  onEdit,
+}: {
+  memo: CalendarMemo;
+  onEdit: (memo: CalendarMemo) => void;
+}) => {
   const timeText = memo.isAllDay
     ? '하루종일'
     : `${formatTime(memo.startDate)} - ${formatTime(memo.endDate)}`;
 
   return (
-    <Card position="relative">
-      <XStack alignItems="center" justifyContent="space-between">
-        <XStack alignItems="center" flex={1} gap="$3">
-          <YStack
-            backgroundColor={memo.hasNotification ? '$blue10' : '$textMuted'}
-            borderRadius="$1"
-            height={36}
-            width={3}
-          />
-          <YStack flex={1} gap="$0.5">
-            <Typography color="$textPrimary" numberOfLines={1} variant="callout">
-              {memo.title}
+    <Card>
+      <View className="flex-row items-center justify-between p-1">
+        <View className="flex-1 gap-1">
+          <Typography className="text-text-primary" numberOfLines={1} variant="callout">
+            {memo.title}
+          </Typography>
+          <View className="flex-row items-center gap-2">
+            <Typography className="text-text-muted" variant="caption2">
+              {timeText}
             </Typography>
-            <XStack alignItems="center" gap="$2">
-              <Typography color="$textMuted" variant="caption2">
-                {timeText}
-              </Typography>
-              {memo.hasNotification && memo.notifyBefore && (
-                <XStack alignItems="center" gap="$1">
-                  <Bell color="$blue10" size={10} />
-                  <Typography color="$blue10" variant="caption2">
-                    {NOTIFICATION_LABELS[memo.notifyBefore]}
-                  </Typography>
-                </XStack>
-              )}
-            </XStack>
-          </YStack>
-        </XStack>
+            {memo.hasNotification && memo.notifyBefore && (
+              <View className="flex-row items-center gap-1 rounded-2 bg-accent-soft px-2 py-0.5">
+                <Bell className="text-accent" size={10} />
+                <Typography className="text-accent-soft-text" variant="caption2">
+                  {NOTIFICATION_LABELS[memo.notifyBefore]}
+                </Typography>
+              </View>
+            )}
+          </View>
+        </View>
 
-        <CalendarMemoDeleteButton memoId={memo.id} />
-      </XStack>
+        <CalendarMemoDeleteButton memoId={memo.id} onEdit={() => onEdit(memo)} />
+      </View>
     </Card>
   );
 };
 
 const EmptyState = ({ message }: { message: string }) => (
   <Card>
-    <Typography color="$textMuted" textAlign="center" variant="footnote">
+    <Typography className="text-text-muted text-center" variant="footnote">
       {message}
     </Typography>
   </Card>
@@ -66,13 +67,39 @@ const EmptyState = ({ message }: { message: string }) => (
 
 const ErrorState = () => (
   <Card>
-    <Typography color="$textMuted" textAlign="center">
-      일정을 불러오는데 실패했습니다.
-    </Typography>
+    <Typography className="text-text-muted text-center">일정을 불러오는데 실패했습니다.</Typography>
   </Card>
 );
 
 export function CalendarMemoList({ startDate, endDate, memos, isError }: CalendarMemoListProps) {
+  const [editMemo, setEditMemo] = useState<CalendarMemo | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const toast = useToast();
+
+  const updateMutation = useUpdateCalendarMemo({
+    onSuccess: () => {
+      setIsEditModalOpen(false);
+      setEditMemo(null);
+    },
+    onError: () => {
+      toast.showError('일정 수정에 실패했습니다.');
+    },
+  });
+
+  const handleEdit = (memo: CalendarMemo) => {
+    setEditMemo(memo);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdate = (data: UpdateCalendarMemoDto) => {
+    updateMutation.mutate(data);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditMemo(null);
+  };
+
   if (!startDate) return null;
 
   if (isError) return <ErrorState />;
@@ -84,10 +111,20 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
   }
 
   return (
-    <YStack gap="$2">
-      {memos.map((memo) => (
-        <MemoCard key={memo.id} memo={memo} />
-      ))}
-    </YStack>
+    <>
+      <View className="gap-2">
+        {memos.map((memo) => (
+          <MemoCard key={memo.id} memo={memo} onEdit={handleEdit} />
+        ))}
+      </View>
+
+      <CalendarAddModal
+        editData={editMemo}
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        onSubmit={() => {}}
+        onUpdate={handleUpdate}
+      />
+    </>
   );
 }

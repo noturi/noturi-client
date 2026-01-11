@@ -1,4 +1,4 @@
-import { XStack } from 'tamagui';
+import { View } from 'react-native';
 
 import { ActiveFilterChip } from './active-filter-chip';
 
@@ -33,7 +33,7 @@ export function ActiveFilters({
   const categoryName = categories.find((c) => c.id === selectedCategoryId)?.name;
 
   return (
-    <XStack alignItems="center" flexWrap="wrap" gap="$1">
+    <View className="flex-row flex-wrap items-center gap-1">
       {categoryName && <ActiveFilterChip label={categoryName} onClear={onClearCategory} />}
 
       {selectedYear !== undefined && (
@@ -43,6 +43,6 @@ export function ActiveFilters({
       {selectedRating !== undefined && (
         <ActiveFilterChip label={`★ ${selectedRating}`} onClear={onClearRating} />
       )}
-    </XStack>
+    </View>
   );
 }

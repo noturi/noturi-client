@@ -1,7 +1,7 @@
-import { XStack, YStack } from 'tamagui';
+import { Calendar, Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
-import { Calendar, Star } from '@tamagui/lucide-icons';
+import { Pressable, View } from 'react-native';
 
 export type MemoViewType = 'rating' | 'calendar';
 
@@ -19,52 +19,39 @@ interface ToggleButtonProps {
 
 function ToggleButton({ isActive, onPress, icon, label }: ToggleButtonProps) {
   return (
-    <YStack
-      alignItems="center"
-      justifyContent="center"
-      pressStyle={{ opacity: 0.7 }}
-      onPress={onPress}
-    >
-      <XStack
-        alignItems="center"
-        backgroundColor="$backgroundSecondary"
-        borderColor={isActive ? '$primary' : '$border'}
-        borderRadius="$5"
-        borderWidth={1}
-        height={48}
-        justifyContent="center"
-        padding="$3"
-        width={48}
+    <Pressable className="items-center justify-center active:opacity-70" onPress={onPress}>
+      <View
+        className={`items-center justify-center bg-bg-secondary rounded-5 p-3 h-12 w-12 border ${
+          isActive ? 'border-selection' : 'border-border'
+        }`}
       >
         {icon}
-      </XStack>
+      </View>
       <Typography
-        color={isActive ? '$textPrimary' : '$textMuted'}
-        fontWeight={isActive ? 600 : 400}
-        pointerEvents="none"
+        className={isActive ? 'font-semibold text-selection' : 'text-text-muted'}
         variant="caption2"
       >
         {label}
       </Typography>
-    </YStack>
+    </Pressable>
   );
 }
 
 export function MemoViewToggle({ selectedView, onViewChange }: MemoViewToggleProps) {
   return (
-    <XStack gap="$4" paddingHorizontal="$4" paddingVertical="$2">
+    <View className="flex-row gap-4 px-4 py-2">
       <ToggleButton
-        icon={<Star color="$star" fill="#ebd759" size="$3" />}
+        icon={<Star className="text-text-secondary fill-text-secondary" size={16} />}
         isActive={selectedView === 'rating'}
         label="메모"
         onPress={() => onViewChange('rating')}
       />
       <ToggleButton
-        icon={<Calendar color="$blue10" size="$3" />}
+        icon={<Calendar className="text-text-secondary" size={16} />}
         isActive={selectedView === 'calendar'}
         label="캘린더"
         onPress={() => onViewChange('calendar')}
       />
-    </XStack>
+    </View>
   );
 }

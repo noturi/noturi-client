@@ -2,7 +2,7 @@
   "expo": {
     "name": "Noturi",
     "slug": "noturi-client",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "owner": "dokimion24",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,6 +12,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.noturi.app",
+      "buildNumber": "2",
       "config": {
         "usesNonExemptEncryption": false
       }

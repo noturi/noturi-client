@@ -1,5 +1,6 @@
-import { Button, ScrollView, XStack, YStack } from 'tamagui';
 import { Typography } from '~/shared/ui';
+
+import { Pressable, ScrollView, View } from 'react-native';
 
 interface CategoryLite {
   id: string;
@@ -18,26 +19,31 @@ export function CategoryChips({ categories, selectedCategoryId, onSelect }: Cate
   };
 
   return (
-    <YStack gap="$1">
+    <View className="gap-1">
       <Typography variant="callout">카테고리</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$1">
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              backgroundColor={selectedCategoryId === category.id ? '$primary' : '$surface'}
-              borderRadius="$2"
-              color={selectedCategoryId === category.id ? '$textOnPrimary' : '$textSecondary'}
-              height={32}
-              justifyContent="center"
-              paddingHorizontal="$1"
-              onPress={() => handlePress(category.id)}
-            >
-              {category.name}
-            </Button>
-          ))}
-        </XStack>
+        <View className="flex-row gap-1">
+          {categories.map((category) => {
+            const isSelected = selectedCategoryId === category.id;
+            return (
+              <Pressable
+                key={category.id}
+                className={`h-8 items-center justify-center rounded-2 px-3 ${
+                  isSelected ? 'bg-primary' : 'bg-surface'
+                }`}
+                onPress={() => handlePress(category.id)}
+              >
+                <Typography
+                  className={isSelected ? 'text-primary-text' : 'text-text-secondary'}
+                  variant="callout"
+                >
+                  {category.name}
+                </Typography>
+              </Pressable>
+            );
+          })}
+        </View>
       </ScrollView>
-    </YStack>
+    </View>
   );
 }

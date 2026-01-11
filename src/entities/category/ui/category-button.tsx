@@ -1,9 +1,8 @@
-import { XStack } from 'tamagui';
 import type { UICategory } from '~/entities/category/model/types';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 interface CategoryButtonProps {
   category: UICategory;
@@ -11,7 +10,9 @@ interface CategoryButtonProps {
 }
 
 export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+
+  const isActive = category.active;
 
   return (
     <Pressable
@@ -21,52 +22,30 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         opacity: pressed ? 0.95 : 1,
       })}
       onPress={onPress}
-      onPressIn={() => setIsHovered(true)}
-      onPressOut={() => setIsHovered(false)}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
     >
-      <XStack
-        alignItems="center"
-        backgroundColor={
-          isHovered
-            ? category.active
-              ? '$primaryHover'
-              : '$surfaceHover'
-            : category.active
-              ? '$textPrimary'
-              : '$surface'
-        }
-        borderColor={
-          isHovered
-            ? category.active
-              ? '$primaryHover'
-              : '$borderHover'
-            : category.active
-              ? '$textPrimary'
-              : '$border'
-        }
-        borderRadius="$4"
-        borderWidth={1}
-        gap="$2"
-        paddingHorizontal="$3"
-        paddingVertical="$2"
+      <View
+        className={`flex-row items-center justify-center gap-2 rounded-4 border bg-surface px-3 py-2 ${
+          isActive ? 'border-selection' : 'border-border'
+        }`}
+        style={{ opacity: isPressed ? 0.8 : 1 }}
       >
         <Typography
-          color={category.active ? '$textOnPrimary' : '$textSecondary'}
-          pointerEvents="none"
+          className={isActive ? 'text-selection' : 'text-text-secondary'}
           variant="caption1"
         >
           {category.name}
         </Typography>
         {category.count > 0 && (
           <Typography
-            color={category.active ? '$textOnPrimary' : '$textMuted'}
-            pointerEvents="none"
+            className={isActive ? 'text-selection' : 'text-text-muted'}
             variant="caption1"
           >
             {category.count}
           </Typography>
         )}
-      </XStack>
+      </View>
     </Pressable>
   );
 };

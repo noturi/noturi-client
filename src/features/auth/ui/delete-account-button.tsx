@@ -1,8 +1,7 @@
-import { YStack } from 'tamagui';
 import { useAuth } from '~/entities/auth';
 import { Typography } from '~/shared/ui';
 
-import { Alert } from 'react-native';
+import { Alert, Pressable } from 'react-native';
 
 import { useDeleteAccountMutation } from '../api/mutation';
 
@@ -34,15 +33,14 @@ export function DeleteAccountButton() {
   };
 
   return (
-    <YStack
-      alignItems="center"
-      opacity={isPending ? 0.5 : 1}
-      paddingVertical="$4"
+    <Pressable
+      className="self-center py-4"
+      style={{ opacity: isPending ? 0.5 : 1 }}
       onPress={isPending ? undefined : confirmDelete}
     >
-      <Typography color="$textMuted" textDecorationLine="underline" variant="footnote">
+      <Typography className="underline text-text-muted" variant="footnote">
         계정 삭제
       </Typography>
-    </YStack>
+    </Pressable>
   );
 }

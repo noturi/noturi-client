@@ -1,4 +1,6 @@
-import { Switch as TamaguiSwitch, XStack } from 'tamagui';
+import { useUserTheme } from '~/application/providers/theme-provider';
+
+import { Platform, Switch as RNSwitch, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -10,17 +12,18 @@ export interface SwitchProps {
 }
 
 export function Switch({ label, checked, onCheckedChange, disabled = false }: SwitchProps) {
+  const { hexColors } = useUserTheme();
+
   const switchElement = (
-    <TamaguiSwitch
-      backgroundColor={checked ? '$primary' : '$backgroundSecondary'}
-      borderColor={checked ? '$primary' : '$border'}
-      checked={checked}
+    <RNSwitch
       disabled={disabled}
-      size="$5"
-      onCheckedChange={onCheckedChange}
-    >
-      <TamaguiSwitch.Thumb animation="quick" backgroundColor="white" borderWidth={0} />
-    </TamaguiSwitch>
+      ios_backgroundColor={hexColors.border}
+      style={Platform.OS === 'ios' ? { transform: [{ scale: 0.75 }] } : undefined}
+      thumbColor={Platform.OS === 'android' ? (checked ? hexColors.accent : '#f4f4f4') : undefined}
+      trackColor={{ false: hexColors.border, true: hexColors.accent }}
+      value={checked}
+      onValueChange={onCheckedChange}
+    />
   );
 
   if (!label) {
@@ -28,9 +31,9 @@ export function Switch({ label, checked, onCheckedChange, disabled = false }: Sw
   }
 
   return (
-    <XStack alignItems="center" justifyContent="space-between">
+    <View className="flex-row items-center justify-between">
       <Typography variant="footnote">{label}</Typography>
       {switchElement}
-    </XStack>
+    </View>
   );
 }

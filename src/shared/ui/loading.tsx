@@ -1,4 +1,4 @@
-import { Spinner, YStack } from 'tamagui';
+import { ActivityIndicator, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -8,24 +8,13 @@ interface LoadingProps {
   flex?: boolean;
 }
 
-/**
- * 로딩 상태를 표시하는 공용 컴포넌트
- */
 export function Loading({ text = '', size = 'small', flex = true }: LoadingProps) {
   return (
-    <YStack
-      alignItems="center"
-      flex={flex ? 1 : undefined}
-      gap="$5"
-      justifyContent="center"
-      paddingVertical="$10"
+    <View
+      className={`items-center justify-center gap-5 bg-bg-secondary py-10 ${flex ? 'flex-1' : ''}`}
     >
-      <Spinner color="$textSecondary" size={size} />
-      {text && (
-        <Typography color="$textSecondary" variant="caption1">
-          {text}
-        </Typography>
-      )}
-    </YStack>
+      <ActivityIndicator className="text-text-secondary" size={size} />
+      {text && <Typography variant="caption1">{text}</Typography>}
+    </View>
   );
 }

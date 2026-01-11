@@ -1,10 +1,9 @@
-import { Separator, YStack } from 'tamagui';
 import type { UIMemo } from '~/entities/memo/model/types';
 import { MemoItem } from '~/entities/memo/ui/memo-item';
 import { Loading } from '~/shared/ui';
 
 import { useCallback } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 interface MemoListProps {
   memos: UIMemo[];
@@ -15,12 +14,12 @@ interface MemoListProps {
 export function MemoList({ memos, onEndReached, isFetchingNextPage }: MemoListProps) {
   const renderItem = useCallback(
     ({ item, index }: { item: UIMemo; index: number }) => (
-      <YStack key={item.id}>
+      <View key={item.id}>
         <MemoItem memo={item} />
-        {index < memos.length - 1 && <Separator borderColor="$border" />}
-      </YStack>
+        {index < memos.length - 1 && <View className="h-px bg-border" />}
+      </View>
     ),
-    [memos],
+    [memos.length],
   );
 
   const renderFooter = useCallback(() => {

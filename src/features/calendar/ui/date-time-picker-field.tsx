@@ -1,13 +1,16 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Text, View, XStack, YStack } from 'tamagui';
-import { CALENDAR_COLORS, CALENDAR_THEME } from '~/shared/config';
+import { useUserTheme } from '~/application/providers/theme-provider';
+import { createCalendarTheme } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
 
-import { useState } from 'react';
-import { Pressable } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
+
+export type PickerType = 'date' | 'time' | null;
+export type ActivePicker = 'start-date' | 'start-time' | 'end-date' | 'end-time' | null;
 
 interface DateTimePickerFieldProps {
   label: string;
@@ -15,8 +18,9 @@ interface DateTimePickerFieldProps {
   onDateTimeChange: (date: Date) => void;
   isAllDay?: boolean;
   minDate?: string;
-  // 하루종일일 때 다른 날짜도 같이 변경
   onSyncDate?: (date: Date) => void;
+  activePicker?: PickerType;
+  onPickerChange?: (picker: PickerType) => void;
 }
 
 export function DateTimePickerField({
@@ -26,18 +30,24 @@ export function DateTimePickerField({
   isAllDay = false,
   minDate,
   onSyncDate,
+  activePicker,
+  onPickerChange,
 }: DateTimePickerFieldProps) {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const isControlled = activePicker !== undefined && onPickerChange !== undefined;
+  const [internalPicker, setInternalPicker] = useState<PickerType>(null);
+
+  const currentPicker = isControlled ? activePicker : internalPicker;
+  const setPicker = isControlled ? onPickerChange : setInternalPicker;
+
+  const { hexColors } = useUserTheme();
+  const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
 
   const handleDatePress = () => {
-    setShowTimePicker(false);
-    setShowDatePicker(!showDatePicker);
+    setPicker(currentPicker === 'date' ? null : 'date');
   };
 
   const handleTimePress = () => {
-    setShowDatePicker(false);
-    setShowTimePicker(!showTimePicker);
+    setPicker(currentPicker === 'time' ? null : 'time');
   };
 
   const handleDayPress = (day: { dateString: string }) => {
@@ -49,7 +59,7 @@ export function DateTimePickerField({
     if (isAllDay && onSyncDate) {
       onSyncDate(newDate);
     }
-    setShowDatePicker(false);
+    setPicker(null);
   };
 
   const handleTimeChange = (_: unknown, selectedTime?: Date) => {
@@ -62,20 +72,13 @@ export function DateTimePickerField({
   };
 
   return (
-    <YStack gap="$2">
+    <View className="gap-2">
       <Typography variant="footnote">{label}</Typography>
-      <XStack gap="$3">
-        <Pressable style={{ flex: 1 }} onPress={handleDatePress}>
+      <View className="flex-row gap-3">
+        <Pressable className="flex-1" onPress={handleDatePress}>
           <Text
-            backgroundColor="$surface"
-            borderColor="$border"
-            borderRadius="$5"
-            borderWidth={1}
-            color="$textPrimary"
-            fontSize="$4"
-            height={44}
-            lineHeight={42}
-            textAlign="center"
+            className="rounded-5 border border-border bg-surface text-center text-text-primary"
+            style={{ height: 44, lineHeight: 42, fontSize: 16 }}
           >
             {formatDate(dateTime)}
           </Text>
@@ -84,55 +87,50 @@ export function DateTimePickerField({
         {!isAllDay && (
           <Pressable onPress={handleTimePress}>
             <Text
-              backgroundColor="$surface"
-              borderColor="$border"
-              borderRadius="$5"
-              borderWidth={1}
-              color="$textPrimary"
-              fontSize="$4"
-              height={44}
-              lineHeight={42}
-              minWidth={80}
-              textAlign="center"
+              className="min-w-[80px] rounded-5 border border-border bg-surface text-center text-text-primary"
+              style={{ height: 44, lineHeight: 42, fontSize: 16 }}
             >
               {formatTime(dateTime)}
             </Text>
           </Pressable>
         )}
-      </XStack>
+      </View>
 
-      {showDatePicker && (
+      {currentPicker === 'date' && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View backgroundColor="$surface" borderRadius="$4" paddingTop="$3">
+          <View className="rounded-4 pt-3" style={{ backgroundColor: hexColors.surface }}>
             <Calendar
+              key={hexColors.bgPrimary}
               current={dateTime.toISOString().split('T')[0]}
+              monthFormat="yyyy년 MM월"
               markedDates={{
                 [dateTime.toISOString().split('T')[0]]: {
                   selected: true,
-                  selectedColor: CALENDAR_COLORS.SELECTION,
-                  selectedTextColor: '#ffffff',
+                  selectedColor: hexColors.primary,
+                  selectedTextColor: hexColors.primaryText,
                 },
               }}
               minDate={minDate}
-              theme={CALENDAR_THEME}
+              theme={calendarTheme}
               onDayPress={handleDayPress}
             />
           </View>
         </Animated.View>
       )}
 
-      {!isAllDay && showTimePicker && (
+      {!isAllDay && currentPicker === 'time' && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut} layout={LinearTransition}>
-          <View paddingTop="$3">
+          <View className="pt-3">
             <DateTimePicker
               display="spinner"
               mode="time"
+              textColor={hexColors.textPrimary}
               value={dateTime}
               onChange={handleTimeChange}
             />
           </View>
         </Animated.View>
       )}
-    </YStack>
+    </View>
   );
 }

@@ -1,7 +1,8 @@
-import { Sheet, YStack } from 'tamagui';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
-import { useEffect, useState } from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { View } from 'react-native';
 
 import { MemoFormContent } from './memo-form-content';
 import { MemoFormHeader } from './memo-form-header';
@@ -12,52 +13,62 @@ interface MemoCreateSheetProps {
 }
 
 export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const { hexColors } = useUserTheme();
+
+  const snapPoints = useMemo(() => ['85%'], []);
 
   useEffect(() => {
-    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
-    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    if (isOpen) {
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [isOpen]);
 
-    const showListener = Keyboard.addListener(showEvent, (e) => {
-      const height = Platform.OS === 'ios' ? e.endCoordinates.height : e.endCoordinates.height + 20;
-      setKeyboardHeight(height);
-    });
-    const hideListener = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
-
-    return () => {
-      showListener?.remove();
-      hideListener?.remove();
-    };
-  }, []);
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="close"
+      />
+    ),
+    [],
+  );
 
   return (
-    <Sheet
-      dismissOnSnapToBottom
-      modal
-      animation="quick"
-      open={isOpen}
-      snapPoints={keyboardHeight > 0 ? [85] : [85, 50]}
-      snapPointsMode="percent"
-      onOpenChange={onClose}
+    <BottomSheetModal
+      ref={bottomSheetRef}
+      enablePanDownToClose
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{
+        backgroundColor: hexColors.surface,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        borderWidth: 1,
+        borderColor: hexColors.border,
+        borderBottomWidth: 0,
+      }}
+      handleIndicatorStyle={{
+        backgroundColor: hexColors.textMuted,
+        width: 36,
+        height: 4,
+      }}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
+      snapPoints={snapPoints}
+      onDismiss={onClose}
     >
-      <Sheet.Overlay
-        animation="quick"
-        backgroundColor="$backgroundOverlay"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
-      />
-      <Sheet.Frame
-        backgroundColor="$backgroundPrimary"
-        borderTopLeftRadius="$6"
-        borderTopRightRadius="$6"
-      >
-        <YStack alignItems="center" paddingBottom="$2" paddingTop="$2">
-          <YStack backgroundColor="$textMuted" borderRadius="$2" height={4} width={36} />
-        </YStack>
-
+      <BottomSheetView style={{ flex: 1 }}>
+        <View className="items-center py-2">
+          <View className="h-1 w-9 rounded-2" style={{ backgroundColor: hexColors.textMuted }} />
+        </View>
         <MemoFormHeader onClose={onClose} />
         <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />
-      </Sheet.Frame>
-    </Sheet>
+      </BottomSheetView>
+    </BottomSheetModal>
   );
 };

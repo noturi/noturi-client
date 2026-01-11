@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
+import '../global.css';
 import { AppProvider } from '../src/application/providers';
 import { RootRouter } from '../src/application/router';
+import '../src/shared/lib/polyfill';
 
 SplashScreen.preventAutoHideAsync();
 
