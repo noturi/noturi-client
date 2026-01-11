@@ -1,10 +1,13 @@
-import type { CalendarMemo } from '~/entities/calendar';
+import type { CalendarMemo, UpdateCalendarMemoDto } from '~/entities/calendar';
 import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
+import { useUpdateCalendarMemo } from '~/features/calendar/api';
+import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
 import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
-import { formatTime } from '~/shared/lib';
+import { formatTime, useToast } from '~/shared/lib';
 import { Bell } from '~/shared/lib/icons';
 import { Card, Typography } from '~/shared/ui';
 
+import { useState } from 'react';
 import { View } from 'react-native';
 
 interface CalendarMemoListProps {
@@ -15,7 +18,13 @@ interface CalendarMemoListProps {
   isError: boolean;
 }
 
-const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
+const MemoCard = ({
+  memo,
+  onEdit,
+}: {
+  memo: CalendarMemo;
+  onEdit: (memo: CalendarMemo) => void;
+}) => {
   const timeText = memo.isAllDay
     ? '하루종일'
     : `${formatTime(memo.startDate)} - ${formatTime(memo.endDate)}`;
@@ -42,7 +51,7 @@ const MemoCard = ({ memo }: { memo: CalendarMemo }) => {
           </View>
         </View>
 
-        <CalendarMemoDeleteButton memoId={memo.id} />
+        <CalendarMemoDeleteButton memoId={memo.id} onEdit={() => onEdit(memo)} />
       </View>
     </Card>
   );
@@ -63,6 +72,34 @@ const ErrorState = () => (
 );
 
 export function CalendarMemoList({ startDate, endDate, memos, isError }: CalendarMemoListProps) {
+  const [editMemo, setEditMemo] = useState<CalendarMemo | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const toast = useToast();
+
+  const updateMutation = useUpdateCalendarMemo({
+    onSuccess: () => {
+      setIsEditModalOpen(false);
+      setEditMemo(null);
+    },
+    onError: () => {
+      toast.showError('일정 수정에 실패했습니다.');
+    },
+  });
+
+  const handleEdit = (memo: CalendarMemo) => {
+    setEditMemo(memo);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdate = (data: UpdateCalendarMemoDto) => {
+    updateMutation.mutate(data);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditMemo(null);
+  };
+
   if (!startDate) return null;
 
   if (isError) return <ErrorState />;
@@ -74,10 +111,20 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
   }
 
   return (
-    <View className="gap-2">
-      {memos.map((memo) => (
-        <MemoCard key={memo.id} memo={memo} />
-      ))}
-    </View>
+    <>
+      <View className="gap-2">
+        {memos.map((memo) => (
+          <MemoCard key={memo.id} memo={memo} onEdit={handleEdit} />
+        ))}
+      </View>
+
+      <CalendarAddModal
+        editData={editMemo}
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        onSubmit={() => {}}
+        onUpdate={handleUpdate}
+      />
+    </>
   );
 }

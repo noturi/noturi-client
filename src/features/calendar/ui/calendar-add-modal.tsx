@@ -5,7 +5,12 @@ import {
   ALL_DAY_NOTIFICATION_OPTIONS,
   NOTIFICATION_OPTIONS,
 } from '~/entities/calendar/model/constants';
-import type { CreateCalendarMemoDto, NotifyBefore } from '~/entities/calendar/model/types';
+import type {
+  CalendarMemo,
+  CreateCalendarMemoDto,
+  NotifyBefore,
+  UpdateCalendarMemoDto,
+} from '~/entities/calendar/model/types';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
 
@@ -19,9 +24,21 @@ interface CalendarAddModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: CreateCalendarMemoDto) => void;
+  onUpdate?: (data: UpdateCalendarMemoDto) => void;
+  editData?: CalendarMemo | null;
+  initialStartDate?: string;
+  initialEndDate?: string;
 }
 
-export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModalProps) {
+export function CalendarAddModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  onUpdate,
+  editData,
+  initialStartDate,
+  initialEndDate,
+}: CalendarAddModalProps) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const titleRef = useRef('');
   const inputRef = useRef<TextInput>(null);
@@ -31,6 +48,7 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   const [notifyBefore, setNotifyBefore] = useState<NotifyBefore | undefined>(undefined);
   const [activePicker, setActivePicker] = useState<ActivePicker>(null);
 
+  const isEditMode = !!editData;
   const { hexColors } = useUserTheme();
 
   const snapPoints = useMemo(() => ['85%'], []);
@@ -39,10 +57,37 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
   useEffect(() => {
     if (isOpen) {
       bottomSheetRef.current?.present();
+
+      // 수정 모드일 때 기존 데이터로 폼 초기화
+      if (editData) {
+        titleRef.current = editData.title;
+        inputRef.current?.setNativeProps({ text: editData.title });
+        setStartDateTime(new Date(editData.startDate));
+        setEndDateTime(new Date(editData.endDate));
+        setIsAllDay(editData.isAllDay);
+        setNotifyBefore(editData.hasNotification ? editData.notifyBefore : undefined);
+      } else if (initialStartDate) {
+        // 생성 모드일 때 선택된 날짜로 초기화
+        const startDate = new Date(initialStartDate);
+        startDate.setHours(new Date().getHours() + 1, 0, 0, 0);
+        setStartDateTime(startDate);
+
+        if (initialEndDate) {
+          // 기간 선택된 경우
+          const endDate = new Date(initialEndDate);
+          endDate.setHours(startDate.getHours() + 1, 0, 0, 0);
+          setEndDateTime(endDate);
+        } else {
+          // 단일 날짜 선택된 경우
+          const endDate = new Date(startDate);
+          endDate.setHours(startDate.getHours() + 1);
+          setEndDateTime(endDate);
+        }
+      }
     } else {
       bottomSheetRef.current?.dismiss();
     }
-  }, [isOpen]);
+  }, [isOpen, editData, initialStartDate, initialEndDate]);
 
   const resetForm = () => {
     titleRef.current = '';
@@ -63,8 +108,18 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
     notifyBefore,
   });
 
+  const getUpdateFormData = (): UpdateCalendarMemoDto => ({
+    id: editData!.id,
+    title: titleRef.current.trim(),
+    startDate: formatDateTimeForApi(startDateTime),
+    endDate: formatDateTimeForApi(endDateTime),
+    isAllDay,
+    hasNotification: notifyBefore !== undefined,
+    notifyBefore,
+  });
+
   const handleSuccess = () => {
-    toast.success('일정이 추가되었습니다');
+    toast.success(isEditMode ? '일정이 수정되었습니다' : '일정이 추가되었습니다');
     handleClose();
   };
 
@@ -115,13 +170,14 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
       >
         <View className="gap-4 p-4 pb-6">
           <Typography className="text-center" variant="headline">
-            새 일정
+            {isEditMode ? '일정 수정' : '새 일정'}
           </Typography>
 
           <Form>
             <Form.Field required label="제목">
               <Input
                 ref={inputRef}
+                defaultValue={editData?.title}
                 placeholder="일정 제목을 입력하세요"
                 size="lg"
                 onChangeText={(text) => {
@@ -136,6 +192,13 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
               onCheckedChange={(checked) => {
                 setIsAllDay(checked);
                 setNotifyBefore(undefined);
+                if (checked) {
+                  // 하루종일일 때 종료일을 시작일과 같게 설정
+                  const newEndDate = new Date(startDateTime);
+                  newEndDate.setHours(startDateTime.getHours() + 1);
+                  newEndDate.setMinutes(startDateTime.getMinutes());
+                  setEndDateTime(newEndDate);
+                }
               }}
             />
 
@@ -208,7 +271,11 @@ export function CalendarAddModal({ isOpen, onClose, onSubmit }: CalendarAddModal
         <FloatingButton
           onPress={() => {
             if (titleRef.current.trim()) {
-              onSubmit(getFormData());
+              if (isEditMode && onUpdate) {
+                onUpdate(getUpdateFormData());
+              } else {
+                onSubmit(getFormData());
+              }
               handleSuccess();
             }
           }}

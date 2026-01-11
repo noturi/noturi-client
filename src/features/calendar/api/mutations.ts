@@ -1,4 +1,8 @@
-import { CreateCalendarMemoDto } from '~/entities/calendar/model/types';
+import {
+  CalendarMemo,
+  CreateCalendarMemoDto,
+  UpdateCalendarMemoDto,
+} from '~/entities/calendar/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import {
@@ -27,6 +31,36 @@ export const useCreateCalendarMemo = () => {
     },
   });
 };
+
+// 캘린더 메모 수정 뮤테이션
+export function useUpdateCalendarMemo(
+  options: Pick<
+    UseMutationOptions<CalendarMemo, DefaultError, UpdateCalendarMemoDto>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['calendar-memo', 'update', ...mutationKey],
+    mutationFn: (data: UpdateCalendarMemoDto) => {
+      const { id, ...updateData } = data;
+      return calendarApi.updateCalendarMemo(id, updateData);
+    },
+    onMutate,
+    onSuccess: async (_, updatedData, context) => {
+      // 캘린더 메모 목록 쿼리들 무효화
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.calendarMemos[0]],
+      });
+
+      await onSuccess?.(_, updatedData, context);
+    },
+    onError,
+    onSettled,
+  });
+}
 
 // 캘린더 메모 삭제 뮤테이션
 export function useDeleteCalendarMemo(

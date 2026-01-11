@@ -1,7 +1,7 @@
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
-import { MoreVertical, Trash2 } from '~/shared/lib/icons';
+import { MoreVertical, Pencil, Trash2 } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -9,9 +9,10 @@ import { Alert, Pressable, TouchableOpacity, View } from 'react-native';
 
 interface CalendarMemoDeleteButtonProps {
   memoId: string;
+  onEdit?: () => void;
 }
 
-export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonProps) {
+export function CalendarMemoDeleteButton({ memoId, onEdit }: CalendarMemoDeleteButtonProps) {
   const [showMenu, setShowMenu] = useState(false);
   const toast = useToast();
   const { hexColors } = useUserTheme();
@@ -25,6 +26,11 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
       toast.showError('일정 삭제에 실패했습니다.');
     },
   });
+
+  const handleEdit = () => {
+    setShowMenu(false);
+    onEdit?.();
+  };
 
   const handleDelete = () => {
     Alert.alert('일정 삭제', '이 일정을 삭제하시겠습니까?', [
@@ -61,6 +67,14 @@ export function CalendarMemoDeleteButton({ memoId }: CalendarMemoDeleteButtonPro
               elevation: 5,
             }}
           >
+            <TouchableOpacity onPress={handleEdit}>
+              <View className="flex-row items-center gap-2 border-b border-border px-3 py-3">
+                <Pencil className="text-text-primary" size={16} />
+                <Typography className="text-text-primary" variant="footnote">
+                  수정
+                </Typography>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleDelete}>
               <View className="flex-row items-center gap-2 px-3 py-3">
                 <Trash2 color="#ef4444" size={16} />

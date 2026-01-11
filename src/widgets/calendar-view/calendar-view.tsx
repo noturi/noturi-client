@@ -199,6 +199,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
         </ScrollView>
 
         <CalendarAddModal
+          initialEndDate={endDate}
+          initialStartDate={startDate}
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSubmit={handleAddCalendarMemo}
