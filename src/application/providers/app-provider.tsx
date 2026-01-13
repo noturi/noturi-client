@@ -8,6 +8,7 @@ import { AuthProvider } from './auth-provider';
 import { NotificationProvider } from './notification-provider';
 import { QueryProvider } from './query-provider';
 import { ThemeProvider } from './theme-provider';
+import { UpdateCheckProvider } from './update-check-provider';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -21,8 +22,10 @@ export function AppProvider({ children }: AppProviderProps) {
           <KeyboardProvider>
             <AuthProvider>
               <NotificationProvider>
-                {children}
-                <Toaster />
+                <UpdateCheckProvider>
+                  {children}
+                  <Toaster />
+                </UpdateCheckProvider>
               </NotificationProvider>
             </AuthProvider>
           </KeyboardProvider>
