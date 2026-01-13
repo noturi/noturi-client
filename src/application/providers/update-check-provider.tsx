@@ -7,7 +7,7 @@ import {
 import { Typography } from '~/shared/ui';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { Alert, AppState, Linking, Modal, Platform, Pressable, View } from 'react-native';
+import { AppState, Linking, Modal, Platform, Pressable, View } from 'react-native';
 
 import Constants from 'expo-constants';
 
@@ -56,23 +56,8 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
   };
 
   const handleUpdate = () => {
-    if (Platform.OS === 'android' && !storeUrl) {
-      // Android fallback
-      Linking.openURL(`market://details?id=${Constants.expoConfig?.android?.package}`);
-      return;
-    }
-
     if (storeUrl) {
-      // iOS Simulator and some contexts don't handle itms-apps://
-      // https:// works everywhere (redirects to App Store on device)
-      const compatibleUrl = storeUrl.replace(/^itms-apps?:\/\//, 'https://');
-      Linking.openURL(compatibleUrl);
-    } else if (Platform.OS === 'ios') {
-      // iOS fallback
-      const appName = Constants.expoConfig?.name || 'Noturi';
-      Linking.openURL(`https://apps.apple.com/search?term=${encodeURIComponent(appName)}`);
-    } else {
-      Alert.alert('알림', '스토어 주소를 찾을 수 없습니다.\n나중에 다시 시도해주세요.');
+      Linking.openURL(storeUrl);
     }
   };
 
