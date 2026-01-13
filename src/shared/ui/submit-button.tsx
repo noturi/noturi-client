@@ -1,6 +1,6 @@
 import { useKeyboard } from '~/shared/lib';
 
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { Typography } from './typography';
 
@@ -31,24 +31,20 @@ export const SubmitButton = ({
 
   const buttonContent = (
     <Pressable
+      className={`items-center justify-center rounded-xl bg-text-primary px-6 py-4 ${isDisabled ? 'opacity-50' : ''}`}
       disabled={isDisabled}
-      style={({ pressed }) => [
-        styles.button,
-        isDisabled && styles.disabled,
-        pressed && !isDisabled && styles.pressed,
-        flex !== undefined && { flex },
-      ]}
+      style={flex !== undefined ? { flex } : undefined}
       onPress={onPress}
     >
       {isLoading ? (
         <View className="flex-row items-center gap-2">
           <ActivityIndicator color="white" size="small" />
-          <Typography className="text-white" variant="body">
+          <Typography className="text-bg-primary" variant="body">
             {loadingText}
           </Typography>
         </View>
       ) : (
-        <Typography className="text-white font-sans-semibold" variant="body">
+        <Typography className="text-bg-primary font-sans-semibold" variant="body">
           {children}
         </Typography>
       )}
@@ -72,21 +68,3 @@ export const SubmitButton = ({
 
   return buttonContent;
 };
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#1d1d1d',
-    borderRadius: 14,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  pressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.98 }],
-  },
-});
