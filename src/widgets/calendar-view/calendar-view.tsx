@@ -105,45 +105,8 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
       setCurrentMonth(`${month.year}-${month.month.toString().padStart(2, '0')}`);
     };
 
-    // 선택된 메모들 필터링
-    const selectedMemos = useMemo(() => {
-      if (startDate && endDate) {
-        // 기간 선택: 선택된 기간과 겹치는 모든 일정
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        return allMemos.filter((memo) => {
-          const memoStart = new Date(memo.startDate.split('T')[0]);
-          const memoEnd = new Date(memo.endDate.split('T')[0]);
-          // 일정과 선택 기간이 겹치는지 확인
-          return memoStart <= end && memoEnd >= start;
-        });
-      } else if (startDate) {
-        // 단일 날짜 선택: 해당 날짜에 포함되는 모든 일정
-        const selectedDate = new Date(startDate);
-        return allMemos.filter((memo) => {
-          const memoStart = new Date(memo.startDate.split('T')[0]);
-          const memoEnd = new Date(memo.endDate.split('T')[0]);
-          // 선택된 날짜가 일정의 시작일~종료일 범위 안에 있는지 확인
-          return selectedDate >= memoStart && selectedDate <= memoEnd;
-        });
-      }
-      return [];
-    }, [allMemos, startDate, endDate]);
-
-    const formatDisplayDate = (dateString: string) => {
-      const [year, month, day] = dateString.split('-');
-      return `${year}. ${month}. ${day}`;
-    };
-
-    const headerTitle = useMemo(() => {
-      if (!startDate) return null;
-      const formattedStart = formatDisplayDate(startDate);
-      if (endDate) {
-        const formattedEnd = formatDisplayDate(endDate);
-        return `${formattedStart} ~ ${formattedEnd}`;
-      }
-      return formattedStart;
-    }, [startDate, endDate]);
+    // 해당 월의 모든 메모 표시 (날짜 선택과 관계없이)
+    const displayMemos = allMemos;
 
     const handleAddCalendarMemo = async (data: CreateCalendarMemoDto) => {
       await createCalendarMemoMutation.mutateAsync(data);
@@ -182,16 +145,11 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
               />
             </Card>
             <View className="gap-2">
-              {headerTitle && (
-                <Typography className="text-text-primary" variant="subheadline">
-                  {headerTitle}
-                </Typography>
-              )}
               <CalendarMemoList
                 endDate={endDate}
                 isError={Boolean(memosError)}
                 isLoading={memosPending}
-                memos={selectedMemos}
+                memos={displayMemos}
                 startDate={startDate}
               />
             </View>
