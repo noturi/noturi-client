@@ -93,7 +93,7 @@ export default function MemoDetailScreen() {
         </ScrollView>
       </View>
 
-      <View className="absolute bottom-[140px] right-4">
+      <View className="absolute bottom-[120px] right-4">
         <FloatingButton onPress={handleEdit} />
       </View>
     </>

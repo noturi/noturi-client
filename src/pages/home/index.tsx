@@ -128,7 +128,7 @@ export function HomePage() {
         )}
       </View>
 
-      <FloatingButton className="absolute bottom-[140px] right-4" onPress={handleCreate} />
+      <FloatingButton className="absolute bottom-[120px] right-4" onPress={handleCreate} />
 
       <YearSelectSheet
         isOpen={showYearSheet}
