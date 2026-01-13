@@ -7,7 +7,7 @@ import {
 import { Typography } from '~/shared/ui';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { Alert, Linking, Modal, Platform, Pressable, View } from 'react-native';
+import { Alert, AppState, Linking, Modal, Platform, Pressable, View } from 'react-native';
 
 import Constants from 'expo-constants';
 
@@ -24,11 +24,15 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
   useEffect(() => {
     checkAppVersion();
 
-    // 🧪 테스트용: 3초 후 강제 팝업 (테스트 후 삭제)
-    // setTimeout(() => {
-    //   setStoreUrl('https://apps.apple.com/app/id123456789');
-    //   setUpdateType('optional'); // 'force' 또는 'optional'
-    // }, 3000);
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'active') {
+        checkAppVersion();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const checkAppVersion = async () => {
@@ -52,8 +56,23 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
   };
 
   const handleUpdate = () => {
+    if (Platform.OS === 'android' && !storeUrl) {
+      // Android fallback
+      Linking.openURL(`market://details?id=${Constants.expoConfig?.android?.package}`);
+      return;
+    }
+
     if (storeUrl) {
-      Linking.openURL(storeUrl);
+      // iOS Simulator and some contexts don't handle itms-apps://
+      // https:// works everywhere (redirects to App Store on device)
+      const compatibleUrl = storeUrl.replace(/^itms-apps?:\/\//, 'https://');
+      Linking.openURL(compatibleUrl);
+    } else if (Platform.OS === 'ios') {
+      // iOS fallback
+      const appName = Constants.expoConfig?.name || 'Noturi';
+      Linking.openURL(`https://apps.apple.com/search?term=${encodeURIComponent(appName)}`);
+    } else {
+      Alert.alert('알림', '스토어 주소를 찾을 수 없습니다.\n나중에 다시 시도해주세요.');
     }
   };
 
@@ -73,25 +92,25 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
               {updateType === 'force' ? '업데이트 필요' : '새 버전 출시'}
             </Typography>
 
-            <Typography className="mb-6 text-center text-text-secondary" variant="body">
+            <Typography className="mb-6 text-center text-text-secondary" variant="subheadline">
               {updateType === 'force'
-                ? '앱을 계속 사용하려면 최신 버전으로 업데이트해주세요.'
-                : '더 나은 경험을 위해 새 버전으로 업데이트해주세요.'}
+                ? '앱을 계속 사용하려면 \n최신 버전으로 업데이트해주세요.'
+                : '더 나은 경험을 위해 \새 버전으로 업데이트해주세요.'}
             </Typography>
 
             <View className="gap-3">
               <Pressable
-                className="items-center rounded-xl bg-text-primary py-4"
+                className="items-center rounded-xl bg-primary py-4"
                 onPress={handleUpdate}
               >
-                <Typography className="font-sans-semibold text-white" variant="body">
+                <Typography className="font-sans-semibold !text-primary-text" variant="subheadline">
                   업데이트
                 </Typography>
               </Pressable>
 
               {updateType === 'optional' && (
                 <Pressable className="items-center py-3" onPress={handleLater}>
-                  <Typography className="text-text-secondary" variant="body">
+                  <Typography className="text-text-secondary" variant="subheadline">
                     나중에
                   </Typography>
                 </Pressable>
