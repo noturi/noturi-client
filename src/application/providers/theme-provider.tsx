@@ -1,6 +1,6 @@
 import { vars } from 'nativewind';
 import { ThemeId, userSettingsQuery } from '~/entities/user';
-import { useUpdateSettingsMutation } from '~/features/user';
+import { useUpdateSettingsMutation } from '~/features/user/api';
 import {
   DEFAULT_THEME_ID,
   HexColors,
