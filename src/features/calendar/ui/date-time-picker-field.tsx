@@ -1,11 +1,11 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { createCalendarTheme } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { Typography } from '~/shared/ui';
 
 import { useMemo, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
@@ -62,8 +62,13 @@ export function DateTimePickerField({
     setPicker(null);
   };
 
-  const handleTimeChange = (_: unknown, selectedTime?: Date) => {
-    if (selectedTime) {
+  const handleTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
+    // Android에서는 확인/취소 시 picker를 닫아야 함
+    if (Platform.OS === 'android') {
+      setPicker(null);
+    }
+
+    if (event.type === 'set' && selectedTime) {
       const newDateTime = new Date(dateTime);
       newDateTime.setHours(selectedTime.getHours());
       newDateTime.setMinutes(selectedTime.getMinutes());
