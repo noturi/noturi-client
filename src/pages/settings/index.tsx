@@ -64,7 +64,7 @@ export function SettingsPage() {
             <View className="h-px bg-border" />
             <View className="flex-row items-center gap-3 rounded-5 px-4 py-3">
               <View className="w-5" />
-              <Typography className="flex-1 text-text-primary" variant="callout">
+              <Typography className="flex-1 text-text-primary pl-2" variant="callout">
                 버전
               </Typography>
               <Typography className="text-text-muted" variant="callout">

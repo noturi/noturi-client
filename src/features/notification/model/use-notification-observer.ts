@@ -1,6 +1,7 @@
 import Logger from '~/shared/lib/logger';
 
 import { useEffect, useRef } from 'react';
+import { Linking } from 'react-native';
 
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
@@ -9,6 +10,7 @@ interface NotificationData {
   type?: string;
   calendarMemoId?: string;
   memoId?: string;
+  linkUrl?: string;
   [key: string]: unknown;
 }
 
@@ -48,6 +50,16 @@ export function useNotificationObserver() {
  */
 function handleNotificationNavigation(data: NotificationData) {
   if (!data) return;
+
+  // 외부 URL 처리 (앱스토어, 웹 등)
+  if (data.linkUrl) {
+    if (data.linkUrl.startsWith('http')) {
+      Linking.openURL(data.linkUrl);
+    } else {
+      router.push(data.linkUrl as any);
+    }
+    return;
+  }
 
   if (data.calendarMemoId) {
     router.push('/(tabs)');

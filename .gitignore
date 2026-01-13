@@ -52,3 +52,4 @@ ios/
 # Tamagui cache/build outputs
 .tamagui/
 
+.idea/

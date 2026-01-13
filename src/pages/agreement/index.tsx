@@ -3,7 +3,7 @@ import { ExternalLink } from '~/shared/lib/icons';
 import { Checkbox, SubmitButton, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
-import { Linking, Pressable, View } from 'react-native';
+import { Linking, Platform, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
@@ -23,9 +23,9 @@ export function AgreementPage() {
   return (
     <View
       className="flex-1 justify-between bg-bg-primary px-5 pt-5"
-      style={{ paddingBottom: insets.bottom + 20 }}
+      style={{ paddingBottom: Platform.OS === 'android' ? 20 : insets.bottom + 20 }}
     >
-      <View className="flex-1 gap-6 justify-center" style={{ marginTop: -80 }}>
+      <View className="flex-1 gap-6 justify-center">
         <View className="gap-2">
           <Typography variant="title1">서비스 이용을 위해</Typography>
           <Typography variant="title1">약관에 동의해주세요</Typography>

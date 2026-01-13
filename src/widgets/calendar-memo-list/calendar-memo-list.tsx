@@ -7,7 +7,7 @@ import { formatTime, useToast } from '~/shared/lib';
 import { Bell } from '~/shared/lib/icons';
 import { Card, Typography } from '~/shared/ui';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 
 interface CalendarMemoListProps {
@@ -71,6 +71,34 @@ const ErrorState = () => (
   </Card>
 );
 
+/**
+ * 날짜 문자열을 한국어 형식으로 포맷합니다.
+ */
+function formatDateLabel(dateString: string): string {
+  const date = new Date(dateString);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[date.getDay()];
+  return `${month}월 ${day}일 (${weekday})`;
+}
+
+/**
+ * 메모를 날짜별로 그룹핑합니다.
+ */
+function groupMemosByDate(memos: CalendarMemo[]): Map<string, CalendarMemo[]> {
+  const grouped = new Map<string, CalendarMemo[]>();
+
+  memos.forEach((memo) => {
+    const dateKey = memo.startDate.split('T')[0]; // YYYY-MM-DD 형식
+    const existing = grouped.get(dateKey) || [];
+    grouped.set(dateKey, [...existing, memo]);
+  });
+
+  // 날짜순 정렬
+  return new Map([...grouped.entries()].sort((a, b) => a[0].localeCompare(b[0])));
+}
+
 export function CalendarMemoList({ startDate, endDate, memos, isError }: CalendarMemoListProps) {
   const [editMemo, setEditMemo] = useState<CalendarMemo | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -104,6 +132,8 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
 
   if (isError) return <ErrorState />;
 
+  const groupedMemos = useMemo(() => groupMemosByDate(memos), [memos]);
+
   if (memos.length === 0) {
     const message =
       startDate && endDate ? '선택한 기간에 일정이 없습니다.' : '선택한 날짜에 일정이 없습니다.';
@@ -112,9 +142,18 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
 
   return (
     <>
-      <View className="gap-2">
-        {memos.map((memo) => (
-          <MemoCard key={memo.id} memo={memo} onEdit={handleEdit} />
+      <View className="gap-4">
+        {[...groupedMemos.entries()].map(([dateKey, dateMemos]) => (
+          <View key={dateKey} className="gap-2">
+            <Typography className="text-text-secondary" variant="footnote">
+              {formatDateLabel(dateKey)}
+            </Typography>
+            <View className="gap-2">
+              {dateMemos.map((memo) => (
+                <MemoCard key={memo.id} memo={memo} onEdit={handleEdit} />
+              ))}
+            </View>
+          </View>
         ))}
       </View>
 
