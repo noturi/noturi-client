@@ -12,15 +12,20 @@ export interface SwitchProps {
 }
 
 export function Switch({ label, checked, onCheckedChange, disabled = false }: SwitchProps) {
-  const { hexColors } = useUserTheme();
+  const { hexColors, isDark } = useUserTheme();
+
+  // 라이트: 진한 색(primary), 다크: 밝은 색(textSecondary)
+  const activeTrackColor = isDark ? hexColors.textSecondary : hexColors.primary;
 
   const switchElement = (
     <RNSwitch
       disabled={disabled}
       ios_backgroundColor={hexColors.border}
       style={Platform.OS === 'ios' ? { transform: [{ scale: 0.75 }] } : undefined}
-      thumbColor={Platform.OS === 'android' ? (checked ? hexColors.accent : '#f4f4f4') : undefined}
-      trackColor={{ false: hexColors.border, true: hexColors.accent }}
+      thumbColor={
+        Platform.OS === 'android' ? (checked ? activeTrackColor : hexColors.surface) : undefined
+      }
+      trackColor={{ false: hexColors.border, true: activeTrackColor }}
       value={checked}
       onValueChange={onCheckedChange}
     />
