@@ -36,4 +36,15 @@ export const QUERY_KEYS = {
   statisticsTrends: (params: Record<string, unknown>) => ['statistics', 'trends', params] as const,
   statisticsOverall: (params: Record<string, unknown>) =>
     ['statistics', 'overall', params] as const,
+
+  // 투두 관련
+  todos: (params: Record<string, unknown>) => ['todos', params] as const,
+  todo: (id: string) => ['todo', id] as const,
+  todosByDate: (date: string) => ['todos', 'date', date] as const,
+  todosMonthlyStats: (params: Record<string, unknown>) =>
+    ['todos', 'stats', 'monthly', params] as const,
+  todosWeeklyStats: ['todos', 'stats', 'weekly'] as const,
+  todosOverviewStats: ['todos', 'stats', 'overview'] as const,
+  todosTemplates: ['todos', 'templates'] as const,
+  todosTemplate: (id: string) => ['todos', 'template', id] as const,
 } as const;

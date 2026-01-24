@@ -96,6 +96,7 @@ export function HomePage() {
   const [category, setCategory] = useState('전체');
   const [showYearSheet, setShowYearSheet] = useState(false);
   const calendarRef = useRef<CalendarViewRef>(null);
+  const [testSwitch, setTestSwitch] = useState(false);
 
   const handleCreate = () => {
     if (view === 'rating') {

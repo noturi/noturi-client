@@ -77,6 +77,15 @@ export function RootRouter() {
             headerBackButtonMenuEnabled: false,
           }}
         />
+
+        <Stack.Screen
+          name={ROUTES.todoCreate.name}
+          options={{
+            title: ROUTES.todoCreate.label,
+            headerBackTitle: '',
+            headerBackButtonMenuEnabled: false,
+          }}
+        />
       </Stack>
     </>
   );

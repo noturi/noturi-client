@@ -38,7 +38,7 @@ export function TabsRouter() {
 
       <NativeTabs.Trigger name="todo">
         <Icon drawable="ic_menu_agenda" sf={{ default: 'checklist', selected: 'checklist' }} />
-        <Label>투두</Label>
+        <Label>Todo</Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="stats">
