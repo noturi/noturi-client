@@ -1,8 +1,8 @@
 import {
+  type PlatformVersion,
   getAppVersion,
   hasNewVersion,
   needsForceUpdate,
-  type PlatformVersion,
 } from '~/entities/app-version';
 import { Typography } from '~/shared/ui';
 
@@ -84,10 +84,7 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
             </Typography>
 
             <View className="gap-3">
-              <Pressable
-                className="items-center rounded-xl bg-primary py-4"
-                onPress={handleUpdate}
-              >
+              <Pressable className="items-center rounded-xl bg-primary py-4" onPress={handleUpdate}>
                 <Typography className="font-sans-semibold !text-primary-text" variant="subheadline">
                   업데이트
                 </Typography>
