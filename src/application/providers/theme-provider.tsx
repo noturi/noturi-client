@@ -20,7 +20,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { Appearance, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
@@ -72,6 +72,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSettings?.theme]);
+
+  // 앱 테마에 맞게 시스템 appearance 동기화 (NativeTabs 색상 문제 해결)
+  useEffect(() => {
+    Appearance.setColorScheme(isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   const setTheme = useCallback(
     async (newThemeId: string) => {
