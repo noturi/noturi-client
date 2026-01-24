@@ -36,6 +36,11 @@ export function TabsRouter() {
         <Label>홈</Label>
       </NativeTabs.Trigger>
 
+      <NativeTabs.Trigger name="todo">
+        <Icon drawable="ic_menu_agenda" sf={{ default: 'checklist', selected: 'checklist' }} />
+        <Label>투두</Label>
+      </NativeTabs.Trigger>
+
       <NativeTabs.Trigger name="stats">
         <Icon drawable="ic_menu_agenda" sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }} />
         <Label>통계</Label>
