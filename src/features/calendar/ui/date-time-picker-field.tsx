@@ -107,7 +107,6 @@ export function DateTimePickerField({
             <Calendar
               key={hexColors.bgPrimary}
               current={dateTime.toISOString().split('T')[0]}
-              monthFormat="yyyy년 MM월"
               markedDates={{
                 [dateTime.toISOString().split('T')[0]]: {
                   selected: true,
@@ -116,6 +115,7 @@ export function DateTimePickerField({
                 },
               }}
               minDate={minDate}
+              monthFormat="yyyy년 MM월"
               theme={calendarTheme}
               onDayPress={handleDayPress}
             />
