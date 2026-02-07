@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from '~/shared/lib';
 
-import { queryOptions } from '@tanstack/react-query';
+import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 import { TodoListParamsDto, TodoMonthlyStatsParamsDto } from '../model/types';
 import { todoApi } from './apis';
@@ -18,6 +18,7 @@ export const todosByDateQuery = (date: string) =>
     queryKey: QUERY_KEYS.todosByDate(date),
     queryFn: () => todoApi.getTodos({ date }),
     enabled: !!date,
+    placeholderData: keepPreviousData,
   });
 
 // 월간 통계 쿼리

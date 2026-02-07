@@ -1,13 +1,12 @@
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { Calendar } from 'lucide-react-native';
+import { addDays } from 'date-fns';
 import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString } from '~/entities/todo/lib/date-utils';
 import { Skeleton, Typography } from '~/shared/ui';
 
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { TodoItem } from './todo-item';
 
@@ -17,12 +16,22 @@ interface TodoListProps {
 
 export function TodoList({ selectedDate }: TodoListProps) {
   const dateString = formatDateString(selectedDate);
-  const { data, isPending } = useQuery(todosByDateQuery(dateString));
+  const queryClient = useQueryClient();
+  const { data, isPending, isPlaceholderData } = useQuery(todosByDateQuery(dateString));
+
+  // 인접 날짜 prefetch (전후 1일)
+  useEffect(() => {
+    const prev = formatDateString(addDays(selectedDate, -1));
+    const next = formatDateString(addDays(selectedDate, 1));
+    queryClient.prefetchQuery(todosByDateQuery(prev));
+    queryClient.prefetchQuery(todosByDateQuery(next));
+  }, [selectedDate, queryClient]);
 
   const todos = data?.data ?? [];
   const completedCount = todos.filter((t) => t.isCompleted).length;
 
-  if (isPending) {
+  // 최초 로딩만 스켈레톤 (placeholderData가 있으면 스켈레톤 안 보임)
+  if (isPending && !isPlaceholderData) {
     return (
       <View className="gap-2">
         <Skeleton height={56} />
@@ -33,23 +42,15 @@ export function TodoList({ selectedDate }: TodoListProps) {
   }
 
   return (
-    <View className="gap-3">
-      {/* 헤더 */}
-      <View className="flex-row items-center justify-between px-1">
-        <View className="flex-row items-center gap-2">
-          <Calendar className="text-text-secondary" size={16} />
-          <Typography className="text-text-secondary" variant="footnote">
-            {format(selectedDate, 'M월 d일 EEEE', { locale: ko })}
-          </Typography>
-        </View>
-        {todos.length > 0 && (
+    <View className="gap-3" style={{ opacity: isPlaceholderData ? 0.6 : 1 }}>
+      {todos.length > 0 && (
+        <View className="flex-row items-center justify-end px-1">
           <Typography className="text-text-secondary" variant="footnote">
             {completedCount}/{todos.length} 완료
           </Typography>
-        )}
-      </View>
+        </View>
+      )}
 
-      {/* 목록 */}
       {todos.length === 0 ? (
         <View className="items-center justify-center rounded-4 bg-surface py-12">
           <Typography className="text-text-muted" variant="body">
