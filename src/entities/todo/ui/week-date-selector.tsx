@@ -97,10 +97,10 @@ export function WeekDateSelector({
             {getDayLabel(dayOfWeek)}
           </Typography>
 
-          <View className="my-2">
-            <CircularProgress progress={progress} size={40} strokeWidth={3}>
+          <View className="my-1">
+            <CircularProgress progress={progress} size={36} strokeWidth={3}>
               <View
-                className={`h-8 w-8 items-center justify-center rounded-full ${
+                className={`h-7 w-7 items-center justify-center rounded-full ${
                   isSelected ? 'bg-primary' : isTodayDate ? 'bg-accent/20' : ''
                 }`}
               >
@@ -114,12 +114,6 @@ export function WeekDateSelector({
               </View>
             </CircularProgress>
           </View>
-
-          {progress > 0 && (
-            <Typography className="text-text-secondary" variant="caption2">
-              {Math.round(progress)}%
-            </Typography>
-          )}
         </Pressable>
       );
     },

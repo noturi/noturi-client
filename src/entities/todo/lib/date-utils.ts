@@ -50,3 +50,10 @@ export function getNextWeek(date: Date): Date {
 export function formatYearMonth(date: Date): string {
   return format(date, 'yyyy년 M월', { locale: ko });
 }
+
+/**
+ * 월일 요일 포맷 (예: 1월 25일 토요일)
+ */
+export function formatDateWithDay(date: Date): string {
+  return format(date, 'M월 d일 EEEE', { locale: ko });
+}
