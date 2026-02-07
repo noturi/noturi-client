@@ -1,15 +1,16 @@
+import { format } from 'date-fns';
 import { todoMonthlyStatsQuery } from '~/entities/todo';
 import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
 import { QuickTodoInput, TodoList } from '~/features/todo';
 import { CircularProgress, FloatingButton, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
 
-import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { router } from 'expo-router';
+
+import { useQuery } from '@tanstack/react-query';
 
 export function TodoPage() {
   const [selectedDate, setSelectedDate] = useState(() => new Date());
