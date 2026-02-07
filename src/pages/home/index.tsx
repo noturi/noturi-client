@@ -92,7 +92,7 @@ function MemoListContent({ category, year, onCategoryChange, onPressYear }: Memo
 
 export function HomePage() {
   const [view, setView] = useState<MemoViewType>('rating');
-  const [year, setYear] = useState<number | undefined>(new Date().getFullYear());
+  const [year, setYear] = useState<number | undefined>(undefined);
   const [category, setCategory] = useState('전체');
   const [showYearSheet, setShowYearSheet] = useState(false);
   const calendarRef = useRef<CalendarViewRef>(null);
