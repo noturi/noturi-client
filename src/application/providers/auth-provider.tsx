@@ -1,6 +1,5 @@
 import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User } from '~/entities/user';
-import { refreshAccessToken as doRefreshToken } from '~/shared/api/auth';
 import { queryClient } from '~/shared/api/query-client';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
@@ -42,17 +41,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const refreshAccessToken = useCallback(async (): Promise<boolean> => {
-    const success = await doRefreshToken();
-
-    if (success) {
-      authStore.setAuthenticated(true);
-    }
-    // 실패 시 tokenEventManager.emitTokenExpired()가 로그아웃 처리함
-
-    return success;
-  }, []);
-
   useEffect(() => {
     const handleTokenExpired = async () => {
       if (isLoggingOutRef.current) return;
@@ -60,19 +48,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await logout();
     };
 
-    return tokenEventManager.onTokenExpired(handleTokenExpired);
+    const handleTokenRefreshed = async () => {
+      await authStore.syncFromCache();
+    };
+
+    const unsubExpired = tokenEventManager.onTokenExpired(handleTokenExpired);
+    const unsubRefreshed = tokenEventManager.onTokenRefreshed(handleTokenRefreshed);
+
+    return () => {
+      unsubExpired();
+      unsubRefreshed();
+    };
   }, [logout]);
 
   const value: AuthContextType = {
-    getUser: authStore.getUser,
-    getAccessToken: authStore.getAccessToken,
-    getRefreshToken: authStore.getRefreshToken,
     isAuthenticated: authState.isAuthenticated,
     isInitialLoading: authState.isInitialLoading,
     error: authState.error,
     saveAuthTokens,
     logout,
-    refreshAccessToken,
     clearError: authStore.clearError,
   };
 

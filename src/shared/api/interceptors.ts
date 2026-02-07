@@ -1,4 +1,4 @@
-import { HTTPError } from 'ky';
+import ky, { HTTPError } from 'ky';
 import { authTokenCache } from '~/shared/lib/cache';
 
 import { refreshAccessToken } from './auth';
@@ -19,6 +19,8 @@ export async function retryInterceptor({ request, error }: { request: Request; e
       if (accessToken) {
         request.headers.set('Authorization', `Bearer ${accessToken}`);
       }
+    } else {
+      return ky.stop;
     }
   }
 }

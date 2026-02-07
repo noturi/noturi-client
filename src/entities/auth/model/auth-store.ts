@@ -80,15 +80,19 @@ class AuthStore {
     }
   };
 
-  getUser = (): User | null => this.state.user;
-  getAccessToken = (): string | null => this.state.accessToken;
-  getRefreshToken = (): string | null => this.state.refreshToken;
-  getState = () => this.state;
+  syncFromCache = async () => {
+    const tokens = await authTokenCache.getAuthTokens();
+    const user = parseUser(tokens.user);
+    this.setState({
+      isAuthenticated: !!(tokens.accessToken && tokens.user),
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user,
+    });
+  };
 
-  setLoading = (isInitialLoading: boolean) => this.setState({ isInitialLoading });
   setError = (error: string | null) => this.setState({ error });
   clearError = () => this.setState({ error: null });
-  setAuthenticated = (isAuthenticated: boolean) => this.setState({ isAuthenticated });
 }
 
 export const authStore = new AuthStore();
