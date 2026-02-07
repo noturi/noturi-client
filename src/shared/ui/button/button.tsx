@@ -37,7 +37,7 @@ const ButtonRoot = forwardRef<View, ButtonRootProps>((props, ref) => {
     isDisabled = false,
     isLoading = false,
     fullWidth = false,
-    pressableFeedbackVariant = 'highlight',
+    pressableFeedbackVariant = 'ripple',
     className,
     style,
     accessibilityRole = 'button',

@@ -98,6 +98,4 @@ export interface HighlightAnimationResult {
 export interface RippleAnimationResult {
   rippleStyle: AnimatedStyle<ViewStyle>;
   backgroundColor: string;
-  onTouchStart: (e: GestureResponderEvent) => void;
-  onTouchEnd: () => void;
 }
