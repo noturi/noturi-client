@@ -1,5 +1,4 @@
-import { CreateTodoDto, Todo } from '~/entities/todo/model/types';
-import { QUERY_KEYS } from '~/shared/lib';
+import { CreateTodoDto, Todo, UpdateTodoDto } from '~/entities/todo/model/types';
 
 import {
   type DefaultError,
@@ -8,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import { invalidateTodoCache } from '../lib/invalidate-todo-cache';
 import { todoMutationApi } from './apis';
 
 /**
@@ -33,21 +33,55 @@ export function useCreateTodoMutation(
     mutationFn: (data: CreateTodoDto) => todoMutationApi.createTodo(data),
     onMutate,
     onSuccess: async (newTodo, createData, context) => {
-      // 관련 캐시 무효화
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['todos'],
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.todosWeeklyStats,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.todosOverviewStats,
-        }),
-      ]);
-
+      await invalidateTodoCache(queryClient);
       await onSuccess?.(newTodo, createData, context);
+    },
+    onError,
+    onSettled,
+  });
+}
+
+// 투두 수정 뮤테이션
+export function useUpdateTodoMutation(
+  options: Pick<
+    UseMutationOptions<Todo, DefaultError, { id: string; data: UpdateTodoDto }>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['todo', 'update', ...mutationKey],
+    mutationFn: ({ id, data }: { id: string; data: UpdateTodoDto }) =>
+      todoMutationApi.updateTodo(id, data),
+    onMutate,
+    onSuccess: async (updatedTodo, variables, context) => {
+      await invalidateTodoCache(queryClient);
+      await onSuccess?.(updatedTodo, variables, context);
+    },
+    onError,
+    onSettled,
+  });
+}
+
+// 투두 삭제 뮤테이션
+export function useDeleteTodoMutation(
+  options: Pick<
+    UseMutationOptions<void, DefaultError, string>,
+    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
+  > = {},
+) {
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['todo', 'delete', ...mutationKey],
+    mutationFn: (id: string) => todoMutationApi.deleteTodo(id),
+    onMutate,
+    onSuccess: async (result, id, context) => {
+      await invalidateTodoCache(queryClient);
+      await onSuccess?.(result, id, context);
     },
     onError,
     onSettled,
@@ -69,26 +103,10 @@ export function useToggleTodoMutation(
     mutationFn: (id: string) => todoMutationApi.toggleTodo(id),
     onMutate,
     onSuccess: async (updatedTodo, id, context) => {
-      // 관련 캐시 무효화
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['todos'],
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.todosWeeklyStats,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.todosOverviewStats,
-        }),
-      ]);
-
+      await invalidateTodoCache(queryClient);
       await onSuccess?.(updatedTodo, id, context);
     },
-    onError: (error, id, context) => {
-      console.error('Todo toggle error:', error);
-      onError?.(error, id, context);
-    },
+    onError,
     onSettled,
   });
 }

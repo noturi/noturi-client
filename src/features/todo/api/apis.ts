@@ -1,5 +1,5 @@
 import { KyInstance } from 'ky';
-import { CreateTodoDto, Todo } from '~/entities/todo/model/types';
+import { CreateTodoDto, Todo, UpdateTodoDto } from '~/entities/todo/model/types';
 import { api } from '~/shared/api';
 
 /**
@@ -22,6 +22,19 @@ export class TodoMutationApi {
       json: data,
     });
     return response.json<Todo>();
+  }
+
+  // 투두 수정
+  async updateTodo(id: string, data: UpdateTodoDto): Promise<Todo> {
+    const response = await this.api.patch(`todos/${id}`, {
+      json: data,
+    });
+    return response.json<Todo>();
+  }
+
+  // 투두 삭제
+  async deleteTodo(id: string): Promise<void> {
+    await this.api.delete(`todos/${id}`);
   }
 
   // 투두 완료 토글

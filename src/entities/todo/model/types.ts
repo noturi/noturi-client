@@ -97,6 +97,13 @@ export interface TodoTemplateListResponseDto {
   total: number;
 }
 
+// 투두 수정 DTO
+export interface UpdateTodoDto {
+  title?: string;
+  description?: string;
+  date?: string;
+}
+
 // 투두 생성 DTO
 export type CreateRecurrenceType = 'NONE' | RecurrenceType;
 
