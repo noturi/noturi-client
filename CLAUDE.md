@@ -30,12 +30,22 @@ project/
     │   └── providers/            # 전역 Provider들 (Tamagui, React Query, Auth)
     ├── entities/                 # 도메인 엔티티 (읽기 전용)
     │   ├── memo/
+    │   ├── todo/
+    │   ├── calendar/
+    │   ├── category/
+    │   ├── statistics/
     │   ├── user/
-    │   └── calendar/
+    │   └── app-version/
     ├── features/                 # 기능별 모듈들 (CUD 작업)
     │   ├── auth/
     │   ├── memo/
-    │   └── calendar/
+    │   ├── todo/
+    │   ├── calendar/
+    │   ├── categories/
+    │   ├── search/
+    │   ├── statistics/
+    │   ├── notification/
+    │   └── user/
     ├── widgets/                  # 복합 UI 컴포넌트들
     ├── pages/                    # 완전한 페이지 컴포넌트 (features/widgets 조합)
     └── shared/                   # 공통 모듈들
@@ -162,8 +172,10 @@ import { useAuth } from '../../features/auth';
 ## 용어
 
 - **Memo**: 메모 엔티티 (기록)
+- **Todo**: 할 일 엔티티 (작업 목록)
 - **Calendar**: 캘린더 엔티티 (일정)
 - **Category**: 카테고리 엔티티 (분류)
+- **Statistics**: 통계 엔티티 (데이터 분석)
 - **Entity**: FSD의 entities 레이어 (읽기 전용)
 - **Feature**: FSD의 features 레이어 (CUD 작업)
 - **Widget**: FSD의 widgets 레이어 (복합 UI)
