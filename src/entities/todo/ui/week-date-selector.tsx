@@ -1,5 +1,7 @@
 import { addDays, format, getDay, isSameDay, isToday } from 'date-fns';
-import { CircularProgress, Typography } from '~/shared/ui';
+import { useUserTheme } from '~/application/providers/theme-provider';
+import { createCalendarTheme } from '~/shared/config/calendar-theme';
+import { CircularProgress, ControlledSheet, Typography } from '~/shared/ui';
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -10,6 +12,7 @@ import {
   Pressable,
   View,
 } from 'react-native';
+import { Calendar, DateData } from 'react-native-calendars';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -92,18 +95,18 @@ const DateCell = memo(function DateCell({ date, isSelected, progress, onPress }:
       </Typography>
 
       <View className="my-1 items-center">
-        {isSelected ? (
-          <Animated.View
-            className="items-center justify-center rounded-full bg-primary"
-            style={[{ width: CIRCLE_SIZE, height: CIRCLE_SIZE }, animatedStyle]}
-          >
-            <Typography className="!text-primary-text" variant="callout" weight="semibold">
-              {date.getDate()}
-            </Typography>
-          </Animated.View>
-        ) : (
+        <Animated.View style={isSelected ? animatedStyle : undefined}>
           <CircularProgress progress={progress} size={CIRCLE_SIZE} strokeWidth={PROGRESS_STROKE}>
-            {isTodayDate ? (
+            {isSelected ? (
+              <View
+                className="items-center justify-center rounded-full bg-primary"
+                style={{ width: TODAY_INNER_SIZE, height: TODAY_INNER_SIZE }}
+              >
+                <Typography className="!text-primary-text" variant="callout" weight="semibold">
+                  {date.getDate()}
+                </Typography>
+              </View>
+            ) : isTodayDate ? (
               <View
                 className="items-center justify-center rounded-full bg-primary/15"
                 style={{ width: TODAY_INNER_SIZE, height: TODAY_INNER_SIZE }}
@@ -116,7 +119,7 @@ const DateCell = memo(function DateCell({ date, isSelected, progress, onPress }:
               <Typography variant="callout">{date.getDate()}</Typography>
             )}
           </CircularProgress>
-        )}
+        </Animated.View>
         <View
           style={{ width: TODAY_DOT_SIZE, height: TODAY_DOT_SIZE, marginTop: TODAY_DOT_MARGIN }}
         >
@@ -139,9 +142,22 @@ export function WeekDateSelector({
   onSelectDate,
   dailyStats = [],
 }: WeekDateSelectorProps) {
+  const { hexColors } = useUserTheme();
   const flatListRef = useRef<FlatList>(null);
   const isScrollingRef = useRef(false);
   const [visibleDate, setVisibleDate] = useState(selectedDate);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const calendarTheme = useMemo(
+    () => ({
+      ...createCalendarTheme(hexColors),
+      backgroundColor: hexColors.bgSecondary,
+      calendarBackground: hexColors.bgSecondary,
+    }),
+    [hexColors],
+  );
+
+  const selectedDateString = format(selectedDate, 'yyyy-MM-dd');
 
   const dates = useMemo(() => {
     const today = new Date();
@@ -218,14 +234,27 @@ export function WeekDateSelector({
     isScrollingRef.current = false;
   };
 
+  const handleHeaderPress = () => {
+    setIsCalendarOpen(true);
+  };
+
+  const handleCalendarDayPress = useCallback(
+    (day: DateData) => {
+      const [y, m, d] = day.dateString.split('-').map(Number);
+      onSelectDate(new Date(y, m - 1, d));
+      setIsCalendarOpen(false);
+    },
+    [onSelectDate],
+  );
+
   return (
-    <View className="gap-4">
+    <View className="gap-2">
       {/* 월 헤더 */}
-      <View className="items-center">
+      <Pressable className="items-center" onPress={handleHeaderPress}>
         <Typography variant="title3" weight="semibold">
           {formatYearMonth(visibleDate)}
         </Typography>
-      </View>
+      </Pressable>
 
       {/* 날짜 스크롤 */}
       <FlatList
@@ -250,6 +279,25 @@ export function WeekDateSelector({
         onScrollBeginDrag={handleScrollBegin}
         onScrollEndDrag={handleScrollEnd}
       />
+
+      {/* 캘린더 바텀시트 */}
+      <ControlledSheet
+        isOpen={isCalendarOpen}
+        snapPoints={['48%']}
+        onClose={() => setIsCalendarOpen(false)}
+      >
+        <View className="px-4 pb-4">
+          <Calendar
+            current={selectedDateString}
+            markedDates={{
+              [selectedDateString]: { selected: true },
+            }}
+            monthFormat="yyyy년 M월"
+            theme={calendarTheme}
+            onDayPress={handleCalendarDayPress}
+          />
+        </View>
+      </ControlledSheet>
     </View>
   );
 }
