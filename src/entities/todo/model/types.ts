@@ -24,6 +24,16 @@ export interface TodoListResponseDto {
   year: number;
   month: number;
   data: Todo[];
+  rate: number;
+}
+
+// 투두 토글 응답 (일별 통계 포함)
+export interface TodoToggleResponseDto extends Todo {
+  dailyStats: {
+    total: number;
+    completed: number;
+    rate: number;
+  };
 }
 
 // 일별 통계

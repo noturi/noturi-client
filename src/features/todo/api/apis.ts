@@ -1,5 +1,10 @@
 import { KyInstance } from 'ky';
-import { CreateTodoDto, Todo, UpdateTodoDto } from '~/entities/todo/model/types';
+import {
+  CreateTodoDto,
+  Todo,
+  TodoToggleResponseDto,
+  UpdateTodoDto,
+} from '~/entities/todo/model/types';
 import { api } from '~/shared/api';
 
 /**
@@ -38,9 +43,9 @@ export class TodoMutationApi {
   }
 
   // 투두 완료 토글
-  async toggleTodo(id: string): Promise<Todo> {
+  async toggleTodo(id: string): Promise<TodoToggleResponseDto> {
     const response = await this.api.patch(`todos/${id}/toggle`);
-    return response.json<Todo>();
+    return response.json<TodoToggleResponseDto>();
   }
 }
 

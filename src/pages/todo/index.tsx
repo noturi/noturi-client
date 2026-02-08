@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import { todoMonthlyStatsQuery } from '~/entities/todo';
+import { useUserTheme } from '~/application/providers/theme-provider';
+import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
 import { QuickTodoInput, TodoList } from '~/features/todo';
 import { CircularProgress, FloatingButton, Typography } from '~/shared/ui';
@@ -13,19 +13,13 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 export function TodoPage() {
+  const { hexColors } = useUserTheme();
   const [selectedDate, setSelectedDate] = useState(() => new Date());
 
-  const year = selectedDate.getFullYear();
-  const month = selectedDate.getMonth() + 1;
+  const dateString = formatDateString(selectedDate);
+  const { data: todosData } = useQuery(todosByDateQuery(dateString));
 
-  const { data: monthlyStats } = useQuery(todoMonthlyStatsQuery({ year, month }));
-
-  const selectedDateProgress = (() => {
-    if (!monthlyStats?.dailyStats) return 0;
-    const dateString = format(selectedDate, 'yyyy-MM-dd');
-    const stat = monthlyStats.dailyStats.find((s) => s.date === dateString);
-    return stat?.rate ?? 0;
-  })();
+  const selectedDateProgress = todosData?.rate ?? 0;
 
   const handleFloatingButtonPress = () => {
     router.push({
@@ -45,19 +39,25 @@ export function TodoPage() {
           <TodoWeeklyView selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
           {/* 선택된 날짜 및 진행률 */}
-          <View className="flex-row items-center justify-between rounded-3 bg-surface px-4 py-3">
+          <View className="flex-row items-center justify-between rounded-3 bg-primary px-4 py-3">
             <View>
-              <Typography variant="headline" weight="semibold">
+              <Typography className="!text-primary-text" variant="callout" weight="semibold">
                 {formatDateWithDay(selectedDate)}
               </Typography>
-              <Typography className="mt-0.5 text-text-secondary" variant="footnote">
+              <Typography className="mt-0.5 !text-primary-text/60" variant="caption1">
                 {selectedDateProgress > 0
                   ? `${Math.round(selectedDateProgress)}% 완료`
                   : '할 일을 추가해보세요'}
               </Typography>
             </View>
-            <CircularProgress progress={selectedDateProgress} size={48} strokeWidth={4}>
-              <Typography className="text-primary" variant="callout" weight="bold">
+            <CircularProgress
+              progress={selectedDateProgress}
+              progressColor={hexColors.primaryText}
+              size={48}
+              strokeWidth={4}
+              trackColor={`${hexColors.primaryText}30`}
+            >
+              <Typography className="!text-primary-text" variant="footnote" weight="bold">
                 {Math.round(selectedDateProgress)}%
               </Typography>
             </CircularProgress>
