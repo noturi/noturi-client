@@ -1,4 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { Pressable, View } from 'react-native';
 
@@ -14,6 +15,8 @@ const ACTION_WIDTH = 36;
  * SRP: 스와이프 시 표시되는 수정/삭제 버튼만 담당
  */
 export function TodoSwipeActions({ onEdit, onDelete }: TodoSwipeActionsProps) {
+  const { hexColors } = useUserTheme();
+
   return (
     <View className="flex-row items-stretch">
       <Pressable
@@ -21,14 +24,14 @@ export function TodoSwipeActions({ onEdit, onDelete }: TodoSwipeActionsProps) {
         style={{ width: ACTION_WIDTH }}
         onPress={onEdit}
       >
-        <Pencil color="#fff" size={16} />
+        <Pencil color={hexColors.accentText} size={16} />
       </Pressable>
       <Pressable
         className="items-center justify-center rounded-r-3 bg-danger"
         style={{ width: ACTION_WIDTH }}
         onPress={onDelete}
       >
-        <Trash2 color="#fff" size={16} />
+        <Trash2 color={hexColors.dangerText} size={16} />
       </Pressable>
     </View>
   );

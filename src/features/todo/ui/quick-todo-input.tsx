@@ -1,22 +1,23 @@
 import { Plus } from 'lucide-react-native';
+import { useUserTheme } from '~/application/providers/theme-provider';
 import { formatDateString } from '~/entities/todo/lib/date-utils';
-import { useToast } from '~/shared/lib';
 import { Button } from '~/shared/ui';
 
 import { useRef, useState } from 'react';
 import { TextInput, View } from 'react-native';
 
 import { useCreateTodoMutation } from '../api/mutations';
+import { TODO_INPUT_BASE_STYLE } from '../lib/todo-input-styles';
 
 interface QuickTodoInputProps {
   selectedDate: Date;
 }
 
 export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
+  const { hexColors } = useUserTheme();
   const [title, setTitle] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
-  const toast = useToast();
   const createTodoMutation = useCreateTodoMutation();
 
   const handleSubmit = () => {
@@ -33,10 +34,6 @@ export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
         onSuccess: () => {
           setTitle('');
           inputRef.current?.focus();
-        },
-        onError: (error) => {
-          console.error('Todo create error:', error);
-          toast.showError('투두 생성에 실패했습니다');
         },
       },
     );
@@ -56,13 +53,11 @@ export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
           ref={inputRef}
           editable={!createTodoMutation.isPending}
           placeholder="할 일 추가..."
-          placeholderTextColor="#9e9e9e"
+          placeholderTextColor={hexColors.textMuted}
           returnKeyType="done"
           style={{
-            fontSize: 14,
-            fontFamily: 'Pretendard-Regular',
-            padding: 0,
-            margin: 0,
+            ...TODO_INPUT_BASE_STYLE,
+            color: hexColors.textPrimary,
           }}
           value={title}
           onBlur={() => setIsFocused(false)}
@@ -78,7 +73,7 @@ export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
         size="sm"
         onPress={handleSubmit}
       >
-        <Plus color="#fff" size={16} />
+        <Plus color={hexColors.primaryText} size={16} />
       </Button>
     </View>
   );
