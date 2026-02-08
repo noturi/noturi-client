@@ -24,8 +24,6 @@ export function SettingsPage() {
 
   return (
     <View className="flex-1 gap-4 bg-bg-secondary px-4 pt-4">
-      <ThemeSettings />
-
       {isAuthenticated && (
         <Card>
           <Accordion
@@ -34,6 +32,8 @@ export function SettingsPage() {
             title="계정"
           >
             <View className="gap-2">
+              <View className="h-px bg-border" />
+              <ThemeSettings />
               <View className="h-px bg-border" />
               <Pressable
                 className="flex-row items-center gap-3 rounded-5 px-4 py-3 active:bg-bg-secondary"
