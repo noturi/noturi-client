@@ -3,20 +3,21 @@ import { QUERY_KEYS } from '~/shared/lib';
 import { QueryClient } from '@tanstack/react-query';
 
 /**
- * 투두 관련 캐시를 일괄 무효화합니다.
- * 모든 투두 mutation의 onSuccess에서 공통으로 사용됩니다.
+ * 투두 통계 캐시만 무효화 (weekly, overview)
  */
-export function invalidateTodoCache(queryClient: QueryClient) {
+export function invalidateTodoStats(queryClient: QueryClient) {
   return Promise.all([
-    queryClient.invalidateQueries({
-      queryKey: ['todos'],
-      exact: false,
-    }),
-    queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.todosWeeklyStats,
-    }),
-    queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.todosOverviewStats,
-    }),
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosWeeklyStats }),
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosOverviewStats }),
+  ]);
+}
+
+/**
+ * 특정 날짜의 투두 목록 + 통계 무효화
+ */
+export function invalidateTodoByDate(queryClient: QueryClient, date: string) {
+  return Promise.all([
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosByDate(date) }),
+    invalidateTodoStats(queryClient),
   ]);
 }
