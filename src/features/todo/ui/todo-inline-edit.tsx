@@ -4,6 +4,8 @@ import { useUserTheme } from '~/application/providers/theme-provider';
 import { useRef, useState } from 'react';
 import { Pressable, TextInput } from 'react-native';
 
+import { TODO_INPUT_BASE_STYLE } from '../lib/todo-input-styles';
+
 interface TodoInlineEditProps {
   initialTitle: string;
   onSubmit: (title: string) => void;
@@ -36,13 +38,8 @@ export function TodoInlineEdit({ initialTitle, onSubmit, onCancel }: TodoInlineE
         className="flex-1"
         returnKeyType="done"
         style={{
-          fontSize: 17,
-          fontFamily: 'Pretendard-Regular',
-          lineHeight: 22,
-          letterSpacing: -0.41,
+          ...TODO_INPUT_BASE_STYLE,
           color: hexColors.textPrimary,
-          padding: 0,
-          margin: 0,
           borderBottomWidth: 1,
           borderBottomColor: hexColors.accent,
           paddingBottom: 2,

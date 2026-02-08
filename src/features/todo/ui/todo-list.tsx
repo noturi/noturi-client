@@ -3,7 +3,7 @@ import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString } from '~/entities/todo/lib/date-utils';
 import { Skeleton, Typography } from '~/shared/ui';
 
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ interface TodoListProps {
   selectedDate: Date;
 }
 
-export function TodoList({ selectedDate }: TodoListProps) {
+export const TodoList = memo(function TodoList({ selectedDate }: TodoListProps) {
   const dateString = formatDateString(selectedDate);
   const queryClient = useQueryClient();
   const { data, isPending, isPlaceholderData } = useQuery(todosByDateQuery(dateString));
@@ -69,4 +69,4 @@ export function TodoList({ selectedDate }: TodoListProps) {
       )}
     </View>
   );
-}
+});

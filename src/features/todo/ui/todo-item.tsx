@@ -1,18 +1,11 @@
 import { Todo } from '~/entities/todo/model/types';
-import { useToast } from '~/shared/lib';
 import { Typography } from '~/shared/ui';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
-import {
-  useDeleteTodoMutation,
-  useToggleTodoMutation,
-  useUpdateTodoMutation,
-} from '../api/mutations';
-import { useCheckAnimation } from '../lib/use-check-animation';
+import { useTodoItemActions } from '../model/use-todo-item-actions';
 import { TodoCheckbox } from './todo-checkbox';
 import { TodoInlineEdit } from './todo-inline-edit';
 import { TodoSwipeActions } from './todo-swipe-actions';
@@ -22,77 +15,24 @@ interface TodoItemProps {
 }
 
 /**
- * 투두 아이템 - 각 하위 컴포넌트/훅을 조합하는 컨테이너
- * SRP: 하위 요소 간의 상호작용 조율만 담당
+ * 투두 아이템 - 순수 UI 조합만 담당
+ * 비즈니스 로직은 useTodoItemActions에 위임
  */
 export function TodoItem({ todo }: TodoItemProps) {
-  const toast = useToast();
-  const swipeableRef = useRef<Swipeable>(null);
-
-  const [optimisticCompleted, setOptimisticCompleted] = useState(todo.isCompleted);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const { animate, checkStyle, circleStyle, contentStyle } = useCheckAnimation(todo.isCompleted);
-
-  useEffect(() => {
-    setOptimisticCompleted(todo.isCompleted);
-  }, [todo.isCompleted]);
-
-  const toggleMutation = useToggleTodoMutation({
-    onError: () => {
-      setOptimisticCompleted(todo.isCompleted);
-      animate(todo.isCompleted);
-      toast.showError('상태 변경에 실패했습니다');
-    },
-  });
-
-  const deleteMutation = useDeleteTodoMutation({
-    onSuccess: () => toast.showSuccess('할 일이 삭제되었습니다'),
-    onError: () => toast.showError('삭제에 실패했습니다'),
-  });
-
-  const updateMutation = useUpdateTodoMutation({
-    onSuccess: () => setIsEditing(false),
-    onError: () => toast.showError('수정에 실패했습니다'),
-  });
-
-  const handleToggle = useCallback(() => {
-    if (isEditing) return;
-    const next = !optimisticCompleted;
-    setOptimisticCompleted(next);
-    animate(next);
-    toggleMutation.mutate(todo.id);
-  }, [isEditing, optimisticCompleted, animate, toggleMutation, todo.id]);
-
-  const handleDelete = useCallback(() => {
-    swipeableRef.current?.close();
-    Alert.alert('할 일 삭제', `"${todo.title}"을(를) 삭제하시겠습니까?`, [
-      { text: '취소', style: 'cancel' },
-      {
-        text: '삭제',
-        style: 'destructive',
-        onPress: () => deleteMutation.mutate(todo.id),
-      },
-    ]);
-  }, [todo.id, todo.title, deleteMutation]);
-
-  const handleEdit = useCallback(() => {
-    swipeableRef.current?.close();
-    setIsEditing(true);
-  }, []);
-
-  const handleEditSubmit = useCallback(
-    (title: string) => {
-      updateMutation.mutate({ id: todo.id, data: { title } });
-    },
-    [todo.id, updateMutation],
-  );
-
-  const handleEditCancel = useCallback(() => {
-    setIsEditing(false);
-  }, []);
-
-  const isPending = deleteMutation.isPending || updateMutation.isPending;
+  const {
+    swipeableRef,
+    optimisticCompleted,
+    isEditing,
+    isPending,
+    checkStyle,
+    circleStyle,
+    contentStyle,
+    handleToggle,
+    handleDelete,
+    handleEdit,
+    handleEditSubmit,
+    handleEditCancel,
+  } = useTodoItemActions(todo);
 
   return (
     <Swipeable
@@ -128,14 +68,14 @@ export function TodoItem({ todo }: TodoItemProps) {
                   className={
                     optimisticCompleted ? 'text-text-muted line-through' : 'text-text-primary'
                   }
-                  variant="body"
+                  variant="callout"
                 >
                   {todo.title}
                 </Typography>
                 {todo.description && (
                   <Typography
                     className={`mt-0.5 ${optimisticCompleted ? 'text-text-muted' : 'text-text-secondary'}`}
-                    variant="footnote"
+                    variant="caption1"
                   >
                     {todo.description}
                   </Typography>
