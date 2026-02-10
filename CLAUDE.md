@@ -66,10 +66,11 @@ project/
     │   ├── statistics/           # (api/, model/)
     │   ├── notification/         # (api/, ui/, model/)
     │   └── user/                 # (api/, ui/)
-    ├── widgets/                  # 복합 UI 컴포넌트들
+    ├── widgets/                  # 복합 UI 컴포넌트들 (API 호출 없음, props로 데이터 수신)
     │   ├── todo-weekly-view/
     │   ├── calendar-memo-list/
     │   ├── memo-list-with-year-filter/
+    │   ├── memo-rating-list/
     │   └── calendar-view/
     ├── pages/                    # 완전한 페이지 컴포넌트 (features/widgets 조합)
     │   ├── home/
@@ -89,10 +90,10 @@ project/
 ### FSD 레이어별 역할
 
 - **shared**: 도메인 무관한 공통 모듈 (UI 컴포넌트, 유틸리티)
-- **entities**: 도메인 데이터 표현 (읽기 전용, GET 작업만)
-- **features**: 비즈니스 로직과 사용자 워크플로우 (CUD 작업)
-- **widgets**: 여러 기능을 조합한 독립적인 UI 블록 (API 호출 가능)
-- **pages**: 개별 페이지의 레이아웃과 로직을 구성하며, 위젯과 기능, 엔터티를 통합함
+- **entities**: 도메인 데이터 표현 및 쿼리 정의 (읽기 전용, queryOptions 정의)
+- **features**: 비즈니스 로직과 사용자 워크플로우 (CUD 작업, useMutation 정의)
+- **widgets**: 여러 기능을 조합한 독립적인 UI 블록 (API 호출 없음, props로 데이터 수신)
+- **pages**: 쿼리 실행(data fetching) + 위젯/기능/엔터티를 조합하여 페이지 구성
 - **app**: Expo Router 라우팅 (pages에서 컴포넌트 import, 비즈니스 로직 금지)
 
 ### FSD 세그먼트 역할
@@ -242,7 +243,7 @@ export function useCreateMemoMutation(options = {}) {
 ### UI 컴포넌트 분류
 
 - **shared/ui**: 순수 원소 UI 컴포넌트 (Button, Input, Card) - API 호출 없음
-- **widgets**: 복합 UI 컴포넌트 (여러 요소 조합, API 호출 가능)
+- **widgets**: 복합 UI 컴포넌트 (여러 요소 조합, API 호출 없음 - props로 데이터 수신)
 - **entities/ui**: 도메인 데이터 읽기 전용 표시
 
 ### TypeScript 규칙
