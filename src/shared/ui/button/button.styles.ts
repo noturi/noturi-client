@@ -103,6 +103,8 @@ export function getVariantStyles(
     textSecondary: string;
     border: string;
     accent: string;
+    danger: string;
+    dangerText: string;
   },
 ): { container: ViewStyle; text: TextStyle; hoverColor: string } {
   switch (variant) {
@@ -154,24 +156,24 @@ export function getVariantStyles(
     case 'danger':
       return {
         container: {
-          backgroundColor: '#dc2626',
+          backgroundColor: colors.danger,
           borderWidth: 0,
         },
         text: {
-          color: '#ffffff',
+          color: colors.dangerText,
         },
-        hoverColor: '#b91c1c',
+        hoverColor: colors.danger + '20',
       };
     case 'danger-soft':
       return {
         container: {
-          backgroundColor: '#fef2f2',
+          backgroundColor: colors.danger + '15',
           borderWidth: 0,
         },
         text: {
-          color: '#dc2626',
+          color: colors.danger,
         },
-        hoverColor: '#fee2e2',
+        hoverColor: colors.danger + '25',
       };
     default:
       return {

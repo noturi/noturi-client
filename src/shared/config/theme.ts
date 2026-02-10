@@ -21,33 +21,16 @@ export interface ThemePreset {
     // 액센트 (포인트 색상)
     accent: string;
     accentText: string;
-    accentHover: string;
     accentSoft: string;
     accentSoftText: string;
     // 버튼
     primary: string;
     primaryText: string;
-    primaryHover: string;
     // 선택 상태 (보더, 텍스트)
     selection: string;
-    // 상태 색상 - Success
-    success: string;
-    successText: string;
-    successHover: string;
-    successSoft: string;
-    successSoftText: string;
-    // 상태 색상 - Warning
-    warning: string;
-    warningText: string;
-    warningHover: string;
-    warningSoft: string;
-    warningSoftText: string;
     // 상태 색상 - Danger
     danger: string;
     dangerText: string;
-    dangerHover: string;
-    dangerSoft: string;
-    dangerSoftText: string;
   };
 }
 
@@ -67,28 +50,13 @@ export const THEME_PRESETS: ThemePreset[] = [
       border: '224 224 224',
       accent: '255 193 7',
       accentText: '29 29 29',
-      accentHover: '255 179 0',
       accentSoft: '255 243 224',
       accentSoftText: '230 150 0',
       primary: '29 29 29',
       primaryText: '255 255 255',
-      primaryHover: '50 50 50',
       selection: '29 29 29',
-      success: '34 197 94',
-      successText: '255 255 255',
-      successHover: '22 163 74',
-      successSoft: '220 252 231',
-      successSoftText: '22 101 52',
-      warning: '245 158 11',
-      warningText: '255 255 255',
-      warningHover: '217 119 6',
-      warningSoft: '254 243 199',
-      warningSoftText: '146 64 14',
       danger: '239 68 68',
       dangerText: '255 255 255',
-      dangerHover: '220 38 38',
-      dangerSoft: '254 226 226',
-      dangerSoftText: '153 27 27',
     },
   },
   {
@@ -106,28 +74,13 @@ export const THEME_PRESETS: ThemePreset[] = [
       border: '64 64 64',
       accent: '255 193 7',
       accentText: '29 29 29',
-      accentHover: '255 213 79',
       accentSoft: '50 45 30',
       accentSoftText: '255 213 79',
       primary: '255 255 255',
       primaryText: '18 18 18',
-      primaryHover: '220 220 220',
       selection: '255 255 255',
-      success: '74 222 128',
-      successText: '18 18 18',
-      successHover: '34 197 94',
-      successSoft: '30 50 35',
-      successSoftText: '134 239 172',
-      warning: '251 191 36',
-      warningText: '18 18 18',
-      warningHover: '245 158 11',
-      warningSoft: '50 45 25',
-      warningSoftText: '253 224 71',
       danger: '248 113 113',
       dangerText: '18 18 18',
-      dangerHover: '239 68 68',
-      dangerSoft: '50 30 30',
-      dangerSoftText: '252 165 165',
     },
   },
   // {
@@ -332,28 +285,13 @@ export type HexColors = {
   border: string;
   accent: string;
   accentText: string;
-  accentHover: string;
   accentSoft: string;
   accentSoftText: string;
   primary: string;
   primaryText: string;
-  primaryHover: string;
   selection: string;
-  success: string;
-  successText: string;
-  successHover: string;
-  successSoft: string;
-  successSoftText: string;
-  warning: string;
-  warningText: string;
-  warningHover: string;
-  warningSoft: string;
-  warningSoftText: string;
   danger: string;
   dangerText: string;
-  dangerHover: string;
-  dangerSoft: string;
-  dangerSoftText: string;
 };
 
 function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
@@ -367,28 +305,13 @@ function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
     border: rgbToHex(colors.border),
     accent: rgbToHex(colors.accent),
     accentText: rgbToHex(colors.accentText),
-    accentHover: rgbToHex(colors.accentHover),
     accentSoft: rgbToHex(colors.accentSoft),
     accentSoftText: rgbToHex(colors.accentSoftText),
     primary: rgbToHex(colors.primary),
     primaryText: rgbToHex(colors.primaryText),
-    primaryHover: rgbToHex(colors.primaryHover),
     selection: rgbToHex(colors.selection),
-    success: rgbToHex(colors.success),
-    successText: rgbToHex(colors.successText),
-    successHover: rgbToHex(colors.successHover),
-    successSoft: rgbToHex(colors.successSoft),
-    successSoftText: rgbToHex(colors.successSoftText),
-    warning: rgbToHex(colors.warning),
-    warningText: rgbToHex(colors.warningText),
-    warningHover: rgbToHex(colors.warningHover),
-    warningSoft: rgbToHex(colors.warningSoft),
-    warningSoftText: rgbToHex(colors.warningSoftText),
     danger: rgbToHex(colors.danger),
     dangerText: rgbToHex(colors.dangerText),
-    dangerHover: rgbToHex(colors.dangerHover),
-    dangerSoft: rgbToHex(colors.dangerSoft),
-    dangerSoftText: rgbToHex(colors.dangerSoftText),
   };
 }
 
