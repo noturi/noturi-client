@@ -3,7 +3,7 @@ import type { RatingGroup } from '~/entities/memo/ui/rating-group-card';
 import { RatingGroupCard } from '~/entities/memo/ui/rating-group-card';
 import { Typography } from '~/shared/ui';
 
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 
 type MemoRatingGroupViewProps = {
@@ -29,21 +29,25 @@ const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
 };
 
 export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGroupViewProps) {
-  const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
   const ratingGroups = groupMemosByRating(memos);
 
-  useEffect(() => {
-    const groups = groupMemosByRating(memos);
-    const newExpandedGroups = groups.reduce(
-      (acc, group) => ({
-        ...acc,
-        [group.rating]: true,
-      }),
-      {} as Record<number, boolean>,
-    );
+  const initialExpanded = useMemo(
+    () =>
+      ratingGroups.reduce(
+        (acc, group) => ({ ...acc, [group.rating]: true }),
+        {} as Record<number, boolean>,
+      ),
+    [memos],
+  );
 
-    setExpandedGroups(newExpandedGroups);
-  }, [memos]);
+  const [expandedGroups, setExpandedGroups] = useState(initialExpanded);
+  const [prevMemos, setPrevMemos] = useState(memos);
+
+  // 메모가 바뀌면 모두 열림으로 리셋
+  if (prevMemos !== memos) {
+    setPrevMemos(memos);
+    setExpandedGroups(initialExpanded);
+  }
 
   const handleToggle = useCallback((rating: number) => {
     setExpandedGroups((prev) => ({
