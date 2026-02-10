@@ -1,5 +1,6 @@
 import { KyInstance } from 'ky';
 import {
+  TodoGrassStatsDto,
   TodoListParamsDto,
   TodoListResponseDto,
   TodoMonthlyStatsDto,
@@ -50,6 +51,12 @@ export class TodoApi {
   async getOverviewStats(): Promise<TodoOverviewStatsDto> {
     const response = await this.api.get('todos/stats/overview');
     return response.json<TodoOverviewStatsDto>();
+  }
+
+  // 잔디 차트 통계 조회
+  async getGrassStats(): Promise<TodoGrassStatsDto> {
+    const response = await this.api.get('todos/stats/grass');
+    return response.json<TodoGrassStatsDto>();
   }
 
   // 반복 템플릿 목록 조회

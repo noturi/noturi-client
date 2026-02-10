@@ -7,6 +7,7 @@ export interface Todo {
   isCompleted: boolean;
   completedAt?: string;
   templateId?: string;
+  carryOverCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -105,6 +106,24 @@ export interface TodoTemplate {
 export interface TodoTemplateListResponseDto {
   data: TodoTemplate[];
   total: number;
+}
+
+// 잔디 차트 일별 데이터
+export interface GrassDay {
+  date: string;
+  total: number;
+  completed: number;
+  rate: number;
+  level: number; // 0~4
+}
+
+// 잔디 차트 통계 응답
+export interface TodoGrassStatsDto {
+  startDate: string;
+  endDate: string;
+  totalDays: number;
+  activeDays: number;
+  data: GrassDay[];
 }
 
 // 투두 수정 DTO

@@ -1,11 +1,9 @@
 import {
   CreateTodoDto,
   Todo,
-  TodoListResponseDto,
   TodoToggleResponseDto,
   UpdateTodoDto,
 } from '~/entities/todo/model/types';
-import { QUERY_KEYS } from '~/shared/lib';
 
 import {
   type DefaultError,
@@ -21,7 +19,7 @@ import { todoMutationApi } from './apis';
  * Feature Layer - CUD 전용 React Query Mutations
  *
  * 캐시 전략:
- * - toggle: 수동 캐시 업데이트 (서버 응답의 dailyStats 활용) + 통계만 무효화
+ * - toggle: 활성 날짜 쿼리 무효화 (이월 투두 rate 동기화) + 통계 무효화
  * - create/delete: 해당 날짜 쿼리 + 통계 무효화
  * - update: 해당 날짜 쿼리 + 통계 무효화
  */
@@ -88,7 +86,7 @@ export function useDeleteTodoMutation(options: MutationCallbacks<void, string> =
   });
 }
 
-// 투두 완료 토글 (수동 캐시 업데이트 + 통계만 무효화)
+// 투두 완료 토글 (활성 날짜 쿼리 무효화로 이월 투두 rate 정확성 보장)
 export function useToggleTodoMutation(
   options: MutationCallbacks<TodoToggleResponseDto, string> = {},
 ) {
@@ -99,23 +97,11 @@ export function useToggleTodoMutation(
     mutationKey: ['todo', 'toggle'],
     mutationFn: (id: string) => todoMutationApi.toggleTodo(id),
     onSuccess: async (response, id, context) => {
-      const { dailyStats, ...updatedTodo } = response;
-      const dateStr = updatedTodo.date.split('T')[0];
-
-      // 서버 응답으로 즉시 캐시 업데이트 (refetch 불필요)
-      queryClient.setQueriesData<TodoListResponseDto>(
-        { queryKey: QUERY_KEYS.todosByDate(dateStr) },
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            rate: dailyStats.rate,
-            data: old.data.map((t) => (t.id === updatedTodo.id ? updatedTodo : t)),
-          };
-        },
-      );
-
-      // 통계만 무효화 (todo 목록은 이미 수동 업데이트됨)
+      // 활성화된 모든 todosByDate 쿼리 무효화 (이월 투두의 rate 동기화)
+      await queryClient.invalidateQueries({
+        queryKey: ['todos', 'date'],
+        exact: false,
+      });
       await invalidateTodoStats(queryClient);
       await onSuccess?.(response, id, context);
     },

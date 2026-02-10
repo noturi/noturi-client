@@ -12,13 +12,14 @@ import { TodoSwipeActions } from './todo-swipe-actions';
 
 interface TodoItemProps {
   todo: Todo;
+  readonly?: boolean;
 }
 
 /**
  * 투두 아이템 - 순수 UI 조합만 담당
  * 비즈니스 로직은 useTodoItemActions에 위임
  */
-export function TodoItem({ todo }: TodoItemProps) {
+export function TodoItem({ todo, readonly = false }: TodoItemProps) {
   const {
     swipeableRef,
     optimisticCompleted,
@@ -37,7 +38,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   return (
     <Swipeable
       ref={swipeableRef}
-      enabled={!isEditing}
+      enabled={!isEditing && !readonly}
       friction={2}
       overshootRight={false}
       renderRightActions={() => <TodoSwipeActions onDelete={handleDelete} onEdit={handleEdit} />}
@@ -46,8 +47,8 @@ export function TodoItem({ todo }: TodoItemProps) {
       <View>
         <Pressable
           className="flex-row items-center gap-3 rounded-3 bg-surface px-3 py-3"
-          disabled={isPending || isEditing}
-          style={{ opacity: isPending ? 0.6 : 1 }}
+          disabled={readonly || isPending || isEditing}
+          style={{ opacity: readonly ? 0.5 : isPending ? 0.6 : 1 }}
           onPress={handleToggle}
         >
           <TodoCheckbox
@@ -83,6 +84,13 @@ export function TodoItem({ todo }: TodoItemProps) {
               </>
             )}
           </Animated.View>
+          {!isEditing && todo.carryOverCount > 0 && (
+            <View className="rounded-full bg-text-muted/15 px-2 py-0.5">
+              <Typography className="text-text-secondary" variant="caption2">
+                이월
+              </Typography>
+            </View>
+          )}
           {!isEditing && todo.templateId && (
             <View className="rounded-full bg-accent/20 px-2 py-0.5">
               <Typography className="text-accent" variant="caption2">

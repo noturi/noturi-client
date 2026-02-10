@@ -9,6 +9,7 @@ export function invalidateTodoStats(queryClient: QueryClient) {
   return Promise.all([
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosWeeklyStats }),
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosOverviewStats }),
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.todosGrassStats }),
   ]);
 }
 

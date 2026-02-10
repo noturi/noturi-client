@@ -45,6 +45,7 @@ export const QUERY_KEYS = {
     ['todos', 'stats', 'monthly', params] as const,
   todosWeeklyStats: ['todos', 'stats', 'weekly'] as const,
   todosOverviewStats: ['todos', 'stats', 'overview'] as const,
+  todosGrassStats: ['todos', 'stats', 'grass'] as const,
   todosTemplates: ['todos', 'templates'] as const,
   todosTemplate: (id: string) => ['todos', 'template', id] as const,
 } as const;

@@ -42,6 +42,13 @@ export const todoOverviewStatsQuery = () =>
     queryFn: () => todoApi.getOverviewStats(),
   });
 
+// 잔디 차트 통계 쿼리
+export const todoGrassStatsQuery = () =>
+  queryOptions({
+    queryKey: QUERY_KEYS.todosGrassStats,
+    queryFn: () => todoApi.getGrassStats(),
+  });
+
 // 반복 템플릿 목록 쿼리
 export const todoTemplatesQuery = () =>
   queryOptions({
