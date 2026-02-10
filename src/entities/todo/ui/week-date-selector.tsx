@@ -108,10 +108,10 @@ const DateCell = memo(function DateCell({ date, isSelected, progress, onPress }:
               </View>
             ) : isTodayDate ? (
               <View
-                className="items-center justify-center rounded-full bg-primary/15"
+                className="items-center justify-center rounded-full bg-accent/20"
                 style={{ width: TODAY_INNER_SIZE, height: TODAY_INNER_SIZE }}
               >
-                <Typography variant="callout" weight="semibold">
+                <Typography className="!text-accent-text" variant="callout" weight="semibold">
                   {date.getDate()}
                 </Typography>
               </View>
@@ -120,16 +120,6 @@ const DateCell = memo(function DateCell({ date, isSelected, progress, onPress }:
             )}
           </CircularProgress>
         </Animated.View>
-        <View
-          style={{ width: TODAY_DOT_SIZE, height: TODAY_DOT_SIZE, marginTop: TODAY_DOT_MARGIN }}
-        >
-          {isTodayDate && !isSelected && (
-            <View
-              className="rounded-full bg-accent"
-              style={{ width: TODAY_DOT_SIZE, height: TODAY_DOT_SIZE }}
-            />
-          )}
-        </View>
       </View>
     </Pressable>
   );

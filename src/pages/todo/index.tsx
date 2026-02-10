@@ -1,3 +1,4 @@
+import { startOfDay } from 'date-fns';
 import { useUserTheme } from '~/application/providers/theme-provider';
 import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
@@ -5,18 +6,22 @@ import { QuickTodoInput, TodoList } from '~/features/todo';
 import { CircularProgress, FloatingButton, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 
 import { useQuery } from '@tanstack/react-query';
 
 export function TodoPage() {
   const { hexColors } = useUserTheme();
+  const insets = useSafeAreaInsets();
   const [selectedDate, setSelectedDate] = useState(() => new Date());
 
   const dateString = formatDateString(selectedDate);
+  const isPast = useMemo(() => startOfDay(selectedDate) < startOfDay(new Date()), [selectedDate]);
   const { data: todosData } = useQuery(todosByDateQuery(dateString));
 
   const selectedDateProgress = todosData?.rate ?? 0;
@@ -39,7 +44,19 @@ export function TodoPage() {
           <TodoWeeklyView selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
           {/* 선택된 날짜 및 진행률 */}
-          <View className="flex-row items-center justify-between rounded-3 bg-primary px-4 py-3">
+          <LinearGradient
+            colors={[hexColors.primary, hexColors.textSecondary]}
+            end={{ x: 1, y: 0 }}
+            start={{ x: 0, y: 0 }}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderRadius: 12,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+            }}
+          >
             <View>
               <Typography className="!text-primary-text" variant="callout" weight="semibold">
                 {formatDateWithDay(selectedDate)}
@@ -61,17 +78,18 @@ export function TodoPage() {
                 {Math.round(selectedDateProgress)}%
               </Typography>
             </CircularProgress>
-          </View>
+          </LinearGradient>
 
-          <QuickTodoInput selectedDate={selectedDate} />
+          {!isPast && <QuickTodoInput selectedDate={selectedDate} />}
           <TodoList selectedDate={selectedDate} />
         </View>
       </ScrollView>
 
-      <FloatingButton
-        className="absolute bottom-[120px] right-4"
-        onPress={handleFloatingButtonPress}
-      />
+      {!isPast && (
+        <View className="absolute right-6" style={{ bottom: insets.bottom + 49 + 20 }}>
+          <FloatingButton onPress={handleFloatingButtonPress} />
+        </View>
+      )}
     </View>
   );
 }
