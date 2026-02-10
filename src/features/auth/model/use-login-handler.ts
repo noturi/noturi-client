@@ -1,5 +1,6 @@
 import { useAuth } from '~/entities/auth';
 import type { LoginResponseDto } from '~/entities/user/model/types';
+import { notificationService } from '~/features/notification';
 import { HREFS } from '~/shared/config';
 
 import { useEffect } from 'react';
@@ -21,6 +22,9 @@ export function useLoginHandler() {
       refreshToken: loginResponse.tokens.refreshToken,
       user: loginResponse.user,
     });
+
+    // 로그인 후 푸시 토큰 갱신 (fire-and-forget)
+    notificationService.refreshDeviceTokenSilently().catch(() => {});
 
     // 신규 회원이면 약관 동의 페이지로, 기존 회원이면 홈으로
     if (loginResponse.isNewUser) {
