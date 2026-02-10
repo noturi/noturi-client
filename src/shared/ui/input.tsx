@@ -1,3 +1,5 @@
+import { useUserTheme } from '~/application/providers/theme-provider';
+
 import { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
@@ -18,6 +20,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
   { hasError = false, size = 'md', style, className, onFocus, onBlur, ...props },
   ref,
 ) {
+  const { hexColors } = useUserTheme();
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: any) => {
@@ -39,7 +42,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
       autoComplete="off"
       autoCorrect={false}
       className={`border bg-bg-primary ${borderClass} rounded-5 px-3 font-sans-medium text-text-primary ${className ?? ''}`}
-      placeholderTextColor="#9e9e9e"
+      placeholderTextColor={hexColors.textMuted}
       spellCheck={false}
       style={[sizeStyles[size], { textAlignVertical: 'center' }, style]}
       onBlur={handleBlur}

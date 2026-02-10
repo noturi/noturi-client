@@ -13,6 +13,7 @@ export * from './input';
 export * from './loading';
 export * from './memo-skeleton';
 export * from './rating-stars';
+export * from './segment-control';
 export * from './select';
 export * from './skeleton';
 export * from './star-rating';
