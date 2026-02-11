@@ -31,7 +31,7 @@ export class TodoMutationApi {
 
   // 투두 수정
   async updateTodo(id: string, data: UpdateTodoDto): Promise<Todo> {
-    const response = await this.api.patch(`todos/${id}`, {
+    const response = await this.api.put(`todos/${id}`, {
       json: data,
     });
     return response.json<Todo>();
