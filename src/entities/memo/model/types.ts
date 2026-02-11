@@ -30,12 +30,10 @@ export interface UpdateMemoDto extends Partial<CreateMemoDto> {
 // 메모 목록 응답 (백엔드 실제 응답 구조에 맞춤)
 export interface MemoListResponseDto {
   data: Memo[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 // 메모 목록 조회 파라미터
@@ -47,6 +45,8 @@ export interface MemoListParamsDto {
   categoryIds?: string[]; // 다중 카테고리 필터링 지원 (클라이언트용)
   year?: number; // 년도로 필터링
   rating?: number;
+  minRating?: number; // 최소 평점 (1.0~5.0)
+  maxRating?: number; // 최대 평점 (1.0~5.0)
   sortBy?: 'createdAt' | 'rating' | 'title';
   sortOrder?: 'asc' | 'desc';
 }
@@ -75,6 +75,17 @@ export interface MemoStatsDto {
   totalCategories: number;
   averageRating: number;
   recentMemosCount: number;
+}
+
+// 별점 그룹 데이터 (서버 페이지네이션 기반)
+export interface RatingGroupData {
+  rating: number;
+  memos: UIMemo[];
+  total: number;
+  isLoading: boolean;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  fetchNextPage: () => void;
 }
 
 // UI 메모 타입 정의

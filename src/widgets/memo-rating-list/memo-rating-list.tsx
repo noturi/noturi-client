@@ -1,6 +1,6 @@
 import type { UICategory } from '~/entities/category/model/types';
 import { CategoryFilterBar, MemoRatingGroupView } from '~/entities/memo';
-import type { UIMemo } from '~/entities/memo/model/types';
+import type { RatingGroupData } from '~/entities/memo/model/types';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
 import { ScrollView, View } from 'react-native';
@@ -8,7 +8,7 @@ import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 
 interface MemoRatingListProps {
-  memos: UIMemo[];
+  ratingGroups: RatingGroupData[];
   categories: UICategory[];
   selectedYear?: number;
   onCategoryChange: (category: string) => void;
@@ -16,7 +16,7 @@ interface MemoRatingListProps {
 }
 
 export function MemoRatingList({
-  memos,
+  ratingGroups,
   categories,
   selectedYear,
   onCategoryChange,
@@ -32,7 +32,7 @@ export function MemoRatingList({
         <CategoryFilterBar categories={categories} onPress={onCategoryChange} />
         <MemoRatingGroupView
           header={<MemoListHeader selectedYear={selectedYear} onPressYear={onPressYear} />}
-          memos={memos}
+          ratingGroups={ratingGroups}
           onMemoPress={(memo) => router.push(`/memo/${memo.id}`)}
         />
       </View>
