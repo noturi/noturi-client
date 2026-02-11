@@ -1,8 +1,8 @@
-import { X } from 'lucide-react-native';
+import { Check, X } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 
 import { useRef, useState } from 'react';
-import { Pressable, TextInput } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 
 import { TODO_INPUT_BASE_STYLE } from '../lib/todo-input-styles';
 
@@ -18,30 +18,33 @@ interface TodoInlineEditProps {
  */
 export function TodoInlineEdit({ initialTitle, onSubmit, onCancel }: TodoInlineEditProps) {
   const { hexColors } = useUserTheme();
-  const inputRef = useRef<TextInput>(null);
   const [editTitle, setEditTitle] = useState(initialTitle);
+  const isSubmittingRef = useRef(false);
 
   const handleSubmit = () => {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+
     const trimmed = editTitle.trim();
     if (!trimmed || trimmed === initialTitle) {
       onCancel();
-      return;
+    } else {
+      onSubmit(trimmed);
     }
-    onSubmit(trimmed);
   };
 
   return (
-    <>
+    <View className="flex-row items-center gap-1">
       <TextInput
-        ref={inputRef}
         autoFocus
         className="flex-1"
+        maxLength={100}
         returnKeyType="done"
         style={{
           ...TODO_INPUT_BASE_STYLE,
           color: hexColors.textPrimary,
           borderBottomWidth: 1,
-          borderBottomColor: hexColors.accent,
+          borderBottomColor: hexColors.primary,
           paddingBottom: 2,
         }}
         value={editTitle}
@@ -49,9 +52,12 @@ export function TodoInlineEdit({ initialTitle, onSubmit, onCancel }: TodoInlineE
         onChangeText={setEditTitle}
         onSubmitEditing={handleSubmit}
       />
+      <Pressable className="p-1" onPress={handleSubmit}>
+        <Check className="text-primary" size={18} />
+      </Pressable>
       <Pressable className="p-1" onPress={onCancel}>
         <X className="text-text-muted" size={18} />
       </Pressable>
-    </>
+    </View>
   );
 }

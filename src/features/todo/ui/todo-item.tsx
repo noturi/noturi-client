@@ -56,7 +56,10 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
             circleStyle={circleStyle}
             isCompleted={optimisticCompleted}
           />
-          <Animated.View className="flex-1" style={optimisticCompleted ? contentStyle : undefined}>
+          <Animated.View
+            className="flex-1"
+            style={contentStyle}
+          >
             {isEditing ? (
               <TodoInlineEdit
                 initialTitle={todo.title}
@@ -69,6 +72,7 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
                   className={
                     optimisticCompleted ? 'text-text-muted line-through' : 'text-text-primary'
                   }
+                  numberOfLines={1}
                   variant="callout"
                 >
                   {todo.title}
@@ -76,6 +80,7 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
                 {todo.description && (
                   <Typography
                     className={`mt-0.5 ${optimisticCompleted ? 'text-text-muted' : 'text-text-secondary'}`}
+                    numberOfLines={1}
                     variant="caption1"
                   >
                     {todo.description}
@@ -84,13 +89,6 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
               </>
             )}
           </Animated.View>
-          {!isEditing && todo.carryOverCount > 0 && (
-            <View className="rounded-full bg-text-muted/15 px-2 py-0.5">
-              <Typography className="text-text-secondary" variant="caption2">
-                이월
-              </Typography>
-            </View>
-          )}
           {!isEditing && todo.templateId && (
             <View className="rounded-full bg-accent/20 px-2 py-0.5">
               <Typography className="text-accent" variant="caption2">

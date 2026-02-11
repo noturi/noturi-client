@@ -52,6 +52,7 @@ export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
         <TextInput
           ref={inputRef}
           editable={!createTodoMutation.isPending}
+          maxLength={100}
           placeholder="할 일 추가..."
           placeholderTextColor={hexColors.textMuted}
           returnKeyType="done"

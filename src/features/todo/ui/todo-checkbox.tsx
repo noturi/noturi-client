@@ -21,10 +21,10 @@ export function TodoCheckbox({ isCompleted, circleStyle, checkStyle }: TodoCheck
       className={`items-center justify-center rounded-full border-2 ${
         isCompleted ? 'border-primary bg-primary' : 'border-border'
       }`}
-      style={[{ width: 24, height: 24 }, circleStyle]}
+      style={[{ width: 20, height: 20 }, circleStyle]}
     >
       <Animated.View style={checkStyle}>
-        {isCompleted && <Check color={hexColors.primaryText} size={14} strokeWidth={3} />}
+        {isCompleted && <Check color={hexColors.primaryText} size={12} strokeWidth={3} />}
       </Animated.View>
     </Animated.View>
   );
