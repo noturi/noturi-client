@@ -56,10 +56,7 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
             circleStyle={circleStyle}
             isCompleted={optimisticCompleted}
           />
-          <Animated.View
-            className="flex-1"
-            style={contentStyle}
-          >
+          <Animated.View className="flex-1" style={contentStyle}>
             {isEditing ? (
               <TodoInlineEdit
                 initialTitle={todo.title}

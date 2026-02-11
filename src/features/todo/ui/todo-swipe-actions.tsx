@@ -24,7 +24,7 @@ export function TodoSwipeActions({ onEdit, onDelete }: TodoSwipeActionsProps) {
         style={{ width: ACTION_WIDTH }}
         onPress={onEdit}
       >
-        <Pencil color={hexColors.dangerText} size={16} />
+        <Pencil color={hexColors.primaryText} size={16} />
       </Pressable>
       <Pressable
         className="items-center justify-center rounded-r-3 bg-danger"
