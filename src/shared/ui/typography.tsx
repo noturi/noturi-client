@@ -123,15 +123,13 @@ const variantColorClass: Record<TypographyVariant, string> = {
   number: 'text-accent',
 };
 
-export type FontWeight = 'regular' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+export type FontWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
 const fontFamilyMap: Record<FontWeight, string> = {
   regular: 'Pretendard-Regular',
   medium: 'Pretendard-Medium',
   semibold: 'Pretendard-SemiBold',
   bold: 'Pretendard-Bold',
-  extrabold: 'Pretendard-ExtraBold',
-  black: 'Pretendard-Black',
 };
 
 export interface TypographyProps extends TextProps {
