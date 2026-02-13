@@ -1,6 +1,7 @@
 import { Todo } from '~/entities/todo/model/types';
 import { Typography } from '~/shared/ui';
 
+import { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
@@ -35,20 +36,32 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
     handleEditCancel,
   } = useTodoItemActions(todo);
 
+  const [isSwiped, setIsSwiped] = useState(false);
+  const handleSwipeOpen = useCallback(() => setIsSwiped(true), []);
+  const handleSwipeClose = useCallback(() => setIsSwiped(false), []);
+
+  const isInteractionDisabled = readonly || isPending || isEditing || isSwiped;
+  const isSwipeEnabled = !isEditing && !readonly;
+  const itemOpacity = readonly ? 0.5 : isPending ? 0.6 : 1;
+  const titleClass = optimisticCompleted ? 'text-text-muted line-through' : 'text-text-primary';
+  const descriptionClass = `mt-0.5 ${optimisticCompleted ? 'text-text-muted' : 'text-text-secondary'}`;
+
   return (
     <Swipeable
       ref={swipeableRef}
-      enabled={!isEditing && !readonly}
+      enabled={isSwipeEnabled}
       friction={2}
       overshootRight={false}
       renderRightActions={() => <TodoSwipeActions onDelete={handleDelete} onEdit={handleEdit} />}
       rightThreshold={40}
+      onSwipeableClose={handleSwipeClose}
+      onSwipeableOpen={handleSwipeOpen}
     >
       <View>
         <Pressable
           className="flex-row items-center gap-3 rounded-3 bg-surface px-3 py-3"
-          disabled={readonly || isPending || isEditing}
-          style={{ opacity: readonly ? 0.5 : isPending ? 0.6 : 1 }}
+          disabled={isInteractionDisabled}
+          style={{ opacity: itemOpacity }}
           onPress={handleToggle}
         >
           <TodoCheckbox
@@ -65,21 +78,11 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
               />
             ) : (
               <>
-                <Typography
-                  className={
-                    optimisticCompleted ? 'text-text-muted line-through' : 'text-text-primary'
-                  }
-                  numberOfLines={1}
-                  variant="callout"
-                >
+                <Typography className={titleClass} numberOfLines={1} variant="callout">
                   {todo.title}
                 </Typography>
                 {todo.description && (
-                  <Typography
-                    className={`mt-0.5 ${optimisticCompleted ? 'text-text-muted' : 'text-text-secondary'}`}
-                    numberOfLines={1}
-                    variant="caption1"
-                  >
+                  <Typography className={descriptionClass} numberOfLines={1} variant="caption1">
                     {todo.description}
                   </Typography>
                 )}
