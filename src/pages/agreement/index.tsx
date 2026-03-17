@@ -33,10 +33,10 @@ export function AgreementPage() {
 
         <Pressable className="flex-row items-center gap-3" onPress={() => setAgreed(!agreed)}>
           <Checkbox checked={agreed} onCheckedChange={setAgreed} />
-          <Pressable className="flex-row items-center gap-1" onPress={handleTermsPress}>
-            <Typography className="text-blue-500" variant="body">
-              이용약관 및 개인정보처리방침
-            </Typography>
+          <Typography className="text-blue-500" variant="body">
+            이용약관 및 개인정보처리방침
+          </Typography>
+          <Pressable className="flex-row items-center" onPress={handleTermsPress}>
             <ExternalLink color="#3b82f6" size={14} />
           </Pressable>
           <Typography className="text-text-secondary" variant="body">

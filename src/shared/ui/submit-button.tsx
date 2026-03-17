@@ -39,12 +39,12 @@ export const SubmitButton = ({
       {isLoading ? (
         <View className="flex-row items-center gap-2">
           <ActivityIndicator color="white" size="small" />
-          <Typography className="text-bg-primary" variant="body">
+          <Typography className="!text-bg-primary" variant="body">
             {loadingText}
           </Typography>
         </View>
       ) : (
-        <Typography className="text-bg-primary font-sans-semibold" variant="body">
+        <Typography className="!text-bg-primary font-sans-semibold" variant="body">
           {children}
         </Typography>
       )}
