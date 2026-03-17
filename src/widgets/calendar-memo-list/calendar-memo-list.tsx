@@ -128,11 +128,11 @@ export function CalendarMemoList({ startDate, endDate, memos, isError }: Calenda
     setEditMemo(null);
   };
 
+  const groupedMemos = useMemo(() => groupMemosByDate(memos), [memos]);
+
   if (!startDate) return null;
 
   if (isError) return <ErrorState />;
-
-  const groupedMemos = useMemo(() => groupMemosByDate(memos), [memos]);
 
   if (memos.length === 0) {
     const message =
