@@ -28,11 +28,11 @@ async function doRefresh(): Promise<boolean> {
         json: { refreshToken: tokens.refreshToken },
         timeout: 5000,
       })
-      .json<{ accessToken: string; refreshToken?: string }>();
+      .json<{ tokens: { accessToken: string; refreshToken: string } }>();
 
     const newTokens = {
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken || tokens.refreshToken,
+      accessToken: response.tokens.accessToken,
+      refreshToken: response.tokens.refreshToken || tokens.refreshToken,
       user: tokens.user || '',
     };
 
