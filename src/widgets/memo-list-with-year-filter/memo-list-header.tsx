@@ -67,7 +67,7 @@ export function YearSelectSheet({
   );
 
   return (
-    <ControlledSheet isOpen={isOpen} scrollable snapPoints={['40%']} onClose={onClose}>
+    <ControlledSheet scrollable isOpen={isOpen} snapPoints={['40%']} onClose={onClose}>
       <View className="gap-2 p-4 pb-8">
         <Typography className="pb-2 text-center" variant="headline">
           년도 선택

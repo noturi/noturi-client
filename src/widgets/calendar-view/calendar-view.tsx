@@ -5,7 +5,7 @@ import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/mo
 import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
 import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
-import { Card, Typography } from '~/shared/ui';
+import { Card } from '~/shared/ui';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';

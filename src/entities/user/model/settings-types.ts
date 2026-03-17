@@ -1,5 +1,6 @@
 // 테마 ID 타입
-export type ThemeId = 'light' | 'dark' | 'sepia' | 'navy' | 'forest' | 'lavender';
+export type ThemeId = 'light' | 'dark';
+// export type ThemeId = 'light' | 'dark' | 'sepia' | 'navy' | 'forest' | 'lavender';
 
 // 언어 타입
 export type Language = 'ko' | 'en';

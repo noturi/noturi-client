@@ -33,6 +33,10 @@ export class MemoApi {
     if (params.categoryId) searchParams.append('categoryId', params.categoryId);
     if (params.year) searchParams.append('year', params.year.toString());
     if (params.rating !== undefined) searchParams.append('rating', params.rating.toString());
+    if (params.minRating !== undefined)
+      searchParams.append('minRating', params.minRating.toString());
+    if (params.maxRating !== undefined)
+      searchParams.append('maxRating', params.maxRating.toString());
     if (params.sortBy) searchParams.append('sortBy', params.sortBy);
     if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
 

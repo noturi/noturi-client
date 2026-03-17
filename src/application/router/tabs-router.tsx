@@ -32,8 +32,16 @@ export function TabsRouter() {
       tintColor={hexColors.primary}
     >
       <NativeTabs.Trigger name="index">
-        <Icon drawable="ic_menu_home" sf={{ default: 'house', selected: 'house.fill' }} />
-        <Label>홈</Label>
+        <Icon drawable="ic_menu_home" sf={{ default: 'star', selected: 'star.fill' }} />
+        <Label>별점 메모</Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="todo">
+        <Icon
+          drawable="ic_menu_agenda"
+          sf={{ default: 'checkmark.circle', selected: 'checkmark.circle.fill' }}
+        />
+        <Label>할일 메모</Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="stats">

@@ -1,9 +1,6 @@
 import { User } from '~/entities/user';
 
 export interface AuthContextType {
-  getUser: () => User | null;
-  getAccessToken: () => string | null;
-  getRefreshToken: () => string | null;
   isAuthenticated: boolean;
   isInitialLoading: boolean;
   error: string | null;
@@ -13,7 +10,6 @@ export interface AuthContextType {
     user: User;
   }) => Promise<void>;
   logout: () => Promise<void>;
-  refreshAccessToken: () => Promise<boolean>;
   clearError: () => void;
 }
 

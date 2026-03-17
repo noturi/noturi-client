@@ -160,10 +160,8 @@ export function usePressableFeedbackRippleAnimation(
   },
 ): RippleAnimationResult {
   const { animation, isDark = false } = options ?? {};
-  const { containerWidth, containerHeight, pressedCenterX, pressedCenterY } = context;
+  const { isPressed, containerWidth, containerHeight, pressedCenterX, pressedCenterY } = context;
 
-  // Local isPressed for ripple (separate from root for proper timing)
-  const isPressed = useSharedValue(false);
   const rippleProgress = useSharedValue(0);
 
   // Extract config values with defaults
@@ -186,43 +184,28 @@ export function usePressableFeedbackRippleAnimation(
     return currentDiagonal > 0 ? currentDiagonal / baseDiagonal : 1;
   });
 
-  const getAdjustedDuration = useCallback(() => {
-    'worklet';
-    return Math.min(
-      Math.max(baseDuration * durationCoefficient.get(), minBaseDuration),
-      baseDuration * 2,
-    );
-  }, [baseDuration, minBaseDuration, durationCoefficient]);
-
-  // Start ripple animation when pressed
+  // React to context isPressed changes from Root's onPressIn/onPressOut
   useAnimatedReaction(
     () => isPressed.get(),
-    (isPressedValue) => {
-      if (isPressedValue && rippleProgress.get() === 0) {
+    (isPressedValue, prev) => {
+      if (isPressedValue && !prev) {
+        // Press started - reset and expand
+        rippleProgress.set(0);
         const adjustedDuration = Math.min(
           Math.max(baseDuration * durationCoefficient.get(), minBaseDuration),
           baseDuration * 2,
         );
         rippleProgress.set(withTiming(1, { duration: adjustedDuration }));
+      } else if (!isPressedValue && prev) {
+        // Press ended - fade out
+        const adjustedDuration = Math.min(
+          Math.max(baseDuration * durationCoefficient.get(), minBaseDuration),
+          baseDuration * 2,
+        );
+        rippleProgress.set(withTiming(2, { duration: adjustedDuration }));
       }
     },
   );
-
-  const onTouchStart = useCallback(
-    (e: GestureResponderEvent) => {
-      isPressed.set(true);
-      pressedCenterX.set(e.nativeEvent.locationX);
-      pressedCenterY.set(e.nativeEvent.locationY);
-      rippleProgress.set(0);
-    },
-    [isPressed, pressedCenterX, pressedCenterY, rippleProgress],
-  );
-
-  const onTouchEnd = useCallback(() => {
-    isPressed.set(false);
-    const adjustedDuration = getAdjustedDuration();
-    rippleProgress.set(withTiming(2, { duration: adjustedDuration }));
-  }, [isPressed, rippleProgress, getAdjustedDuration]);
 
   const rippleStyle = useAnimatedStyle(() => {
     // Calculate circle radius to cover entire container
@@ -257,7 +240,5 @@ export function usePressableFeedbackRippleAnimation(
   return {
     rippleStyle,
     backgroundColor,
-    onTouchStart,
-    onTouchEnd,
   };
 }

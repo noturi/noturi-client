@@ -45,8 +45,8 @@ export function useInfiniteMemos({
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (!lastPage?.meta) return undefined;
-      return lastPage.meta.page < lastPage.meta.totalPages ? lastPage.meta.page + 1 : undefined;
+      if (!lastPage?.page || !lastPage?.totalPages) return undefined;
+      return lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined;
     },
     enabled,
   });

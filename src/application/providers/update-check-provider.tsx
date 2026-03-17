@@ -70,7 +70,7 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
       {children}
 
       {/* 업데이트 팝업 */}
-      <Modal transparent visible={updateType !== null} animationType="fade">
+      <Modal transparent animationType="fade" visible={updateType !== null}>
         <View className="flex-1 items-center justify-center bg-black/50 px-6">
           <View className="w-full rounded-2xl bg-bg-primary p-6">
             <Typography className="mb-2 text-center" variant="title2">

@@ -8,9 +8,7 @@ module.exports = {
         // 테마 색상 (CSS 변수)
         primary: 'rgb(var(--color-primary) / <alpha-value>)',
         'primary-text': 'rgb(var(--color-primary-text) / <alpha-value>)',
-        'primary-hover': 'rgb(var(--color-primary-hover) / <alpha-value>)',
         accent: 'rgb(var(--color-accent) / <alpha-value>)',
-        'accent-hover': 'rgb(var(--color-accent-hover) / <alpha-value>)',
         'accent-soft': 'rgb(var(--color-accent-soft) / <alpha-value>)',
         'accent-soft-text': 'rgb(var(--color-accent-soft-text) / <alpha-value>)',
         selection: 'rgb(var(--color-selection) / <alpha-value>)',
@@ -29,26 +27,9 @@ module.exports = {
         // 테두리 (CSS 변수)
         border: 'rgb(var(--color-border) / <alpha-value>)',
 
-        // 상태 색상 - Success (CSS 변수)
-        success: 'rgb(var(--color-success) / <alpha-value>)',
-        'success-text': 'rgb(var(--color-success-text) / <alpha-value>)',
-        'success-hover': 'rgb(var(--color-success-hover) / <alpha-value>)',
-        'success-soft': 'rgb(var(--color-success-soft) / <alpha-value>)',
-        'success-soft-text': 'rgb(var(--color-success-soft-text) / <alpha-value>)',
-
-        // 상태 색상 - Warning (CSS 변수)
-        warning: 'rgb(var(--color-warning) / <alpha-value>)',
-        'warning-text': 'rgb(var(--color-warning-text) / <alpha-value>)',
-        'warning-hover': 'rgb(var(--color-warning-hover) / <alpha-value>)',
-        'warning-soft': 'rgb(var(--color-warning-soft) / <alpha-value>)',
-        'warning-soft-text': 'rgb(var(--color-warning-soft-text) / <alpha-value>)',
-
         // 상태 색상 - Danger (CSS 변수)
         danger: 'rgb(var(--color-danger) / <alpha-value>)',
         'danger-text': 'rgb(var(--color-danger-text) / <alpha-value>)',
-        'danger-hover': 'rgb(var(--color-danger-hover) / <alpha-value>)',
-        'danger-soft': 'rgb(var(--color-danger-soft) / <alpha-value>)',
-        'danger-soft-text': 'rgb(var(--color-danger-soft-text) / <alpha-value>)',
 
         // 하위 호환성 (기존 error → danger 매핑)
         error: 'rgb(var(--color-danger) / <alpha-value>)',

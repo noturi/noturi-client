@@ -1,49 +1,41 @@
-import type { UIMemo } from '~/entities/memo/model/types';
-import type { RatingGroup } from '~/entities/memo/ui/rating-group-card';
-import { RatingGroupCard } from '~/entities/memo/ui/rating-group-card';
+import type { RatingGroupData, UIMemo } from '~/entities/memo/model/types';
+import { RatingGroupCard, RatingGroupCardSkeleton } from '~/entities/memo/ui/rating-group-card';
 import { Typography } from '~/shared/ui';
 
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 type MemoRatingGroupViewProps = {
-  memos: UIMemo[];
+  ratingGroups: RatingGroupData[];
   header?: ReactNode;
   onMemoPress?: (memo: UIMemo) => void;
 };
 
-const groupMemosByRating = (memos: UIMemo[]): RatingGroup[] => {
-  const groups = [5, 4, 3, 2, 1, 0]
-    .map((rating) => ({
-      rating,
-      memos: memos.filter((memo) => {
-        if (rating === 0) {
-          return !memo.rating || memo.rating === 0;
-        }
-        return Math.floor(memo.rating) === rating;
-      }),
-    }))
-    .filter((group) => group.memos.length > 0);
-
-  return groups;
-};
-
-export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGroupViewProps) {
+export function MemoRatingGroupView({
+  ratingGroups,
+  header,
+  onMemoPress,
+}: MemoRatingGroupViewProps) {
+  const visibleGroups = ratingGroups.filter((group) => group.total > 0);
   const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
-  const ratingGroups = groupMemosByRating(memos);
 
+  // 새 그룹이 도착하면 열림 상태로 추가
+  const visibleRatingsKey = visibleGroups.map((g) => g.rating).join(',');
   useEffect(() => {
-    const groups = groupMemosByRating(memos);
-    const newExpandedGroups = groups.reduce(
-      (acc, group) => ({
-        ...acc,
-        [group.rating]: true,
-      }),
-      {} as Record<number, boolean>,
-    );
-
-    setExpandedGroups(newExpandedGroups);
-  }, [memos]);
+    if (!visibleRatingsKey) return;
+    setExpandedGroups((prev) => {
+      const next = { ...prev };
+      let changed = false;
+      for (const group of visibleGroups) {
+        if (!(group.rating in next)) {
+          next[group.rating] = true;
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleRatingsKey]);
 
   const handleToggle = useCallback((rating: number) => {
     setExpandedGroups((prev) => ({
@@ -52,7 +44,10 @@ export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGr
     }));
   }, []);
 
-  if (memos.length === 0) {
+  const isAnyLoading = ratingGroups.some((group) => group.isLoading);
+  const totalMemos = ratingGroups.reduce((sum, group) => sum + group.total, 0);
+
+  if (!isAnyLoading && totalMemos === 0) {
     return (
       <View className="flex-1 items-center justify-center">
         <Typography className="text-text-muted" variant="callout">
@@ -65,16 +60,20 @@ export function MemoRatingGroupView({ memos, header, onMemoPress }: MemoRatingGr
   return (
     <View className="gap-3">
       {header}
-      <View className="gap-4 mb-5">
-        {ratingGroups.map((group) => (
-          <RatingGroupCard
-            key={group.rating}
-            group={group}
-            isExpanded={expandedGroups[group.rating] || false}
-            onMemoPress={onMemoPress}
-            onToggle={() => handleToggle(group.rating)}
-          />
-        ))}
+      <View className="mb-5 gap-4">
+        {ratingGroups.map((group) =>
+          group.isLoading ? (
+            <RatingGroupCardSkeleton key={group.rating} />
+          ) : group.total > 0 ? (
+            <RatingGroupCard
+              key={group.rating}
+              group={group}
+              isExpanded={expandedGroups[group.rating] || false}
+              onMemoPress={onMemoPress}
+              onToggle={() => handleToggle(group.rating)}
+            />
+          ) : null,
+        )}
       </View>
     </View>
   );

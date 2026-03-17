@@ -118,6 +118,34 @@ class NotificationService {
     }
   }
 
+  // 권한이 이미 허용된 경우에만 토큰 갱신 + 서버 등록 (프롬프트 없음)
+  async refreshDeviceTokenSilently(): Promise<void> {
+    try {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+
+      const token = await this.getExpoPushToken();
+      if (!token) {
+        return;
+      }
+
+      const deviceName = this.getDeviceName();
+      const platform: DevicePlatform = Platform.OS as DevicePlatform;
+
+      await deviceApi.registerDevice({
+        expoPushToken: token,
+        deviceName,
+        platform,
+      });
+
+      Logger.info('디바이스 토큰 silent 갱신 성공');
+    } catch (error) {
+      Logger.warn('디바이스 토큰 silent 갱신 실패:', error);
+    }
+  }
+
   // 모든 디바이스 삭제 (로그아웃 시 사용)
   async unregisterAllDevices(): Promise<void> {
     try {

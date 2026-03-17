@@ -20,7 +20,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { Appearance, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
@@ -73,6 +73,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSettings?.theme]);
 
+  // 앱 테마에 맞게 시스템 appearance 동기화 (NativeTabs 색상 문제 해결)
+  useEffect(() => {
+    Appearance.setColorScheme(isDark ? 'dark' : 'light');
+  }, [isDark]);
+
   const setTheme = useCallback(
     async (newThemeId: string) => {
       // 로컬에 즉시 저장 (빠른 반응)
@@ -121,28 +126,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     '--color-text-muted': currentTheme.colors.textMuted,
     '--color-border': currentTheme.colors.border,
     '--color-accent': currentTheme.colors.accent,
-    '--color-accent-hover': currentTheme.colors.accentHover,
     '--color-accent-soft': currentTheme.colors.accentSoft,
     '--color-accent-soft-text': currentTheme.colors.accentSoftText,
     '--color-primary': currentTheme.colors.primary,
     '--color-primary-text': currentTheme.colors.primaryText,
-    '--color-primary-hover': currentTheme.colors.primaryHover,
     '--color-selection': currentTheme.colors.selection,
-    '--color-success': currentTheme.colors.success,
-    '--color-success-text': currentTheme.colors.successText,
-    '--color-success-hover': currentTheme.colors.successHover,
-    '--color-success-soft': currentTheme.colors.successSoft,
-    '--color-success-soft-text': currentTheme.colors.successSoftText,
-    '--color-warning': currentTheme.colors.warning,
-    '--color-warning-text': currentTheme.colors.warningText,
-    '--color-warning-hover': currentTheme.colors.warningHover,
-    '--color-warning-soft': currentTheme.colors.warningSoft,
-    '--color-warning-soft-text': currentTheme.colors.warningSoftText,
     '--color-danger': currentTheme.colors.danger,
     '--color-danger-text': currentTheme.colors.dangerText,
-    '--color-danger-hover': currentTheme.colors.dangerHover,
-    '--color-danger-soft': currentTheme.colors.dangerSoft,
-    '--color-danger-soft-text': currentTheme.colors.dangerSoftText,
   });
 
   return (
@@ -171,7 +161,7 @@ export function useUserTheme() {
  *
  * @example
  * // 여러 색상
- * const [accent, success, danger] = useThemeColor(['accent', 'success', 'danger']);
+ * const [accent, danger] = useThemeColor(['accent', 'danger']);
  */
 export function useThemeColor<T extends ThemeColorKey>(colorKey: T): string;
 export function useThemeColor<T extends readonly [ThemeColorKey, ...ThemeColorKey[]]>(

@@ -6,6 +6,7 @@
  * <Star className="text-accent" size={16} />
  */
 import {
+  BarChart3,
   Bell,
   Calendar,
   Check,
@@ -17,8 +18,11 @@ import {
   FileText,
   Filter,
   GripVertical,
+  Home,
   Info,
+  ListChecks,
   LogOut,
+  Moon,
   MoreVertical,
   Palette,
   Pencil,
@@ -34,6 +38,7 @@ import { cssInterop } from 'nativewind';
 
 // 모든 아이콘에 cssInterop 적용
 const icons = [
+  BarChart3,
   Bell,
   Calendar,
   Check,
@@ -45,8 +50,11 @@ const icons = [
   FileText,
   Filter,
   GripVertical,
+  Home,
   Info,
+  ListChecks,
   LogOut,
+  Moon,
   MoreVertical,
   Palette,
   Pencil,
@@ -71,6 +79,7 @@ icons.forEach((icon) => {
 });
 
 export {
+  BarChart3,
   Bell,
   Calendar,
   Check,
@@ -82,8 +91,11 @@ export {
   FileText,
   Filter,
   GripVertical,
+  Home,
   Info,
+  ListChecks,
   LogOut,
+  Moon,
   MoreVertical,
   Palette,
   Pencil,

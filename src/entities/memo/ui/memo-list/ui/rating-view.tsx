@@ -1,19 +1,24 @@
 import type { UICategory } from '~/entities/category';
+import type { RatingGroupData, UIMemo } from '~/entities/memo/model/types';
 
 import { ScrollView, View } from 'react-native';
 
-import type { UIMemo } from '../../../model/types';
 import { CategoryFilterBar } from './category-filter-bar';
 import { MemoRatingGroupView } from './memo-rating-group-view';
 
 interface RatingViewProps {
   categories: UICategory[];
-  memos: UIMemo[];
+  ratingGroups: RatingGroupData[];
   onCategoryPress: (categoryName: string) => void;
   onMemoPress: (memo: UIMemo) => void;
 }
 
-export function RatingView({ categories, memos, onCategoryPress, onMemoPress }: RatingViewProps) {
+export function RatingView({
+  categories,
+  ratingGroups,
+  onCategoryPress,
+  onMemoPress,
+}: RatingViewProps) {
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 200 }}
@@ -22,7 +27,7 @@ export function RatingView({ categories, memos, onCategoryPress, onMemoPress }: 
     >
       <View className="gap-6">
         <CategoryFilterBar categories={categories} onPress={onCategoryPress} />
-        <MemoRatingGroupView memos={memos} onMemoPress={onMemoPress} />
+        <MemoRatingGroupView ratingGroups={ratingGroups} onMemoPress={onMemoPress} />
       </View>
     </ScrollView>
   );
