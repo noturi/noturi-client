@@ -55,7 +55,7 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
       renderRightActions={() => <TodoSwipeActions onDelete={handleDelete} onEdit={handleEdit} />}
       rightThreshold={40}
       onSwipeableClose={handleSwipeClose}
-      onSwipeableOpen={handleSwipeOpen}
+      onSwipeableWillOpen={handleSwipeOpen}
     >
       <View>
         <Pressable
