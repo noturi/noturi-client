@@ -3,21 +3,18 @@ import { useUserTheme } from '~/application/providers/theme-provider';
 import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
 import { QuickTodoInput, TodoList } from '~/features/todo';
-import { CircularProgress, FloatingButton, Typography } from '~/shared/ui';
+import { CircularProgress, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
 
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 
 import { useQuery } from '@tanstack/react-query';
 
 export function TodoPage() {
   const { hexColors } = useUserTheme();
-  const insets = useSafeAreaInsets();
   const [selectedDate, setSelectedDate] = useState(() => new Date());
 
   const dateString = formatDateString(selectedDate);
@@ -26,12 +23,12 @@ export function TodoPage() {
 
   const selectedDateProgress = todosData?.rate ?? 0;
 
-  const handleFloatingButtonPress = () => {
-    router.push({
-      pathname: '/todo/create',
-      params: { date: formatDateString(selectedDate) },
-    });
-  };
+  // const handleFloatingButtonPress = () => {
+  //   router.push({
+  //     pathname: '/todo/create',
+  //     params: { date: formatDateString(selectedDate) },
+  //   });
+  // };
 
   return (
     <View className="flex-1 bg-bg-secondary">
@@ -85,11 +82,11 @@ export function TodoPage() {
         </View>
       </ScrollView>
 
-      {!isPast && (
+      {/* {!isPast && (
         <View className="absolute right-6" style={{ bottom: insets.bottom + 49 + 20 }}>
           <FloatingButton onPress={handleFloatingButtonPress} />
         </View>
-      )}
+      )} */}
     </View>
   );
 }
