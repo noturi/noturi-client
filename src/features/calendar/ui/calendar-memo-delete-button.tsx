@@ -1,4 +1,3 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
 import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
 import { MoreVertical, Pencil, Trash2 } from '~/shared/lib/icons';
@@ -15,8 +14,6 @@ interface CalendarMemoDeleteButtonProps {
 export function CalendarMemoDeleteButton({ memoId, onEdit }: CalendarMemoDeleteButtonProps) {
   const [showMenu, setShowMenu] = useState(false);
   const toast = useToast();
-  const { hexColors } = useUserTheme();
-
   const deleteMutation = useDeleteCalendarMemo({
     onSuccess: () => {
       toast.showSuccess('일정이 삭제되었습니다.');

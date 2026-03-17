@@ -40,8 +40,6 @@ const ITEM_WIDTH = (Dimensions.get('window').width - HORIZONTAL_PADDING) / VISIB
 const CIRCLE_SIZE = 36;
 const PROGRESS_STROKE = 3;
 const TODAY_INNER_SIZE = 30;
-const TODAY_DOT_SIZE = 4;
-const TODAY_DOT_MARGIN = 3;
 
 function getScrollOffset(index: number): number {
   return (index - CENTER_OFFSET) * ITEM_WIDTH;
