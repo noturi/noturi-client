@@ -1,5 +1,5 @@
 import { User, parseUser } from '~/entities/user';
-import { authTokenCache } from '~/shared/lib/cache';
+import { authTokenCache, syncTokensToWidget } from '~/shared/lib/cache';
 import Logger from '~/shared/lib/logger';
 
 import type { AuthState } from './types';
@@ -59,6 +59,10 @@ class AuthStore {
       const tokens = await authTokenCache.getAuthTokens();
       const user = parseUser(tokens.user);
       const isAuthenticated = !!(tokens.accessToken && tokens.user);
+
+      if (isAuthenticated && tokens.accessToken && tokens.refreshToken) {
+        syncTokensToWidget(tokens.accessToken, tokens.refreshToken);
+      }
 
       this.setState({
         isAuthenticated,

@@ -22,12 +22,17 @@ export function useTodoItemActions(todo: Todo) {
 
   const [optimisticCompleted, setOptimisticCompleted] = useState(todo.isCompleted);
   const [isEditing, setIsEditing] = useState(false);
+  const prevServerCompleted = useRef(todo.isCompleted);
 
   const { animate, checkStyle, circleStyle, contentStyle } = useCheckAnimation(todo.isCompleted);
 
   useEffect(() => {
-    setOptimisticCompleted(todo.isCompleted);
-  }, [todo.isCompleted]);
+    if (todo.isCompleted !== prevServerCompleted.current) {
+      prevServerCompleted.current = todo.isCompleted;
+      setOptimisticCompleted(todo.isCompleted);
+      animate(todo.isCompleted);
+    }
+  }, [todo.isCompleted, animate]);
 
   const toggleMutation = useToggleTodoMutation({
     onError: () => {

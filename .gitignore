@@ -40,7 +40,12 @@ app-example
 
 
 android/
-ios/
+ios/*
+# iOS 위젯 및 엔타이틀먼트는 커스텀 네이티브 코드이므로 추적
+!ios/NoturiWidget/
+!ios/Noturi/
+ios/Noturi/*
+!ios/Noturi/Noturi.entitlements
 
 # VS Code: ignore all but shared project configs
 .vscode/*
