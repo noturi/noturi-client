@@ -58,17 +58,21 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
       onSwipeableWillOpen={handleSwipeOpen}
     >
       <View>
-        <Pressable
+        <View
           className="flex-row items-center gap-3 rounded-3 bg-surface px-3 py-3"
-          disabled={isInteractionDisabled}
           style={{ opacity: itemOpacity }}
-          onPress={handleToggle}
         >
-          <TodoCheckbox
-            checkStyle={checkStyle}
-            circleStyle={circleStyle}
-            isCompleted={optimisticCompleted}
-          />
+          <Pressable
+            disabled={isInteractionDisabled}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            onPress={handleToggle}
+          >
+            <TodoCheckbox
+              checkStyle={checkStyle}
+              circleStyle={circleStyle}
+              isCompleted={optimisticCompleted}
+            />
+          </Pressable>
           <Animated.View className="flex-1" style={contentStyle}>
             {isEditing ? (
               <TodoInlineEdit
@@ -96,7 +100,7 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
               </Typography>
             </View>
           )}
-        </Pressable>
+        </View>
       </View>
     </Swipeable>
   );
