@@ -81,7 +81,22 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "f1469043-19f5-4185-9ada-7f09a682c8a5"
+        "projectId": "f1469043-19f5-4185-9ada-7f09a682c8a5",
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "NoturiWidget",
+                  "bundleIdentifier": "com.noturi.app.widget",
+                  "entitlements": {
+                    "com.apple.security.application-groups": ["group.com.noturi.app"]
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     }
   }

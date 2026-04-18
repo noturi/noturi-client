@@ -12,15 +12,7 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true,
-      "ios": {
-        "appExtensions": [
-          {
-            "targetName": "NoturiWidget",
-            "bundleIdentifier": "com.noturi.app.widget"
-          }
-        ]
-      }
+      "autoIncrement": true
     }
   },
   "submit": {
