@@ -358,7 +358,7 @@ function addWidgetExtension(project) {
   // === 메인 타겟에 의존성 & Embed 추가 ===
   const mainTarget = project.getFirstTarget();
   if (mainTarget) {
-    const mainUuid = mainTarget.firstTarget.uuid;
+    const mainUuid = mainTarget.uuid;
     const mt = objs.PBXNativeTarget[mainUuid];
     if (mt) {
       // 의존성 추가
