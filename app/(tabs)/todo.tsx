@@ -1,3 +1,11 @@
 import { TodoPage } from '~/pages/todo';
 
-export default TodoPage;
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function TodoScreen() {
+  return (
+    <SafeAreaView className="flex-1 bg-bg-secondary" edges={['top']}>
+      <TodoPage />
+    </SafeAreaView>
+  );
+}
