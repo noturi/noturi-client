@@ -76,6 +76,7 @@
     "experiments": {
       "typedRoutes": true
     },
+    "modules": ["./modules/widget-bridge"],
     "extra": {
       "router": {},
       "eas": {

@@ -35,6 +35,17 @@ interface AuthTokens {
   user: string;
 }
 
+export const syncTokensToWidget = async (accessToken: string, refreshToken: string) => {
+  if (Platform.OS === 'web') return;
+  try {
+    const { syncAuthTokens } = await import('@modules/widget-bridge');
+    const baseUrl = process.env.EXPO_PUBLIC_BASE_URL ?? '';
+    await syncAuthTokens(accessToken, refreshToken, baseUrl);
+  } catch {
+    // Widget bridge not available
+  }
+};
+
 export const authTokenCache = {
   saveAuthTokens: async (tokens: AuthTokens) => {
     await Promise.all([
@@ -42,6 +53,7 @@ export const authTokenCache = {
       tokenCache.saveToken('refreshToken', tokens.refreshToken),
       tokenCache.saveToken('user', tokens.user),
     ]);
+    syncTokensToWidget(tokens.accessToken, tokens.refreshToken);
   },
 
   getAuthTokens: async () => {

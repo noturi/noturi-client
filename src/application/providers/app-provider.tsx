@@ -9,6 +9,7 @@ import { NotificationProvider } from './notification-provider';
 import { QueryProvider } from './query-provider';
 import { ThemeProvider } from './theme-provider';
 import { UpdateCheckProvider } from './update-check-provider';
+import { WidgetSyncProvider } from './widget-sync-provider';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -21,12 +22,14 @@ export function AppProvider({ children }: AppProviderProps) {
         <BottomSheetModalProvider>
           <KeyboardProvider>
             <AuthProvider>
-              <NotificationProvider>
-                <UpdateCheckProvider>
-                  {children}
-                  <Toaster />
-                </UpdateCheckProvider>
-              </NotificationProvider>
+              <WidgetSyncProvider>
+                <NotificationProvider>
+                  <UpdateCheckProvider>
+                    {children}
+                    <Toaster />
+                  </UpdateCheckProvider>
+                </NotificationProvider>
+              </WidgetSyncProvider>
             </AuthProvider>
           </KeyboardProvider>
         </BottomSheetModalProvider>
