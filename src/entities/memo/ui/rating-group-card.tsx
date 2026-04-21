@@ -151,7 +151,13 @@ export function RatingGroupCard({
     <Card>
       <Pressable className="flex-row items-center gap-2 p-3 active:opacity-70" onPress={onToggle}>
         <View className="flex-1 flex-row items-center gap-2">
-          <RatingStars rating={group.rating} />
+          {group.rating > 0 ? (
+            <RatingStars rating={group.rating} />
+          ) : (
+            <Typography className="text-text-secondary" variant="callout">
+              별점 없음
+            </Typography>
+          )}
           <Typography className="text-text-muted" variant="caption1">
             ({group.total}개)
           </Typography>
