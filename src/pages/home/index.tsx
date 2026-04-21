@@ -13,25 +13,24 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
 
-import { keepPreviousData, useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-const RATINGS = [5, 4, 3, 2, 1] as const;
-const RATING_RANGES: Record<number, { minRating: number; maxRating: number }> = {
+const UNRATED = 0 as const;
+const RATINGS = [5, 4, 3, 2, 1, UNRATED] as const;
+const RATING_FILTERS: Record<number, Partial<MemoListParamsDto>> = {
   5: { minRating: 5, maxRating: 5 },
   4: { minRating: 4, maxRating: 4.5 },
   3: { minRating: 3, maxRating: 3.5 },
   2: { minRating: 2, maxRating: 2.5 },
   1: { minRating: 1, maxRating: 1.5 },
+  [UNRATED]: { hasRating: false },
 };
 const PAGE_LIMIT = 50;
 const SORT_BY = 'createdAt';
 const SORT_ORDER = 'desc';
 
 function useRatingQuery(queryParams: Omit<MemoListParamsDto, 'page'>, rating: number) {
-  return useInfiniteQuery({
-    ...infiniteMemoListQuery({ ...queryParams, ...RATING_RANGES[rating] }),
-    placeholderData: keepPreviousData,
-  });
+  return useInfiniteQuery(infiniteMemoListQuery({ ...queryParams, ...RATING_FILTERS[rating] }));
 }
 
 function buildRatingGroup(
@@ -63,10 +62,11 @@ function useRatingGroups(queryParams: Omit<MemoListParamsDto, 'page'>): RatingGr
   const r3 = useRatingQuery(queryParams, 3);
   const r2 = useRatingQuery(queryParams, 2);
   const r1 = useRatingQuery(queryParams, 1);
+  const r0 = useRatingQuery(queryParams, UNRATED);
 
   return useMemo(
     () => {
-      const queries = [r5, r4, r3, r2, r1];
+      const queries = [r5, r4, r3, r2, r1, r0];
       return RATINGS.map((rating, i) => buildRatingGroup(rating, queries[i]));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,6 +91,10 @@ function useRatingGroups(queryParams: Omit<MemoListParamsDto, 'page'>): RatingGr
       r1.hasNextPage,
       r1.isFetchingNextPage,
       r1.isLoading,
+      r0.data,
+      r0.hasNextPage,
+      r0.isFetchingNextPage,
+      r0.isLoading,
     ],
   );
 }

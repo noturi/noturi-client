@@ -37,6 +37,8 @@ export class MemoApi {
       searchParams.append('minRating', params.minRating.toString());
     if (params.maxRating !== undefined)
       searchParams.append('maxRating', params.maxRating.toString());
+    if (params.hasRating !== undefined)
+      searchParams.append('hasRating', params.hasRating.toString());
     if (params.sortBy) searchParams.append('sortBy', params.sortBy);
     if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
 

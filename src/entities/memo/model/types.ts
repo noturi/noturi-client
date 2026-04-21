@@ -47,6 +47,7 @@ export interface MemoListParamsDto {
   rating?: number;
   minRating?: number; // 최소 평점 (1.0~5.0)
   maxRating?: number; // 최대 평점 (1.0~5.0)
+  hasRating?: boolean; // 별점 여부 필터 (false: 별점 없는 메모만, true: 별점 있는 메모만)
   sortBy?: 'createdAt' | 'rating' | 'title';
   sortOrder?: 'asc' | 'desc';
 }
