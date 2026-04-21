@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
 
-import { keepPreviousData, useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 const UNRATED = 0 as const;
 const RATINGS = [5, 4, 3, 2, 1, UNRATED] as const;
@@ -30,10 +30,7 @@ const SORT_BY = 'createdAt';
 const SORT_ORDER = 'desc';
 
 function useRatingQuery(queryParams: Omit<MemoListParamsDto, 'page'>, rating: number) {
-  return useInfiniteQuery({
-    ...infiniteMemoListQuery({ ...queryParams, ...RATING_FILTERS[rating] }),
-    placeholderData: keepPreviousData,
-  });
+  return useInfiniteQuery(infiniteMemoListQuery({ ...queryParams, ...RATING_FILTERS[rating] }));
 }
 
 function buildRatingGroup(
