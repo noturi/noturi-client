@@ -53,13 +53,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const updateSettingsMutation = useUpdateSettingsMutation();
 
   const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
-  const hexColors = PRESET_HEX_COLORS[themeId];
-  const isDark = PRESET_IS_DARK[themeId];
+  const hexColors = PRESET_HEX_COLORS[themeId] ?? PRESET_HEX_COLORS[DEFAULT_THEME_ID];
+  const isDark = PRESET_IS_DARK[themeId] ?? PRESET_IS_DARK[DEFAULT_THEME_ID];
 
   // 초기 로딩: 로컬 → 서버 순서로 테마 적용
   useEffect(() => {
     themeStore.getThemeId().then((stored) => {
-      setThemeId(stored);
+      const safeId = stored in PRESET_HEX_COLORS ? stored : DEFAULT_THEME_ID;
+      if (safeId !== stored) {
+        themeStore.setThemeId(safeId);
+      }
+      setThemeId(safeId);
       setIsLoading(false);
     });
   }, []);
@@ -67,8 +71,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // 서버 설정이 로드되면 동기화
   useEffect(() => {
     if (serverSettings?.theme && serverSettings.theme !== themeId) {
-      setThemeId(serverSettings.theme);
-      themeStore.setThemeId(serverSettings.theme);
+      const safeId =
+        serverSettings.theme in PRESET_HEX_COLORS ? serverSettings.theme : DEFAULT_THEME_ID;
+      setThemeId(safeId);
+      themeStore.setThemeId(safeId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSettings?.theme]);
