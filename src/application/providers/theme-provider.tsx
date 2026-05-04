@@ -97,17 +97,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   );
 
   const toggleTheme = useCallback(async () => {
-    const pairedId = currentTheme.pairedThemeId;
-    if (pairedId) {
-      await themeStore.setThemeId(pairedId);
-      setThemeId(pairedId);
-    } else {
-      // pairedThemeId가 없으면 light ↔ dark 토글
-      const newId = isDark ? 'light' : 'dark';
-      await themeStore.setThemeId(newId);
-      setThemeId(newId);
-    }
-  }, [currentTheme.pairedThemeId, isDark]);
+    const newId = currentTheme.pairedThemeId ?? (isDark ? 'light' : 'dark');
+    await setTheme(newId);
+  }, [currentTheme.pairedThemeId, isDark, setTheme]);
 
   const contextValue = useMemo(
     () => ({
