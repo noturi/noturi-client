@@ -3,7 +3,7 @@ import { Typography } from '~/shared/ui';
 
 import { Alert, Pressable } from 'react-native';
 
-import { useDeleteAccountMutation } from '../api/mutation';
+import { useDeleteAccountMutation } from '../api/mutations';
 
 export function DeleteAccountButton() {
   const { logout } = useAuth();

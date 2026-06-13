@@ -7,7 +7,7 @@ import { queryClient } from '~/shared/api/query-client';
 
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { authApi } from './api';
+import { authApi } from './apis';
 
 export function useGoogleLoginMutation(
   options: Pick<

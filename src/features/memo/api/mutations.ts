@@ -13,6 +13,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import { invalidateMemoRelatedCache } from '../lib/invalidate-memo-cache';
 import { memoMutationApi } from './apis';
 
 /**
@@ -41,25 +42,7 @@ export function useCreateMemoMutation(
       // 새로 생성된 메모를 캐시에 저장
       queryClient.setQueryData(QUERY_KEYS.memo(newMemo.id), newMemo);
 
-      // 캐시 무효화를 병렬 처리
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.memos,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.categories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsCategories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsMemos,
-          exact: false,
-        }),
-      ]);
+      await invalidateMemoRelatedCache(queryClient);
 
       await onSuccess?.(newMemo, createData, context);
     },
@@ -75,7 +58,7 @@ export function useUpdateMemoMutation(
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   > = {},
 ) {
-  const { mutationKey = [], onMutate, onSuccess, onSettled } = options;
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -86,28 +69,11 @@ export function useUpdateMemoMutation(
       // 특정 메모 캐시 업데이트
       queryClient.setQueryData(QUERY_KEYS.memo(updatedMemo.id), updatedMemo);
 
-      // 캐시 무효화를 병렬 처리
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.memos,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.categories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsOverall({}),
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsOverall({}),
-          exact: false,
-        }),
-      ]);
+      await invalidateMemoRelatedCache(queryClient);
 
       await onSuccess?.(updatedMemo, updateData, context);
     },
+    onError,
     onSettled,
   });
 }
@@ -130,25 +96,7 @@ export function useDeleteMemoMutation(
       // 삭제된 메모의 캐시 제거
       queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(deletedId) });
 
-      // 캐시 무효화를 병렬 처리
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.memos,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.categories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsCategories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsMemos,
-          exact: false,
-        }),
-      ]);
+      await invalidateMemoRelatedCache(queryClient);
 
       await onSuccess?.(_, deletedId, context);
     },
@@ -177,25 +125,7 @@ export function useBulkDeleteMemosMutation(
         queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(id) });
       });
 
-      // 캐시 무효화를 병렬 처리
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.memos,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.categories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsCategories,
-          exact: false,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.statisticsMemos,
-          exact: false,
-        }),
-      ]);
+      await invalidateMemoRelatedCache(queryClient);
 
       await onSuccess?.(_, deleteData, context);
     },

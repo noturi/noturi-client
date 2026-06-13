@@ -30,6 +30,7 @@ export const QUERY_KEYS = {
   userSettings: ['user', 'settings'] as const,
 
   // 통계
+  statistics: ['statistics'] as const,
   statisticsMemos: ['statistics', 'memos'] as const,
   statisticsCategories: ['statistics', 'categories'] as const,
   statisticsCategoryDistribution: ['statistics', 'category-distribution'] as const,

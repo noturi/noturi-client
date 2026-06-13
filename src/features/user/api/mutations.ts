@@ -3,7 +3,7 @@ import { QUERY_KEYS } from '~/shared/lib';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { userSettingsApi } from './api';
+import { userSettingsApi } from './apis';
 
 export const useUpdateSettingsMutation = () => {
   const queryClient = useQueryClient();

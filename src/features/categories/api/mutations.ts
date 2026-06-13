@@ -75,7 +75,7 @@ export function useDeleteCategoryMutation(
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   >,
 ) {
-  const { mutationKey = [], onMutate, onSuccess, onSettled } = options || {};
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options || {};
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -91,6 +91,7 @@ export function useDeleteCategoryMutation(
 
       await onSuccess?.(_, deletedId, context);
     },
+    onError,
     onSettled,
   });
 }
@@ -126,7 +127,7 @@ export function useMergeCategoriesMutation(
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
   > = {},
 ) {
-  const { mutationKey = [], onMutate, onSuccess, onSettled } = options;
+  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -143,6 +144,7 @@ export function useMergeCategoriesMutation(
 
       await onSuccess?.(_, mergeData, context);
     },
+    onError,
     onSettled,
   });
 }

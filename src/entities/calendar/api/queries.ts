@@ -6,7 +6,7 @@ import { QUERY_KEYS } from '~/shared/lib';
 
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-import { calendarMemoApi } from './api';
+import { calendarMemoApi } from './apis';
 
 // 캘린더 메모 월별 조회 쿼리 (캘린더 뷰용)
 export const calendarMemoMonthlyQuery = (params: CalendarMemoMonthlyParamsDto = {}) =>

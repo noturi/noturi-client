@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 
-import { deviceApi } from '../api/api';
+import { deviceApi } from '../api/apis';
 import type { DevicePlatform } from './types';
 
 // 알림 핸들러 설정 (앱이 포그라운드일 때 알림 표시 방법)

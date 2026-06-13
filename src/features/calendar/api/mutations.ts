@@ -12,7 +12,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { calendarApi } from './api';
+import { calendarApi } from './apis';
 
 // 캘린더 메모 생성 뮤테이션
 export const useCreateCalendarMemo = () => {
