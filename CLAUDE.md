@@ -280,29 +280,21 @@ export function useCreateMemoMutation(options = {}) {
 
 현재 코드베이스에 존재하는 위반 사항들입니다. 새 코드 작성 시 이 패턴을 따르지 마세요.
 
-### P0: 아키텍처 위반
-
-1. **features/categories에 queries.ts 존재** - GET 쿼리는 entities 레이어에만 있어야 함
-   - `features/categories/api/queries.ts` → `entities/category/api/queries.ts`로 이동 필요
-   - `features/categories/api/apis.ts`에 GET 메서드 7개 포함 → entities로 이동 필요
-   - `entities/category/`에 api 세그먼트가 없음 → 생성 필요
-
 ### P1: Entities 내 크로스 슬라이스 Import
 
-2. **entities/auth → entities/user** 직접 import
-3. **entities/memo → entities/category** 직접 import (ui 컴포넌트, 타입)
-
-### P2: 파일 네이밍 불일치
-
-4. 일부 파일이 `api.ts`(단수), `statistics-api.ts`(접두사) 등 비일관적
-   - 표준: `apis.ts` (복수형), `mutations.ts` (복수형)
-   - 위반: `features/auth/api/mutation.ts` (단수형)
-   - 위반: `entities/calendar/api/api.ts` (단수형)
+1. **entities/auth → entities/user** 직접 import
+2. **entities/memo → entities/category** 직접 import (ui 컴포넌트, 타입)
 
 ### P3: app 라우트에 비즈니스 로직
 
-5. `app/memo/[id].tsx` 등 일부 라우트 파일에 useQuery, 날짜 포맷팅 등 로직 포함
+3. `app/memo/[id].tsx` 등 일부 라우트 파일에 useQuery, 날짜 포맷팅 등 로직 포함
    - pages 레이어로 추출 필요
+
+### 해결됨 (2026-06)
+
+- ~~P0: features/categories의 GET 쿼리/API~~ → `entities/category/api`로 이동 완료
+- ~~P2: 파일 네이밍 불일치 (`api.ts`, `mutation.ts` 단수형)~~ → `apis.ts`/`mutations.ts`로 통일 완료
+  (단, `statistics-api.ts` 접두사형은 남아 있음)
 
 ## 용어
 
