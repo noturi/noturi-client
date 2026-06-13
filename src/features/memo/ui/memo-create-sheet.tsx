@@ -4,7 +4,7 @@ import { useUserTheme } from '~/application/providers/theme-provider';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 
-import { MemoFormContent } from './memo-form-content';
+import { MemoForm } from './memo-form';
 import { MemoFormHeader } from './memo-form-header';
 
 interface MemoCreateSheetProps {
@@ -67,7 +67,7 @@ export const MemoCreateSheet = ({ isOpen, onClose }: MemoCreateSheetProps) => {
           <View className="h-1 w-9 rounded-2" style={{ backgroundColor: hexColors.textMuted }} />
         </View>
         <MemoFormHeader onClose={onClose} />
-        <MemoFormContent shouldAutoFocus={isOpen} onSuccess={onClose} />
+        <MemoForm shouldAutoFocus={isOpen} onSuccess={onClose} />
       </BottomSheetView>
     </BottomSheetModal>
   );

@@ -8,26 +8,30 @@ import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
 import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { useUpdateMemoMutation } from '../api';
+import { useCreateMemoMutation, useUpdateMemoMutation } from '../api';
 import { RatingSelector } from './rating-selector';
 
-interface MemoEditFormProps {
-  memoId: string;
+interface MemoFormProps {
+  /** 있으면 수정 모드, 없으면 생성 모드 */
+  memoId?: string;
   onSuccess?: () => void;
+  shouldAutoFocus?: boolean;
 }
 
-export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
+export const MemoForm = ({ memoId, onSuccess, shouldAutoFocus = false }: MemoFormProps) => {
+  const isEdit = !!memoId;
   const [showAddCategory, setShowAddCategory] = useState(false);
+  const titleInputRef = useRef<any>(null);
   const toast = useToast();
   const { height } = useGradualAnimation();
 
-  const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId));
+  const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId ?? ''));
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
@@ -55,7 +59,6 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
         : null;
 
       const memoData: any = {
-        id: memoId,
         title,
         content: content || '',
       };
@@ -68,7 +71,11 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
         memoData.rating = values.rating;
       }
 
-      updateMemoMutation.mutate(memoData);
+      if (isEdit) {
+        updateMemoMutation.mutate({ ...memoData, id: memoId });
+      } else {
+        createMemoMutation.mutate(memoData);
+      }
     },
   });
 
@@ -77,6 +84,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     validationSchema: categoryFormSchema,
   });
 
+  // 수정 모드: 메모 데이터로 폼 채우기
   useEffect(() => {
     if (memo) {
       const text = memo.content ? `${memo.title}\n${memo.content}` : memo.title;
@@ -94,6 +102,23 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
       setShowAddCategory(false);
       toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
     },
+    onError: () => {
+      categoryForm.setError('name', {
+        message: '카테고리 생성 중 오류가 발생했습니다.',
+        type: 'server',
+      });
+    },
+  });
+
+  const createMemoMutation = useCreateMemoMutation({
+    onSuccess: () => {
+      toast.showSuccess(MESSAGES.MEMO.CREATE_SUCCESS);
+      memoForm.reset();
+      onSuccess?.();
+    },
+    onError: () => {
+      memoForm.setError('text', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
+    },
   });
 
   const updateMemoMutation = useUpdateMemoMutation({
@@ -101,7 +126,12 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
       toast.showSuccess(MESSAGES.MEMO.UPDATE_SUCCESS);
       onSuccess?.();
     },
+    onError: () => {
+      memoForm.setError('text', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
+    },
   });
+
+  const isMutationPending = isEdit ? updateMemoMutation.isPending : createMemoMutation.isPending;
 
   const handleAddCategory = async () => {
     createCategoryMutation.mutate({
@@ -119,8 +149,22 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     memoForm.setValue('selectedCategory', categoryName);
   };
 
+  // 생성 모드: 지연 포커스 (바텀시트 애니메이션 후)
+  useEffect(() => {
+    if (!shouldAutoFocus) return;
+
+    const timer = setTimeout(() => {
+      titleInputRef.current?.focus();
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [shouldAutoFocus]);
+
   const shouldShowTextError = memoForm.shouldShowError('text');
   const textError = shouldShowTextError ? memoForm.errors.text : undefined;
+  const selectedCategoryError = memoForm.shouldShowError('selectedCategory')
+    ? memoForm.errors.selectedCategory
+    : undefined;
 
   const floatingButtonPosition = useAnimatedStyle(() => {
     return {
@@ -128,7 +172,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
     };
   }, []);
 
-  if (isLoading) {
+  if (isEdit && isLoading) {
     return (
       <View className="flex-1 bg-bg-primary">
         <Loading text="메모를 불러오는 중..." />
@@ -143,8 +187,9 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
           <Form>
             <Form.Field required error={textError} label="메모">
               <TextArea
-                autoFocus
+                ref={titleInputRef}
                 multiline
+                autoFocus={isEdit}
                 hasError={!!shouldShowTextError}
                 minHeight={220}
                 placeholder="첫 번째 줄은 제목, 나머지는 내용이 됩니다"
@@ -155,14 +200,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
               />
             </Form.Field>
 
-            <Form.Field
-              error={
-                memoForm.shouldShowError('selectedCategory')
-                  ? memoForm.errors.selectedCategory
-                  : undefined
-              }
-              label="카테고리"
-            >
+            <Form.Field error={selectedCategoryError} label="카테고리">
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View className="flex-row gap-3">
                   {categories.map((category) => (
@@ -206,6 +244,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
                     <Button
                       isDisabled={!categoryForm.isValid || createCategoryMutation.isPending}
                       size="sm"
+                      variant="primary"
                       onPress={handleAddCategory}
                     >
                       <Button.Label>추가</Button.Label>
@@ -240,7 +279,7 @@ export const MemoEditForm = ({ memoId, onSuccess }: MemoEditFormProps) => {
       >
         <FloatingButton
           disabled={!memoForm.isValid}
-          isLoading={updateMemoMutation.isPending}
+          isLoading={isMutationPending}
           onPress={memoForm.handleSubmit}
         />
       </Animated.View>

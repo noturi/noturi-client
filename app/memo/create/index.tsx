@@ -1,4 +1,4 @@
-import { MemoFormContent } from '~/features/memo/ui/memo-form-content';
+import { MemoForm } from '~/features/memo/ui';
 
 import { View } from 'react-native';
 
@@ -11,7 +11,7 @@ export default function RatingMemoCreateScreen() {
 
   return (
     <View className="flex-1 bg-bg-secondary">
-      <MemoFormContent shouldAutoFocus={true} onSuccess={handleSuccess} />
+      <MemoForm shouldAutoFocus={true} onSuccess={handleSuccess} />
     </View>
   );
 }
