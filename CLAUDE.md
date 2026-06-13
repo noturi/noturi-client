@@ -280,21 +280,17 @@ export function useCreateMemoMutation(options = {}) {
 
 현재 코드베이스에 존재하는 위반 사항들입니다. 새 코드 작성 시 이 패턴을 따르지 마세요.
 
-### P1: Entities 내 크로스 슬라이스 Import
+### 개선 검토 항목
 
-1. **entities/auth → entities/user** 직접 import
-2. **entities/memo → entities/category** 직접 import (ui 컴포넌트, 타입)
-
-### P3: app 라우트에 비즈니스 로직
-
-3. `app/memo/[id].tsx` 등 일부 라우트 파일에 useQuery, 날짜 포맷팅 등 로직 포함
-   - pages 레이어로 추출 필요
+1. `rating-group-card.tsx`의 무한스크롤 센티넬이 300ms `setInterval` 폴링 방식
+   - 스크롤 이벤트 기반(onScroll/onEndReached)으로 전환 권장 — 실기기 검증 필요
 
 ### 해결됨 (2026-06)
 
 - ~~P0: features/categories의 GET 쿼리/API~~ → `entities/category/api`로 이동 완료
-- ~~P2: 파일 네이밍 불일치 (`api.ts`, `mutation.ts` 단수형)~~ → `apis.ts`/`mutations.ts`로 통일 완료
-  (단, `statistics-api.ts` 접두사형은 남아 있음)
+- ~~P1: entities 크로스 슬라이스 딥 import~~ → public API(index.ts) 경유로 수정 완료
+- ~~P2: 파일 네이밍 불일치~~ → `apis.ts`/`mutations.ts`로 통일 완료 (`statistics-api.ts` 포함)
+- ~~P3: app 라우트 비즈니스 로직~~ → `pages/memo-detail`로 추출 완료
 
 ## 용어
 
