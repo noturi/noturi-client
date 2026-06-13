@@ -1,12 +1,5 @@
 import { KyInstance } from 'ky';
-import {
-  CategoryStatsDto,
-  Memo,
-  MemoListParamsDto,
-  MemoListResponseDto,
-  MemoSearchResultDto,
-  MemoStatsDto,
-} from '~/entities/memo/model/types';
+import { Memo, MemoListParamsDto, MemoListResponseDto } from '~/entities/memo/model/types';
 import { api } from '~/shared/api';
 
 /**
@@ -54,24 +47,6 @@ export class MemoApi {
   async getMemo(id: string): Promise<Memo> {
     const response = await this.api.get(`memos/${id}`);
     return response.json<Memo>();
-  }
-
-  // 카테고리 목록 조회
-  async getCategories(): Promise<CategoryStatsDto[]> {
-    const response = await this.api.get('memos/categories');
-    return response.json<CategoryStatsDto[]>();
-  }
-
-  // 메모 검색
-  async searchMemos(query: string): Promise<MemoSearchResultDto> {
-    const response = await this.api.get(`memos/search?q=${encodeURIComponent(query)}`);
-    return response.json<MemoSearchResultDto>();
-  }
-
-  // 메모 통계 조회
-  async getMemoStats(): Promise<MemoStatsDto> {
-    const response = await this.api.get('memos/stats');
-    return response.json<MemoStatsDto>();
   }
 }
 

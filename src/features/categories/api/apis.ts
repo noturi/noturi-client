@@ -1,7 +1,6 @@
 import { KyInstance } from 'ky';
 import {
   Category,
-  CategoryDistributionDto,
   CategoryListParamsDto,
   CategoryListResponseDto,
   CategoryStatsDto,
@@ -57,17 +56,6 @@ export class CategoryApi {
     } catch (error) {
       console.error('Get categories API error:', error);
       throw new Error('카테고리 목록을 불러오는데 실패했습니다.');
-    }
-  }
-
-  // 특정 카테고리 조회
-  async getCategory(id: string): Promise<Category> {
-    try {
-      const response = await this.api.get(`categories/${id}`);
-      return response.json<Category>();
-    } catch (error) {
-      console.error('Get category API error:', error);
-      throw new Error('카테고리를 불러오는데 실패했습니다.');
     }
   }
 
@@ -130,52 +118,6 @@ export class CategoryApi {
     } catch (error) {
       console.error('Merge categories API error:', error);
       throw new Error('카테고리 병합에 실패했습니다.');
-    }
-  }
-
-  // 카테고리별 메모 분포 조회
-  async getCategoryDistribution(): Promise<CategoryDistributionDto[]> {
-    try {
-      const response = await this.api.get('categories/distribution');
-      return response.json<CategoryDistributionDto[]>();
-    } catch (error) {
-      console.error('Get category distribution API error:', error);
-      throw new Error('카테고리 분포를 불러오는데 실패했습니다.');
-    }
-  }
-
-  // 사용하지 않는 카테고리 조회
-  async getUnusedCategories(): Promise<Category[]> {
-    try {
-      const response = await this.api.get('categories/unused');
-      return response.json<Category[]>();
-    } catch (error) {
-      console.error('Get unused categories API error:', error);
-      throw new Error('사용하지 않는 카테고리를 불러오는데 실패했습니다.');
-    }
-  }
-
-  // 카테고리 검색
-  async searchCategories(query: string): Promise<Category[]> {
-    try {
-      const response = await this.api.get(`categories/search?q=${encodeURIComponent(query)}`);
-      return response.json<Category[]>();
-    } catch (error) {
-      console.error('Search categories API error:', error);
-      throw new Error('카테고리 검색에 실패했습니다.');
-    }
-  }
-
-  // 카테고리 중복 확인
-  async checkCategoryExists(name: string): Promise<{ exists: boolean; category?: Category }> {
-    try {
-      const response = await this.api.get(
-        `categories/check-exists?name=${encodeURIComponent(name)}`,
-      );
-      return response.json<{ exists: boolean; category?: Category }>();
-    } catch (error) {
-      console.error('Check category exists API error:', error);
-      throw new Error('카테고리 중복 확인에 실패했습니다.');
     }
   }
 }
