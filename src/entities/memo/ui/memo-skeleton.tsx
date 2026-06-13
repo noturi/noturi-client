@@ -1,8 +1,13 @@
+import { Card, Skeleton } from '~/shared/ui';
+
 import { View } from 'react-native';
 
-import { Card } from './card';
-import { Skeleton } from './skeleton';
+import { RatingGroupCardSkeleton } from './rating-group-card';
 
+/**
+ * 홈 메모 목록 로딩 스켈레톤
+ * (카테고리 필터 바 + 헤더 + 별점 그룹 카드 3개)
+ */
 export function MemoSkeleton() {
   return (
     <View className="gap-6">
@@ -27,25 +32,7 @@ export function MemoSkeleton() {
       {/* Rating Group Cards */}
       <View className="mb-5 gap-4">
         {[1, 2, 3].map((i) => (
-          <Card key={i}>
-            {/* Rating header: 별점 + (N개) + 화살표 */}
-            <View className="flex-row items-center gap-2 p-3">
-              <View className="flex-1 flex-row items-center gap-2">
-                <Skeleton borderRadius={2} height={14} width={86} />
-                <Skeleton borderRadius={4} height={14} width={28} />
-              </View>
-              <Skeleton borderRadius={2} height={16} width={16} />
-            </View>
-
-            {/* Divider */}
-            <View className="mx-3 h-px bg-border" />
-
-            {/* Memo titles */}
-            <View className="gap-2 p-3">
-              <Skeleton borderRadius={4} height={18} width="70%" />
-              <Skeleton borderRadius={4} height={18} width="55%" />
-            </View>
-          </Card>
+          <RatingGroupCardSkeleton key={i} />
         ))}
       </View>
     </View>

@@ -1,3 +1,4 @@
+import { STAR_COLOR } from '~/shared/config';
 import { Star } from '~/shared/lib/icons';
 
 import { View } from 'react-native';
@@ -7,9 +8,6 @@ import { Typography } from './typography';
 interface StarRatingProps {
   rating: number;
 }
-
-// RatingStars와 동일한 노란색으로 통일 (다크/라이트 모드 공통)
-const STAR_COLOR = '#ffc107';
 
 export function StarRating({ rating }: StarRatingProps) {
   // 모든 가능한 케이스를 처리하여 안전한 숫자로 변환

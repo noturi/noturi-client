@@ -1,3 +1,4 @@
+import { STAR_COLOR } from '~/shared/config';
 import { Star } from '~/shared/lib/icons';
 
 import { View } from 'react-native';
@@ -5,9 +6,6 @@ import { View } from 'react-native';
 interface RatingStarsProps {
   rating: number;
 }
-
-// 테마에서 star 색상 사용 (accent와 동일)
-const STAR_COLOR = '#ffc107';
 
 export function RatingStars({ rating }: RatingStarsProps) {
   return (

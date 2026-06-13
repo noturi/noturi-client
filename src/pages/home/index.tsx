@@ -1,10 +1,11 @@
 import { activeCategoriesQuery } from '~/entities/category';
 import { infiniteMemoListQuery } from '~/entities/memo';
+import { MemoSkeleton } from '~/entities/memo';
 import type { MemoListParamsDto, RatingGroupData } from '~/entities/memo/model/types';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
 import { HREFS } from '~/shared/config/routes';
-import { FloatingButton, MemoSkeleton } from '~/shared/ui';
+import { FloatingButton } from '~/shared/ui';
 import { MemoRatingList, YearSelectSheet } from '~/widgets';
 
 import { Suspense, useMemo, useState } from 'react';
