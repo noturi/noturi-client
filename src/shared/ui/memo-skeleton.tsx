@@ -31,11 +31,7 @@ export function MemoSkeleton() {
             {/* Rating header: 별점 + (N개) + 화살표 */}
             <View className="flex-row items-center gap-2 p-3">
               <View className="flex-1 flex-row items-center gap-2">
-                <View className="flex-row gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Skeleton key={star} borderRadius={2} height={14} width={14} />
-                  ))}
-                </View>
+                <Skeleton borderRadius={2} height={14} width={86} />
                 <Skeleton borderRadius={4} height={14} width={28} />
               </View>
               <Skeleton borderRadius={2} height={16} width={16} />
