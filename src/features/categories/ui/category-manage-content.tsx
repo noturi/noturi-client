@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Category } from '~/entities/category';
-import { activeCategoriesQuery } from '~/features/categories/api/queries';
+import { activeCategoriesQuery } from '~/entities/category';
 import { useForm } from '~/shared/lib';
 import { GripVertical } from '~/shared/lib/icons';
 import { Button, Form, Input } from '~/shared/ui';

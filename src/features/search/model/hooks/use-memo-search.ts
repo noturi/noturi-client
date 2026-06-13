@@ -1,5 +1,5 @@
+import { activeCategoriesQuery } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo/model/types';
-import { activeCategoriesQuery } from '~/features/categories/api/queries';
 
 import { useCallback } from 'react';
 

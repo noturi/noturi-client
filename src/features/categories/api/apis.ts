@@ -1,9 +1,6 @@
 import { KyInstance } from 'ky';
 import {
   Category,
-  CategoryListParamsDto,
-  CategoryListResponseDto,
-  CategoryStatsDto,
   CreateCategoryDto,
   MergeCategoriesDto,
   ReorderCategoriesDto,
@@ -11,52 +8,18 @@ import {
 } from '~/entities/category/model/types';
 import { api } from '~/shared/api';
 
-export class CategoryApi {
+/**
+ * Feature Layer - CUD 전용 API
+ *
+ * 이 클래스는 카테고리의 변경 작업만 담당합니다.
+ * - ✅ POST, PATCH, DELETE 요청만 처리
+ * - ❌ GET은 entities/category/api/apis.ts에서 처리
+ */
+export class CategoryMutationApi {
   private api: KyInstance;
 
   constructor(apiInstance: KyInstance) {
     this.api = apiInstance;
-  }
-
-  private transformBackendCategory(backendCategory: any): Category {
-    return {
-      id: backendCategory.id,
-      name: backendCategory.name,
-      color: backendCategory.color,
-      icon: backendCategory.icon,
-      description: backendCategory.description,
-      memoCount: backendCategory.count?.memos || 0,
-      createdAt: backendCategory.createdAt,
-      updatedAt: backendCategory.updatedAt,
-    };
-  }
-
-  // 카테고리 목록 조회
-  async getCategories(params: CategoryListParamsDto = {}): Promise<CategoryListResponseDto> {
-    try {
-      const searchParams = new URLSearchParams();
-
-      if (params.includeEmpty !== undefined) {
-        searchParams.append('includeEmpty', params.includeEmpty.toString());
-      }
-      if (params.sortBy) searchParams.append('sortBy', params.sortBy);
-      if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
-
-      const url = `categories?${searchParams.toString()}`;
-
-      const response = await this.api.get(url);
-      const backendData = await response.json<any[]>();
-
-      const transformedData: CategoryListResponseDto = {
-        categories: backendData.map((item) => this.transformBackendCategory(item)),
-        total: backendData.length,
-      };
-
-      return transformedData;
-    } catch (error) {
-      console.error('Get categories API error:', error);
-      throw new Error('카테고리 목록을 불러오는데 실패했습니다.');
-    }
   }
 
   // 카테고리 생성
@@ -86,17 +49,6 @@ export class CategoryApi {
     await this.api.delete(`categories/${id}`);
   }
 
-  // 카테고리 통계 조회
-  async getCategoryStats(): Promise<CategoryStatsDto> {
-    try {
-      const response = await this.api.get('categories/stats');
-      return response.json<CategoryStatsDto>();
-    } catch (error) {
-      console.error('Get category stats API error:', error);
-      throw new Error('카테고리 통계를 불러오는데 실패했습니다.');
-    }
-  }
-
   // 카테고리 순서 변경
   async reorderCategories(data: ReorderCategoriesDto): Promise<void> {
     try {
@@ -122,4 +74,4 @@ export class CategoryApi {
   }
 }
 
-export const categoryApi = new CategoryApi(api);
+export const categoryMutationApi = new CategoryMutationApi(api);

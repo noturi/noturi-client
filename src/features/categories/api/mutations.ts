@@ -14,7 +14,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { categoryApi } from './apis';
+import { categoryMutationApi } from './apis';
 
 // 카테고리 생성 뮤테이션
 export function useCreateCategoryMutation(
@@ -28,7 +28,7 @@ export function useCreateCategoryMutation(
 
   return useMutation({
     mutationKey: ['category', 'create', ...mutationKey],
-    mutationFn: (data: CreateCategoryDto) => categoryApi.createCategory(data),
+    mutationFn: (data: CreateCategoryDto) => categoryMutationApi.createCategory(data),
     onMutate,
     onSuccess: async (newCategory, createData, context) => {
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
@@ -54,7 +54,7 @@ export function useUpdateCategoryMutation(
 
   return useMutation({
     mutationKey: ['category', 'update', ...mutationKey],
-    mutationFn: (data: UpdateCategoryDto) => categoryApi.updateCategory(data),
+    mutationFn: (data: UpdateCategoryDto) => categoryMutationApi.updateCategory(data),
     onMutate,
     onSuccess: async (updatedCategory, updateData, context) => {
       await queryClient.setQueryData(QUERY_KEYS.category(updatedCategory.id), updatedCategory);
@@ -80,7 +80,7 @@ export function useDeleteCategoryMutation(
 
   return useMutation({
     mutationKey: ['category', 'delete', ...mutationKey],
-    mutationFn: (id: string) => categoryApi.deleteCategory(id),
+    mutationFn: (id: string) => categoryMutationApi.deleteCategory(id),
     onMutate,
     onSuccess: async (_, deletedId, context) => {
       await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(deletedId) });
@@ -108,7 +108,7 @@ export function useReorderCategoriesMutation(
 
   return useMutation({
     mutationKey: ['category', 'reorder', ...mutationKey],
-    mutationFn: (data: ReorderCategoriesDto) => categoryApi.reorderCategories(data),
+    mutationFn: (data: ReorderCategoriesDto) => categoryMutationApi.reorderCategories(data),
     onMutate,
     onSuccess: async (_, reorderData, context) => {
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
@@ -132,7 +132,7 @@ export function useMergeCategoriesMutation(
 
   return useMutation({
     mutationKey: ['category', 'merge', ...mutationKey],
-    mutationFn: (data: MergeCategoriesDto) => categoryApi.mergeCategories(data),
+    mutationFn: (data: MergeCategoriesDto) => categoryMutationApi.mergeCategories(data),
     onMutate,
     onSuccess: async (_, mergeData, context) => {
       await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(mergeData.sourceId) });

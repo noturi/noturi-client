@@ -1,6 +1,6 @@
+import { activeCategoriesQuery } from '~/entities/category';
 import { infiniteMemoListQuery } from '~/entities/memo';
 import type { MemoListParamsDto, RatingGroupData } from '~/entities/memo/model/types';
-import { activeCategoriesQuery } from '~/features/categories/api';
 import { CategoryService } from '~/features/categories/model';
 import { MemoService } from '~/features/memo/model';
 import { HREFS } from '~/shared/config/routes';
