@@ -39,9 +39,13 @@ export function useWidgetDeepLink() {
     const subscription = Linking.addEventListener('url', handleUrl);
 
     // Handle initial URL (app opened from widget)
-    Linking.getInitialURL().then((url) => {
-      if (url) handleUrl({ url });
-    });
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) handleUrl({ url });
+      })
+      .catch(() => {
+        // 초기 URL 조회 실패는 무시 (위젯 외 진입)
+      });
 
     return () => {
       subscription.remove();
