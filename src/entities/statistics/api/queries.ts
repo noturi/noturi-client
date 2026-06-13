@@ -3,7 +3,7 @@ import { QUERY_KEYS } from '~/shared/lib';
 
 import { queryOptions } from '@tanstack/react-query';
 
-import { statisticsApi } from './statistics-api';
+import { statisticsApi } from './apis';
 
 // 트렌드 분석 쿼리
 export const trendsQuery = (params: TrendsParamsDto = {}) =>

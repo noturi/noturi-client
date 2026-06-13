@@ -1,2 +1,2 @@
 export * from './queries';
-export * from './statistics-api';
+export * from './apis';
