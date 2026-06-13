@@ -12,6 +12,7 @@
     "assets:generate": "node ./scripts/generate-assets.mjs",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest --watchAll",

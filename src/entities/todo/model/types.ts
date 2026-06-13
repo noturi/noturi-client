@@ -13,11 +13,11 @@ export interface Todo {
 }
 
 // 투두 목록 조회 파라미터
-export interface TodoListParamsDto {
+export type TodoListParamsDto = {
   date?: string; // 특정 날짜 조회 (있으면 year/month 무시)
   year?: number; // 년도 (월별 조회용)
   month?: number; // 월 (월별 조회용)
-}
+};
 
 // 투두 목록 응답
 export interface TodoListResponseDto {
@@ -46,10 +46,10 @@ export interface DailyStat {
 }
 
 // 월간 통계 파라미터
-export interface TodoMonthlyStatsParamsDto {
+export type TodoMonthlyStatsParamsDto = {
   year: number;
   month: number;
-}
+};
 
 // 월간 통계 응답
 export interface TodoMonthlyStatsDto {

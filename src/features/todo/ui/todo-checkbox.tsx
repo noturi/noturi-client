@@ -1,12 +1,13 @@
 import { Check } from 'lucide-react-native';
 import { useUserTheme } from '~/application/providers/theme-provider';
 
+import { ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 interface TodoCheckboxProps {
   isCompleted: boolean;
-  circleStyle: Animated.AnimateStyle<Record<string, unknown>>;
-  checkStyle: Animated.AnimateStyle<Record<string, unknown>>;
+  circleStyle: ViewStyle;
+  checkStyle: ViewStyle;
 }
 
 /**

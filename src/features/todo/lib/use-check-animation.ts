@@ -1,3 +1,4 @@
+import { ViewStyle } from 'react-native';
 import {
   Easing,
   useAnimatedStyle,
@@ -7,9 +8,9 @@ import {
 } from 'react-native-reanimated';
 
 interface CheckAnimationStyles {
-  checkStyle: ReturnType<typeof useAnimatedStyle>;
-  circleStyle: ReturnType<typeof useAnimatedStyle>;
-  contentStyle: ReturnType<typeof useAnimatedStyle>;
+  checkStyle: ViewStyle;
+  circleStyle: ViewStyle;
+  contentStyle: ViewStyle;
 }
 
 interface UseCheckAnimationReturn extends CheckAnimationStyles {
@@ -53,16 +54,16 @@ export function useCheckAnimation(initialCompleted: boolean): UseCheckAnimationR
     }
   };
 
-  const checkStyle = useAnimatedStyle(() => ({
+  const checkStyle = useAnimatedStyle<ViewStyle>(() => ({
     transform: [{ scale: checkScale.value }],
     opacity: checkOpacity.value,
   }));
 
-  const circleStyle = useAnimatedStyle(() => ({
+  const circleStyle = useAnimatedStyle<ViewStyle>(() => ({
     transform: [{ scale: circleScale.value }],
   }));
 
-  const contentStyle = useAnimatedStyle(() => ({
+  const contentStyle = useAnimatedStyle<ViewStyle>(() => ({
     opacity: 0.4 + (1 - contentOpacity.value) * 0.6,
   }));
 
