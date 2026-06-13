@@ -1,5 +1,4 @@
-import type { UICategory } from '~/entities/category/model/types';
-import { CategoryButton } from '~/entities/category/ui/category-button';
+import { CategoryButton, type UICategory } from '~/entities/category';
 import { Card } from '~/shared/ui';
 
 import { ScrollView, View } from 'react-native';

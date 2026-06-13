@@ -1,5 +1,4 @@
-import type { SortOption } from '~/entities/category/model/types';
-import { SortButton } from '~/entities/category/ui/sort-button';
+import { SortButton, type SortOption } from '~/entities/category';
 
 import { View } from 'react-native';
 
