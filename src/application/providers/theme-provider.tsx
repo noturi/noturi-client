@@ -1,4 +1,5 @@
 import { vars } from 'nativewind';
+import { authStore } from '~/entities/auth';
 import { ThemeId, userSettingsQuery } from '~/entities/user';
 import { useUpdateSettingsMutation } from '~/features/user';
 import {
@@ -10,7 +11,7 @@ import {
 } from '~/shared/config/theme';
 import { ThemeContext } from '~/shared/lib/theme-context';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState, useSyncExternalStore } from 'react';
 import { Appearance, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -24,8 +25,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 서버에서 설정 조회
-  const { data: serverSettings } = useQuery(userSettingsQuery());
+  // 테마는 계정 설정 — 로그인한 계정의 서버 설정에서 가져옴
+  // (ThemeProvider는 로그인 화면도 감싸야 해서 AuthProvider 바깥에 있으므로 authStore를 직접 구독)
+  const auth = useSyncExternalStore(authStore.subscribe, authStore.getSnapshot);
+  const accountId = auth.isAuthenticated ? auth.user?.id : undefined;
+  const { data: serverSettings } = useQuery({
+    ...userSettingsQuery(),
+    enabled: Boolean(accountId),
+  });
   const updateSettingsMutation = useUpdateSettingsMutation();
 
   const currentTheme = themeStore.getPreset(themeId);
@@ -44,20 +51,32 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     });
   }, []);
 
-  // 서버 설정이 로드/변경되면 동기화 — 상태는 렌더 중 조정, 로컬 저장만 effect에서
+  // 계정 전환 감지 (렌더 중 상태 조정) — 로그아웃하면 기본 테마, 다른 계정이면 그 계정 테마를 새로 적용
+  const [appliedServerThemeId, setAppliedServerThemeId] = useState<string | undefined>(undefined);
+  const [currentAccountId, setCurrentAccountId] = useState<string | undefined>(undefined);
+  if (!auth.isInitialLoading && accountId !== currentAccountId) {
+    setCurrentAccountId(accountId);
+    setAppliedServerThemeId(undefined);
+    if (!accountId) setThemeId(DEFAULT_THEME_ID);
+  }
+
+  // 계정의 서버 테마 적용 — 상태는 렌더 중 조정, 로컬 캐시 저장만 effect에서
   const serverThemeId = serverSettings?.theme
     ? serverSettings.theme in PRESET_HEX_COLORS
       ? serverSettings.theme
       : DEFAULT_THEME_ID
     : undefined;
-  const [appliedServerThemeId, setAppliedServerThemeId] = useState<string | undefined>(undefined);
-  if (serverThemeId && serverThemeId !== appliedServerThemeId) {
+  if (accountId && serverThemeId && serverThemeId !== appliedServerThemeId) {
     setAppliedServerThemeId(serverThemeId);
     setThemeId(serverThemeId);
   }
+
+  // 로컬 저장은 앱 시작 시 깜빡임 방지용 캐시 — 현재 계정의 테마(로그아웃이면 기본값)를 저장
+  const isLoggedOut = !auth.isInitialLoading && !accountId;
   useEffect(() => {
-    if (serverThemeId) themeStore.setThemeId(serverThemeId);
-  }, [serverThemeId]);
+    if (isLoggedOut) themeStore.setThemeId(DEFAULT_THEME_ID);
+    else if (serverThemeId) themeStore.setThemeId(serverThemeId);
+  }, [isLoggedOut, serverThemeId]);
 
   // 앱 테마에 맞게 시스템 appearance 동기화 (NativeTabs 색상 문제 해결)
   useEffect(() => {
