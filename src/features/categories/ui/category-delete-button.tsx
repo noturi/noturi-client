@@ -1,3 +1,4 @@
+import { UNCATEGORIZED_LABEL } from '~/shared/config';
 import { useToast } from '~/shared/lib';
 import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
@@ -9,7 +10,7 @@ import { useDeleteCategoryMutation } from '../api/mutations';
 interface CategoryDeleteButtonProps {
   categoryId: string;
   categoryName: string;
-  /** 소속 메모 수 — 삭제 시 '기타'로 이동됨을 안내 */
+  /** 소속 메모 수 — 삭제해도 메모는 남는다는 것을 안내 */
   memoCount?: number;
   disabled?: boolean;
 }
@@ -35,9 +36,11 @@ export function CategoryDeleteButton({
       return;
     }
 
-    // 메모는 삭제되지 않고 카테고리 없음('기타')으로 이동
+    // 메모는 삭제되지 않고 카테고리만 비워짐 — 실제 카테고리가 아니므로 '미분류'로 안내
     const memoNotice =
-      memoCount > 0 ? `\n이 카테고리의 메모 ${memoCount}개는 '기타'로 이동됩니다.` : '';
+      memoCount > 0
+        ? `\n이 카테고리의 메모 ${memoCount}개는 삭제되지 않고 '${UNCATEGORIZED_LABEL}'로 남아요.`
+        : '';
     Alert.alert(
       '카테고리 삭제',
       `'${categoryName}' 카테고리를 정말 삭제하시겠습니까?${memoNotice}`,

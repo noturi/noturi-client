@@ -1,6 +1,6 @@
 import { memoDetailQuery } from '~/entities/memo';
 import { MemoDeleteButton } from '~/features/memo';
-import { HREFS } from '~/shared/config';
+import { FALLBACK_CATEGORY_COLOR, HREFS, UNCATEGORIZED_LABEL } from '~/shared/config';
 import { FloatingButton, Loading, StarRating, Typography } from '~/shared/ui';
 
 import { ScrollView, View } from 'react-native';
@@ -60,16 +60,14 @@ export function MemoDetailPage({ memoId }: MemoDetailPageProps) {
             <View className="gap-2">
               <View className="flex-row items-start justify-between">
                 <View className="flex-row items-center flex-1 gap-4">
-                  {memo.category && (
-                    <View
-                      className="rounded-2 px-3 py-2"
-                      style={{ backgroundColor: memo.category.color }}
-                    >
-                      <Typography className="text-white text-2 font-medium" variant="caption2">
-                        {memo.category.name}
-                      </Typography>
-                    </View>
-                  )}
+                  <View
+                    className="rounded-2 px-3 py-2"
+                    style={{ backgroundColor: memo.category?.color ?? FALLBACK_CATEGORY_COLOR }}
+                  >
+                    <Typography className="text-white text-2 font-medium" variant="caption2">
+                      {memo.category?.name ?? UNCATEGORIZED_LABEL}
+                    </Typography>
+                  </View>
                   <Typography className="text-text-muted" variant="caption2">
                     {formatDate(memo.createdAt)}
                   </Typography>

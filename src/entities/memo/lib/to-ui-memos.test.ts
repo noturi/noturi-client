@@ -31,8 +31,8 @@ describe('toUIMemos', () => {
     });
   });
 
-  it('카테고리가 없으면 "기타"로 대체한다', () => {
+  it('카테고리가 없으면 "미분류"로 표시한다', () => {
     const [ui] = toUIMemos([memo({ category: null })]);
-    expect(ui.category).toEqual({ id: 'default', name: '기타', color: '#6b7280' });
+    expect(ui.category).toEqual({ id: 'default', name: '미분류', color: '#6b7280' });
   });
 });

@@ -87,7 +87,7 @@ export function useDeleteCategoryMutation(
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
-      // 소속 메모가 '기타'로 이동하므로 열어 본 메모 상세의 카테고리 표시도 갱신
+      // 소속 메모가 미분류가 되므로 열어 본 메모 상세의 카테고리 표시도 갱신
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memoDetails });
 
       await onSuccess?.(_, deletedId, onMutateResult, context);

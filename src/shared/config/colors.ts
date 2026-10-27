@@ -8,8 +8,9 @@
 // 새 카테고리 기본 색상
 export const DEFAULT_COLORS = '#000000';
 
-// 카테고리가 없는 메모의 '기타' 카테고리 색상 (gray-500)
-export const FALLBACK_CATEGORY_COLOR = '#6b7280';
+// 카테고리가 없는 메모(카테고리 삭제 등)의 표시 — 실제 카테고리가 아니므로 사용자 카테고리명과 겹치지 않게 '미분류'
+export const UNCATEGORIZED_LABEL = '미분류';
+export const FALLBACK_CATEGORY_COLOR = '#6b7280'; // gray-500
 
 // 그림자 색상 (iOS shadowColor — 테마 공통)
 export const SHADOW_COLOR = '#000';
