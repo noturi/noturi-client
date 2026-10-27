@@ -1,8 +1,9 @@
-const { getDefaultConfig } = require('expo/metro-config');
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 const { withNativeWind } = require('nativewind/metro');
 const path = require('path');
 
-const config = getDefaultConfig(__dirname);
+// Sentry: 번들에 디버그 ID를 주입해 소스맵과 매칭 (getDefaultConfig 대체)
+const config = getSentryExpoConfig(__dirname);
 
 // Add path aliases for Metro
 config.resolver.alias = {

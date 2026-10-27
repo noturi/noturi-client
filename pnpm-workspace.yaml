@@ -7,3 +7,4 @@ allowBuilds:
   sharp: false
   unrs-resolver: false
   '@parcel/watcher': false
+  '@sentry/cli': false

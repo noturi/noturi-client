@@ -23,6 +23,14 @@ pnpm format             # Prettier
 npx expo start --clear  # 캐시 클리어
 ```
 
+## 환경변수 (`.env.local`, 커밋 금지)
+
+- `EXPO_PUBLIC_BASE_URL` 등 기존 값 + 선택:
+- `EXPO_PUBLIC_SENTRY_DSN` — Sentry 에러 수집 (없거나 개발 모드면 비활성화, `src/shared/lib/sentry.ts`)
+- `EXPO_PUBLIC_LOG_API=1` — 모든 API 요청/응답 debug 로그 (기본은 실패 응답만 warn)
+- 빌드 시 소스맵 업로드: `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` (EAS 시크릿 — 토큰은 절대 커밋 금지)
+- 로그는 `Logger` 사용: `error` → Sentry 이벤트, `warn` → Sentry breadcrumb
+
 ## 아키텍처: FSD (Feature-Sliced Design)
 
 의존성: `shared < entities < features < widgets < pages < app` (역방향 금지)

@@ -7,10 +7,12 @@ import '../global.css';
 import { AppProvider } from '../src/application/providers';
 import { RootRouter } from '../src/application/router';
 import '../src/shared/lib/polyfill';
+import { Sentry, initSentry } from '../src/shared/lib/sentry';
 
+initSentry();
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     'Pretendard-Regular': require('../assets/fonts/Pretendard-Regular.ttf'),
     'Pretendard-Medium': require('../assets/fonts/Pretendard-Medium.ttf'),
@@ -34,3 +36,6 @@ export default function RootLayout() {
     </AppProvider>
   );
 }
+
+// 렌더 중 발생한 에러·네이티브 크래시를 Sentry로 보고
+export default Sentry.wrap(RootLayout);

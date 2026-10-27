@@ -1,3 +1,5 @@
+import { Sentry } from './sentry';
+
 const LOG_LEVELS = {
   DEBUG: 0,
   INFO: 1,
@@ -41,6 +43,17 @@ const COLORS = {
     white: '\x1b[47m',
   },
 };
+
+/** Error 객체가 있으면 예외(스택 포함)로, 없으면 메시지 이벤트로 보고 */
+function reportToSentry(message: string, args: unknown[]) {
+  const error = args.find((arg): arg is Error => arg instanceof Error);
+  const extra = { args: args.filter((arg) => arg !== error) };
+  if (error) {
+    Sentry.captureException(error, { extra: { message, ...extra } });
+  } else {
+    Sentry.captureMessage(message, { level: 'error', extra });
+  }
+}
 
 class Logger {
   private static getTimestamp(): string {
@@ -92,6 +105,8 @@ class Logger {
   }
 
   static warn(message: string, ...args: unknown[]) {
+    // 경고는 이벤트로 보내지 않고 이후 에러의 맥락(breadcrumb)으로만 남김
+    Sentry.addBreadcrumb({ level: 'warning', message, data: args.length ? { args } : undefined });
     this.print(LOG_LEVELS.WARN, message, args, {
       color: COLORS.fg.yellow,
       label: 'WARN',
@@ -99,6 +114,7 @@ class Logger {
   }
 
   static error(message: string, ...args: unknown[]) {
+    reportToSentry(message, args);
     this.print(LOG_LEVELS.ERROR, message, args, {
       color: COLORS.fg.red,
       label: 'ERROR',
