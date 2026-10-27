@@ -1,13 +1,9 @@
 import { useTheme } from '@react-navigation/native';
+import { DURATION, EASING } from '~/shared/config';
 
 import { useEffect } from 'react';
 import { View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedProps,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -40,8 +36,8 @@ export function CircularProgress({
   useEffect(() => {
     animatedProgress.set(
       withTiming(clampedProgress, {
-        duration: 600,
-        easing: Easing.out(Easing.cubic),
+        duration: DURATION.progress,
+        easing: EASING.outCubic,
       }),
     );
   }, [clampedProgress, animatedProgress]);

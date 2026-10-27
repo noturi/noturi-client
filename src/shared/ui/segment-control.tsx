@@ -1,4 +1,4 @@
-import { SHADOW_COLOR } from '~/shared/config';
+import { DURATION, SHADOW_COLOR } from '~/shared/config';
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { useEffect } from 'react';
@@ -37,7 +37,7 @@ export function SegmentControl<T extends string>({
   // 선택 변경 시 인디케이터 이동 (폭은 shared value라 렌더 중에 읽지 않고 effect 안에서 읽음)
   useEffect(() => {
     const segmentWidth = innerWidth.get() / segmentCount;
-    translateX.set(withTiming(activeIndex * segmentWidth, { duration: 200 }));
+    translateX.set(withTiming(activeIndex * segmentWidth, { duration: DURATION.d4 }));
   }, [activeIndex, segmentCount, innerWidth, translateX]);
 
   const handleInnerLayout = (e: LayoutChangeEvent) => {

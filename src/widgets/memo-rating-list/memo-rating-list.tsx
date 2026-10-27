@@ -8,6 +8,7 @@ import {
   RatingGroupMemoRow,
   type UIMemo,
 } from '~/entities/memo';
+import { DURATION } from '~/shared/config';
 import { Typography } from '~/shared/ui';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
@@ -21,7 +22,7 @@ import type { MemoRatingRow, RatingGroup } from './types';
 const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 0 };
 /** 펼침/접힘: 기존 카드 높이 애니메이션(250ms, ease-out)과 비슷한 길이 */
 const TOGGLE_LAYOUT_ANIMATION = LayoutAnimation.create(
-  250,
+  DURATION.d5,
   LayoutAnimation.Types.easeOut,
   LayoutAnimation.Properties.opacity,
 );

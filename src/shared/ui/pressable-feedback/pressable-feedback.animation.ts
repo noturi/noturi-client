@@ -1,6 +1,7 @@
+import { DURATION, EASING } from '~/shared/config';
+
 import type { GestureResponderEvent, LayoutChangeEvent } from 'react-native';
 import {
-  Easing,
   interpolate,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -34,10 +35,10 @@ export function usePressableFeedbackRootAnimation(options?: {
 
   // Extract config values with defaults
   const scaleValue = animation?.scale?.value ?? DEFAULT_SCALE_VALUE;
-  const scaleDuration = animation?.scale?.timingConfig?.duration ?? 300;
+  const scaleDuration = animation?.scale?.timingConfig?.duration ?? DURATION.d6;
   const scaleTimingConfig = {
     duration: scaleDuration,
-    easing: Easing.out(Easing.ease),
+    easing: EASING.out,
   };
   const ignoreScaleCoefficient = animation?.scale?.ignoreScaleCoefficient ?? false;
 

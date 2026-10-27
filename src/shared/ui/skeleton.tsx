@@ -1,4 +1,4 @@
-import { RADIUS } from '~/shared/config';
+import { DURATION, RADIUS } from '~/shared/config';
 
 import { useEffect } from 'react';
 import Animated, {
@@ -24,7 +24,7 @@ export function Skeleton({
   const opacity = useSharedValue(0.5);
 
   useEffect(() => {
-    opacity.set(withRepeat(withTiming(1, { duration: 800 }), -1, true));
+    opacity.set(withRepeat(withTiming(1, { duration: DURATION.skeletonPulse }), -1, true));
   }, [opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({

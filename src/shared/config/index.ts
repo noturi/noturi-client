@@ -4,3 +4,4 @@ export * from './external-links';
 export * from './routes';
 export * from './calendar-locale';
 export * from './tokens';
+export * from './motion';

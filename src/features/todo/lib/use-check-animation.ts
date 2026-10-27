@@ -1,6 +1,7 @@
+import { BOUNCE_DURATION, DURATION, EASING } from '~/shared/config';
+
 import { ViewStyle } from 'react-native';
 import {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
   withSequence,
@@ -33,27 +34,30 @@ export function useCheckAnimation(initialCompleted: boolean): UseCheckAnimationR
     if (toCompleted) {
       circleScale.set(
         withSequence(
-          withTiming(0.85, { duration: 80 }),
-          withTiming(1.08, { duration: 120 }),
-          withTiming(1, { duration: 100 }),
+          withTiming(0.85, { duration: BOUNCE_DURATION.squash }),
+          withTiming(1.08, { duration: BOUNCE_DURATION.overshoot }),
+          withTiming(1, { duration: BOUNCE_DURATION.settle }),
         ),
       );
       checkScale.set(
         withSequence(
-          withTiming(0, { duration: 50 }),
-          withTiming(1.15, { duration: 150 }),
-          withTiming(1, { duration: 100 }),
+          withTiming(0, { duration: DURATION.d1 }),
+          withTiming(1.15, { duration: DURATION.d3 }),
+          withTiming(1, { duration: DURATION.d2 }),
         ),
       );
-      checkOpacity.set(withTiming(1, { duration: 150 }));
-      contentOpacity.set(withTiming(1, { duration: 300, easing: Easing.out(Easing.ease) }));
+      checkOpacity.set(withTiming(1, { duration: DURATION.d3 }));
+      contentOpacity.set(withTiming(1, { duration: DURATION.d6, easing: EASING.out }));
     } else {
       circleScale.set(
-        withSequence(withTiming(1.08, { duration: 80 }), withTiming(1, { duration: 100 })),
+        withSequence(
+          withTiming(1.08, { duration: BOUNCE_DURATION.squash }),
+          withTiming(1, { duration: BOUNCE_DURATION.settle }),
+        ),
       );
-      checkScale.set(withTiming(0, { duration: 120 }));
-      checkOpacity.set(withTiming(0, { duration: 100 }));
-      contentOpacity.set(withTiming(0, { duration: 200 }));
+      checkScale.set(withTiming(0, { duration: BOUNCE_DURATION.overshoot }));
+      checkOpacity.set(withTiming(0, { duration: DURATION.d2 }));
+      contentOpacity.set(withTiming(0, { duration: DURATION.d4 }));
     }
   };
 

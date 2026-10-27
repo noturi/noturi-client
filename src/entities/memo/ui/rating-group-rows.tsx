@@ -1,14 +1,10 @@
+import { DURATION, EASING } from '~/shared/config';
 import { ChevronDown } from '~/shared/lib/icons';
 import { Card, RatingStars, Skeleton, Typography } from '~/shared/ui';
 
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import type { UIMemo } from '../model/types';
 
@@ -20,8 +16,8 @@ import type { UIMemo } from '../model/types';
  */
 
 const CHEVRON_TIMING = {
-  duration: 250,
-  easing: Easing.bezier(0, 0, 0.2, 1),
+  duration: DURATION.d5,
+  easing: EASING.enter,
 };
 
 interface RatingGroupHeaderRowProps {

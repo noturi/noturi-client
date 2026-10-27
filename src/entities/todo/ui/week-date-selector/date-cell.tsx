@@ -1,4 +1,5 @@
 import { getDay, isToday } from 'date-fns';
+import { BOUNCE_DURATION } from '~/shared/config';
 import { CircularProgress, Typography } from '~/shared/ui';
 
 import { useEffect, useRef } from 'react';
@@ -62,9 +63,9 @@ function useSelectBounce(isSelected: boolean) {
     if (isSelected && !prevSelectedRef.current) {
       scale.set(
         withSequence(
-          withTiming(0.8, { duration: 80 }),
-          withTiming(1.1, { duration: 120 }),
-          withTiming(1, { duration: 100 }),
+          withTiming(0.8, { duration: BOUNCE_DURATION.squash }),
+          withTiming(1.1, { duration: BOUNCE_DURATION.overshoot }),
+          withTiming(1, { duration: BOUNCE_DURATION.settle }),
         ),
       );
     }

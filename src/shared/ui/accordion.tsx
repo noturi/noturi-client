@@ -1,13 +1,9 @@
+import { DURATION, EASING } from '~/shared/config';
 import { ChevronDown } from '~/shared/lib/icons';
 
 import { ReactNode, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { Typography } from './typography';
 
@@ -32,22 +28,22 @@ export function Accordion({ title, icon, children, defaultOpen = false }: Accord
 
     rotation.set(
       withTiming(newIsOpen ? 180 : 0, {
-        duration: 250,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: DURATION.d5,
+        easing: EASING.standard,
       }),
     );
 
     height.set(
       withTiming(newIsOpen ? 1 : 0, {
-        duration: 250,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: DURATION.d5,
+        easing: EASING.standard,
       }),
     );
 
     opacity.set(
       withTiming(newIsOpen ? 1 : 0, {
-        duration: 200,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: DURATION.d4,
+        easing: EASING.standard,
       }),
     );
   };
