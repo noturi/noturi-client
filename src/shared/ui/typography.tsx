@@ -98,11 +98,12 @@ const variantStyles: Record<TypographyVariant, TextStyle> = {
     letterSpacing: 0.07,
     textTransform: 'uppercase',
   },
+  // 통계 값 — 옆 라벨(footnote)과 같은 크기, 굵기로 강조
   number: {
-    fontSize: 15,
-    fontFamily: 'Pretendard-Medium',
-    lineHeight: 22,
-    letterSpacing: -0.41,
+    fontSize: 13,
+    fontFamily: 'Pretendard-SemiBold',
+    lineHeight: 18,
+    letterSpacing: -0.08,
   },
 };
 
@@ -121,7 +122,8 @@ const variantColorClass: Record<TypographyVariant, string> = {
   caption2: 'text-text-muted',
   link: 'text-accent',
   label: 'text-text-primary',
-  number: 'text-accent',
+  // accent(노랑)는 흰 배경 대비가 낮아(약 1.6:1) 글자색으로 쓰지 않음
+  number: 'text-text-primary',
 };
 
 export type FontWeight = 'regular' | 'medium' | 'semibold' | 'bold';
