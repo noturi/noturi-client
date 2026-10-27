@@ -11,7 +11,6 @@ import { Search } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { ControlledSheet } from '~/shared/ui';
 
-import { useCallback } from 'react';
 import { View } from 'react-native';
 
 import { router } from 'expo-router';
@@ -20,7 +19,7 @@ export function SearchPage() {
   const { filters, categories, memos } = useMemoSearch();
   const { hexColors } = useUserTheme();
 
-  const handleSearch = useCallback(() => {
+  const handleSearch = () => {
     if (
       filters.debouncedSearchText.trim() ||
       filters.selectedCategoryId !== undefined ||
@@ -29,11 +28,11 @@ export function SearchPage() {
     ) {
       memos.refetch();
     }
-  }, [filters, memos]);
+  };
 
-  const onEndReached = useCallback(() => {
+  const onEndReached = () => {
     if (memos.hasNextPage && !memos.isFetchingNextPage) memos.fetchNextPage();
-  }, [memos]);
+  };
 
   const isIdle = !filters.hasSearchQuery;
   const hasResults = filters.hasSearchQuery && !memos.isLoading && memos.list.length > 0;

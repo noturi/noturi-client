@@ -10,7 +10,7 @@ import { useUserTheme } from '~/shared/lib/theme-context';
 import { CircularProgress, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,7 +22,7 @@ export function TodoPage() {
   const [selectedDate, setSelectedDate] = useState(() => new Date());
 
   const dateString = formatDateString(selectedDate);
-  const isPast = useMemo(() => startOfDay(selectedDate) < startOfDay(new Date()), [selectedDate]);
+  const isPast = startOfDay(selectedDate) < startOfDay(new Date());
   const { data: todosData } = useQuery(todosByDateQuery(dateString));
   const { data: monthlyStats } = useQuery(
     todoMonthlyStatsQuery({ year: selectedDate.getFullYear(), month: selectedDate.getMonth() + 1 }),

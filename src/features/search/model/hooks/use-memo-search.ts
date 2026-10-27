@@ -1,8 +1,6 @@
 import { activeCategoriesQuery } from '~/entities/category';
 import type { UIMemo } from '~/entities/memo';
 
-import { useCallback } from 'react';
-
 import { useQuery } from '@tanstack/react-query';
 
 import { useInfiniteMemos } from './use-infinite-memos';
@@ -83,17 +81,17 @@ export function useMemoSearch(): UseMemoSearchReturn {
 
   const transformedMemos = useTransformMemos(data);
 
-  const wrappedFetchNextPage = useCallback(() => {
+  const wrappedFetchNextPage = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  };
 
-  const wrappedRefetch = useCallback(() => {
+  const wrappedRefetch = () => {
     if (hasSearchQuery) {
       refetch();
     }
-  }, [hasSearchQuery, refetch]);
+  };
 
   return {
     filters: {

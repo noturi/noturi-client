@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import type { GestureResponderEvent, LayoutChangeEvent } from 'react-native';
 import {
   Easing,
@@ -40,13 +39,10 @@ export function usePressableFeedbackRootAnimation(options?: {
   // Extract config values with defaults
   const scaleValue = animation?.scale?.value ?? DEFAULT_SCALE_VALUE;
   const scaleDuration = animation?.scale?.timingConfig?.duration ?? 300;
-  const scaleTimingConfig = useMemo(
-    () => ({
-      duration: scaleDuration,
-      easing: Easing.out(Easing.ease),
-    }),
-    [scaleDuration],
-  );
+  const scaleTimingConfig = {
+    duration: scaleDuration,
+    easing: Easing.out(Easing.ease),
+  };
   const ignoreScaleCoefficient = animation?.scale?.ignoreScaleCoefficient ?? false;
 
   // Shared values
@@ -66,31 +62,22 @@ export function usePressableFeedbackRootAnimation(options?: {
     return 1 - (1 - scaleValue) * Math.min(coefficient, 1.5);
   });
 
-  const onPressIn = useCallback(
-    (e: GestureResponderEvent) => {
-      isPressed.set(true);
-      pressedCenterX.set(e.nativeEvent.locationX);
-      pressedCenterY.set(e.nativeEvent.locationY);
-      scale.set(withTiming(1, scaleTimingConfig));
-    },
-    [isPressed, pressedCenterX, pressedCenterY, scale, scaleTimingConfig],
-  );
+  const onPressIn = (e: GestureResponderEvent) => {
+    isPressed.set(true);
+    pressedCenterX.set(e.nativeEvent.locationX);
+    pressedCenterY.set(e.nativeEvent.locationY);
+    scale.set(withTiming(1, scaleTimingConfig));
+  };
 
-  const onPressOut = useCallback(
-    (_e: GestureResponderEvent) => {
-      isPressed.set(false);
-      scale.set(withTiming(0, scaleTimingConfig));
-    },
-    [isPressed, scale, scaleTimingConfig],
-  );
+  const onPressOut = (_e: GestureResponderEvent) => {
+    isPressed.set(false);
+    scale.set(withTiming(0, scaleTimingConfig));
+  };
 
-  const onLayout = useCallback(
-    (e: LayoutChangeEvent) => {
-      containerWidth.set(e.nativeEvent.layout.width);
-      containerHeight.set(e.nativeEvent.layout.height);
-    },
-    [containerWidth, containerHeight],
-  );
+  const onLayout = (e: LayoutChangeEvent) => {
+    containerWidth.set(e.nativeEvent.layout.width);
+    containerHeight.set(e.nativeEvent.layout.height);
+  };
 
   const containerStyle = useAnimatedStyle(() => ({
     transform: [

@@ -3,7 +3,7 @@ import { ko } from 'date-fns/locale';
 import { useThemeColor } from '~/shared/lib/theme-context';
 import { Card, Typography } from '~/shared/ui';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, ScrollView, type ScrollView as ScrollViewType, View } from 'react-native';
 
 import { GrassDay } from '../model/types';
@@ -84,15 +84,15 @@ export function GrassChart({ data }: GrassChartProps) {
   const borderColor = useThemeColor('border');
   const textPrimaryColor = useThemeColor('textPrimary');
   const [selectedDay, setSelectedDay] = useState<GrassDay | null>(null);
-  const todayStr = useMemo(() => toLocalDateStr(new Date()), []);
+  const todayStr = toLocalDateStr(new Date());
 
-  const columns = useMemo(() => buildColumns(data), [data]);
+  const columns = buildColumns(data);
 
   const scrollRef = useRef<ScrollViewType>(null);
 
-  const handleCellPress = useCallback((cell: GrassDay) => {
+  const handleCellPress = (cell: GrassDay) => {
     setSelectedDay((prev) => (prev?.date === cell.date ? null : cell));
-  }, []);
+  };
 
   return (
     <View className="gap-3">

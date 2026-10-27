@@ -3,13 +3,11 @@ import { ChevronDown } from '~/shared/lib/icons';
 import React, { useRef, useState } from 'react';
 import {
   type DimensionValue,
-  Dimensions,
   Pressable,
-  View as RNView,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
 import { Typography } from './typography';
@@ -40,7 +38,8 @@ export function Select({
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<'bottom' | 'top'>('bottom');
-  const triggerRef = useRef<RNView>(null);
+  const triggerRef = useRef<View>(null);
+  const { height: screenHeight } = useWindowDimensions();
 
   const selectedOption = options.find((option) => option.value === value);
   const displayText = selectedOption ? selectedOption.label : placeholder;
@@ -53,7 +52,6 @@ export function Select({
   const calculatePosition = () => {
     if (triggerRef.current) {
       triggerRef.current.measureInWindow((x: number, y: number, _width: number, height: number) => {
-        const screenHeight = Dimensions.get('window').height;
         const dropdownHeight = Math.min(options.length * 40, 200);
         const spaceBelow = screenHeight - (y + height);
         const spaceAbove = y;
@@ -79,8 +77,8 @@ export function Select({
   return (
     <View style={[styles.container, { width }]}>
       {/* Trigger */}
-      <RNView ref={triggerRef} collapsable={false}>
-        <TouchableOpacity activeOpacity={1} disabled={disabled} onPress={toggleOpen}>
+      <View ref={triggerRef} collapsable={false}>
+        <Pressable disabled={disabled} onPress={toggleOpen}>
           <View
             className={`flex-row items-center justify-between rounded-5 border bg-surface px-3 ${
               isOpen ? 'border-border-active' : 'border-border'
@@ -101,8 +99,8 @@ export function Select({
               style={isOpen ? { transform: [{ rotate: '180deg' }] } : undefined}
             />
           </View>
-        </TouchableOpacity>
-      </RNView>
+        </Pressable>
+      </View>
 
       {/* Dropdown */}
       {isOpen && (
@@ -134,7 +132,7 @@ export function Select({
       )}
 
       {/* 배경 터치 시 닫기 */}
-      {isOpen && <TouchableOpacity style={styles.backdrop} onPress={() => setIsOpen(false)} />}
+      {isOpen && <Pressable style={styles.backdrop} onPress={() => setIsOpen(false)} />}
     </View>
   );
 }

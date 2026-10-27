@@ -2,7 +2,7 @@ import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { SheetBackdrop, Typography } from '~/shared/ui';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 
 import { CategoryManageContent } from './category-manage-content';
@@ -16,7 +16,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
-  const snapPoints = useMemo(() => ['60%'], []);
+  const snapPoints = ['60%'];
 
   useEffect(() => {
     if (isOpen) {

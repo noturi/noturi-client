@@ -2,7 +2,6 @@ import type { UIMemo } from '~/entities/memo';
 import { MemoItem } from '~/entities/memo';
 import { Loading } from '~/shared/ui';
 
-import { useCallback } from 'react';
 import { FlatList, View } from 'react-native';
 
 interface MemoListProps {
@@ -13,20 +12,17 @@ interface MemoListProps {
 }
 
 export function MemoList({ memos, onEndReached, isFetchingNextPage, onPressMemo }: MemoListProps) {
-  const renderItem = useCallback(
-    ({ item, index }: { item: UIMemo; index: number }) => (
-      <View key={item.id}>
-        <MemoItem memo={item} onPress={onPressMemo} />
-        {index < memos.length - 1 && <View className="h-px bg-border" />}
-      </View>
-    ),
-    [memos.length, onPressMemo],
+  const renderItem = ({ item, index }: { item: UIMemo; index: number }) => (
+    <View key={item.id}>
+      <MemoItem memo={item} onPress={onPressMemo} />
+      {index < memos.length - 1 && <View className="h-px bg-border" />}
+    </View>
   );
 
-  const renderFooter = useCallback(() => {
+  const renderFooter = () => {
     if (!isFetchingNextPage) return null;
     return <Loading size="small" />;
-  }, [isFetchingNextPage]);
+  };
 
   return (
     <FlatList

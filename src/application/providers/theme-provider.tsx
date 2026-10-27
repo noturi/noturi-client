@@ -10,7 +10,7 @@ import {
 } from '~/shared/config/theme';
 import { ThemeContext } from '~/shared/lib/theme-context';
 
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Appearance, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const { data: serverSettings } = useQuery(userSettingsQuery());
   const updateSettingsMutation = useUpdateSettingsMutation();
 
-  const currentTheme = useMemo(() => themeStore.getPreset(themeId), [themeId]);
+  const currentTheme = themeStore.getPreset(themeId);
   const hexColors = PRESET_HEX_COLORS[themeId] ?? PRESET_HEX_COLORS[DEFAULT_THEME_ID];
   const isDark = PRESET_IS_DARK[themeId] ?? PRESET_IS_DARK[DEFAULT_THEME_ID];
 
@@ -59,35 +59,29 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     Appearance.setColorScheme(isDark ? 'dark' : 'light');
   }, [isDark]);
 
-  const setTheme = useCallback(
-    async (newThemeId: string) => {
-      // 로컬에 즉시 저장 (빠른 반응)
-      await themeStore.setThemeId(newThemeId);
-      setThemeId(newThemeId);
+  const setTheme = async (newThemeId: string) => {
+    // 로컬에 즉시 저장 (빠른 반응)
+    await themeStore.setThemeId(newThemeId);
+    setThemeId(newThemeId);
 
-      // 서버에 저장 (백그라운드)
-      updateSettingsMutation.mutate({ theme: newThemeId as ThemeId });
-    },
-    [updateSettingsMutation],
-  );
+    // 서버에 저장 (백그라운드)
+    updateSettingsMutation.mutate({ theme: newThemeId as ThemeId });
+  };
 
-  const toggleTheme = useCallback(async () => {
+  const toggleTheme = async () => {
     const newId = currentTheme.pairedThemeId ?? (isDark ? 'light' : 'dark');
     await setTheme(newId);
-  }, [currentTheme.pairedThemeId, isDark, setTheme]);
+  };
 
-  const contextValue = useMemo(
-    () => ({
-      hexColors,
-      isDark,
-      themeId,
-      isLoading,
-      setTheme,
-      toggleTheme,
-      presets: THEME_PRESETS,
-    }),
-    [hexColors, isDark, themeId, isLoading, setTheme, toggleTheme],
-  );
+  const contextValue = {
+    hexColors,
+    isDark,
+    themeId,
+    isLoading,
+    setTheme,
+    toggleTheme,
+    presets: THEME_PRESETS,
+  };
 
   // Create CSS variables style object using NativeWind's vars()
   const themeVars = vars({

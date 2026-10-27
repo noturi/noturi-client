@@ -1,6 +1,6 @@
 import { useUserTheme } from '~/shared/lib/theme-context';
 
-import { type Ref, createContext, use, useMemo } from 'react';
+import { type Ref, createContext, use } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 import { PressableFeedback } from '../pressable-feedback';
@@ -46,16 +46,13 @@ const ButtonRoot = ({ ref, ...props }: ButtonRootProps & { ref?: Ref<View> }) =>
 
   const { hexColors } = useUserTheme();
 
-  const variantStyles = useMemo(() => getVariantStyles(variant, hexColors), [variant, hexColors]);
+  const variantStyles = getVariantStyles(variant, hexColors);
 
-  const contextValue = useMemo(
-    () => ({
-      size,
-      variant,
-      isDisabled: isDisabled || isLoading,
-    }),
-    [size, variant, isDisabled, isLoading],
-  );
+  const contextValue = {
+    size,
+    variant,
+    isDisabled: isDisabled || isLoading,
+  };
 
   const combinedStyles = [
     styleSheet.buttonRoot,
@@ -105,7 +102,7 @@ const ButtonLabel = ({ ref, ...props }: ButtonLabelProps & { ref?: Ref<Text> }) 
   const { size, variant } = useButton();
   const { hexColors } = useUserTheme();
 
-  const variantStyles = useMemo(() => getVariantStyles(variant, hexColors), [variant, hexColors]);
+  const variantStyles = getVariantStyles(variant, hexColors);
 
   return (
     <Text

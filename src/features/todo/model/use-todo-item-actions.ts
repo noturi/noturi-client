@@ -1,7 +1,7 @@
 import { Todo } from '~/entities/todo';
 import { useToast } from '~/shared/lib';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
@@ -49,15 +49,15 @@ export function useTodoItemActions(todo: Todo) {
     onSuccess: () => setIsEditing(false),
   });
 
-  const handleToggle = useCallback(() => {
+  const handleToggle = () => {
     if (isEditing) return;
     const next = !optimisticCompleted;
     setOptimisticCompleted(next);
     animate(next);
     toggleMutation.mutate(todo.id);
-  }, [isEditing, optimisticCompleted, animate, toggleMutation, todo.id]);
+  };
 
-  const handleDelete = useCallback(() => {
+  const handleDelete = () => {
     swipeableRef.current?.close();
     Alert.alert('할 일 삭제', `"${todo.title}"을(를) 삭제하시겠습니까?`, [
       { text: '취소', style: 'cancel' },
@@ -67,23 +67,20 @@ export function useTodoItemActions(todo: Todo) {
         onPress: () => deleteMutation.mutate(todo.id),
       },
     ]);
-  }, [todo.id, todo.title, deleteMutation]);
+  };
 
-  const handleEdit = useCallback(() => {
+  const handleEdit = () => {
     swipeableRef.current?.close();
     setIsEditing(true);
-  }, []);
+  };
 
-  const handleEditSubmit = useCallback(
-    (title: string) => {
-      updateMutation.mutate({ id: todo.id, data: { title } });
-    },
-    [todo.id, updateMutation],
-  );
+  const handleEditSubmit = (title: string) => {
+    updateMutation.mutate({ id: todo.id, data: { title } });
+  };
 
-  const handleEditCancel = useCallback(() => {
+  const handleEditCancel = () => {
     setIsEditing(false);
-  }, []);
+  };
 
   const isPending = deleteMutation.isPending || updateMutation.isPending;
 

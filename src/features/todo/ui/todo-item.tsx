@@ -1,7 +1,7 @@
 import { Todo } from '~/entities/todo';
 import { Typography } from '~/shared/ui';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
@@ -37,8 +37,8 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
   } = useTodoItemActions(todo);
 
   const [isSwiped, setIsSwiped] = useState(false);
-  const handleSwipeOpen = useCallback(() => setIsSwiped(true), []);
-  const handleSwipeClose = useCallback(() => setIsSwiped(false), []);
+  const handleSwipeOpen = () => setIsSwiped(true);
+  const handleSwipeClose = () => setIsSwiped(false);
 
   const isInteractionDisabled = readonly || isPending || isEditing || isSwiped;
   const isSwipeEnabled = !isEditing && !readonly;

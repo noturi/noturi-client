@@ -4,7 +4,7 @@ import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
 import { MemoRatingList, YearSelectSheet } from '~/widgets';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -24,22 +24,19 @@ interface HomeContentProps {
 function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeContentProps) {
   const { data: categoriesData } = useSuspenseQuery(activeCategoriesQuery());
 
-  const categoryId = useMemo(
-    () => findCategoryIdByName(category, categoriesData?.categories),
-    [category, categoriesData?.categories],
-  );
+  const categoryId = findCategoryIdByName(category, categoriesData?.categories);
 
-  const queryParams: Omit<MemoListParamsDto, 'page'> = useMemo(
-    () => ({ limit: PAGE_LIMIT, year, categoryId, sortBy: SORT_BY, sortOrder: SORT_ORDER }),
-    [year, categoryId],
-  );
+  const queryParams: Omit<MemoListParamsDto, 'page'> = {
+    limit: PAGE_LIMIT,
+    year,
+    categoryId,
+    sortBy: SORT_BY,
+    sortOrder: SORT_ORDER,
+  };
 
   const ratingGroups = useRatingGroups(queryParams);
 
-  const categories = useMemo(
-    () => toUICategories(categoriesData?.categories, category),
-    [categoriesData?.categories, category],
-  );
+  const categories = toUICategories(categoriesData?.categories, category);
 
   return (
     <MemoRatingList

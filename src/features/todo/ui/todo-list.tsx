@@ -2,7 +2,7 @@ import { addDays, startOfDay } from 'date-fns';
 import { formatDateString, todosByDateQuery } from '~/entities/todo';
 import { Skeleton, Typography } from '~/shared/ui';
 
-import { memo, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -13,9 +13,9 @@ interface TodoListProps {
   selectedDate: Date;
 }
 
-export const TodoList = memo(function TodoList({ selectedDate }: TodoListProps) {
+export function TodoList({ selectedDate }: TodoListProps) {
   const dateString = formatDateString(selectedDate);
-  const isPast = useMemo(() => startOfDay(selectedDate) < startOfDay(new Date()), [selectedDate]);
+  const isPast = startOfDay(selectedDate) < startOfDay(new Date());
   const queryClient = useQueryClient();
   const { data, isPending, isPlaceholderData } = useQuery(todosByDateQuery(dateString));
 
@@ -69,4 +69,4 @@ export const TodoList = memo(function TodoList({ selectedDate }: TodoListProps) 
       )}
     </View>
   );
-});
+}

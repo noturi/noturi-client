@@ -2,7 +2,6 @@ import { ChevronDown } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { ControlledSheet, Typography } from '~/shared/ui';
 
-import { useCallback, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 
 const APP_LAUNCH_YEAR = 2025;
@@ -56,15 +55,12 @@ export function YearSelectSheet({
   onYearChange,
 }: YearSelectSheetProps) {
   const { hexColors } = useUserTheme();
-  const yearOptions = useMemo(() => getYearOptions(), []);
+  const yearOptions = getYearOptions();
 
-  const handleYearSelect = useCallback(
-    (value: number | undefined) => {
-      onYearChange(value);
-      onClose();
-    },
-    [onYearChange, onClose],
-  );
+  const handleYearSelect = (value: number | undefined) => {
+    onYearChange(value);
+    onClose();
+  };
 
   return (
     <ControlledSheet scrollable isOpen={isOpen} snapPoints={['40%']} onClose={onClose}>

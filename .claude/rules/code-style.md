@@ -10,6 +10,21 @@
 - 로그는 `console.*` 대신 `Logger`(`~/shared/lib/logger`) — 운영 빌드는 ERROR만 출력
 - reanimated 4: `Animated.AnimateStyle` 제거됨 — `useAnimatedStyle<ViewStyle>(...)` 제네릭과 `ViewStyle` 사용
 
+## React 19 / React Compiler
+
+- **React Compiler 활성화됨** (`app.json` `experiments.reactCompiler`) — `useCallback`/`useMemo`/`memo`를 새로 쓰지 않는다
+  - 예외: 컴파일러가 건너뛰는 컴포넌트(`try/finally`, 동적 `import()` 등 미지원 문법 포함)에서 참조 안정성이 실제로 필요할 때만
+- Rules of React 준수 — 렌더 중 `ref.current` 읽기/쓰기 금지, 렌더 중 shared value 읽기 금지
+- 훅이 반환하는 객체에 ref를 섞지 말고 따로 꺼내 쓴다 (컴파일러가 객체 전체를 ref로 취급)
+- props/서버 데이터로 상태를 맞출 때 effect 대신 렌더 중 상태 조정 패턴 (`useMemoForm` 참고)
+- `forwardRef` 대신 `ref`를 일반 prop으로, `useContext` 대신 `use`, `<Ctx.Provider>` 대신 `<Ctx>`
+- Reanimated shared value는 `.get()`/`.set()` (`.value` 대입은 컴파일러가 최적화를 건너뜀)
+
+## React Native
+
+- 터치는 `Pressable` (`Touchable*` 사용 금지)
+- 화면 크기는 `useWindowDimensions()` — 모듈 레벨 `Dimensions.get()` 금지 (회전/분할화면 미반영)
+
 ## Import
 
 - 절대경로 `~/` 필수 (같은 슬라이스 내부만 상대경로)

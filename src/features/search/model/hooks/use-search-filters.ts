@@ -1,6 +1,6 @@
 import { useDebounce } from '~/shared/lib/use-debounce';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 export interface UseSearchFiltersReturn {
   // state
@@ -29,13 +29,13 @@ export function useSearchFilters(): UseSearchFiltersReturn {
   const [selectedRating, setSelectedRating] = useState<number | undefined>();
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
-  const toggleFilters = useCallback(() => setShowFilters((prev) => !prev), []);
-  const clearAll = useCallback(() => {
+  const toggleFilters = () => setShowFilters((prev) => !prev);
+  const clearAll = () => {
     setSearchText('');
     setSelectedCategoryId(undefined);
     setSelectedYear(undefined);
     setSelectedRating(undefined);
-  }, []);
+  };
 
   const debouncedSearchText = useDebounce(searchText, 500);
   const hasActiveFilters =
