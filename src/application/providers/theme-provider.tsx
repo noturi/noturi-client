@@ -44,15 +44,20 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     });
   }, []);
 
-  // 서버 설정이 로드되면 동기화
-  // (서버 테마 값이 바뀔 때만 실행 — 같은 값이면 setState는 no-op)
-  const serverTheme = serverSettings?.theme;
+  // 서버 설정이 로드/변경되면 동기화 — 상태는 렌더 중 조정, 로컬 저장만 effect에서
+  const serverThemeId = serverSettings?.theme
+    ? serverSettings.theme in PRESET_HEX_COLORS
+      ? serverSettings.theme
+      : DEFAULT_THEME_ID
+    : undefined;
+  const [appliedServerThemeId, setAppliedServerThemeId] = useState<string | undefined>(undefined);
+  if (serverThemeId && serverThemeId !== appliedServerThemeId) {
+    setAppliedServerThemeId(serverThemeId);
+    setThemeId(serverThemeId);
+  }
   useEffect(() => {
-    if (!serverTheme) return;
-    const safeId = serverTheme in PRESET_HEX_COLORS ? serverTheme : DEFAULT_THEME_ID;
-    setThemeId(safeId);
-    themeStore.setThemeId(safeId);
-  }, [serverTheme]);
+    if (serverThemeId) themeStore.setThemeId(serverThemeId);
+  }, [serverThemeId]);
 
   // 앱 테마에 맞게 시스템 appearance 동기화 (NativeTabs 색상 문제 해결)
   useEffect(() => {

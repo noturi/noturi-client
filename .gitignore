@@ -61,3 +61,6 @@ ios/Noturi/*
 
 # Claude Code agent worktrees
 .claude/worktrees/
+
+# Firebase 설정 (로컬 전용, 커밋 금지)
+google-services.json

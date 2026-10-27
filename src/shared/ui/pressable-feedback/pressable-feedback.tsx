@@ -110,10 +110,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   rippleContainer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     overflow: 'hidden',
   },
   rippleCircle: {

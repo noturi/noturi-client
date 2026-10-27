@@ -2,6 +2,7 @@ import { BOUNCE_DURATION, DURATION, EASING } from '~/shared/config';
 
 import { ViewStyle } from 'react-native';
 import {
+  type AnimatedStyle,
   useAnimatedStyle,
   useSharedValue,
   withSequence,
@@ -9,9 +10,9 @@ import {
 } from 'react-native-reanimated';
 
 interface CheckAnimationStyles {
-  checkStyle: ViewStyle;
-  circleStyle: ViewStyle;
-  contentStyle: ViewStyle;
+  checkStyle: AnimatedStyle<ViewStyle>;
+  circleStyle: AnimatedStyle<ViewStyle>;
+  contentStyle: AnimatedStyle<ViewStyle>;
 }
 
 interface UseCheckAnimationReturn extends CheckAnimationStyles {

@@ -6,7 +6,7 @@ const WIDGET_NAME = 'NoturiWidget';
 const WIDGET_BUNDLE_ID = 'com.noturi.app.widget';
 const APP_GROUP = 'group.com.noturi.app';
 const TEAM_ID = '3JAT5MMB44';
-const DEPLOYMENT_TARGET = '15.1';
+const DEPLOYMENT_TARGET = '16.4';
 
 const WIDGET_SWIFT_FILES = [
   'NoturiWidget.swift',

@@ -2,12 +2,12 @@ import { Check } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { ViewStyle } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 
 interface TodoCheckboxProps {
   isCompleted: boolean;
-  circleStyle: ViewStyle;
-  checkStyle: ViewStyle;
+  circleStyle: AnimatedStyle<ViewStyle>;
+  checkStyle: AnimatedStyle<ViewStyle>;
 }
 
 /**

@@ -1,5 +1,5 @@
-import { useTheme } from '@react-navigation/native';
 import { DURATION, EASING } from '~/shared/config';
+import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { useEffect } from 'react';
 import { View } from 'react-native';
@@ -25,7 +25,7 @@ export function CircularProgress({
   progressColor,
   children,
 }: CircularProgressProps) {
-  const { colors } = useTheme();
+  const [borderColor, primaryColor] = useThemeColor(['border', 'primary']);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -55,7 +55,7 @@ export function CircularProgress({
           cy={size / 2}
           fill="none"
           r={radius}
-          stroke={trackColor ?? colors.border}
+          stroke={trackColor ?? borderColor}
           strokeWidth={strokeWidth}
         />
         {/* 진행률 원 */}
@@ -67,7 +67,7 @@ export function CircularProgress({
           origin={`${size / 2}, ${size / 2}`}
           r={radius}
           rotation={-90}
-          stroke={progressColor ?? colors.primary}
+          stroke={progressColor ?? primaryColor}
           strokeDasharray={circumference}
           strokeLinecap="round"
           strokeWidth={strokeWidth}

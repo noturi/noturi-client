@@ -67,23 +67,40 @@ export function useCalendarMemoForm({
   const notificationOptions = isAllDay ? ALL_DAY_NOTIFICATION_OPTIONS : NOTIFICATION_OPTIONS;
 
   // 열릴 때 폼 초기화: 수정 모드는 기존 데이터, 생성 모드는 선택된 날짜 기준
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (editData) {
+  // 상태는 렌더 중 조정 (입력값이 바뀐 "열림" 시점에만), 비제어 제목 입력은 아래 effect에서 처리
+  const [syncedInputs, setSyncedInputs] = useState({
+    isOpen: false,
+    editData: undefined as typeof editData,
+    initialStartDate: undefined as typeof initialStartDate,
+    initialEndDate: undefined as typeof initialEndDate,
+  });
+  const inputsChanged =
+    syncedInputs.isOpen !== isOpen ||
+    syncedInputs.editData !== editData ||
+    syncedInputs.initialStartDate !== initialStartDate ||
+    syncedInputs.initialEndDate !== initialEndDate;
+  if (inputsChanged) {
+    setSyncedInputs({ isOpen, editData, initialStartDate, initialEndDate });
+    if (isOpen && editData) {
       const values = fromCalendarMemo(editData);
-      titleRef.current = values.title;
-      inputRef.current?.setNativeProps({ text: values.title });
       setStartDateTime(values.startDateTime);
       setEndDateTime(values.endDateTime);
       setIsAllDay(values.isAllDay);
       setNotifyBefore(values.notifyBefore);
-    } else if (initialStartDate) {
+    } else if (isOpen && initialStartDate) {
       const range = getInitialDateRange(initialStartDate, initialEndDate);
       setStartDateTime(range.startDateTime);
       setEndDateTime(range.endDateTime);
     }
-  }, [isOpen, editData, initialStartDate, initialEndDate]);
+  }
+
+  // 비제어 제목 입력은 네이티브 값이라 effect에서 주입
+  useEffect(() => {
+    if (!isOpen || !editData) return;
+    const { title } = fromCalendarMemo(editData);
+    titleRef.current = title;
+    inputRef.current?.setNativeProps({ text: title });
+  }, [isOpen, editData]);
 
   const resetForm = () => {
     titleRef.current = '';
