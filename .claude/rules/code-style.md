@@ -21,6 +21,13 @@
   (도메인 전용 컴포넌트는 entities/{slice}/ui에 — 예: MemoSkeleton)
 - **entities/ui**: 도메인 데이터 읽기 전용 표시
 - **widgets**: 복합 UI — API 호출 금지, props로 데이터 수신
+- **표시 컴포넌트는 부수효과를 숨기지 않는다**: entities/ui·features의 버튼은 `router`를 직접 호출하지 않고
+  `onPress`/`onDeleted` 같은 콜백으로 노출 — 이동 여부는 pages가 결정
+- **다른 feature의 UI가 필요하면 슬롯(render prop)으로 주입** — 예: `MemoForm`의 `renderAddCategory`
+- **같은 기능의 UI는 하나만** — 카테고리 생성은 `CategoryInlineAddForm`만 사용
+- 컴포넌트에 폼 상태·검증·저장 로직이 커지면 `model/use-*.ts` 훅으로 분리 (예: `useMemoForm`)
+- 정적 메서드만 있는 `*Service` 클래스 대신 순수 함수 (`lib/`) — 읽기 변환은 entities/{slice}/lib
+- 외부 라이브러리는 shared 파사드 경유: 토스트 `useToast`, 아이콘 `~/shared/lib/icons`
 - 색상 등 디자인 상수는 `shared/config` (예: `STAR_COLOR`) — 컴포넌트마다 하드코딩 금지
 
 ## ESLint / Prettier
