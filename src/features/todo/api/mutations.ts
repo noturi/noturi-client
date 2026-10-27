@@ -32,9 +32,9 @@ export function useCreateTodoMutation(options: MutationCallbacks<Todo, CreateTod
   return useMutation({
     mutationKey: ['todo', 'create'],
     mutationFn: (data: CreateTodoDto) => todoMutationApi.createTodo(data),
-    onSuccess: async (newTodo, createData, context) => {
+    onSuccess: async (newTodo, createData, onMutateResult, context) => {
       await invalidateTodoByDate(queryClient, createData.date);
-      await onSuccess?.(newTodo, createData, context);
+      await onSuccess?.(newTodo, createData, onMutateResult, context);
     },
     ...rest,
   });
@@ -51,10 +51,10 @@ export function useUpdateTodoMutation(
     mutationKey: ['todo', 'update'],
     mutationFn: ({ id, data }: { id: string; data: UpdateTodoDto }) =>
       todoMutationApi.updateTodo(id, data),
-    onSuccess: async (updatedTodo, variables, context) => {
+    onSuccess: async (updatedTodo, variables, onMutateResult, context) => {
       const dateStr = updatedTodo.date.split('T')[0];
       await invalidateTodoByDate(queryClient, dateStr);
-      await onSuccess?.(updatedTodo, variables, context);
+      await onSuccess?.(updatedTodo, variables, onMutateResult, context);
     },
     ...rest,
   });
@@ -68,14 +68,14 @@ export function useDeleteTodoMutation(options: MutationCallbacks<void, string> =
   return useMutation({
     mutationKey: ['todo', 'delete'],
     mutationFn: (id: string) => todoMutationApi.deleteTodo(id),
-    onSuccess: async (result, id, context) => {
+    onSuccess: async (result, id, onMutateResult, context) => {
       // 삭제는 어떤 날짜인지 모르므로 활성 쿼리 전체 무효화
       await queryClient.invalidateQueries({
         queryKey: ['todos', 'date'],
         exact: false,
       });
       await invalidateTodoStats(queryClient);
-      await onSuccess?.(result, id, context);
+      await onSuccess?.(result, id, onMutateResult, context);
     },
     ...rest,
   });
@@ -91,14 +91,14 @@ export function useToggleTodoMutation(
   return useMutation({
     mutationKey: ['todo', 'toggle'],
     mutationFn: (id: string) => todoMutationApi.toggleTodo(id),
-    onSuccess: async (response, id, context) => {
+    onSuccess: async (response, id, onMutateResult, context) => {
       // 활성화된 모든 todosByDate 쿼리 무효화 (이월 투두의 rate 동기화)
       await queryClient.invalidateQueries({
         queryKey: ['todos', 'date'],
         exact: false,
       });
       await invalidateTodoStats(queryClient);
-      await onSuccess?.(response, id, context);
+      await onSuccess?.(response, id, onMutateResult, context);
     },
     ...rest,
   });

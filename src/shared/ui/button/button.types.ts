@@ -1,12 +1,7 @@
 import type { PressableProps, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 export type ButtonVariant =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'ghost'
-  | 'danger'
-  | 'danger-soft';
+  'primary' | 'secondary' | 'tertiary' | 'ghost' | 'danger' | 'danger-soft';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 

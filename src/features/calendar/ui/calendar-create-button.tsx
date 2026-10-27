@@ -6,8 +6,10 @@ import type { ComponentProps } from 'react';
 
 import { useCreateCalendarMemo } from '../api/mutations';
 
-interface CalendarCreateButtonProps
-  extends Omit<ComponentProps<typeof SubmitButton>, 'onPress' | 'isLoading'> {
+interface CalendarCreateButtonProps extends Omit<
+  ComponentProps<typeof SubmitButton>,
+  'onPress' | 'isLoading'
+> {
   data: CreateCalendarMemoDto;
   onSuccess?: () => void;
   onError?: (error: Error) => void;

@@ -17,11 +17,11 @@ export function useGoogleLoginMutation(
     mutationKey: ['auth', 'google-login', ...mutationKey],
     mutationFn: (dto: GoogleLoginDto) => authApi.googleLogin(dto),
     onMutate,
-    onSuccess: async (loginResponse, loginData, context) => {
+    onSuccess: async (loginResponse, loginData, onMutateResult, context) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['auth', 'user'] }),
         queryClient.invalidateQueries({ queryKey: ['auth', 'profile'] }),
-        onSuccess?.(loginResponse, loginData, context),
+        onSuccess?.(loginResponse, loginData, onMutateResult, context),
       ]);
     },
     onError,
@@ -41,11 +41,11 @@ export function useAppleLoginMutation(
     mutationKey: ['auth', 'apple-login', ...mutationKey],
     mutationFn: (dto: AppleLoginDto) => authApi.appleLogin(dto),
     onMutate,
-    onSuccess: async (loginResponse, loginData, context) => {
+    onSuccess: async (loginResponse, loginData, onMutateResult, context) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['auth', 'user'] }),
         queryClient.invalidateQueries({ queryKey: ['auth', 'profile'] }),
-        onSuccess?.(loginResponse, loginData, context),
+        onSuccess?.(loginResponse, loginData, onMutateResult, context),
       ]);
     },
     onError,

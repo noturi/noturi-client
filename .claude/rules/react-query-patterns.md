@@ -36,9 +36,10 @@ export function useCreateMemoMutation(
     mutationKey: ['memo', 'create', ...mutationKey],
     mutationFn: (data: CreateMemoDto) => memoMutationApi.createMemo(data),
     onMutate,
-    onSuccess: async (newMemo, createData, context) => {
+    // TanStack Query 5.8x+: (data, variables, onMutateResult, context) — 4개 인자 모두 전달
+    onSuccess: async (newMemo, createData, onMutateResult, context) => {
       await invalidateMemoRelatedCache(queryClient);
-      await onSuccess?.(newMemo, createData, context);
+      await onSuccess?.(newMemo, createData, onMutateResult, context);
     },
     onError, // ⚠️ 옵션으로 받았으면 반드시 useMutation에 전달 (누락 버그 주의)
     onSettled,

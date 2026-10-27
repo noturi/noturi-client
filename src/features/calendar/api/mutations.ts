@@ -46,13 +46,13 @@ export function useUpdateCalendarMemo(
       return calendarApi.updateCalendarMemo(id, updateData);
     },
     onMutate,
-    onSuccess: async (_, updatedData, context) => {
+    onSuccess: async (_, updatedData, onMutateResult, context) => {
       // 캘린더 메모 목록 쿼리들 무효화
       await queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.calendarMemos[0]],
       });
 
-      await onSuccess?.(_, updatedData, context);
+      await onSuccess?.(_, updatedData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -73,7 +73,7 @@ export function useDeleteCalendarMemo(
     mutationKey: ['calendar-memo', 'delete', ...mutationKey],
     mutationFn: (id: string) => calendarApi.deleteCalendarMemo(id),
     onMutate,
-    onSuccess: async (_, deletedId, context) => {
+    onSuccess: async (_, deletedId, onMutateResult, context) => {
       // 삭제된 캘린더 메모의 캐시 제거
       queryClient.removeQueries({ queryKey: ['calendar-memo', deletedId] });
 
@@ -82,7 +82,7 @@ export function useDeleteCalendarMemo(
         queryKey: [QUERY_KEYS.calendarMemos[0]],
       });
 
-      await onSuccess?.(_, deletedId, context);
+      await onSuccess?.(_, deletedId, onMutateResult, context);
     },
     onError,
     onSettled,

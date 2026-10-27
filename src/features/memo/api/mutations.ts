@@ -33,13 +33,13 @@ export function useCreateMemoMutation(
     mutationKey: ['memo', 'create', ...mutationKey],
     mutationFn: (data: CreateMemoDto) => memoMutationApi.createMemo(data),
     onMutate,
-    onSuccess: async (newMemo, createData, context) => {
+    onSuccess: async (newMemo, createData, onMutateResult, context) => {
       // 새로 생성된 메모를 캐시에 저장
       queryClient.setQueryData(QUERY_KEYS.memo(newMemo.id), newMemo);
 
       await invalidateMemoRelatedCache(queryClient);
 
-      await onSuccess?.(newMemo, createData, context);
+      await onSuccess?.(newMemo, createData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -60,13 +60,13 @@ export function useUpdateMemoMutation(
     mutationKey: ['memo', 'update', ...mutationKey],
     mutationFn: (data: UpdateMemoDto) => memoMutationApi.updateMemo(data),
     onMutate,
-    onSuccess: async (updatedMemo, updateData, context) => {
+    onSuccess: async (updatedMemo, updateData, onMutateResult, context) => {
       // 특정 메모 캐시 업데이트
       queryClient.setQueryData(QUERY_KEYS.memo(updatedMemo.id), updatedMemo);
 
       await invalidateMemoRelatedCache(queryClient);
 
-      await onSuccess?.(updatedMemo, updateData, context);
+      await onSuccess?.(updatedMemo, updateData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -87,13 +87,13 @@ export function useDeleteMemoMutation(
     mutationKey: ['memo', 'delete', ...mutationKey],
     mutationFn: (id: string) => memoMutationApi.deleteMemo(id),
     onMutate,
-    onSuccess: async (_, deletedId, context) => {
+    onSuccess: async (_, deletedId, onMutateResult, context) => {
       // 삭제된 메모의 캐시 제거
       queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(deletedId) });
 
       await invalidateMemoRelatedCache(queryClient);
 
-      await onSuccess?.(_, deletedId, context);
+      await onSuccess?.(_, deletedId, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -114,7 +114,7 @@ export function useBulkDeleteMemosMutation(
     mutationKey: ['memo', 'bulk-delete', ...mutationKey],
     mutationFn: (data: BulkDeleteMemosDto) => memoMutationApi.bulkDeleteMemos(data),
     onMutate,
-    onSuccess: async (_, deleteData, context) => {
+    onSuccess: async (_, deleteData, onMutateResult, context) => {
       // 삭제된 메모들의 캐시 제거
       deleteData.ids.forEach((id) => {
         queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(id) });
@@ -122,7 +122,7 @@ export function useBulkDeleteMemosMutation(
 
       await invalidateMemoRelatedCache(queryClient);
 
-      await onSuccess?.(_, deleteData, context);
+      await onSuccess?.(_, deleteData, onMutateResult, context);
     },
     onError,
     onSettled,

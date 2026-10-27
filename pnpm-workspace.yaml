@@ -1,0 +1,8 @@
+# pnpm 11+는 .npmrc의 pnpm 전용 설정을 읽지 않으므로 여기서 지정
+# Expo/React Native 네이티브 autolinking과 scripts/apply-patches.sh가 평탄한 node_modules를 전제로 함
+nodeLinker: hoisted
+
+# sharp/unrs-resolver는 prebuilt 바이너리를 사용하므로 빌드 스크립트 불필요
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

@@ -30,12 +30,12 @@ export function useCreateCategoryMutation(
     mutationKey: ['category', 'create', ...mutationKey],
     mutationFn: (data: CreateCategoryDto) => categoryMutationApi.createCategory(data),
     onMutate,
-    onSuccess: async (newCategory, createData, context) => {
+    onSuccess: async (newCategory, createData, onMutateResult, context) => {
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
       await queryClient.setQueryData(QUERY_KEYS.category(newCategory.id), newCategory);
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
-      await onSuccess?.(newCategory, createData, context);
+      await onSuccess?.(newCategory, createData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -56,12 +56,12 @@ export function useUpdateCategoryMutation(
     mutationKey: ['category', 'update', ...mutationKey],
     mutationFn: (data: UpdateCategoryDto) => categoryMutationApi.updateCategory(data),
     onMutate,
-    onSuccess: async (updatedCategory, updateData, context) => {
+    onSuccess: async (updatedCategory, updateData, onMutateResult, context) => {
       await queryClient.setQueryData(QUERY_KEYS.category(updatedCategory.id), updatedCategory);
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
-      await onSuccess?.(updatedCategory, updateData, context);
+      await onSuccess?.(updatedCategory, updateData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -82,14 +82,14 @@ export function useDeleteCategoryMutation(
     mutationKey: ['category', 'delete', ...mutationKey],
     mutationFn: (id: string) => categoryMutationApi.deleteCategory(id),
     onMutate,
-    onSuccess: async (_, deletedId, context) => {
+    onSuccess: async (_, deletedId, onMutateResult, context) => {
       await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(deletedId) });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
 
-      await onSuccess?.(_, deletedId, context);
+      await onSuccess?.(_, deletedId, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -110,10 +110,10 @@ export function useReorderCategoriesMutation(
     mutationKey: ['category', 'reorder', ...mutationKey],
     mutationFn: (data: ReorderCategoriesDto) => categoryMutationApi.reorderCategories(data),
     onMutate,
-    onSuccess: async (_, reorderData, context) => {
+    onSuccess: async (_, reorderData, onMutateResult, context) => {
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
 
-      await onSuccess?.(_, reorderData, context);
+      await onSuccess?.(_, reorderData, onMutateResult, context);
     },
     onError,
     onSettled,
@@ -134,7 +134,7 @@ export function useMergeCategoriesMutation(
     mutationKey: ['category', 'merge', ...mutationKey],
     mutationFn: (data: MergeCategoriesDto) => categoryMutationApi.mergeCategories(data),
     onMutate,
-    onSuccess: async (_, mergeData, context) => {
+    onSuccess: async (_, mergeData, onMutateResult, context) => {
       await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(mergeData.sourceId) });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.category(mergeData.targetId) });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
@@ -142,7 +142,7 @@ export function useMergeCategoriesMutation(
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
 
-      await onSuccess?.(_, mergeData, context);
+      await onSuccess?.(_, mergeData, onMutateResult, context);
     },
     onError,
     onSettled,
