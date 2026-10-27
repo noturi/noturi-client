@@ -1,4 +1,4 @@
-import { BulkDeleteMemosDto, CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
+import { CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import {
@@ -94,35 +94,6 @@ export function useDeleteMemoMutation(
       await invalidateMemoRelatedCache(queryClient);
 
       await onSuccess?.(_, deletedId, onMutateResult, context);
-    },
-    onError,
-    onSettled,
-  });
-}
-
-// 메모 일괄 삭제 뮤테이션
-export function useBulkDeleteMemosMutation(
-  options: Pick<
-    UseMutationOptions<void, DefaultError, BulkDeleteMemosDto>,
-    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
-  > = {},
-) {
-  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: ['memo', 'bulk-delete', ...mutationKey],
-    mutationFn: (data: BulkDeleteMemosDto) => memoMutationApi.bulkDeleteMemos(data),
-    onMutate,
-    onSuccess: async (_, deleteData, onMutateResult, context) => {
-      // 삭제된 메모들의 캐시 제거
-      deleteData.ids.forEach((id) => {
-        queryClient.removeQueries({ queryKey: QUERY_KEYS.memo(id) });
-      });
-
-      await invalidateMemoRelatedCache(queryClient);
-
-      await onSuccess?.(_, deleteData, onMutateResult, context);
     },
     onError,
     onSettled,

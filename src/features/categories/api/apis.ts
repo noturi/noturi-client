@@ -2,7 +2,6 @@ import { KyInstance } from 'ky';
 import {
   Category,
   CreateCategoryDto,
-  MergeCategoriesDto,
   ReorderCategoriesDto,
   UpdateCategoryDto,
 } from '~/entities/category';
@@ -59,18 +58,6 @@ export class CategoryMutationApi {
     } catch (error) {
       Logger.error('Reorder categories API error:', error);
       throw new Error('카테고리 순서 변경에 실패했습니다.');
-    }
-  }
-
-  // 카테고리 병합
-  async mergeCategories(data: MergeCategoriesDto): Promise<void> {
-    try {
-      await this.api.post('categories/merge', {
-        json: data,
-      });
-    } catch (error) {
-      Logger.error('Merge categories API error:', error);
-      throw new Error('카테고리 병합에 실패했습니다.');
     }
   }
 }

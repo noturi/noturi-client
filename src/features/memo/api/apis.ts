@@ -1,5 +1,5 @@
 import { KyInstance } from 'ky';
-import { BulkDeleteMemosDto, CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
+import { CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
 import { api } from '~/shared/api';
 
 /**
@@ -36,13 +36,6 @@ export class MemoMutationApi {
   // 메모 삭제
   async deleteMemo(id: string): Promise<void> {
     await this.api.delete(`memos/${id}`);
-  }
-
-  // 메모 일괄 삭제
-  async bulkDeleteMemos(data: BulkDeleteMemosDto): Promise<void> {
-    await this.api.delete('memos/bulk', {
-      json: data,
-    });
   }
 }
 

@@ -59,11 +59,6 @@ export interface MemoListParamsDto {
   sortOrder?: 'asc' | 'desc';
 }
 
-// 메모 일괄 삭제 요청
-export interface BulkDeleteMemosDto {
-  ids: string[];
-}
-
 // 카테고리 통계
 export interface CategoryStatsDto {
   name: string;

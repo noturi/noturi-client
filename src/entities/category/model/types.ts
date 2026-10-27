@@ -53,12 +53,6 @@ export interface ReorderCategoriesDto {
   }[];
 }
 
-// 카테고리 병합 요청
-export interface MergeCategoriesDto {
-  sourceId: string;
-  targetId: string;
-}
-
 // 카테고리별 메모 분포
 export interface CategoryDistributionDto {
   categoryId: string;

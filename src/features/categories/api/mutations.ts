@@ -1,7 +1,6 @@
 import {
   Category,
   CreateCategoryDto,
-  MergeCategoriesDto,
   ReorderCategoriesDto,
   UpdateCategoryDto,
 } from '~/entities/category';
@@ -114,35 +113,6 @@ export function useReorderCategoriesMutation(
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
 
       await onSuccess?.(_, reorderData, onMutateResult, context);
-    },
-    onError,
-    onSettled,
-  });
-}
-
-// 카테고리 병합 뮤테이션
-export function useMergeCategoriesMutation(
-  options: Pick<
-    UseMutationOptions<void, DefaultError, MergeCategoriesDto>,
-    'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
-  > = {},
-) {
-  const { mutationKey = [], onMutate, onSuccess, onError, onSettled } = options;
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: ['category', 'merge', ...mutationKey],
-    mutationFn: (data: MergeCategoriesDto) => categoryMutationApi.mergeCategories(data),
-    onMutate,
-    onSuccess: async (_, mergeData, onMutateResult, context) => {
-      await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(mergeData.sourceId) });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.category(mergeData.targetId) });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
-
-      await onSuccess?.(_, mergeData, onMutateResult, context);
     },
     onError,
     onSettled,
