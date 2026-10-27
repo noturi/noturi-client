@@ -11,7 +11,7 @@ export interface Memo {
   title: string;
   content: string;
   category: MemoCategory | null;
-  categoryId: string;
+  categoryId: string | null; // 카테고리 없는 메모는 null
   rating: number;
   description?: string;
   experienceDate?: string | null;

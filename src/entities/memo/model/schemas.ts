@@ -20,8 +20,9 @@ export const memoSchema: z.ZodType<Memo> = z.object({
   title: z.string(),
   content: z.string(),
   category: z.object({ id: z.string(), name: z.string(), color: z.string() }).nullable(),
-  categoryId: z.string(),
-  rating: z.number(),
+  categoryId: z.string().nullable(),
+  // 서버 Decimal 컬럼이 JSON 문자열("4.5")로 직렬화됨 → 경계에서 숫자로 정규화
+  rating: z.coerce.number(),
   description: z.string().optional(),
   experienceDate: z.string().nullable().optional(),
   userId: z.string(),
