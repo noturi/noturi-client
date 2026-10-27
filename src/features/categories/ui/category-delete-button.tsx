@@ -9,12 +9,15 @@ import { useDeleteCategoryMutation } from '../api/mutations';
 interface CategoryDeleteButtonProps {
   categoryId: string;
   categoryName: string;
+  /** 소속 메모 수 — 삭제 시 '기타'로 이동됨을 안내 */
+  memoCount?: number;
   disabled?: boolean;
 }
 
 export function CategoryDeleteButton({
   categoryId,
   categoryName,
+  memoCount = 0,
   disabled = false,
 }: CategoryDeleteButtonProps) {
   const toast = useToast();
@@ -32,7 +35,21 @@ export function CategoryDeleteButton({
       return;
     }
 
-    deleteCategoryMutation.mutate(categoryId);
+    // 메모는 삭제되지 않고 카테고리 없음('기타')으로 이동
+    const memoNotice =
+      memoCount > 0 ? `\n이 카테고리의 메모 ${memoCount}개는 '기타'로 이동됩니다.` : '';
+    Alert.alert(
+      '카테고리 삭제',
+      `'${categoryName}' 카테고리를 정말 삭제하시겠습니까?${memoNotice}`,
+      [
+        { text: '취소', style: 'cancel' },
+        {
+          text: '삭제',
+          style: 'destructive',
+          onPress: () => deleteCategoryMutation.mutate(categoryId),
+        },
+      ],
+    );
   };
 
   return (

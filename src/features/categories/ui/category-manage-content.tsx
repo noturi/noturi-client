@@ -56,6 +56,7 @@ export const CategoryManageContent = ({
           categoryId={item.id}
           categoryName={item.name}
           disabled={categories.length <= 1}
+          memoCount={item.memoCount}
         />
       </Pressable>
     </ScaleDecorator>

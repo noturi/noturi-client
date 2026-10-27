@@ -1,6 +1,8 @@
 export const QUERY_KEYS = {
   // 메모 관련
   memos: ['memos'] as const,
+  /** 모든 메모 상세 쿼리의 prefix (일괄 무효화용) */
+  memoDetails: ['memo'] as const,
   memo: (id: string) => ['memo', id] as const,
   memosInfinite: (params: Record<string, unknown>) => ['memos', 'infinite', params] as const,
 
