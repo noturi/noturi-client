@@ -14,7 +14,8 @@
       "buildNumber": "3",
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "appleTeamId": "3JAT5MMB44"
     },
     "android": {
       "adaptiveIcon": {
@@ -55,9 +56,7 @@
           "iosUrlScheme": "com.googleusercontent.apps.1037765933934-3v8f0acqqjkk2mtv4hsaqfpvvr2c8bsc"
         }
       ],
-      [
-        "expo-apple-authentication"
-      ],
+      ["expo-apple-authentication"],
       "expo-font",
       "@react-native-community/datetimepicker",
       [
@@ -87,9 +86,7 @@
                   "targetName": "NoturiWidget",
                   "bundleIdentifier": "com.noturi.app.widget",
                   "entitlements": {
-                    "com.apple.security.application-groups": [
-                      "group.com.noturi.app"
-                    ]
+                    "com.apple.security.application-groups": ["group.com.noturi.app"]
                   }
                 }
               ]

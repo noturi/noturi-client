@@ -5,7 +5,8 @@ const path = require('path');
 const WIDGET_NAME = 'NoturiWidget';
 const WIDGET_BUNDLE_ID = 'com.noturi.app.widget';
 const APP_GROUP = 'group.com.noturi.app';
-const TEAM_ID = '3JAT5MMB44';
+// 앱 타깃과 동일한 팀 — app.json ios.appleTeamId가 단일 출처
+const FALLBACK_TEAM_ID = '3JAT5MMB44';
 const DEPLOYMENT_TARGET = '16.4';
 
 const WIDGET_SWIFT_FILES = [
@@ -30,7 +31,7 @@ const withNoturiWidget = (config) => {
     const platformRoot = config.modRequest.platformProjectRoot;
 
     copyWidgetFiles(platformRoot);
-    addWidgetExtension(project);
+    addWidgetExtension(project, config.ios?.appleTeamId ?? FALLBACK_TEAM_ID);
 
     return config;
   });
@@ -65,7 +66,7 @@ function copyDirSync(src, dest) {
   }
 }
 
-function addWidgetExtension(project) {
+function addWidgetExtension(project, teamId) {
   if (project.pbxTargetByName(WIDGET_NAME)) {
     console.log(`[withNoturiWidget] Target already exists, skipping`);
     return;
@@ -76,14 +77,25 @@ function addWidgetExtension(project) {
   // UUIDs 생성
   const uuids = {};
   const names = [
-    'target', 'productRef', 'configList', 'debugConfig', 'releaseConfig',
-    'sourcesPhase', 'frameworksPhase', 'resourcesPhase',
-    'group', 'containerProxy', 'targetDependency',
-    'embedPhase', 'embedBuildFile',
+    'target',
+    'productRef',
+    'configList',
+    'debugConfig',
+    'releaseConfig',
+    'sourcesPhase',
+    'frameworksPhase',
+    'resourcesPhase',
+    'group',
+    'containerProxy',
+    'targetDependency',
+    'embedPhase',
+    'embedBuildFile',
     ...WIDGET_SWIFT_FILES.map((f) => `fileRef_${f}`),
     ...WIDGET_SWIFT_FILES.map((f) => `buildFile_${f}`),
-    'assetsFileRef', 'assetsBuildFile',
-    'infoPlistRef', 'entitlementsRef',
+    'assetsFileRef',
+    'assetsBuildFile',
+    'infoPlistRef',
+    'entitlementsRef',
   ];
   for (const name of names) {
     uuids[name] = project.generateUuid();
@@ -171,7 +183,8 @@ function addWidgetExtension(project) {
     fileRef_comment: `${WIDGET_NAME}.appex`,
     settings: { ATTRIBUTES: ['RemoveHeadersOnCopy'] },
   };
-  buildFiles[`${uuids.embedBuildFile}_comment`] = `${WIDGET_NAME}.appex in Embed Foundation Extensions`;
+  buildFiles[`${uuids.embedBuildFile}_comment`] =
+    `${WIDGET_NAME}.appex in Embed Foundation Extensions`;
 
   // === PBXGroup ===
   if (!objs.PBXGroup) objs.PBXGroup = {};
@@ -248,7 +261,10 @@ function addWidgetExtension(project) {
     dstPath: '""',
     dstSubfolderSpec: 13,
     files: [
-      { value: uuids.embedBuildFile, comment: `${WIDGET_NAME}.appex in Embed Foundation Extensions` },
+      {
+        value: uuids.embedBuildFile,
+        comment: `${WIDGET_NAME}.appex in Embed Foundation Extensions`,
+      },
     ],
     name: '"Embed Foundation Extensions"',
     runOnlyForDeploymentPostprocessing: 0,
@@ -263,12 +279,13 @@ function addWidgetExtension(project) {
     CODE_SIGN_ENTITLEMENTS: `"${WIDGET_NAME}/${WIDGET_NAME}.entitlements"`,
     CODE_SIGN_STYLE: 'Automatic',
     CURRENT_PROJECT_VERSION: '1',
-    DEVELOPMENT_TEAM: TEAM_ID,
+    DEVELOPMENT_TEAM: teamId,
     GENERATE_INFOPLIST_FILE: 'NO',
     INFOPLIST_FILE: `"${WIDGET_NAME}/Info.plist"`,
     INFOPLIST_KEY_CFBundleDisplayName: '"Noturi Widget"',
     IPHONEOS_DEPLOYMENT_TARGET: DEPLOYMENT_TARGET,
-    LD_RUNPATH_SEARCH_PATHS: '"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"',
+    LD_RUNPATH_SEARCH_PATHS:
+      '"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"',
     MARKETING_VERSION: '1.0',
     PRODUCT_BUNDLE_IDENTIFIER: `"${WIDGET_BUNDLE_ID}"`,
     PRODUCT_NAME: '"$(TARGET_NAME)"',
@@ -310,7 +327,8 @@ function addWidgetExtension(project) {
     defaultConfigurationIsVisible: 0,
     defaultConfigurationName: 'Release',
   };
-  objs.XCConfigurationList[`${uuids.configList}_comment`] = `Build configuration list for PBXNativeTarget "${WIDGET_NAME}"`;
+  objs.XCConfigurationList[`${uuids.configList}_comment`] =
+    `Build configuration list for PBXNativeTarget "${WIDGET_NAME}"`;
 
   // === Container Proxy & Target Dependency ===
   if (!objs.PBXContainerItemProxy) objs.PBXContainerItemProxy = {};
