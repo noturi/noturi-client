@@ -1,17 +1,7 @@
-import { MemoForm } from '~/features/memo';
-
-import { View } from 'react-native';
+import { MemoFormPage } from '~/pages/memo-form';
 
 import { router } from 'expo-router';
 
 export default function RatingMemoCreateScreen() {
-  const handleSuccess = () => {
-    router.push('/(tabs)');
-  };
-
-  return (
-    <View className="flex-1 bg-bg-secondary">
-      <MemoForm shouldAutoFocus={true} onSuccess={handleSuccess} />
-    </View>
-  );
+  return <MemoFormPage onSuccess={() => router.push('/(tabs)')} />;
 }

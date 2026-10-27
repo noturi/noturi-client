@@ -1,7 +1,11 @@
-import { CategoryButton, activeCategoriesQuery } from '~/entities/category';
+import {
+  type Category,
+  CategoryButton,
+  type CreateCategoryDto,
+  activeCategoriesQuery,
+} from '~/entities/category';
 import { categoryFormSchema, memoDetailQuery, memoFormSchema } from '~/entities/memo';
 import type { CategoryFormData, MemoFormData } from '~/entities/memo';
-import { useCreateCategoryMutation } from '~/features/categories';
 import { DEFAULT_COLORS } from '~/shared/config';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
@@ -21,9 +25,18 @@ interface MemoFormProps {
   memoId?: string;
   onSuccess?: () => void;
   shouldAutoFocus?: boolean;
+  /** 카테고리 생성은 categories feature 소관이므로 상위(pages)에서 주입 */
+  onCreateCategory: (data: CreateCategoryDto) => Promise<Category>;
+  isCreatingCategory?: boolean;
 }
 
-export const MemoForm = ({ memoId, onSuccess, shouldAutoFocus = false }: MemoFormProps) => {
+export const MemoForm = ({
+  memoId,
+  onSuccess,
+  shouldAutoFocus = false,
+  onCreateCategory,
+  isCreatingCategory = false,
+}: MemoFormProps) => {
   const isEdit = !!memoId;
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<any>(null);
@@ -94,21 +107,6 @@ export const MemoForm = ({ memoId, onSuccess, shouldAutoFocus = false }: MemoFor
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memo]);
 
-  const createCategoryMutation = useCreateCategoryMutation({
-    onSuccess: (newCategory) => {
-      memoForm.setValue('selectedCategory', newCategory.name);
-      categoryForm.reset();
-      setShowAddCategory(false);
-      toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
-    },
-    onError: () => {
-      categoryForm.setError('name', {
-        message: '카테고리 생성 중 오류가 발생했습니다.',
-        type: 'server',
-      });
-    },
-  });
-
   const createMemoMutation = useCreateMemoMutation({
     onSuccess: () => {
       toast.showSuccess(MESSAGES.MEMO.CREATE_SUCCESS);
@@ -133,10 +131,21 @@ export const MemoForm = ({ memoId, onSuccess, shouldAutoFocus = false }: MemoFor
   const isMutationPending = isEdit ? updateMemoMutation.isPending : createMemoMutation.isPending;
 
   const handleAddCategory = async () => {
-    createCategoryMutation.mutate({
-      name: categoryForm.values.name,
-      color: DEFAULT_COLORS,
-    });
+    try {
+      const newCategory = await onCreateCategory({
+        name: categoryForm.values.name,
+        color: DEFAULT_COLORS,
+      });
+      memoForm.setValue('selectedCategory', newCategory.name);
+      categoryForm.reset();
+      setShowAddCategory(false);
+      toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
+    } catch {
+      categoryForm.setError('name', {
+        message: '카테고리 생성 중 오류가 발생했습니다.',
+        type: 'server',
+      });
+    }
   };
 
   const handleCancelAddCategory = () => {
@@ -241,7 +250,7 @@ export const MemoForm = ({ memoId, onSuccess, shouldAutoFocus = false }: MemoFor
                   </View>
                   <View className="flex-row items-center gap-1">
                     <Button
-                      isDisabled={!categoryForm.isValid || createCategoryMutation.isPending}
+                      isDisabled={!categoryForm.isValid || isCreatingCategory}
                       size="sm"
                       variant="primary"
                       onPress={handleAddCategory}

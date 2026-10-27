@@ -1,5 +1,4 @@
-import type { MemoListResponseDto, UIMemo } from '~/entities/memo';
-import { MemoService } from '~/features/memo';
+import { type MemoListResponseDto, type UIMemo, toUIMemos } from '~/entities/memo';
 
 import { useMemo } from 'react';
 
@@ -9,6 +8,6 @@ export function useTransformMemos(data: InfiniteData<MemoListResponseDto> | unde
   return useMemo(() => {
     if (!data?.pages) return [];
     const allMemos = data.pages.flatMap((page) => page.data);
-    return MemoService.transformToUIMemos(allMemos);
+    return toUIMemos(allMemos);
   }, [data]);
 }

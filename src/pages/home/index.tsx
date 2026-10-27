@@ -4,9 +4,9 @@ import {
   MemoSkeleton,
   type RatingGroupData,
   infiniteMemoListQuery,
+  toUIMemos,
 } from '~/entities/memo';
 import { CategoryService } from '~/features/categories';
-import { MemoService } from '~/features/memo';
 import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
 import { MemoRatingList, YearSelectSheet } from '~/widgets';
@@ -51,7 +51,7 @@ function buildRatingGroup(
 
   return {
     rating,
-    memos: MemoService.transformToUIMemos(memos),
+    memos: toUIMemos(memos),
     total: query.data?.pages[0]?.total || 0,
     isLoading: query.isLoading,
     hasNextPage: query.hasNextPage ?? false,

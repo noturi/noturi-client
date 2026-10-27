@@ -1,5 +1,10 @@
 import { startOfDay } from 'date-fns';
-import { formatDateString, formatDateWithDay, todosByDateQuery } from '~/entities/todo';
+import {
+  formatDateString,
+  formatDateWithDay,
+  todoMonthlyStatsQuery,
+  todosByDateQuery,
+} from '~/entities/todo';
 import { QuickTodoInput, TodoList } from '~/features/todo';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { CircularProgress, Typography } from '~/shared/ui';
@@ -19,6 +24,9 @@ export function TodoPage() {
   const dateString = formatDateString(selectedDate);
   const isPast = useMemo(() => startOfDay(selectedDate) < startOfDay(new Date()), [selectedDate]);
   const { data: todosData } = useQuery(todosByDateQuery(dateString));
+  const { data: monthlyStats } = useQuery(
+    todoMonthlyStatsQuery({ year: selectedDate.getFullYear(), month: selectedDate.getMonth() + 1 }),
+  );
 
   const selectedDateProgress = todosData?.rate ?? 0;
 
@@ -37,7 +45,11 @@ export function TodoPage() {
         showsVerticalScrollIndicator={false}
       >
         <View className="gap-4 px-4 pt-4">
-          <TodoWeeklyView selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+          <TodoWeeklyView
+            dailyStats={monthlyStats?.dailyStats}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+          />
 
           {/* 선택된 날짜 및 진행률 */}
           <LinearGradient
