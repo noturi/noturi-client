@@ -6,6 +6,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AuthProvider } from './auth-provider';
 import { NotificationProvider } from './notification-provider';
+import { OnlineStatusNotice } from './online-status-notice';
 import { QueryProvider } from './query-provider';
 import { ThemeProvider } from './theme-provider';
 import { UpdateCheckProvider } from './update-check-provider';
@@ -27,6 +28,7 @@ export function AppProvider({ children }: AppProviderProps) {
                   <UpdateCheckProvider>
                     {children}
                     <Toaster />
+                    <OnlineStatusNotice />
                   </UpdateCheckProvider>
                 </NotificationProvider>
               </WidgetSyncProvider>

@@ -3,6 +3,7 @@ import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User } from '~/entities/user';
 import { authApi } from '~/features/auth';
 import { queryClient } from '~/shared/api/query-client';
+import { queryPersister } from '~/shared/api/query-persister';
 import { HREFS } from '~/shared/config';
 import Logger from '~/shared/lib/logger';
 import { tokenEventManager } from '~/shared/model';
@@ -43,6 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await clearWidgetTokens().catch(() => {});
       await authStore.clearAuthTokens();
       queryClient.clear();
+      // 기기에 저장된 캐시도 삭제 — 다른 계정으로 로그인했을 때 이전 계정 데이터가 복원되지 않게
+      await queryPersister.removeClient();
       router.replace(HREFS.login());
     } catch (e) {
       Logger.error('로그아웃 실패:', e);
