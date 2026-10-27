@@ -2,6 +2,9 @@ import { SegmentedControl } from '@expo/ui/community/segmented-control';
 
 import { View } from 'react-native';
 
+/** 칸 하나의 너비 — 한글 4~5자 + 좌우 여백. 화면 비율로 늘리면 짧은 라벨에 여백이 과하게 생김 */
+const SEGMENT_WIDTH = 84;
+
 interface SegmentOption<T extends string> {
   value: T;
   label: string;
@@ -28,7 +31,7 @@ export function SegmentControl<T extends string>({
   );
 
   return (
-    <View className="w-3/5">
+    <View style={{ width: options.length * SEGMENT_WIDTH }}>
       <SegmentedControl
         selectedIndex={selectedIndex}
         values={options.map((option) => option.label)}

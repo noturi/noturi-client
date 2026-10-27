@@ -19,6 +19,8 @@ interface SegmentControlProps<T extends string> {
 }
 
 const INDICATOR_MARGIN = 4;
+/** 칸 하나의 너비 — 한글 4~5자 + 좌우 여백. 화면 비율로 늘리면 짧은 라벨에 여백이 과하게 생김 */
+const SEGMENT_WIDTH = 84;
 
 export function SegmentControl<T extends string>({
   options,
@@ -68,7 +70,7 @@ export function SegmentControl<T extends string>({
   });
 
   return (
-    <View className="w-3/5 rounded-full bg-surface p-1">
+    <View className="rounded-full bg-surface p-1" style={{ width: options.length * SEGMENT_WIDTH }}>
       <View className="flex-row" onLayout={handleInnerLayout}>
         <Animated.View style={indicatorStyle} />
         {options.map((option) => {
