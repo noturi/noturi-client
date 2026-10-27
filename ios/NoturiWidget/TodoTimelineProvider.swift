@@ -3,64 +3,45 @@ import WidgetKit
 struct TodoTimelineProvider: TimelineProvider {
     typealias Entry = TodoEntry
 
+    /// 서버에서 다시 받아오는 주기
+    private static let refreshInterval: TimeInterval = 15 * 60
+
     func placeholder(in context: Context) -> TodoEntry {
-        NSLog("[NoturiWidget] placeholder called")
-        return TodoEntry.placeholder
+        TodoEntry.placeholder
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TodoEntry) -> Void) {
-        NSLog("[NoturiWidget] getSnapshot called")
-        let defaults = UserDefaults(suiteName: "group.com.noturi.app")
-        let raw = defaults?.string(forKey: "widgetTodoData")
-        NSLog("[NoturiWidget] [Snapshot] UserDefaults exists: \(defaults != nil), raw data: \(raw != nil), length: \(raw?.count ?? 0)")
-        let cached = createEntryFromCache()
-        NSLog("[NoturiWidget] [Snapshot] cached data: \(cached != nil)")
-        let entry = cached ?? TodoEntry.placeholder
-        completion(entry)
+        completion(cachedEntry(for: Self.todayString()) ?? TodoEntry.placeholder)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<TodoEntry>) -> Void) {
-        NSLog("[NoturiWidget] getTimeline called")
-
         Task {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            formatter.timeZone = TimeZone.current
-            let today = formatter.string(from: Date())
-
-            // 1. API에서 fresh data fetch 시도
-            NSLog("[NoturiWidget] Fetching fresh data for: \(today)")
-            let freshData = await TodoWidgetService.fetchTodos(for: today)
-            NSLog("[NoturiWidget] Fresh data: \(freshData != nil), todos: \(freshData?.todos.count ?? 0)")
-
-            // 2. 실패하면 캐시 fallback
-            let data = freshData ?? SharedDataManager.getTodoData()
-            NSLog("[NoturiWidget] Final data: \(data != nil), todos: \(data?.todos.count ?? 0)")
+            let today = Self.todayString()
 
             let entry: TodoEntry
-            if let data = data {
-                entry = TodoEntry(
-                    date: Date(),
-                    todos: data.todos,
-                    completedCount: data.completed,
-                    totalCount: data.total,
-                    rate: data.rate,
-                    dateString: data.date,
-                    isPlaceholder: false
-                )
-            } else {
-                entry = TodoEntry.empty
+            switch await TodoWidgetService.fetchTodos(for: today) {
+            case .success(let data):
+                entry = Self.makeEntry(from: data)
+            case .unauthorized:
+                // 세션이 없거나 만료 — 다른 계정/오래된 할 일을 보여주지 않도록 캐시 삭제
+                SharedDataManager.clearTodoData()
+                entry = TodoEntry.signedOut
+            case .failure:
+                // 네트워크 실패 시 오늘 날짜의 캐시만 사용 (자정이 지난 어제 데이터는 표시하지 않음)
+                entry = cachedEntry(for: today) ?? TodoEntry.empty
             }
 
-            let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
-            let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
-            completion(timeline)
+            completion(Timeline(entries: [entry], policy: .after(Self.nextRefreshDate())))
         }
     }
 
-    private func createEntryFromCache() -> TodoEntry? {
-        guard let data = SharedDataManager.getTodoData() else { return nil }
-        return TodoEntry(
+    private func cachedEntry(for date: String) -> TodoEntry? {
+        guard let data = SharedDataManager.getTodoData(), data.date == date else { return nil }
+        return Self.makeEntry(from: data)
+    }
+
+    private static func makeEntry(from data: WidgetTodoData) -> TodoEntry {
+        TodoEntry(
             date: Date(),
             todos: data.todos,
             completedCount: data.completed,
@@ -69,5 +50,26 @@ struct TodoTimelineProvider: TimelineProvider {
             dateString: data.date,
             isPlaceholder: false
         )
+    }
+
+    /// 15분 뒤와 다음 자정 중 빠른 시각 — 날짜가 바뀌면 바로 오늘 할 일로 갱신
+    private static func nextRefreshDate(now: Date = Date()) -> Date {
+        let regular = now.addingTimeInterval(refreshInterval)
+        let calendar = Calendar.current
+        guard let midnight = calendar.nextDate(
+            after: now,
+            matching: DateComponents(hour: 0, minute: 0, second: 5),
+            matchingPolicy: .nextTime
+        ) else {
+            return regular
+        }
+        return min(regular, midnight)
+    }
+
+    static func todayString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = TimeZone.current
+        return formatter.string(from: Date())
     }
 }

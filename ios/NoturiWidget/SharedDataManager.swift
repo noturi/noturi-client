@@ -37,6 +37,10 @@ struct SharedDataManager {
         defaults.synchronize()
     }
 
+    static func clearTodoData() {
+        UserDefaults(suiteName: suiteName)?.removeObject(forKey: "widgetTodoData")
+    }
+
     static func saveTokens(accessToken: String, refreshToken: String) {
         SharedKeychain.set("accessToken", accessToken)
         SharedKeychain.set("refreshToken", refreshToken)

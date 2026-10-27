@@ -1,11 +1,10 @@
 import { syncAuthTokens, syncWidgetData } from '@modules/widget-bridge';
-import { useWidgetDeepLink } from '~/application/hooks/use-widget-deep-link';
 import { useAuth } from '~/entities/auth';
 import { formatDateString, todosByDateQuery } from '~/entities/todo';
 import { authApi } from '~/features/auth';
 import Logger from '~/shared/lib/logger';
 
-import { type ReactNode, useEffect, useMemo, useRef } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 import { AppState, Platform } from 'react-native';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -14,13 +13,12 @@ export function WidgetSyncProvider({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const appState = useRef(AppState.currentState);
-  const today = useMemo(() => formatDateString(new Date()), []);
+  // 매 렌더마다 계산 — 앱을 켜 둔 채 자정이 지나도 오늘 날짜 기준으로 위젯에 동기화 (포그라운드 복귀 시 재렌더)
+  const today = formatDateString(new Date());
   const { data } = useQuery({
     ...todosByDateQuery(today),
     enabled: isAuthenticated,
   });
-
-  useWidgetDeepLink();
 
   // 로그인 상태가 되면 위젯 전용 세션을 발급받아 위젯에 전달 (앱 실행마다 1회)
   // 위젯은 앱과 별도 세션으로 토큰을 회전하므로 서로의 리프레시 토큰을 무효화하지 않음

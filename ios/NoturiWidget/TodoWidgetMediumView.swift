@@ -70,9 +70,9 @@ struct TodoWidgetMediumView: View {
                             }
                             .buttonStyle(.plain)
                         } else {
-                            Link(destination: URL(string: "noturiclient://todo/toggle/\(todo.id)")!) {
-                                todoRow(todo)
-                            }
+                            // iOS 16: 위젯 안 체크 불가 — 탭하면 widgetURL로 앱의 할 일 탭이 열림
+                            // (링크로 상태를 바꾸면 외부 앱·웹이 같은 링크로 할 일을 조작할 수 있어 사용하지 않음)
+                            todoRow(todo)
                         }
                     }
                 }

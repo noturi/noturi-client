@@ -43,33 +43,27 @@ struct RefreshTokenResponse: Codable {
     let tokens: Tokens
 }
 
-class TodoWidgetService {
-    static func fetchTodos(for date: String) async -> WidgetTodoData? {
-        guard let baseUrl = SharedDataManager.getBaseUrl(),
-              let accessToken = SharedDataManager.getAccessToken() else {
-            return nil
-        }
+/// 위젯의 할 일 조회 결과 — 인증 실패는 "로그인 필요"로 화면에 표시하기 위해 구분
+enum TodoFetchResult {
+    case success(WidgetTodoData)
+    case unauthorized
+    case failure
+}
 
-        let urlString = "\(baseUrl)/client/todos?date=\(date)"
-        guard let url = URL(string: urlString) else { return nil }
+/// 인증이 필요한 요청 결과
+private enum ApiResponse {
+    case ok(Data)
+    case unauthorized
+    case failure
+}
 
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
-
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
-                // Try refresh token
-                if let newToken = await refreshAccessToken() {
-                    return await fetchTodosWithToken(date: date, baseUrl: baseUrl, token: newToken)
-                }
-                return nil
+enum TodoWidgetService {
+    static func fetchTodos(for date: String) async -> TodoFetchResult {
+        switch await send(path: "client/todos?date=\(date)", method: "GET") {
+        case .ok(let data):
+            guard let todoResponse = try? JSONDecoder().decode(TodoListResponse.self, from: data) else {
+                return .failure
             }
-
-            let todoResponse = try JSONDecoder().decode(TodoListResponse.self, from: data)
             let widgetData = WidgetTodoData(
                 todos: todoResponse.data.map { TodoItem(id: $0.id, title: $0.title, isCompleted: $0.isCompleted) },
                 date: date,
@@ -78,54 +72,64 @@ class TodoWidgetService {
                 completed: todoResponse.data.filter { $0.isCompleted }.count,
                 lastUpdated: ISO8601DateFormatter().string(from: Date())
             )
-
             SharedDataManager.saveTodoData(widgetData)
-            return widgetData
-        } catch {
-            return nil
+            return .success(widgetData)
+        case .unauthorized:
+            return .unauthorized
+        case .failure:
+            return .failure
         }
     }
 
     static func toggleTodo(id: String) async -> Bool {
+        if case .ok = await send(path: "client/todos/\(id)/toggle", method: "PATCH") {
+            return true
+        }
+        return false
+    }
+
+    /// 액세스 토큰으로 요청, 401이면 토큰을 한 번 갱신해 재시도. 2xx만 성공으로 처리
+    private static func send(path: String, method: String) async -> ApiResponse {
         guard let baseUrl = SharedDataManager.getBaseUrl(),
-              let accessToken = SharedDataManager.getAccessToken() else {
-            return false
+              let url = URL(string: "\(baseUrl)/\(path)") else {
+            return .failure
+        }
+        guard let accessToken = SharedDataManager.getAccessToken() else {
+            return .unauthorized
         }
 
-        let urlString = "\(baseUrl)/client/todos/\(id)/toggle"
-        guard let url = URL(string: urlString) else { return false }
+        let first = await perform(url: url, method: method, token: accessToken)
+        guard first.status == 401 else {
+            return first.result
+        }
 
+        guard let newToken = await refreshAccessToken() else {
+            return .unauthorized
+        }
+        let retry = await perform(url: url, method: method, token: newToken)
+        return retry.status == 401 ? .unauthorized : retry.result
+    }
+
+    private static func perform(url: URL, method: String, token: String) async -> (status: Int, result: ApiResponse) {
         var request = URLRequest(url: url)
-        request.httpMethod = "PATCH"
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = method
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.timeoutInterval = 10
 
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
-                if let newToken = await refreshAccessToken() {
-                    return await toggleTodoWithToken(id: id, baseUrl: baseUrl, token: newToken)
-                }
-                return false
-            }
-
-            let _ = try JSONDecoder().decode(TodoToggleResponse.self, from: data)
-            return true
-        } catch {
-            return false
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              let http = response as? HTTPURLResponse else {
+            return (0, .failure)
         }
+        return (http.statusCode, (200..<300).contains(http.statusCode) ? .ok(data) : .failure)
     }
 
     private static func refreshAccessToken() async -> String? {
         guard let baseUrl = SharedDataManager.getBaseUrl(),
-              let refreshToken = SharedDataManager.getRefreshToken() else {
+              let refreshToken = SharedDataManager.getRefreshToken(),
+              let url = URL(string: "\(baseUrl)/client/auth/refresh") else {
             return nil
         }
-
-        let urlString = "\(baseUrl)/client/auth/refresh"
-        guard let url = URL(string: urlString) else { return nil }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -133,60 +137,13 @@ class TodoWidgetService {
         request.httpBody = try? JSONEncoder().encode(["refreshToken": refreshToken])
         request.timeoutInterval = 10
 
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return nil }
-            let tokens = try JSONDecoder().decode(RefreshTokenResponse.self, from: data).tokens
-            // 리프레시 토큰은 1회용(RTR) — 새 토큰을 반드시 저장해야 다음 갱신이 가능
-            SharedDataManager.saveTokens(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken)
-            return tokens.accessToken
-        } catch {
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              let http = response as? HTTPURLResponse, http.statusCode == 200,
+              let tokens = try? JSONDecoder().decode(RefreshTokenResponse.self, from: data).tokens else {
             return nil
         }
-    }
-
-    private static func fetchTodosWithToken(date: String, baseUrl: String, token: String) async -> WidgetTodoData? {
-        let urlString = "\(baseUrl)/client/todos?date=\(date)"
-        guard let url = URL(string: urlString) else { return nil }
-
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
-
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let todoResponse = try JSONDecoder().decode(TodoListResponse.self, from: data)
-            let widgetData = WidgetTodoData(
-                todos: todoResponse.data.map { TodoItem(id: $0.id, title: $0.title, isCompleted: $0.isCompleted) },
-                date: date,
-                rate: todoResponse.rate,
-                total: todoResponse.data.count,
-                completed: todoResponse.data.filter { $0.isCompleted }.count,
-                lastUpdated: ISO8601DateFormatter().string(from: Date())
-            )
-            SharedDataManager.saveTodoData(widgetData)
-            return widgetData
-        } catch {
-            return nil
-        }
-    }
-
-    private static func toggleTodoWithToken(id: String, baseUrl: String, token: String) async -> Bool {
-        let urlString = "\(baseUrl)/client/todos/\(id)/toggle"
-        guard let url = URL(string: urlString) else { return false }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "PATCH"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
-
-        do {
-            let (_, _) = try await URLSession.shared.data(for: request)
-            return true
-        } catch {
-            return false
-        }
+        // 리프레시 토큰은 1회용(RTR) — 새 토큰을 반드시 저장해야 다음 갱신이 가능
+        SharedDataManager.saveTokens(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken)
+        return tokens.accessToken
     }
 }

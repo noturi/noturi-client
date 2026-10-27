@@ -37,8 +37,3 @@ export async function reloadWidget(): Promise<void> {
   if (Platform.OS === 'web' || !WidgetBridge) return;
   return WidgetBridge.reloadWidget();
 }
-
-export async function readWidgetData(): Promise<string> {
-  if (Platform.OS === 'web' || !WidgetBridge) return 'ERROR: bridge not available';
-  return WidgetBridge.readWidgetData();
-}

@@ -19,8 +19,8 @@ struct ToggleTodoIntent: AppIntent {
         let success = await TodoWidgetService.toggleTodo(id: todoId)
 
         if success {
-            // Update local cache optimistically
-            if var todoData = SharedDataManager.getTodoData() {
+            // 낙관적 업데이트: 서버 재조회 전까지 위젯에 바로 반영
+            if let todoData = SharedDataManager.getTodoData() {
                 var updatedTodos = todoData.todos
                 if let index = updatedTodos.firstIndex(where: { $0.id == todoId }) {
                     let todo = updatedTodos[index]
@@ -40,23 +40,11 @@ struct ToggleTodoIntent: AppIntent {
                 SharedDataManager.saveTodoData(updated)
             }
 
-            // Refresh widget after data update
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            formatter.timeZone = TimeZone.current
-            let today = formatter.string(from: Date())
-            let _ = await TodoWidgetService.fetchTodos(for: today)
+            // 서버 기준으로 다시 동기화
+            _ = await TodoWidgetService.fetchTodos(for: TodoTimelineProvider.todayString())
         }
 
         WidgetCenter.shared.reloadAllTimelines()
         return .result()
-    }
-}
-
-// Helper extension for DateFormatter
-private extension DateFormatter {
-    func apply(_ configure: (DateFormatter) -> Void) -> DateFormatter {
-        configure(self)
-        return self
     }
 }

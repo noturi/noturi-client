@@ -23,6 +23,8 @@ struct TodoEntry: TimelineEntry {
     let rate: Double
     let dateString: String
     let isPlaceholder: Bool
+    /// 위젯 세션이 없거나 만료됨 — 오래된 캐시 대신 로그인 안내를 표시
+    var needsLogin: Bool = false
 
     static var placeholder: TodoEntry {
         TodoEntry(
@@ -38,6 +40,19 @@ struct TodoEntry: TimelineEntry {
             rate: 50,
             dateString: "",
             isPlaceholder: true
+        )
+    }
+
+    static var signedOut: TodoEntry {
+        TodoEntry(
+            date: Date(),
+            todos: [],
+            completedCount: 0,
+            totalCount: 0,
+            rate: 0,
+            dateString: formatTodayString(),
+            isPlaceholder: false,
+            needsLogin: true
         )
     }
 
