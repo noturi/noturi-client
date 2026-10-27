@@ -1,61 +1,28 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/shared/lib/theme-context';
-import { SheetBackdrop, Typography } from '~/shared/ui';
+import { ControlledSheet } from '~/shared/ui';
 
-import { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 
 import { CategoryManageContent } from './category-manage-content';
+
+/** 모듈 상수 — bottom-sheet가 snapPoints 배열 참조로 재계산하므로 렌더마다 새로 만들지 않는다 */
+const SNAP_POINTS = ['60%'];
 
 interface CategoryManageSheetProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
-  const { hexColors } = useUserTheme();
-
-  const snapPoints = ['60%'];
-
-  useEffect(() => {
-    if (isOpen) {
-      bottomSheetRef.current?.present();
-    } else {
-      bottomSheetRef.current?.dismiss();
-    }
-  }, [isOpen]);
-
-  return (
-    <BottomSheetModal
-      ref={bottomSheetRef}
-      enablePanDownToClose
-      backdropComponent={SheetBackdrop}
-      backgroundStyle={{
-        backgroundColor: hexColors.surface,
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        borderWidth: 1,
-        borderColor: hexColors.border,
-        borderBottomWidth: 0,
-      }}
-      enableDynamicSizing={false}
-      handleIndicatorStyle={{
-        backgroundColor: hexColors.textMuted,
-        width: 36,
-        height: 4,
-      }}
-      snapPoints={snapPoints}
-      onDismiss={onClose}
-    >
-      <BottomSheetView style={{ flex: 1 }}>
-        <View className="gap-4 p-4 pb-6">
-          <Typography className="text-center" variant="headline">
-            카테고리 관리
-          </Typography>
-        </View>
-        <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
-      </BottomSheetView>
-    </BottomSheetModal>
-  );
-};
+export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProps) => (
+  <ControlledSheet
+    background="surface"
+    isOpen={isOpen}
+    snapPoints={SNAP_POINTS}
+    title="카테고리 관리"
+    onClose={onClose}
+  >
+    {/* 제목 아래 간격(pb-6) 유지 */}
+    <View className="flex-1 pt-6">
+      <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
+    </View>
+  </ControlledSheet>
+);
