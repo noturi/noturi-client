@@ -22,7 +22,7 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
   >
     {/* 제목 아래 간격(pb-6) 유지 */}
     <View className="flex-1 pt-6">
-      <CategoryManageContent shouldAutoFocus={isOpen} onSuccess={onClose} />
+      <CategoryManageContent shouldAutoFocus={isOpen} />
     </View>
   </ControlledSheet>
 );

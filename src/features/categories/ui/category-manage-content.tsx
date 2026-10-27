@@ -19,24 +19,15 @@ import { CategoryInlineAddForm } from './category-inline-add-form';
 
 interface CategoryManageContentProps {
   shouldAutoFocus?: boolean;
-  onSuccess?: () => void;
 }
 
-export const CategoryManageContent = ({
-  shouldAutoFocus = false,
-  onSuccess,
-}: CategoryManageContentProps) => {
+export const CategoryManageContent = ({ shouldAutoFocus = false }: CategoryManageContentProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
   const reorderMutation = useReorderCategoriesMutation();
-
-  const handleCreated = () => {
-    setIsFormVisible(false);
-    onSuccess?.();
-  };
 
   const handleDragEnd = ({ data }: { data: Category[] }) => {
     reorderMutation.mutate({
@@ -71,7 +62,7 @@ export const CategoryManageContent = ({
               <CategoryInlineAddForm
                 autoFocus={shouldAutoFocus || isFormVisible}
                 onCancel={() => setIsFormVisible(false)}
-                onCreated={handleCreated}
+                onCreated={() => setIsFormVisible(false)} /* 연속 추가·정리할 수 있게 시트는 유지 */
               />
             ) : (
               <Button size="md" variant="ghost" onPress={() => setIsFormVisible(true)}>
