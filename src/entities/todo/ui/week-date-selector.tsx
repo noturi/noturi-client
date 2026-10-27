@@ -1,5 +1,5 @@
 import { addDays, format, getDay, isSameDay, isToday } from 'date-fns';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { createCalendarTheme } from '~/shared/config/calendar-theme';
 import { CircularProgress, ControlledSheet, Typography } from '~/shared/ui';
 

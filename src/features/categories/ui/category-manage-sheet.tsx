@@ -1,5 +1,5 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';

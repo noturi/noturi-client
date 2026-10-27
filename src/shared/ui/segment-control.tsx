@@ -1,4 +1,4 @@
-import { useThemeColor } from '~/application/providers/theme-provider';
+import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { useCallback, useEffect } from 'react';
 import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';

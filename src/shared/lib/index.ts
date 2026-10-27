@@ -9,3 +9,5 @@ export { useDebounce } from './use-debounce';
 export { useForm } from './use-form';
 export * from './use-keyboard';
 export { useToast } from './use-toast';
+export { ThemeContext, useThemeColor, useUserTheme } from './theme-context';
+export type { ThemeColorKey, ThemeContextValue } from './theme-context';

@@ -4,7 +4,7 @@ import BottomSheet, {
   BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 
 import {
   ReactNode,

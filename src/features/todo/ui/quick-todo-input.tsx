@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { formatDateString } from '~/entities/todo/lib/date-utils';
 import { Button } from '~/shared/ui';
 

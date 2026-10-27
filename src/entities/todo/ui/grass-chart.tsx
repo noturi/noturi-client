@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useThemeColor } from '~/application/providers/theme-provider';
+import { useThemeColor } from '~/shared/lib/theme-context';
 import { Card, Typography } from '~/shared/ui';
 
 import { useCallback, useMemo, useRef, useState } from 'react';

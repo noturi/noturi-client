@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { ChevronDown } from '~/shared/lib/icons';
 import { ControlledSheet, Typography } from '~/shared/ui';
 

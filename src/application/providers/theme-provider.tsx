@@ -3,42 +3,18 @@ import { ThemeId, userSettingsQuery } from '~/entities/user';
 import { useUpdateSettingsMutation } from '~/features/user/api';
 import {
   DEFAULT_THEME_ID,
-  HexColors,
   PRESET_HEX_COLORS,
   PRESET_IS_DARK,
   THEME_PRESETS,
-  ThemePreset,
   themeStore,
 } from '~/shared/config/theme';
+import { ThemeContext } from '~/shared/lib/theme-context';
 
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
-
-// 색상 키 타입 정의 (useThemeColor 훅용)
-export type ThemeColorKey = keyof HexColors;
-
-interface ThemeContextValue {
-  hexColors: HexColors;
-  isDark: boolean;
-  themeId: string;
-  isLoading: boolean;
-  setTheme: (themeId: string) => Promise<void>;
-  toggleTheme: () => Promise<void>;
-  presets: ThemePreset[];
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -140,37 +116,4 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       </GestureHandlerRootView>
     </ThemeContext.Provider>
   );
-}
-
-export function useUserTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useUserTheme must be used within ThemeProvider');
-  }
-  return context;
-}
-
-/**
- * 특정 테마 색상을 가져오는 훅
- *
- * @example
- * // 단일 색상
- * const accentColor = useThemeColor('accent');
- *
- * @example
- * // 여러 색상
- * const [accent, danger] = useThemeColor(['accent', 'danger']);
- */
-export function useThemeColor<T extends ThemeColorKey>(colorKey: T): string;
-export function useThemeColor<T extends readonly [ThemeColorKey, ...ThemeColorKey[]]>(
-  colorKeys: T,
-): { [K in keyof T]: string };
-export function useThemeColor(colorKeyOrKeys: ThemeColorKey | ThemeColorKey[]): string | string[] {
-  const { hexColors } = useUserTheme();
-
-  if (Array.isArray(colorKeyOrKeys)) {
-    return colorKeyOrKeys.map((key) => hexColors[key]);
-  }
-
-  return hexColors[colorKeyOrKeys];
 }

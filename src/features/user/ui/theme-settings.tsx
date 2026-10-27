@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Moon } from '~/shared/lib/icons';
 import { Switch, Typography } from '~/shared/ui';
 

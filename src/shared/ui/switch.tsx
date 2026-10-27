@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { Platform, Switch as RNSwitch, View } from 'react-native';
 

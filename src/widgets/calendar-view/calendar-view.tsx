@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
 import { useCalendarDate } from '~/entities/calendar/model';
 import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';

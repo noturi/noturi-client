@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { ChevronLeft } from '~/shared/lib/icons';
 
 import { Pressable } from 'react-native';

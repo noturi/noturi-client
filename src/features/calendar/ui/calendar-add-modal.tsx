@@ -1,6 +1,6 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import {
   ALL_DAY_NOTIFICATION_OPTIONS,
   NOTIFICATION_OPTIONS,

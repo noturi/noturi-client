@@ -1,5 +1,5 @@
 import { startOfDay } from 'date-fns';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
 import { QuickTodoInput, TodoList } from '~/features/todo';

@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { createContext, forwardRef, useContext, useMemo } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';

@@ -1,4 +1,4 @@
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';

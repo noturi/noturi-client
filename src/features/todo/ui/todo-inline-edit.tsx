@@ -1,5 +1,5 @@
 import { Check, X } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { useRef, useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';

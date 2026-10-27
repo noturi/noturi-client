@@ -1,5 +1,5 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/application/providers/theme-provider';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { X } from '~/shared/lib/icons';
 import { Button, Input, Typography } from '~/shared/ui';
