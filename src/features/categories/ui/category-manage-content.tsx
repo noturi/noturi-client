@@ -1,12 +1,9 @@
-import { z } from 'zod';
 import type { Category } from '~/entities/category';
 import { activeCategoriesQuery } from '~/entities/category';
-import { useForm } from '~/shared/lib';
 import { GripVertical } from '~/shared/lib/icons';
-import { Button, Form, Input } from '~/shared/ui';
+import { Button, Form } from '~/shared/ui';
 
-import { useEffect, useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import DraggableFlatList, {
   type RenderItemParams,
@@ -17,9 +14,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useQuery } from '@tanstack/react-query';
 
 import { useReorderCategoriesMutation } from '../api/mutations';
-import { handleCategoryCreateError } from '../model/form-error-handler';
-import { CategoryCreateButton } from './category-create-button';
 import { CategoryDeleteButton } from './category-delete-button';
+import { CategoryInlineAddForm } from './category-inline-add-form';
 
 interface CategoryManageContentProps {
   shouldAutoFocus?: boolean;
@@ -31,62 +27,21 @@ export const CategoryManageContent = ({
   onSuccess,
 }: CategoryManageContentProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const textInputRef = useRef<TextInput | null>(null);
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
   const reorderMutation = useReorderCategoriesMutation();
 
-  const form = useForm({
-    initialValues: {
-      categoryName: '',
-    },
-    validationSchema: z.object({
-      categoryName: z.string().min(1, '카테고리 이름을 입력해주세요.'),
-    }),
-  });
-
-  useEffect(() => {
-    if (!shouldAutoFocus || !isFormVisible) return;
-
-    const timer = setTimeout(() => {
-      textInputRef.current?.focus();
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [shouldAutoFocus, isFormVisible]);
-
-  const handleShowForm = () => {
-    setIsFormVisible(true);
-    setTimeout(() => {
-      textInputRef.current?.focus();
-    }, 100);
-  };
-
-  const handleCancelAdd = () => {
-    form.reset();
-    setIsFormVisible(false);
-  };
-
-  const handleCreateSuccess = () => {
-    form.reset();
+  const handleCreated = () => {
     setIsFormVisible(false);
     onSuccess?.();
   };
 
-  const handleCreateError = async (error: Error) => {
-    await handleCategoryCreateError(error);
-  };
-
   const handleDragEnd = ({ data }: { data: Category[] }) => {
-    const reorderData = {
-      categories: data.map((cat, index) => ({
-        id: cat.id,
-        sortOrder: index,
-      })),
-    };
-    reorderMutation.mutate(reorderData);
+    reorderMutation.mutate({
+      categories: data.map((cat, index) => ({ id: cat.id, sortOrder: index })),
+    });
   };
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<Category>) => (
@@ -111,44 +66,16 @@ export const CategoryManageContent = ({
       <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <Form>
           <Form.Field>
-            {!isFormVisible && (
-              <Button size="md" variant="ghost" onPress={handleShowForm}>
+            {isFormVisible ? (
+              <CategoryInlineAddForm
+                autoFocus={shouldAutoFocus || isFormVisible}
+                onCancel={() => setIsFormVisible(false)}
+                onCreated={handleCreated}
+              />
+            ) : (
+              <Button size="md" variant="ghost" onPress={() => setIsFormVisible(true)}>
                 <Button.Label>+ 추가</Button.Label>
               </Button>
-            )}
-
-            {isFormVisible && (
-              <View className="mt-2 flex-row items-center gap-1">
-                <View className="flex-1">
-                  <Form.Field
-                    error={
-                      form.shouldShowError('categoryName') ? form.errors.categoryName : undefined
-                    }
-                  >
-                    <Input
-                      ref={textInputRef}
-                      hasError={!!form.shouldShowError('categoryName')}
-                      maxLength={20}
-                      placeholder="새 카테고리 이름"
-                      value={form.values.categoryName}
-                      onBlur={() => form.setTouched('categoryName')}
-                      onChangeText={(text) => form.setValue('categoryName', text)}
-                      onFocus={() => form.clearError('categoryName')}
-                    />
-                  </Form.Field>
-                </View>
-                <View className="flex-row items-center gap-1">
-                  <CategoryCreateButton
-                    isValid={form.isValid}
-                    name={form.values.categoryName}
-                    onError={handleCreateError}
-                    onSuccess={handleCreateSuccess}
-                  />
-                  <Button size="sm" variant="ghost" onPress={handleCancelAdd}>
-                    <Button.Label>취소</Button.Label>
-                  </Button>
-                </View>
-              </View>
             )}
           </Form.Field>
 

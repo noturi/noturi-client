@@ -1,154 +1,64 @@
-import {
-  type Category,
-  CategoryButton,
-  type CreateCategoryDto,
-  activeCategoriesQuery,
-} from '~/entities/category';
-import { categoryFormSchema, memoDetailQuery, memoFormSchema } from '~/entities/memo';
-import type { CategoryFormData, CreateMemoDto, MemoFormData } from '~/entities/memo';
-import { DEFAULT_COLORS } from '~/shared/config';
-import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
-import { MESSAGES } from '~/shared/model';
-import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
+import { CategoryButton, activeCategoriesQuery } from '~/entities/category';
+import { useGradualAnimation } from '~/shared/lib';
+import { Button, FloatingButton, Form, Loading, TextArea } from '~/shared/ui';
 
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { useCreateMemoMutation, useUpdateMemoMutation } from '../api';
+import { useMemoForm } from '../model';
 import { RatingSelector } from './rating-selector';
+
+export interface AddCategorySlotProps {
+  onCreated: (category: { name: string }) => void;
+  onCancel: () => void;
+}
 
 interface MemoFormProps {
   /** 있으면 수정 모드, 없으면 생성 모드 */
   memoId?: string;
   onSuccess?: () => void;
   shouldAutoFocus?: boolean;
-  /** 카테고리 생성은 categories feature 소관이므로 상위(pages)에서 주입 */
-  onCreateCategory: (data: CreateCategoryDto) => Promise<Category>;
-  isCreatingCategory?: boolean;
+  /**
+   * 카테고리 추가 UI 슬롯. 카테고리 생성은 categories feature 소관이므로
+   * MemoForm은 구현을 모르고 상위(pages)에서 주입받는다. 없으면 "+ 추가" 버튼을 숨긴다.
+   */
+  renderAddCategory?: (props: AddCategorySlotProps) => ReactNode;
 }
 
 export const MemoForm = ({
   memoId,
   onSuccess,
   shouldAutoFocus = false,
-  onCreateCategory,
-  isCreatingCategory = false,
+  renderAddCategory,
 }: MemoFormProps) => {
-  const isEdit = !!memoId;
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<TextInput>(null);
-  const toast = useToast();
   const { height } = useGradualAnimation();
 
-  const { data: memo, isLoading } = useQuery(memoDetailQuery(memoId ?? ''));
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
   const categories = categoriesData?.categories || [];
 
-  const memoForm = useForm<MemoFormData>({
-    initialValues: {
-      text: '',
-      rating: 0,
-      selectedCategory: '',
-    },
-    validationSchema: memoFormSchema,
-    onSubmit: async (values) => {
-      const lines = values.text.split('\n');
-      let title = lines[0].trim() || '제목 없음';
-      let content = lines.slice(1).join('\n').trim();
-
-      if (title.length > 30) {
-        const truncatedTitle = title.substring(0, 30);
-        const remainingText = title.substring(30);
-        title = truncatedTitle;
-        content = remainingText + (content ? '\n' + content : '');
-      }
-
-      const selectedCat = values.selectedCategory
-        ? categories.find((cat) => cat.name === values.selectedCategory)
-        : null;
-
-      const memoData: CreateMemoDto = {
-        title,
-        content: content || '',
-        ...(selectedCat?.id && { categoryId: selectedCat.id }),
-        ...(values.rating > 0 && { rating: values.rating }),
-      };
-
-      if (isEdit) {
-        updateMemoMutation.mutate({ ...memoData, id: memoId });
-      } else {
-        createMemoMutation.mutate(memoData);
-      }
-    },
+  const {
+    form: memoForm,
+    isEdit,
+    isLoadingMemo,
+    isSubmitting,
+  } = useMemoForm({
+    memoId,
+    categories,
+    onSuccess,
   });
-
-  const categoryForm = useForm<CategoryFormData>({
-    initialValues: { name: '' },
-    validationSchema: categoryFormSchema,
-  });
-
-  // 수정 모드: 메모 데이터로 폼 채우기
-  useEffect(() => {
-    if (memo) {
-      const text = memo.content ? `${memo.title}\n${memo.content}` : memo.title;
-      memoForm.setValue('text', text);
-      memoForm.setValue('rating', Number(memo.rating) || 0);
-      memoForm.setValue('selectedCategory', memo.category?.name || '');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memo]);
-
-  const createMemoMutation = useCreateMemoMutation({
-    onSuccess: () => {
-      toast.showSuccess(MESSAGES.MEMO.CREATE_SUCCESS);
-      memoForm.reset();
-      onSuccess?.();
-    },
-    onError: () => {
-      memoForm.setError('text', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
-    },
-  });
-
-  const updateMemoMutation = useUpdateMemoMutation({
-    onSuccess: () => {
-      toast.showSuccess(MESSAGES.MEMO.UPDATE_SUCCESS);
-      onSuccess?.();
-    },
-    onError: () => {
-      memoForm.setError('text', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
-    },
-  });
-
-  const isMutationPending = isEdit ? updateMemoMutation.isPending : createMemoMutation.isPending;
-
-  const handleAddCategory = async () => {
-    try {
-      const newCategory = await onCreateCategory({
-        name: categoryForm.values.name,
-        color: DEFAULT_COLORS,
-      });
-      memoForm.setValue('selectedCategory', newCategory.name);
-      categoryForm.reset();
-      setShowAddCategory(false);
-      toast.showSuccess(MESSAGES.CATEGORY.CREATE_SUCCESS);
-    } catch {
-      categoryForm.setError('name', {
-        message: '카테고리 생성 중 오류가 발생했습니다.',
-        type: 'server',
-      });
-    }
-  };
-
-  const handleCancelAddCategory = () => {
-    categoryForm.reset();
-    setShowAddCategory(false);
-  };
 
   const handleCategorySelect = (categoryName: string) => {
     memoForm.setValue('selectedCategory', categoryName);
+  };
+
+  const handleCategoryCreated = (category: { name: string }) => {
+    handleCategorySelect(category.name);
+    setShowAddCategory(false);
   };
 
   // 생성 모드: 지연 포커스 (바텀시트 애니메이션 후)
@@ -174,7 +84,7 @@ export const MemoForm = ({
     };
   }, []);
 
-  if (isEdit && isLoading) {
+  if (isLoadingMemo) {
     return (
       <View className="flex-1 bg-bg-primary">
         <Loading text="메모를 불러오는 중..." />
@@ -216,7 +126,7 @@ export const MemoForm = ({
                       onPress={() => handleCategorySelect(category.name)}
                     />
                   ))}
-                  {!showAddCategory && (
+                  {renderAddCategory && !showAddCategory && (
                     <Button size="sm" variant="ghost" onPress={() => setShowAddCategory(true)}>
                       <Button.Label>+ 추가</Button.Label>
                     </Button>
@@ -224,39 +134,11 @@ export const MemoForm = ({
                 </View>
               </ScrollView>
 
-              {showAddCategory && (
-                <View className="mt-2 flex-row items-center gap-1">
-                  <View className="flex-1">
-                    <Form.Field
-                      error={
-                        categoryForm.shouldShowError('name') ? categoryForm.errors.name : undefined
-                      }
-                    >
-                      <Input
-                        hasError={!!categoryForm.shouldShowError('name')}
-                        maxLength={20}
-                        placeholder="새 카테고리 이름"
-                        value={categoryForm.values.name}
-                        onBlur={() => categoryForm.setTouched('name')}
-                        onChangeText={(text) => categoryForm.setValue('name', text)}
-                      />
-                    </Form.Field>
-                  </View>
-                  <View className="flex-row items-center gap-1">
-                    <Button
-                      isDisabled={!categoryForm.isValid || isCreatingCategory}
-                      size="sm"
-                      variant="primary"
-                      onPress={handleAddCategory}
-                    >
-                      <Button.Label>추가</Button.Label>
-                    </Button>
-                    <Button size="sm" variant="ghost" onPress={handleCancelAddCategory}>
-                      <Button.Label>취소</Button.Label>
-                    </Button>
-                  </View>
-                </View>
-              )}
+              {showAddCategory &&
+                renderAddCategory?.({
+                  onCreated: handleCategoryCreated,
+                  onCancel: () => setShowAddCategory(false),
+                })}
             </Form.Field>
 
             <Form.Field label="평점">
@@ -281,7 +163,7 @@ export const MemoForm = ({
       >
         <FloatingButton
           disabled={!memoForm.isValid}
-          isLoading={isMutationPending}
+          isLoading={isSubmitting}
           onPress={memoForm.handleSubmit}
         />
       </Animated.View>

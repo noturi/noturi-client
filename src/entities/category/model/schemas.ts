@@ -15,3 +15,14 @@ export const backendCategorySchema = z.object({
 export const backendCategoryListSchema = z.array(backendCategorySchema);
 
 export type BackendCategory = z.infer<typeof backendCategorySchema>;
+
+// 카테고리 생성 폼
+export const categoryFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, '카테고리 이름을 입력해주세요.')
+    .max(20, '카테고리 이름은 20자 이하로 입력해주세요'),
+});
+
+export type CategoryFormData = z.infer<typeof categoryFormSchema>;

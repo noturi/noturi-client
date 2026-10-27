@@ -1,3 +1,2 @@
-export { CategoryAddSheet } from './category-add-sheet';
+export { CategoryInlineAddForm, type CategoryInlineAddFormProps } from './category-inline-add-form';
 export { CategoryManageSheet } from './category-manage-sheet';
-export { CategorySelector } from './category-selector';

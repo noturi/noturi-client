@@ -14,15 +14,6 @@ export const memoFormSchema = z.object({
 
 export type MemoFormData = z.infer<typeof memoFormSchema>;
 
-export const categoryFormSchema = z.object({
-  name: z
-    .string()
-    .max(20, '카테고리 이름은 20자 이하로 입력해주세요')
-    .transform((val) => val.trim()),
-});
-
-export type CategoryFormData = z.infer<typeof categoryFormSchema>;
-
 // API 응답 스키마 — 타입과 어긋나면 컴파일 에러가 나도록 z.ZodType<...>으로 고정
 export const memoSchema: z.ZodType<Memo> = z.object({
   id: z.string(),
