@@ -34,9 +34,9 @@ export class TodoApi {
     return response.json<TodoListResponseDto>();
   }
 
-  // 월간 통계 조회
+  // 월간 통계 조회 (서버: GET /client/todos/stats/daily — 월의 일별 달성률)
   async getMonthlyStats(params: TodoMonthlyStatsParamsDto): Promise<TodoMonthlyStatsDto> {
-    const response = await this.api.get('todos/stats/monthly', {
+    const response = await this.api.get('todos/stats/daily', {
       searchParams: toSearchParams(params),
     });
     return response.json<TodoMonthlyStatsDto>();

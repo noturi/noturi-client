@@ -86,13 +86,24 @@ export function ControlledSheet({
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
 
+  // 실제로 열려 있을 때만 dismiss() — 열린 적 없는 모달에 dismiss()를 호출하면
+  // 이후 present()가 아무것도 그리지 않는 버그 회피 (gorhom/react-native-bottom-sheet#2787, 5.2.11+)
+  const isPresentedRef = useRef(false);
   useEffect(() => {
     if (isOpen) {
       bottomSheetRef.current?.present();
-    } else {
+      isPresentedRef.current = true;
+    } else if (isPresentedRef.current) {
       bottomSheetRef.current?.dismiss();
+      isPresentedRef.current = false;
     }
   }, [isOpen]);
+
+  // 팬다운/배경 탭으로 닫힌 경우 이미 dismiss 상태이므로 다시 dismiss()하지 않도록 기록
+  const handleDismiss = () => {
+    isPresentedRef.current = false;
+    onClose();
+  };
 
   const header = title ? (
     <View className="px-4 pt-4">
@@ -120,7 +131,7 @@ export function ControlledSheet({
         height: 4,
       }}
       snapPoints={snapPoints}
-      onDismiss={onClose}
+      onDismiss={handleDismiss}
     >
       {scrollable ? (
         <BottomSheetScrollView

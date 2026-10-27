@@ -5,17 +5,22 @@ import { requestInterceptor, retryInterceptor } from './interceptors';
 
 export { ENDPOINTS } from './endpoints';
 
+// 정상 요청/응답 로그는 EXPO_PUBLIC_LOG_API=1일 때만 출력 (기본은 조용히)
+// 실패 응답(4xx/5xx)은 설정과 무관하게 항상 경고 — 404 같은 계약 불일치를 놓치지 않도록
+const LOG_ALL_API = process.env.EXPO_PUBLIC_LOG_API === '1';
+
 function logRequest(request: Request) {
-  const method = request.method;
-  const url = request.url;
-  Logger.debug(`[API] → ${method} ${url}`);
+  if (!LOG_ALL_API) return;
+  Logger.debug(`[API] → ${request.method} ${request.url}`);
 }
 
 function logResponse(request: Request, _options: unknown, response: Response) {
-  const method = request.method;
-  const url = request.url;
-  const status = response.status;
-  Logger.debug(`[API] ← ${status} ${method} ${url}`);
+  if (!response.ok) {
+    Logger.warn(`[API] ← ${response.status} ${request.method} ${request.url}`);
+    return;
+  }
+  if (!LOG_ALL_API) return;
+  Logger.debug(`[API] ← ${response.status} ${request.method} ${request.url}`);
 }
 
 export const api = ky.create({
