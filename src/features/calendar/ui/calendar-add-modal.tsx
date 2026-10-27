@@ -46,7 +46,8 @@ export function CalendarAddModal({
 }: CalendarAddModalProps) {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { hexColors } = useUserTheme();
-  const form = useCalendarMemoForm({
+  // inputRef를 분리해야 컴파일러가 form 전체를 ref로 오인하지 않음
+  const { inputRef, ...form } = useCalendarMemoForm({
     isOpen,
     editData,
     initialStartDate,
@@ -99,7 +100,7 @@ export function CalendarAddModal({
           <Form>
             <Form.Field required label="제목">
               <Input
-                ref={form.inputRef}
+                ref={inputRef}
                 defaultValue={editData?.title}
                 placeholder="일정 제목을 입력하세요"
                 size="lg"
