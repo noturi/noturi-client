@@ -1,3 +1,5 @@
+import Logger from '~/shared/lib/logger';
+
 type TokenExpiredCallback = () => void;
 type TokenRefreshedCallback = (tokens: { accessToken: string; refreshToken: string }) => void;
 
@@ -17,7 +19,7 @@ class TokenEventManager {
       try {
         callback();
       } catch (error) {
-        console.error('Token expired callback error:', error);
+        Logger.error('Token expired callback error:', error);
       }
     });
   }
@@ -34,7 +36,7 @@ class TokenEventManager {
       try {
         callback(tokens);
       } catch (error) {
-        console.error('Token refreshed callback error:', error);
+        Logger.error('Token refreshed callback error:', error);
       }
     });
   }

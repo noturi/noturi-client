@@ -7,6 +7,7 @@ import {
   UpdateCategoryDto,
 } from '~/entities/category/model/types';
 import { api } from '~/shared/api';
+import Logger from '~/shared/lib/logger';
 
 /**
  * Feature Layer - CUD 전용 API
@@ -39,7 +40,7 @@ export class CategoryMutationApi {
       });
       return response.json<Category>();
     } catch (error) {
-      console.error('Update category API error:', error);
+      Logger.error('Update category API error:', error);
       throw new Error('카테고리 수정에 실패했습니다.');
     }
   }
@@ -56,7 +57,7 @@ export class CategoryMutationApi {
         json: data,
       });
     } catch (error) {
-      console.error('Reorder categories API error:', error);
+      Logger.error('Reorder categories API error:', error);
       throw new Error('카테고리 순서 변경에 실패했습니다.');
     }
   }
@@ -68,7 +69,7 @@ export class CategoryMutationApi {
         json: data,
       });
     } catch (error) {
-      console.error('Merge categories API error:', error);
+      Logger.error('Merge categories API error:', error);
       throw new Error('카테고리 병합에 실패했습니다.');
     }
   }

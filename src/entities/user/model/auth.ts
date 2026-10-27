@@ -1,3 +1,5 @@
+import Logger from '~/shared/lib/logger';
+
 export interface User {
   id: string;
   email: string;
@@ -32,7 +34,7 @@ export const parseUser = (userString: string | null): User | null => {
     const parsed = JSON.parse(userString);
     return isUser(parsed) ? parsed : null;
   } catch (error) {
-    console.error('사용자 정보 파싱 실패:', error);
+    Logger.error('사용자 정보 파싱 실패:', error);
     return null;
   }
 };

@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 import { useCallback, useMemo, useReducer } from 'react';
 
+import Logger from './logger';
+
 export type FormFieldError = {
   message: string;
   type?: string;
@@ -206,7 +208,7 @@ export function useForm<T extends Record<string, any>>({
         await onSubmit(state.values);
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      Logger.error('Form submission error:', error);
     } finally {
       dispatch({ type: 'SET_SUBMITTING', value: false });
     }

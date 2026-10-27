@@ -50,7 +50,7 @@ class Logger {
   private static print(
     level: LogLevel,
     message: string,
-    args: any[],
+    args: unknown[],
     options: { color: string; label: string },
   ) {
     if (CURRENT_LOG_LEVEL <= level) {
@@ -77,28 +77,28 @@ class Logger {
     }
   }
 
-  static debug(message: string, ...args: any[]) {
+  static debug(message: string, ...args: unknown[]) {
     this.print(LOG_LEVELS.DEBUG, message, args, {
       color: COLORS.fg.magenta,
       label: 'DEBUG',
     });
   }
 
-  static info(message: string, ...args: any[]) {
+  static info(message: string, ...args: unknown[]) {
     this.print(LOG_LEVELS.INFO, message, args, {
       color: COLORS.fg.blue,
       label: 'INFO',
     });
   }
 
-  static warn(message: string, ...args: any[]) {
+  static warn(message: string, ...args: unknown[]) {
     this.print(LOG_LEVELS.WARN, message, args, {
       color: COLORS.fg.yellow,
       label: 'WARN',
     });
   }
 
-  static error(message: string, ...args: any[]) {
+  static error(message: string, ...args: unknown[]) {
     this.print(LOG_LEVELS.ERROR, message, args, {
       color: COLORS.fg.red,
       label: 'ERROR',

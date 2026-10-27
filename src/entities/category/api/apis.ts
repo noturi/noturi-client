@@ -5,6 +5,7 @@ import {
   CategoryListResponseDto,
 } from '~/entities/category/model/types';
 import { api } from '~/shared/api';
+import Logger from '~/shared/lib/logger';
 
 /**
  * Entity Layer - READ 전용 API
@@ -56,7 +57,7 @@ export class CategoryApi {
 
       return transformedData;
     } catch (error) {
-      console.error('Get categories API error:', error);
+      Logger.error('Get categories API error:', error);
       throw new Error('카테고리 목록을 불러오는데 실패했습니다.');
     }
   }

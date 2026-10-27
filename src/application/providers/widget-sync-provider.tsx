@@ -2,6 +2,7 @@ import { useWidgetDeepLink } from '~/application/hooks/use-widget-deep-link';
 import { useAuth } from '~/entities/auth';
 import { todosByDateQuery } from '~/entities/todo/api/queries';
 import { formatDateString } from '~/entities/todo/lib/date-utils';
+import Logger from '~/shared/lib/logger';
 
 import { type ReactNode, useEffect, useMemo, useRef } from 'react';
 import { AppState, Platform } from 'react-native';
@@ -50,7 +51,7 @@ export function WidgetSyncProvider({ children }: { children: ReactNode }) {
         };
         await syncWidgetData(widgetData);
       } catch (e) {
-        console.error('[WidgetSync] Sync failed:', e);
+        Logger.error('[WidgetSync] Sync failed:', e);
       }
     };
 

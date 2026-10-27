@@ -1,4 +1,5 @@
 import { CreateCalendarMemoDto } from '~/entities/calendar/model/types';
+import Logger from '~/shared/lib/logger';
 import { SubmitButton } from '~/shared/ui';
 
 import type { ComponentProps } from 'react';
@@ -28,7 +29,7 @@ export function CalendarCreateButton({
       onSuccess?.();
     } catch (error) {
       onError?.(error as Error);
-      console.error('캘린더 메모 생성 실패:', error);
+      Logger.error('캘린더 메모 생성 실패:', error);
     }
   };
 

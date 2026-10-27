@@ -1,3 +1,5 @@
+import Logger from '~/shared/lib/logger';
+
 import React, { Component, ReactNode } from 'react';
 import { View } from 'react-native';
 
@@ -25,7 +27,7 @@ export class ApiErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ApiErrorBoundary caught an error:', error, errorInfo);
+    Logger.error('ApiErrorBoundary caught an error:', error, errorInfo);
   }
 
   handleRetry = () => {

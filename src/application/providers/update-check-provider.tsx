@@ -4,6 +4,7 @@ import {
   hasNewVersion,
   needsForceUpdate,
 } from '~/entities/app-version';
+import Logger from '~/shared/lib/logger';
 import { Typography } from '~/shared/ui';
 
 import { ReactNode, useEffect, useState } from 'react';
@@ -51,7 +52,7 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
       }
     } catch (error) {
       // 버전 체크 실패 시 무시 (앱 사용은 가능하게)
-      console.warn('앱 버전 체크 실패:', error);
+      Logger.warn('앱 버전 체크 실패:', error);
     }
   };
 

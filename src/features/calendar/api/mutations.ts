@@ -4,6 +4,7 @@ import {
   UpdateCalendarMemoDto,
 } from '~/entities/calendar/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
+import Logger from '~/shared/lib/logger';
 
 import {
   type DefaultError,
@@ -27,7 +28,7 @@ export const useCreateCalendarMemo = () => {
       });
     },
     onError: (error) => {
-      console.error('캘린더 메모 생성 실패:', error);
+      Logger.error('캘린더 메모 생성 실패:', error);
     },
   });
 };

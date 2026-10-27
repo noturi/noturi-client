@@ -1,4 +1,5 @@
 import ky from 'ky';
+import Logger from '~/shared/lib/logger';
 
 import { requestInterceptor, retryInterceptor } from './interceptors';
 
@@ -7,14 +8,14 @@ export { ENDPOINTS } from './endpoints';
 function logRequest(request: Request) {
   const method = request.method;
   const url = request.url;
-  console.log(`[API] → ${method} ${url}`);
+  Logger.debug(`[API] → ${method} ${url}`);
 }
 
 function logResponse(request: Request, _options: unknown, response: Response) {
   const method = request.method;
   const url = request.url;
   const status = response.status;
-  console.log(`[API] ← ${status} ${method} ${url}`);
+  Logger.debug(`[API] ← ${status} ${method} ${url}`);
 }
 
 export const api = ky.create({
