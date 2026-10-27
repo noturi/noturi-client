@@ -63,11 +63,15 @@ export function YearSelectSheet({
   };
 
   return (
-    <ControlledSheet scrollable isOpen={isOpen} snapPoints={['40%']} onClose={onClose}>
+    <ControlledSheet
+      scrollable
+      isOpen={isOpen}
+      snapPoints={['40%']}
+      title="년도 선택"
+      onClose={onClose}
+    >
+      {/* 제목~첫 항목 간격 16 유지 (기존 pb-2 + gap-2) */}
       <View className="gap-2 p-4 pb-8">
-        <Typography className="pb-2 text-center" variant="headline">
-          년도 선택
-        </Typography>
         {yearOptions.map((option) => {
           const isSelected = selectedYear === option.value;
           return (
