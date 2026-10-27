@@ -6,6 +6,7 @@ export * from './pressable-feedback';
 export * from './card';
 export * from './checkbox';
 export * from './circular-progress';
+export * from './empty-state-card';
 export * from './error-view';
 export * from './floating-button';
 export * from './form';

@@ -1,6 +1,6 @@
 import { addDays, startOfDay } from 'date-fns';
 import { formatDateString, todosByDateQuery } from '~/entities/todo';
-import { Skeleton, Typography } from '~/shared/ui';
+import { EmptyStateCard, Skeleton, Typography } from '~/shared/ui';
 
 import { useEffect } from 'react';
 import { View } from 'react-native';
@@ -52,14 +52,10 @@ export function TodoList({ selectedDate }: TodoListProps) {
       )}
 
       {todos.length === 0 ? (
-        <View className="items-center justify-center rounded-4 bg-surface py-12">
-          <Typography className="text-text-muted" variant="body">
-            등록된 할 일이 없어요
-          </Typography>
-          <Typography className="mt-1 text-text-muted" variant="footnote">
-            위에서 새로운 할 일을 추가해보세요
-          </Typography>
-        </View>
+        <EmptyStateCard
+          description="위에서 새로운 할 일을 추가해보세요"
+          title="등록된 할 일이 없어요"
+        />
       ) : (
         <View className="gap-2">
           {todos.map((todo) => (

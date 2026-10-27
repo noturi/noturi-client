@@ -9,7 +9,7 @@ import {
   type UIMemo,
 } from '~/entities/memo';
 import { DURATION } from '~/shared/config';
-import { Typography } from '~/shared/ui';
+import { EmptyStateCard, Typography } from '~/shared/ui';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
 import { useRef, useState } from 'react';
@@ -106,11 +106,10 @@ export function MemoRatingList({
       getItemType={(row) => row.type}
       keyExtractor={(row) => row.key}
       ListEmptyComponent={
-        <View className="flex-1 items-center justify-center">
-          <Typography className="text-text-muted" variant="callout">
-            작성된 메모가 없습니다
-          </Typography>
-        </View>
+        <EmptyStateCard
+          description="+ 버튼을 눌러 첫 메모를 남겨보세요"
+          title="작성된 메모가 없어요"
+        />
       }
       ListHeaderComponent={
         <View className="gap-6 pb-3">
