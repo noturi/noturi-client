@@ -13,14 +13,13 @@ struct SharedDataManager {
         return try? JSONDecoder().decode(WidgetTodoData.self, from: data)
     }
 
+    // 토큰은 공유 키체인(위젯 전용 세션)에서 읽음 — App Group UserDefaults에는 저장하지 않음
     static func getAccessToken() -> String? {
-        let defaults = UserDefaults(suiteName: suiteName)
-        return defaults?.string(forKey: "accessToken")
+        SharedKeychain.get("accessToken")
     }
 
     static func getRefreshToken() -> String? {
-        let defaults = UserDefaults(suiteName: suiteName)
-        return defaults?.string(forKey: "refreshToken")
+        SharedKeychain.get("refreshToken")
     }
 
     static func getBaseUrl() -> String? {
@@ -39,9 +38,7 @@ struct SharedDataManager {
     }
 
     static func saveTokens(accessToken: String, refreshToken: String) {
-        guard let defaults = UserDefaults(suiteName: suiteName) else { return }
-        defaults.set(accessToken, forKey: "accessToken")
-        defaults.set(refreshToken, forKey: "refreshToken")
-        defaults.synchronize()
+        SharedKeychain.set("accessToken", accessToken)
+        SharedKeychain.set("refreshToken", refreshToken)
     }
 }

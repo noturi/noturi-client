@@ -10,7 +10,8 @@ export function DeleteAccountButton() {
 
   const { mutate: deleteAccount, isPending } = useDeleteAccountMutation({
     onSuccess: () => {
-      logout();
+      // 탈퇴 시 서버에서 세션이 함께 삭제되므로 서버 로그아웃 호출 불필요
+      logout({ revokeSession: false });
     },
     onError: () => {
       Alert.alert('오류', '계정 삭제에 실패했습니다. 다시 시도해주세요.');

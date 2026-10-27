@@ -104,7 +104,8 @@
                   "targetName": "NoturiWidget",
                   "bundleIdentifier": "com.noturi.app.widget",
                   "entitlements": {
-                    "com.apple.security.application-groups": ["group.com.noturi.app"]
+                    "com.apple.security.application-groups": ["group.com.noturi.app"],
+                    "keychain-access-groups": ["$(AppIdentifierPrefix)com.noturi.app.shared"]
                   }
                 }
               ]

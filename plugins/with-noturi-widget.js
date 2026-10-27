@@ -5,6 +5,8 @@ const path = require('path');
 const WIDGET_NAME = 'NoturiWidget';
 const WIDGET_BUNDLE_ID = 'com.noturi.app.widget';
 const APP_GROUP = 'group.com.noturi.app';
+// 위젯 세션 토큰 공유용 키체인 그룹. 앱은 자체 그룹을 첫 번째로 둬서 expo-secure-store 기본 저장 위치(앱 전용)를 유지
+const SHARED_KEYCHAIN_GROUP = '$(AppIdentifierPrefix)com.noturi.app.shared';
 // 앱 타깃과 동일한 팀 — app.json ios.appleTeamId가 단일 출처
 const FALLBACK_TEAM_ID = '3JAT5MMB44';
 const DEPLOYMENT_TARGET = '16.4';
@@ -14,6 +16,7 @@ const WIDGET_SWIFT_FILES = [
   'TodoEntry.swift',
   'TodoTimelineProvider.swift',
   'SharedDataManager.swift',
+  'SharedKeychain.swift',
   'TodoWidgetService.swift',
   'TodoWidgetSmallView.swift',
   'TodoWidgetMediumView.swift',
@@ -23,6 +26,10 @@ const WIDGET_SWIFT_FILES = [
 const withNoturiWidget = (config) => {
   config = withEntitlementsPlist(config, (config) => {
     config.modResults['com.apple.security.application-groups'] = [APP_GROUP];
+    config.modResults['keychain-access-groups'] = [
+      `$(AppIdentifierPrefix)${config.ios?.bundleIdentifier}`,
+      SHARED_KEYCHAIN_GROUP,
+    ];
     return config;
   });
 

@@ -9,7 +9,7 @@ export interface AuthContextType {
     refreshToken: string;
     user: User;
   }) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: (options?: { revokeSession?: boolean }) => Promise<void>;
   clearError: () => void;
 }
 

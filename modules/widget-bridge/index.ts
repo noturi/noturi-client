@@ -27,6 +27,12 @@ export async function syncAuthTokens(
   return WidgetBridge.syncAuthTokens(accessToken, refreshToken, baseUrl);
 }
 
+/** 로그아웃 시 위젯 토큰·데이터 삭제 */
+export async function clearAuthTokens(): Promise<void> {
+  if (Platform.OS === 'web' || !WidgetBridge) return;
+  return WidgetBridge.clearAuthTokens();
+}
+
 export async function reloadWidget(): Promise<void> {
   if (Platform.OS === 'web' || !WidgetBridge) return;
   return WidgetBridge.reloadWidget();

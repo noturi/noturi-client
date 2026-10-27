@@ -13,7 +13,7 @@ export function LogoutButton() {
       {
         text: '로그아웃',
         style: 'destructive',
-        onPress: logout,
+        onPress: () => logout(),
       },
     ]);
   };

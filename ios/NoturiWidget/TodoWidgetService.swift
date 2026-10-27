@@ -34,9 +34,13 @@ struct DailyStats: Codable {
     let rate: Double
 }
 
+/// 서버 응답: { "tokens": { "accessToken", "refreshToken" } }
 struct RefreshTokenResponse: Codable {
-    let accessToken: String
-    let refreshToken: String
+    struct Tokens: Codable {
+        let accessToken: String
+        let refreshToken: String
+    }
+    let tokens: Tokens
 }
 
 class TodoWidgetService {
@@ -130,13 +134,12 @@ class TodoWidgetService {
         request.timeoutInterval = 10
 
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let tokenResponse = try JSONDecoder().decode(RefreshTokenResponse.self, from: data)
-            SharedDataManager.saveTokens(
-                accessToken: tokenResponse.accessToken,
-                refreshToken: tokenResponse.refreshToken
-            )
-            return tokenResponse.accessToken
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return nil }
+            let tokens = try JSONDecoder().decode(RefreshTokenResponse.self, from: data).tokens
+            // 리프레시 토큰은 1회용(RTR) — 새 토큰을 반드시 저장해야 다음 갱신이 가능
+            SharedDataManager.saveTokens(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken)
+            return tokens.accessToken
         } catch {
             return nil
         }
