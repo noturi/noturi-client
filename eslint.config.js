@@ -69,7 +69,7 @@ module.exports = defineConfig([
       'src/pages/**/*.{ts,tsx}',
       'app/**/*.{ts,tsx}',
     ],
-    ignores: ['src/features/auth/ui/google-icon.tsx'],
+    ignores: ['src/features/auth/ui/google-icon.tsx', '**/*.test.ts', '**/*.test.tsx'],
     rules: {
       'no-restricted-syntax': [
         'error',
