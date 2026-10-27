@@ -32,6 +32,7 @@ export function ErrorView({ title, message, error }: ErrorViewProps) {
         {displayTitle}
       </Typography>
 
+      {/* 300px: 안내 문구 줄바꿈 폭 — 스케일 외 값 */}
       <Typography className="max-w-[300px] text-center text-text-muted" variant="subheadline">
         {displayMessage}
       </Typography>

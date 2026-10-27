@@ -19,6 +19,7 @@ export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) 
         const isFilled = rating >= value;
         const isHalfFilled = rating === value - 0.5;
 
+        // 34px: 28px 별 아이콘 + 터치 여백 — 스페이싱 스케일에 없는 전용 크기
         return (
           <View key={value} className="relative h-[34px] w-[34px] items-center justify-center">
             {/* 왼쪽 반쪽: 0.5점 단위 */}

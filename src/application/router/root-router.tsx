@@ -1,3 +1,4 @@
+import { FONT_SIZE, ROUTES, SPACING } from '~/shared/config';
 import { ChevronLeft } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
@@ -5,8 +6,6 @@ import { Pressable } from 'react-native';
 
 import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-
-import { ROUTES } from '../../shared/config';
 
 export function RootRouter() {
   const { hexColors, isDark } = useUserTheme();
@@ -22,7 +21,7 @@ export function RootRouter() {
           headerTintColor: hexColors.textPrimary,
           headerTitleStyle: {
             fontWeight: '600',
-            fontSize: 16,
+            fontSize: FONT_SIZE[4],
           },
           headerShadowVisible: false,
           headerBackTitle: '',
@@ -62,7 +61,7 @@ export function RootRouter() {
             headerBackVisible: false,
             headerBackButtonMenuEnabled: false,
             headerLeft: () => (
-              <Pressable style={{ padding: 8 }} onPress={() => router.back()}>
+              <Pressable style={{ padding: SPACING[3] }} onPress={() => router.back()}>
                 <ChevronLeft className="text-text-primary" size={24} />
               </Pressable>
             ),

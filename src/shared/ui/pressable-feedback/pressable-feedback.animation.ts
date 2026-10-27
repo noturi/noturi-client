@@ -27,12 +27,8 @@ import type {
   RootAnimationResult,
 } from './pressable-feedback.types';
 
-const DEFAULT_HIGHLIGHT_COLOR_LIGHT = '#3f3f46';
-const DEFAULT_HIGHLIGHT_COLOR_DARK = '#d4d4d8';
-
 export function usePressableFeedbackRootAnimation(options?: {
   animation?: RootAnimationConfig;
-  isDark?: boolean;
 }): RootAnimationResult {
   const { animation } = options ?? {};
 
@@ -110,18 +106,17 @@ export function usePressableFeedbackRootAnimation(options?: {
  */
 export function usePressableFeedbackHighlightAnimation(
   context: PressableFeedbackContextValue,
-  options?: {
+  options: {
     animation?: HighlightAnimationConfig;
-    isDark?: boolean;
+    /** animation.backgroundColor가 없을 때의 색상 (테마 토큰 pressHighlight) */
+    defaultColor: string;
   },
 ): HighlightAnimationResult {
-  const { animation, isDark = false } = options ?? {};
+  const { animation, defaultColor } = options;
   const { isPressed } = context;
 
   // Extract config values with defaults
-  const backgroundColor =
-    animation?.backgroundColor?.value ??
-    (isDark ? DEFAULT_HIGHLIGHT_COLOR_DARK : DEFAULT_HIGHLIGHT_COLOR_LIGHT);
+  const backgroundColor = animation?.backgroundColor?.value ?? defaultColor;
   const opacityValue = animation?.opacity?.value ?? DEFAULT_HIGHLIGHT_OPACITY;
   const opacityTimingConfig = {
     duration: animation?.opacity?.timingConfig?.duration ?? 200,
@@ -141,12 +136,13 @@ export function usePressableFeedbackHighlightAnimation(
  */
 export function usePressableFeedbackRippleAnimation(
   context: PressableFeedbackContextValue,
-  options?: {
+  options: {
     animation?: RippleAnimationConfig;
-    isDark?: boolean;
+    /** animation.backgroundColor가 없을 때의 색상 (테마 토큰 pressHighlight) */
+    defaultColor: string;
   },
 ): RippleAnimationResult {
-  const { animation, isDark = false } = options ?? {};
+  const { animation, defaultColor } = options;
   const { isPressed, containerWidth, containerHeight, pressedCenterX, pressedCenterY } = context;
 
   const rippleProgress = useSharedValue(0);
@@ -156,9 +152,7 @@ export function usePressableFeedbackRippleAnimation(
   const minBaseDuration = animation?.progress?.minBaseDuration ?? BASE_RIPPLE_PROGRESS_DURATION_MIN;
   const ignoreDurationCoefficient = animation?.progress?.ignoreDurationCoefficient ?? false;
 
-  const backgroundColor =
-    animation?.backgroundColor?.value ??
-    (isDark ? DEFAULT_HIGHLIGHT_COLOR_DARK : DEFAULT_HIGHLIGHT_COLOR_LIGHT);
+  const backgroundColor = animation?.backgroundColor?.value ?? defaultColor;
   const opacityValue = animation?.opacity?.value ?? DEFAULT_RIPPLE_OPACITY;
   const scaleValue = animation?.scale?.value ?? DEFAULT_RIPPLE_SCALE;
 

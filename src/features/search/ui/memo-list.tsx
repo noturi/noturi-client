@@ -1,5 +1,6 @@
 import type { UIMemo } from '~/entities/memo';
 import { MemoItem } from '~/entities/memo';
+import { SPACING } from '~/shared/config';
 import { Loading } from '~/shared/ui';
 
 import { FlatList, View } from 'react-native';
@@ -26,7 +27,7 @@ export function MemoList({ memos, onEndReached, isFetchingNextPage, onPressMemo 
 
   return (
     <FlatList
-      contentContainerStyle={{ paddingBottom: 24 }}
+      contentContainerStyle={{ paddingBottom: SPACING[6] }}
       data={memos}
       keyExtractor={(item) => item.id}
       ListFooterComponent={renderFooter}

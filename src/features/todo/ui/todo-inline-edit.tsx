@@ -1,3 +1,4 @@
+import { SPACING } from '~/shared/config';
 import { Check, X } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
@@ -45,7 +46,7 @@ export function TodoInlineEdit({ initialTitle, onSubmit, onCancel }: TodoInlineE
           color: hexColors.textPrimary,
           borderBottomWidth: 1,
           borderBottomColor: hexColors.primary,
-          paddingBottom: 2,
+          paddingBottom: SPACING[1],
         }}
         value={editTitle}
         onBlur={handleSubmit}

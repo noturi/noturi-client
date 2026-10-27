@@ -21,8 +21,9 @@ export const SortButton = ({ option, onPress }: SortButtonProps) => {
       onPressOut={() => setIsPressed(false)}
     >
       <View className="relative">
+        {/* min-w 60px: 스케일(48/64)에 없는 탭 최소 너비 */}
         <View
-          className="items-center justify-center min-h-[48px] min-w-[60px] px-2 py-2"
+          className="items-center justify-center min-h-8 min-w-[60px] px-2 py-2"
           style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }}
         >
           <Typography

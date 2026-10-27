@@ -98,7 +98,7 @@ export function MemoDetailPage({ memoId }: MemoDetailPageProps) {
         </ScrollView>
       </View>
 
-      <View className="absolute bottom-[120px] right-4">
+      <View className="absolute bottom-11 right-4">
         <FloatingButton onPress={handleEdit} />
       </View>
     </>

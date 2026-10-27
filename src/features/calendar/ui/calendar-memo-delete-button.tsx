@@ -1,3 +1,4 @@
+import { SHADOW_COLOR } from '~/shared/config';
 import { useToast } from '~/shared/lib';
 import { MoreVertical, Pencil, Trash2 } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
@@ -56,9 +57,9 @@ export function CalendarMemoDeleteButton({ memoId, onEdit }: CalendarMemoDeleteB
       {showMenu && (
         <>
           <View
-            className="absolute right-0 top-8 z-[999999] min-w-[120px] rounded-3 border border-border bg-bg-primary"
+            className="absolute right-0 top-8 z-[999999] min-w-11 rounded-3 border border-border bg-bg-primary"
             style={{
-              shadowColor: '#000',
+              shadowColor: SHADOW_COLOR,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -75,7 +76,7 @@ export function CalendarMemoDeleteButton({ memoId, onEdit }: CalendarMemoDeleteB
             </TouchableOpacity>
             <TouchableOpacity onPress={handleDelete}>
               <View className="flex-row items-center gap-2 px-3 py-3">
-                <Trash2 color="#ef4444" size={16} />
+                <Trash2 className="text-danger" size={16} />
                 <Typography className="text-error" variant="footnote">
                   삭제
                 </Typography>

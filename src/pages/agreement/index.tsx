@@ -23,7 +23,10 @@ export function AgreementPage() {
   return (
     <View
       className="flex-1 justify-between bg-bg-primary px-5 pt-5"
-      style={{ paddingBottom: Platform.OS === 'android' ? 20 : insets.bottom + 20 }}
+      style={{
+        // 20px: 스케일(16/24)에 없는 하단 여백
+        paddingBottom: Platform.OS === 'android' ? 20 : insets.bottom + 20,
+      }}
     >
       <View className="flex-1 gap-6 justify-center">
         <View className="gap-2">
@@ -33,11 +36,11 @@ export function AgreementPage() {
 
         <Pressable className="flex-row items-center gap-3" onPress={() => setAgreed(!agreed)}>
           <Checkbox checked={agreed} onCheckedChange={setAgreed} />
-          <Typography className="text-blue-500" variant="body">
+          <Typography className="text-link" variant="body">
             이용약관 및 개인정보처리방침
           </Typography>
           <Pressable className="flex-row items-center" onPress={handleTermsPress}>
-            <ExternalLink color="#3b82f6" size={14} />
+            <ExternalLink className="text-link" size={14} />
           </Pressable>
           <Typography className="text-text-secondary" variant="body">
             에 동의합니다

@@ -50,6 +50,7 @@ export class ApiErrorBoundary extends Component<Props, State> {
             {isNetworkError ? '서버 연결 실패' : '오류가 발생했습니다'}
           </Typography>
 
+          {/* 300px: 안내 문구 줄바꿈 폭 — 스케일 외 값 */}
           <Typography className="max-w-[300px] text-center text-text-muted" variant="subheadline">
             {isNetworkError
               ? '서버에 연결할 수 없습니다.\n네트워크 상태를 확인하거나 잠시 후 다시 시도해주세요.'

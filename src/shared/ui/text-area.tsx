@@ -1,3 +1,5 @@
+import { useThemeColor } from '~/shared/lib/theme-context';
+
 import { type Ref, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
@@ -20,6 +22,7 @@ export function TextArea({
   ...props
 }: TextAreaProps & { ref?: Ref<TextInput> }) {
   const [isFocused, setIsFocused] = useState(false);
+  const placeholderColor = useThemeColor('textMuted');
 
   const handleFocus = (e: FocusEvent) => {
     setIsFocused(true);
@@ -40,7 +43,7 @@ export function TextArea({
       autoCapitalize="none"
       autoCorrect={false}
       className={`border bg-bg-primary ${borderClass} rounded-5 px-3 py-3 font-sans text-text-primary ${className ?? ''}`}
-      placeholderTextColor="#9e9e9e"
+      placeholderTextColor={placeholderColor}
       style={[{ minHeight }, style]}
       textAlignVertical="top"
       onBlur={handleBlur}

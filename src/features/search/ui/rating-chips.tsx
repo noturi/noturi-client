@@ -1,3 +1,4 @@
+import { RATING_INPUT_FILLED_COLOR } from '~/shared/config';
 import { Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
@@ -9,9 +10,6 @@ interface RatingChipsProps {
 }
 
 export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
-  // Rating star color (amber)
-  const starColor = '#f59e0b';
-
   return (
     <View className="gap-1">
       <Typography variant="callout">평점</Typography>
@@ -26,7 +24,7 @@ export function RatingChips({ selectedRating, onSelect }: RatingChipsProps) {
               }`}
               onPress={() => onSelect(selectedRating === rating ? undefined : rating)}
             >
-              <Star color={starColor} fill={starColor} size={16} />
+              <Star color={RATING_INPUT_FILLED_COLOR} fill={RATING_INPUT_FILLED_COLOR} size={16} />
               <Typography
                 className={isSelected ? 'text-primary-text' : 'text-text-primary'}
                 variant="callout"
