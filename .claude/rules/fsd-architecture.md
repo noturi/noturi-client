@@ -6,8 +6,12 @@
 shared < entities < features < widgets < pages < app
 ```
 
-- 같은 레이어 내 다른 슬라이스는 **public API(index.ts)를 통해서만** import (딥 import 금지)
-- 같은 슬라이스 내부는 상대경로 허용
+- 다른 슬라이스는 **public API(index.ts)를 통해서만** import (딥 import 금지)
+- 같은 슬라이스 내부는 상대경로 사용 (자기 슬라이스 index를 경유하면 순환 import 발생)
+- **features 슬라이스끼리 import 금지** — 조합이 필요하면 pages/widgets에서 props로 주입
+  (예: `MemoForm`의 `onCreateCategory`를 `pages/memo-form`에서 주입)
+- 위 규칙은 `eslint.config.js`의 `no-restricted-imports`로 강제됨
+- 테마 훅(`useUserTheme`, `useThemeColor`)은 `~/shared/lib/theme-context` — application import 금지
 
 ## 디렉토리 구조
 
@@ -32,12 +36,12 @@ src/
 
 ## 세그먼트 역할
 
-| 세그먼트 | 역할 | 파일 |
-| --- | --- | --- |
-| `api/` | HTTP 통신 + React Query | `apis.ts`(API 클래스), `queries.ts`(Entity 전용), `mutations.ts`(Feature 전용) |
-| `model/` | 타입, 스키마, 비즈니스 로직 | `types.ts`, `schemas.ts`, `constants.ts`, `*-service.ts` |
-| `ui/` | 컴포넌트 | |
-| `lib/` | 슬라이스 내 공통 코드 | 예: `invalidate-memo-cache.ts` |
+| 세그먼트 | 역할                        | 파일                                                                           |
+| -------- | --------------------------- | ------------------------------------------------------------------------------ |
+| `api/`   | HTTP 통신 + React Query     | `apis.ts`(API 클래스), `queries.ts`(Entity 전용), `mutations.ts`(Feature 전용) |
+| `model/` | 타입, 스키마, 비즈니스 로직 | `types.ts`, `schemas.ts`, `constants.ts`, `*-service.ts`                       |
+| `ui/`    | 컴포넌트                    |                                                                                |
+| `lib/`   | 슬라이스 내 공통 코드       | 예: `invalidate-memo-cache.ts`                                                 |
 
 ## 파일 네이밍 (복수형 필수)
 
@@ -54,10 +58,18 @@ src/
 
 ## 개선 검토 항목
 
+- 미사용 위젯: `widgets/calendar-view`, `widgets/calendar-memo-list` (라우트 없음, 위젯 내부 쿼리/뮤테이션 잔존) — 삭제 또는 재연결 결정 필요
 - `rating-group-card.tsx`의 무한스크롤 센티넬이 300ms `setInterval` 폴링 방식
   - 스크롤 이벤트 기반(onScroll/onEndReached) 전환 권장 — 실기기 검증 필요
 
-## 해결된 과거 위반 (2026-06) — 이 패턴으로 회귀 금지
+## 해결된 과거 위반 — 이 패턴으로 회귀 금지
+
+2026-10:
+
+- shared/entities/features가 `application/providers/theme-provider`를 import → shared/lib로 이동
+- 크로스 슬라이스 딥 import 90건, features 간 import 3건, 위젯 내 쿼리 → 정리 + ESLint 강제
+
+2026-06:
 
 - P0: features/categories의 GET → `entities/category/api`로 이동 완료
 - P1: entities 크로스 슬라이스 딥 import → public API 경유로 수정 완료

@@ -17,7 +17,8 @@
 pnpm start              # Expo 개발 서버
 pnpm ios / android      # 네이티브 실행
 pnpm typecheck          # tsc --noEmit (에러 0이 정상 상태)
-pnpm lint / lint:fix    # ESLint
+pnpm lint / lint:fix    # ESLint (FSD 레이어 경계도 여기서 검사)
+pnpm test:ci            # Jest 단위 테스트 (pnpm test는 watch 모드)
 pnpm format             # Prettier
 npx expo start --clear  # 캐시 클리어
 ```
@@ -26,14 +27,14 @@ npx expo start --clear  # 캐시 클리어
 
 의존성: `shared < entities < features < widgets < pages < app` (역방향 금지)
 
-| 레이어 | 역할 |
-| --- | --- |
-| `app/` (루트) | Expo Router 라우팅만 — pages에서 컴포넌트 import |
-| `src/pages/` | 쿼리 실행 + 위젯/기능 조합 |
-| `src/widgets/` | 복합 UI (API 호출 금지, props 수신) |
-| `src/features/` | CUD + `useMutation` |
-| `src/entities/` | 읽기 전용 (GET + `queryOptions`) |
-| `src/shared/` | 공통 모듈 (api, ui, lib, config, model) |
+| 레이어             | 역할                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| `app/` (루트)      | Expo Router 라우팅만 — pages에서 컴포넌트 import             |
+| `src/pages/`       | 쿼리 실행 + 위젯/기능 조합                                   |
+| `src/widgets/`     | 복합 UI (API 호출 금지, props 수신)                          |
+| `src/features/`    | CUD + `useMutation`                                          |
+| `src/entities/`    | 읽기 전용 (GET + `queryOptions`)                             |
+| `src/shared/`      | 공통 모듈 (api, ui, lib, config, model)                      |
 | `src/application/` | 전역 Provider, 라우터 (`src/app/`은 Expo Router 충돌로 금지) |
 
 ## 상세 규칙

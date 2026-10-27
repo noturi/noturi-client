@@ -5,6 +5,9 @@
 - `any` 사용 금지, 타입 단언 남용 금지, strict 모드
 - 쿼리키에 들어가는 params DTO는 `interface`가 아닌 `type` 별칭으로 정의
   (interface는 `Record<string, unknown>`에 할당 불가 — QUERY_KEYS 시그니처와 충돌)
+- catch 절은 `unknown` — `getErrorCode`/`getErrorMessage`(`~/shared/lib`)로 값 추출
+- API 응답은 `parseResponse(schema, data, label)`(`~/shared/api`)로 검증 — 스키마는 `z.ZodType<T>`로 타입과 고정
+- 로그는 `console.*` 대신 `Logger`(`~/shared/lib/logger`) — 운영 빌드는 ERROR만 출력
 - reanimated 4: `Animated.AnimateStyle` 제거됨 — `useAnimatedStyle<ViewStyle>(...)` 제네릭과 `ViewStyle` 사용
 
 ## Import
@@ -24,4 +27,10 @@
 
 - JSX props 정렬 강제: reserved → shorthand → 일반 → callback
 - singleQuote, semi, printWidth 100, trailingComma all
-- 커밋 전: `pnpm typecheck && pnpm lint` (typecheck는 에러 0이 정상 상태)
+- 바텀시트 backdrop은 `SheetBackdrop`(`~/shared/ui`)을 `backdropComponent`에 전달
+- 커밋 전: `pnpm typecheck && pnpm lint && pnpm test:ci`
+
+## 테스트
+
+- Jest(`jest-expo`), 대상 파일 옆에 `*.test.ts`로 배치
+- 순수 로직(lib, model, service) 우선 — 변경 시 테스트 함께 수정
