@@ -1,10 +1,7 @@
-import { useToast } from '~/shared/lib';
 import { Trash2 } from '~/shared/lib/icons';
 import { Button } from '~/shared/ui';
 
-import { Alert } from 'react-native';
-
-import { useDeleteMemoMutation } from '../api/mutations';
+import { useConfirmDeleteMemo } from '../model';
 
 interface MemoDeleteButtonProps {
   memoId: string;
@@ -14,41 +11,11 @@ interface MemoDeleteButtonProps {
 }
 
 export const MemoDeleteButton = ({ memoId, memoTitle, onDeleted }: MemoDeleteButtonProps) => {
-  const toast = useToast();
-  const deleteMutation = useDeleteMemoMutation({
-    onSuccess: () => {
-      toast.showSuccess('메모가 삭제되었습니다');
-      onDeleted?.();
-    },
-    onError: () => {
-      Alert.alert('오류', '메모 삭제에 실패했습니다.');
-    },
-  });
-
-  const handleDelete = () => {
-    Alert.alert('메모 삭제', `"${memoTitle}" 메모를 정말로 삭제하시겠습니까?`, [
-      {
-        text: '취소',
-        style: 'cancel',
-      },
-      {
-        text: '삭제',
-        style: 'destructive',
-        onPress: () => {
-          deleteMutation.mutate(memoId);
-        },
-      },
-    ]);
-  };
+  const { confirmDelete, isDeleting } = useConfirmDeleteMemo();
+  const handleDelete = () => confirmDelete({ id: memoId, title: memoTitle }, onDeleted);
 
   return (
-    <Button
-      isIconOnly
-      isDisabled={deleteMutation.isPending}
-      size="sm"
-      variant="ghost"
-      onPress={handleDelete}
-    >
+    <Button isIconOnly isDisabled={isDeleting} size="sm" variant="ghost" onPress={handleDelete}>
       <Trash2 className="text-text-primary" size={16} />
     </Button>
   );

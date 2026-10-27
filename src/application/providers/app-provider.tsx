@@ -1,5 +1,5 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Toaster } from 'sonner-native';
+import { SheetProvider } from '~/shared/ui';
 
 import { ReactNode } from 'react';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
@@ -19,7 +19,7 @@ export function AppProvider({ children }: AppProviderProps) {
   return (
     <QueryProvider>
       <ThemeProvider>
-        <BottomSheetModalProvider>
+        <SheetProvider>
           <KeyboardProvider>
             <AuthProvider>
               <WidgetSyncProvider>
@@ -32,7 +32,7 @@ export function AppProvider({ children }: AppProviderProps) {
               </WidgetSyncProvider>
             </AuthProvider>
           </KeyboardProvider>
-        </BottomSheetModalProvider>
+        </SheetProvider>
       </ThemeProvider>
     </QueryProvider>
   );

@@ -1,29 +1,18 @@
-import {
-  BottomSheetBackdrop,
-  type BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetScrollView,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { type ReactNode, useEffect, useRef } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
+import {
+  BottomSheetModal,
+  BottomSheetScrollView,
+  BottomSheetView,
+  SheetBackdrop,
+  USES_NATIVE_SHEET,
+} from './sheet-engine';
 import { Typography } from './typography';
 
-// 모든 바텀시트 공통 backdrop — backdropComponent에 그대로 전달
-export function SheetBackdrop(props: BottomSheetBackdropProps) {
-  return (
-    <BottomSheetBackdrop
-      {...props}
-      appearsOnIndex={0}
-      disappearsOnIndex={-1}
-      opacity={0.5}
-      pressBehavior="close"
-    />
-  );
-}
+export { BottomSheetModalProvider as SheetProvider, SheetBackdrop } from './sheet-engine';
 
 type HexColors = ReturnType<typeof useUserTheme>['hexColors'];
 
@@ -118,18 +107,23 @@ export function ControlledSheet({
       ref={bottomSheetRef}
       enablePanDownToClose
       backdropComponent={SheetBackdrop}
-      backgroundStyle={{
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        borderColor: hexColors.border,
-        ...SHEET_BACKGROUNDS[background](hexColors),
-      }}
+      // iOS 네이티브 시트는 배경색을 지정하면 Liquid Glass가 가려지므로 시스템 기본 사용
+      backgroundStyle={
+        USES_NATIVE_SHEET
+          ? undefined
+          : {
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              borderColor: hexColors.border,
+              ...SHEET_BACKGROUNDS[background](hexColors),
+            }
+      }
       enableDynamicSizing={false}
-      handleIndicatorStyle={{
-        backgroundColor: hexColors.textMuted,
-        width: 36,
-        height: 4,
-      }}
+      handleIndicatorStyle={
+        USES_NATIVE_SHEET
+          ? undefined
+          : { backgroundColor: hexColors.textMuted, width: 36, height: 4 }
+      }
       snapPoints={snapPoints}
       onDismiss={handleDismiss}
     >

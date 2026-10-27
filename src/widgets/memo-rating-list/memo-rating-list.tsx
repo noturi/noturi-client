@@ -9,12 +9,13 @@ import {
   type UIMemo,
 } from '~/entities/memo';
 import { DURATION } from '~/shared/config';
-import { EmptyStateCard, Typography } from '~/shared/ui';
+import { EmptyStateCard } from '~/shared/ui';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
 import { useRef, useState } from 'react';
 import { LayoutAnimation, View } from 'react-native';
 
+import { MemoContextMenu } from './memo-context-menu';
 import { buildMemoRatingRows, selectGroupsToFetch } from './memo-rating-rows';
 import type { MemoRatingRow, RatingGroup } from './types';
 
@@ -34,6 +35,9 @@ interface MemoRatingListProps {
   onCategoryChange: (category: string) => void;
   onPressYear: () => void;
   onMemoPress: (memo: UIMemo) => void;
+  /** 길게 누르기 메뉴(iOS) — 둘 다 있을 때만 표시 */
+  onMemoEdit?: (memo: UIMemo) => void;
+  onMemoDelete?: (memo: UIMemo) => void;
 }
 
 export function MemoRatingList({
@@ -43,6 +47,8 @@ export function MemoRatingList({
   onCategoryChange,
   onPressYear,
   onMemoPress,
+  onMemoEdit,
+  onMemoDelete,
 }: MemoRatingListProps) {
   const listRef = useRef<FlashListRef<MemoRatingRow>>(null);
   // 그룹은 기본 펼침 — 사용자가 접은 그룹만 기록한다
@@ -92,7 +98,17 @@ export function MemoRatingList({
           />
         );
       case 'memo':
-        return <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />;
+        if (!onMemoEdit || !onMemoDelete) {
+          return <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />;
+        }
+        return (
+          <MemoContextMenu
+            onDelete={() => onMemoDelete(row.memo)}
+            onEdit={() => onMemoEdit(row.memo)}
+          >
+            <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />
+          </MemoContextMenu>
+        );
       case 'footer':
         return <RatingGroupFooterRow isFetchingNextPage={row.isFetchingNextPage} />;
     }

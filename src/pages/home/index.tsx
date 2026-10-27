@@ -1,5 +1,6 @@
 import { activeCategoriesQuery, findCategoryIdByName, toUICategories } from '~/entities/category';
 import { type MemoListParamsDto, MemoSkeleton } from '~/entities/memo';
+import { useConfirmDeleteMemo } from '~/features/memo';
 import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
 import { MemoRatingList, YearSelectSheet } from '~/widgets';
@@ -35,6 +36,7 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
   };
 
   const ratingGroups = useRatingGroups(queryParams);
+  const { confirmDelete } = useConfirmDeleteMemo();
 
   const categories = toUICategories(categoriesData?.categories, category);
 
@@ -44,6 +46,8 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
       ratingGroups={ratingGroups}
       selectedYear={year}
       onCategoryChange={onCategoryChange}
+      onMemoDelete={(memo) => confirmDelete(memo)}
+      onMemoEdit={(memo) => router.push(HREFS.memoEdit(memo.id))}
       onMemoPress={(memo) => router.push(HREFS.memoDetail(memo.id))}
       onPressYear={onPressYear}
     />
