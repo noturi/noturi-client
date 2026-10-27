@@ -1,5 +1,6 @@
 import BottomSheet, {
   BottomSheetBackdrop,
+  type BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetScrollView,
   BottomSheetView,
@@ -16,6 +17,19 @@ import {
   useRef,
 } from 'react';
 import { StyleSheet, View } from 'react-native';
+
+// 모든 바텀시트 공통 backdrop — backdropComponent에 그대로 전달
+export function SheetBackdrop(props: BottomSheetBackdropProps) {
+  return (
+    <BottomSheetBackdrop
+      {...props}
+      appearsOnIndex={0}
+      disappearsOnIndex={-1}
+      opacity={0.5}
+      pressBehavior="close"
+    />
+  );
+}
 
 export interface SheetRef {
   open: () => void;
@@ -51,13 +65,6 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
       close: () => bottomSheetRef.current?.close(),
     }));
 
-    const renderBackdrop = useCallback(
-      (props: any) => (
-        <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} />
-      ),
-      [],
-    );
-
     const handleSheetChanges = useCallback(
       (index: number) => {
         if (index === -1) {
@@ -72,7 +79,7 @@ export const Sheet = forwardRef<SheetRef, SheetProps>(
     return (
       <BottomSheet
         ref={bottomSheetRef}
-        backdropComponent={renderBackdrop}
+        backdropComponent={SheetBackdrop}
         backgroundStyle={{
           backgroundColor: hexColors.bgSecondary,
           borderTopLeftRadius: 16,
@@ -127,26 +134,13 @@ export function ControlledSheet({
     }
   }, [isOpen]);
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
-
   const ContentComponent = scrollable ? BottomSheetScrollView : BottomSheetView;
 
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
-      backdropComponent={renderBackdrop}
+      backdropComponent={SheetBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.bgSecondary,
         borderTopLeftRadius: 16,

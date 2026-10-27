@@ -1,3 +1,4 @@
+import { getErrorMessage } from '~/shared/lib';
 import { Bell } from '~/shared/lib/icons';
 import { Switch, Typography } from '~/shared/ui';
 
@@ -45,8 +46,8 @@ export function NotificationToggle() {
 
     try {
       await (value ? enableNotification() : disableNotification());
-    } catch (error: any) {
-      showAlert('오류', `알림 설정 중 문제가 발생했습니다.\n${error?.message || error}`);
+    } catch (error) {
+      showAlert('오류', `알림 설정 중 문제가 발생했습니다.\n${getErrorMessage(error)}`);
     } finally {
       setLoading(false);
     }

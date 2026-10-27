@@ -1,9 +1,16 @@
+// 메모에 포함되는 카테고리 요약
+export interface MemoCategory {
+  id: string;
+  name: string;
+  color: string;
+}
+
 // 메모 타입 정의 (백엔드 실제 응답에 맞춤)
 export interface Memo {
   id: string; // UUID 형태
   title: string;
   content: string;
-  category: any; // 객체 형태로 오는 경우 대비
+  category: MemoCategory | null;
   categoryId: string;
   rating: number;
   description?: string;
@@ -18,7 +25,7 @@ export interface CreateMemoDto {
   title: string;
   content: string;
   categoryId?: string; // UUID 형태, 선택사항
-  rating: number;
+  rating?: number; // 0(별점 없음)이면 생략
   description?: string;
 }
 

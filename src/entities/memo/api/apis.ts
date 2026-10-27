@@ -1,6 +1,7 @@
 import { KyInstance } from 'ky';
-import { api } from '~/shared/api';
+import { api, parseResponse } from '~/shared/api';
 
+import { memoListResponseSchema, memoSchema } from '../model/schemas';
 import { Memo, MemoListParamsDto, MemoListResponseDto } from '../model/types';
 
 /**
@@ -38,16 +39,14 @@ export class MemoApi {
 
     const url = `memos?${searchParams.toString()}`;
 
-    const response = await this.api.get(url);
-    const data = await response.json<MemoListResponseDto>();
-
-    return data;
+    const data = await this.api.get(url).json();
+    return parseResponse(memoListResponseSchema, data, 'GET memos');
   }
 
   // 특정 메모 조회
   async getMemo(id: string): Promise<Memo> {
-    const response = await this.api.get(`memos/${id}`);
-    return response.json<Memo>();
+    const data = await this.api.get(`memos/${id}`).json();
+    return parseResponse(memoSchema, data, 'GET memos/:id');
   }
 }
 

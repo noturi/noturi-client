@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import type { Memo, MemoListResponseDto } from './types';
+
 export const memoFormSchema = z.object({
   text: z
     .string()
@@ -20,3 +22,26 @@ export const categoryFormSchema = z.object({
 });
 
 export type CategoryFormData = z.infer<typeof categoryFormSchema>;
+
+// API 응답 스키마 — 타입과 어긋나면 컴파일 에러가 나도록 z.ZodType<...>으로 고정
+export const memoSchema: z.ZodType<Memo> = z.object({
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  category: z.object({ id: z.string(), name: z.string(), color: z.string() }).nullable(),
+  categoryId: z.string(),
+  rating: z.number(),
+  description: z.string().optional(),
+  experienceDate: z.string().nullable().optional(),
+  userId: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const memoListResponseSchema: z.ZodType<MemoListResponseDto> = z.object({
+  data: z.array(memoSchema),
+  total: z.number(),
+  page: z.number(),
+  limit: z.number(),
+  totalPages: z.number(),
+});

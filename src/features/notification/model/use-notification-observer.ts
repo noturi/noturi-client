@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Linking } from 'react-native';
 
 import * as Notifications from 'expo-notifications';
-import { router } from 'expo-router';
+import { type Href, router } from 'expo-router';
 
 interface NotificationData {
   type?: string;
@@ -55,8 +55,9 @@ function handleNotificationNavigation(data: NotificationData) {
   if (data.linkUrl) {
     if (data.linkUrl.startsWith('http')) {
       Linking.openURL(data.linkUrl);
-    } else {
-      router.push(data.linkUrl as any);
+    } else if (data.linkUrl.startsWith('/')) {
+      // 서버가 내려주는 동적 경로라 타입 라우트로 검증 불가 — 앱 내부 경로만 허용
+      router.push(data.linkUrl as Href);
     }
     return;
   }

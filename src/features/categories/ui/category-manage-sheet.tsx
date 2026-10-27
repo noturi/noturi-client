@@ -1,8 +1,8 @@
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useUserTheme } from '~/shared/lib/theme-context';
-import { Typography } from '~/shared/ui';
+import { SheetBackdrop, Typography } from '~/shared/ui';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { View } from 'react-native';
 
 import { CategoryManageContent } from './category-manage-content';
@@ -26,24 +26,11 @@ export const CategoryManageSheet = ({ isOpen, onClose }: CategoryManageSheetProp
     }
   }, [isOpen]);
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
-
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
-      backdropComponent={renderBackdrop}
+      backdropComponent={SheetBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,

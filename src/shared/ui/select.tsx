@@ -2,6 +2,7 @@ import { ChevronDown } from '~/shared/lib/icons';
 
 import React, { useRef, useState } from 'react';
 import {
+  type DimensionValue,
   Dimensions,
   Pressable,
   View as RNView,
@@ -24,7 +25,7 @@ export interface SelectProps {
   onValueChange?: (value: string) => void;
   placeholder?: string;
   height?: number;
-  width?: string | number;
+  width?: DimensionValue;
   disabled?: boolean;
 }
 
@@ -76,7 +77,7 @@ export function Select({
   };
 
   return (
-    <View style={[styles.container, { width: width as any }]}>
+    <View style={[styles.container, { width }]}>
       {/* Trigger */}
       <RNView ref={triggerRef} collapsable={false}>
         <TouchableOpacity activeOpacity={1} disabled={disabled} onPress={toggleOpen}>

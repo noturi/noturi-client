@@ -1,5 +1,5 @@
 import { createContext, forwardRef, useContext } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { type GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import {
@@ -44,12 +44,12 @@ const PressableFeedbackRoot = forwardRef<View, PressableFeedbackRootProps>((prop
   const { containerStyle, onPressIn, onPressOut, onLayout, contextValue } =
     usePressableFeedbackRootAnimation({ animation });
 
-  const handlePressIn = (e: any) => {
+  const handlePressIn = (e: GestureResponderEvent) => {
     onPressIn(e);
     onPressInProp?.(e);
   };
 
-  const handlePressOut = (e: any) => {
+  const handlePressOut = (e: GestureResponderEvent) => {
     onPressOut(e);
     onPressOutProp?.(e);
   };

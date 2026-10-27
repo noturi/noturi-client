@@ -1,10 +1,10 @@
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { HREFS } from '~/shared/config';
 import { FileText, Star } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
-import { Typography } from '~/shared/ui';
+import { SheetBackdrop, Typography } from '~/shared/ui';
 
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { router } from 'expo-router';
@@ -42,24 +42,11 @@ export const MemoTypeSelectSheet = ({ isOpen, onClose }: MemoTypeSelectSheetProp
     }, 100);
   };
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
-
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
-      backdropComponent={renderBackdrop}
+      backdropComponent={SheetBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,

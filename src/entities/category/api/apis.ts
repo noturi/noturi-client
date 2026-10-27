@@ -1,7 +1,8 @@
 import { KyInstance } from 'ky';
-import { api } from '~/shared/api';
+import { api, parseResponse } from '~/shared/api';
 import Logger from '~/shared/lib/logger';
 
+import { type BackendCategory, backendCategoryListSchema } from '../model/schemas';
 import { Category, CategoryListParamsDto, CategoryListResponseDto } from '../model/types';
 
 /**
@@ -18,7 +19,7 @@ export class CategoryApi {
     this.api = apiInstance;
   }
 
-  private transformBackendCategory(backendCategory: any): Category {
+  private transformBackendCategory(backendCategory: BackendCategory): Category {
     return {
       id: backendCategory.id,
       name: backendCategory.name,
@@ -44,8 +45,11 @@ export class CategoryApi {
 
       const url = `categories?${searchParams.toString()}`;
 
-      const response = await this.api.get(url);
-      const backendData = await response.json<any[]>();
+      const backendData = parseResponse(
+        backendCategoryListSchema,
+        await this.api.get(url).json(),
+        'GET categories',
+      );
 
       const transformedData: CategoryListResponseDto = {
         categories: backendData.map((item) => this.transformBackendCategory(item)),

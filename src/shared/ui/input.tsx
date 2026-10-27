@@ -3,6 +3,9 @@ import { useUserTheme } from '~/shared/lib/theme-context';
 import { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
+type FocusEvent = Parameters<NonNullable<TextInputProps['onFocus']>>[0];
+type BlurEvent = Parameters<NonNullable<TextInputProps['onBlur']>>[0];
+
 type InputSize = 'sm' | 'md' | 'lg';
 
 export interface InputProps extends TextInputProps {
@@ -23,12 +26,12 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
   const { hexColors } = useUserTheme();
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = (e: any) => {
+  const handleFocus = (e: FocusEvent) => {
     setIsFocused(true);
     onFocus?.(e);
   };
 
-  const handleBlur = (e: any) => {
+  const handleBlur = (e: BlurEvent) => {
     setIsFocused(false);
     onBlur?.(e);
   };

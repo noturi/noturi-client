@@ -17,7 +17,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useQuery } from '@tanstack/react-query';
 
 import { useReorderCategoriesMutation } from '../api/mutations';
-import { handleCategoryFormError } from '../model/form-error-handler';
+import { handleCategoryCreateError } from '../model/form-error-handler';
 import { CategoryCreateButton } from './category-create-button';
 import { CategoryDeleteButton } from './category-delete-button';
 
@@ -76,7 +76,7 @@ export const CategoryManageContent = ({
   };
 
   const handleCreateError = async (error: Error) => {
-    await handleCategoryFormError(error, form);
+    await handleCategoryCreateError(error);
   };
 
   const handleDragEnd = ({ data }: { data: Category[] }) => {

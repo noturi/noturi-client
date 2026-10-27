@@ -1,3 +1,4 @@
+import { getErrorMessage } from '~/shared/lib/error';
 import Logger from '~/shared/lib/logger';
 
 import { Platform } from 'react-native';
@@ -66,9 +67,9 @@ class NotificationService {
       Logger.info('Expo Push Token 획득 성공:', this.expoPushToken);
 
       return this.expoPushToken;
-    } catch (error: any) {
+    } catch (error) {
       // 시뮬레이터에서는 aps-environment 에러가 발생함 - 정상적인 동작
-      if (error?.message?.includes('aps-environment')) {
+      if (getErrorMessage(error).includes('aps-environment')) {
         Logger.info('시뮬레이터에서는 푸시 알림을 지원하지 않습니다');
       } else {
         Logger.warn('Expo Push Token 획득 실패:', error);

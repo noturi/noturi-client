@@ -1,4 +1,4 @@
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
 import { ALL_DAY_NOTIFICATION_OPTIONS, NOTIFICATION_OPTIONS } from '~/entities/calendar';
 import type {
@@ -9,9 +9,17 @@ import type {
 } from '~/entities/calendar';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { useUserTheme } from '~/shared/lib/theme-context';
-import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
+import {
+  FloatingButton,
+  Form,
+  Input,
+  Select,
+  SheetBackdrop,
+  Switch,
+  Typography,
+} from '~/shared/ui';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
@@ -125,24 +133,11 @@ export function CalendarAddModal({
     onClose();
   };
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
-
   return (
     <BottomSheetModal
       ref={bottomSheetRef}
       enablePanDownToClose
-      backdropComponent={renderBackdrop}
+      backdropComponent={SheetBackdrop}
       backgroundStyle={{
         backgroundColor: hexColors.surface,
         borderTopLeftRadius: 16,

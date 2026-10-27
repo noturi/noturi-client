@@ -5,14 +5,14 @@ import {
   activeCategoriesQuery,
 } from '~/entities/category';
 import { categoryFormSchema, memoDetailQuery, memoFormSchema } from '~/entities/memo';
-import type { CategoryFormData, MemoFormData } from '~/entities/memo';
+import type { CategoryFormData, CreateMemoDto, MemoFormData } from '~/entities/memo';
 import { DEFAULT_COLORS } from '~/shared/config';
 import { useForm, useGradualAnimation, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
 import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TextInput, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
@@ -39,7 +39,7 @@ export const MemoForm = ({
 }: MemoFormProps) => {
   const isEdit = !!memoId;
   const [showAddCategory, setShowAddCategory] = useState(false);
-  const titleInputRef = useRef<any>(null);
+  const titleInputRef = useRef<TextInput>(null);
   const toast = useToast();
   const { height } = useGradualAnimation();
 
@@ -70,18 +70,12 @@ export const MemoForm = ({
         ? categories.find((cat) => cat.name === values.selectedCategory)
         : null;
 
-      const memoData: any = {
+      const memoData: CreateMemoDto = {
         title,
         content: content || '',
+        ...(selectedCat?.id && { categoryId: selectedCat.id }),
+        ...(values.rating > 0 && { rating: values.rating }),
       };
-
-      if (selectedCat?.id) {
-        memoData.categoryId = selectedCat.id;
-      }
-
-      if (values.rating > 0) {
-        memoData.rating = values.rating;
-      }
 
       if (isEdit) {
         updateMemoMutation.mutate({ ...memoData, id: memoId });

@@ -11,3 +11,4 @@ export * from './use-keyboard';
 export { useToast } from './use-toast';
 export { ThemeContext, useThemeColor, useUserTheme } from './theme-context';
 export type { ThemeColorKey, ThemeContextValue } from './theme-context';
+export { getErrorCode, getErrorMessage } from './error';

@@ -1,3 +1,5 @@
+import { getErrorCode } from '~/shared/lib';
+
 import { Alert, Platform, View } from 'react-native';
 
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -57,8 +59,8 @@ export function AppleButton() {
         idToken: credential.identityToken || '',
         user: credential.user,
       });
-    } catch (e: any) {
-      if (e.code === 'ERR_REQUEST_CANCELED') return;
+    } catch (e) {
+      if (getErrorCode(e) === 'ERR_REQUEST_CANCELED') return;
       Alert.alert('로그인 오류', 'Apple 로그인에 실패했습니다.');
     }
   };

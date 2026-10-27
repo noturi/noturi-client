@@ -1,6 +1,9 @@
 import { forwardRef, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
+type FocusEvent = Parameters<NonNullable<TextInputProps['onFocus']>>[0];
+type BlurEvent = Parameters<NonNullable<TextInputProps['onBlur']>>[0];
+
 export interface TextAreaProps extends TextInputProps {
   hasError?: boolean;
   minHeight?: number;
@@ -12,12 +15,12 @@ export const TextArea = forwardRef<TextInput, TextAreaProps>(function TextArea(
 ) {
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = (e: any) => {
+  const handleFocus = (e: FocusEvent) => {
     setIsFocused(true);
     onFocus?.(e);
   };
 
-  const handleBlur = (e: any) => {
+  const handleBlur = (e: BlurEvent) => {
     setIsFocused(false);
     onBlur?.(e);
   };

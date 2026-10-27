@@ -3,6 +3,7 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { getErrorCode } from '~/shared/lib';
 
 import { useEffect } from 'react';
 import { Alert, Platform, Pressable } from 'react-native';
@@ -54,8 +55,8 @@ export function GoogleButton() {
         photo: user.photo,
         idToken,
       });
-    } catch (e: any) {
-      const message = ERROR_MESSAGES[e.code] ?? 'Google 로그인에 실패했습니다.';
+    } catch (e) {
+      const message = ERROR_MESSAGES[getErrorCode(e) ?? ''] ?? 'Google 로그인에 실패했습니다.';
       if (message) Alert.alert('로그인 오류', message);
     }
   };
