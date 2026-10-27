@@ -14,7 +14,8 @@ interface StatCardProps {
 export function StatCard({ label, children }: StatCardProps) {
   return (
     <Card>
-      <View className="flex-1 flex-row items-center gap-2 px-2">
+      {/* flex-1 금지 — 높이가 내용으로 정해지는 Card 안에서 basis 0이 되어 첫 렌더에 높이 0으로 그려짐 */}
+      <View className="flex-row items-center gap-2 px-2">
         <Typography variant="footnote">{label}</Typography>
         {children}
       </View>
