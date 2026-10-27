@@ -76,7 +76,11 @@ export function MemoDetailPage({ memoId }: MemoDetailPageProps) {
                 </View>
                 <View className="flex-row items-center gap-2">
                   {memo.rating > 0 && <StarRating rating={memo.rating} />}
-                  <MemoDeleteButton memoId={memoId} memoTitle={memo.title} />
+                  <MemoDeleteButton
+                    memoId={memoId}
+                    memoTitle={memo.title}
+                    onDeleted={() => router.back()}
+                  />
                 </View>
               </View>
 

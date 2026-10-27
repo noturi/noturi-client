@@ -1,25 +1,24 @@
-import { toast } from 'sonner-native';
+import { useToast } from '~/shared/lib';
 import { Trash2 } from '~/shared/lib/icons';
 import { Button } from '~/shared/ui';
 
 import { Alert } from 'react-native';
-
-import { router } from 'expo-router';
 
 import { useDeleteMemoMutation } from '../api/mutations';
 
 interface MemoDeleteButtonProps {
   memoId: string;
   memoTitle: string;
-  onDelete?: () => void;
+  /** 삭제 성공 후 처리 (예: 화면 이동) — 호출자가 결정 */
+  onDeleted?: () => void;
 }
 
-export const MemoDeleteButton = ({ memoId, memoTitle, onDelete }: MemoDeleteButtonProps) => {
+export const MemoDeleteButton = ({ memoId, memoTitle, onDeleted }: MemoDeleteButtonProps) => {
+  const toast = useToast();
   const deleteMutation = useDeleteMemoMutation({
     onSuccess: () => {
-      toast.success('메모가 삭제되었습니다');
-      onDelete?.();
-      router.back();
+      toast.showSuccess('메모가 삭제되었습니다');
+      onDeleted?.();
     },
     onError: () => {
       Alert.alert('오류', '메모 삭제에 실패했습니다.');

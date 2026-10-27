@@ -9,17 +9,18 @@ interface MemoListProps {
   memos: UIMemo[];
   onEndReached: () => void;
   isFetchingNextPage: boolean;
+  onPressMemo: (memo: UIMemo) => void;
 }
 
-export function MemoList({ memos, onEndReached, isFetchingNextPage }: MemoListProps) {
+export function MemoList({ memos, onEndReached, isFetchingNextPage, onPressMemo }: MemoListProps) {
   const renderItem = useCallback(
     ({ item, index }: { item: UIMemo; index: number }) => (
       <View key={item.id}>
-        <MemoItem memo={item} />
+        <MemoItem memo={item} onPress={onPressMemo} />
         {index < memos.length - 1 && <View className="h-px bg-border" />}
       </View>
     ),
-    [memos.length],
+    [memos.length, onPressMemo],
   );
 
   const renderFooter = useCallback(() => {

@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react-native';
+import { Check } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { ViewStyle } from 'react-native';

@@ -1,4 +1,4 @@
-import { toast } from 'sonner-native';
+import { useToast } from '~/shared/lib';
 import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
@@ -17,9 +17,10 @@ export function CategoryDeleteButton({
   categoryName,
   disabled = false,
 }: CategoryDeleteButtonProps) {
+  const toast = useToast();
   const deleteCategoryMutation = useDeleteCategoryMutation({
     onSuccess: () => {
-      toast.success('카테고리가 삭제되었습니다');
+      toast.showSuccess('카테고리가 삭제되었습니다');
     },
   });
 

@@ -1,5 +1,4 @@
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { toast } from 'sonner-native';
 import { ALL_DAY_NOTIFICATION_OPTIONS, NOTIFICATION_OPTIONS } from '~/entities/calendar';
 import type {
   CalendarMemo,
@@ -7,6 +6,7 @@ import type {
   NotifyBefore,
   UpdateCalendarMemoDto,
 } from '~/entities/calendar';
+import { useToast } from '~/shared/lib';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import {
@@ -44,6 +44,7 @@ export function CalendarAddModal({
   initialStartDate,
   initialEndDate,
 }: CalendarAddModalProps) {
+  const toast = useToast();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const titleRef = useRef('');
   const inputRef = useRef<TextInput>(null);
@@ -124,7 +125,7 @@ export function CalendarAddModal({
   });
 
   const handleSuccess = () => {
-    toast.success(isEditMode ? '일정이 수정되었습니다' : '일정이 추가되었습니다');
+    toast.showSuccess(isEditMode ? '일정이 수정되었습니다' : '일정이 추가되었습니다');
     handleClose();
   };
 

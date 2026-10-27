@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react-native';
+import { Pencil, Trash2 } from '~/shared/lib/icons';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { Pressable, View } from 'react-native';
