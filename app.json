@@ -8,7 +8,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "noturiclient",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.noturi.app",
@@ -22,7 +21,6 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.noturi.app",
       "googleServicesFile": "./android/app/google-services.json"
     },
@@ -43,12 +41,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      [
-        "expo-web-browser",
-        {
-          "experimentalLauncherActivity": true
-        }
-      ],
+      "expo-web-browser",
       [
         "expo-secure-store",
         {
@@ -72,13 +65,13 @@
           "color": "#ffffff",
           "sounds": []
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "modules": ["./modules/widget-bridge"],
     "extra": {
       "router": {},
       "eas": {

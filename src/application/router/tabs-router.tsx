@@ -4,7 +4,7 @@ import { useUserTheme } from '~/shared/lib/theme-context';
 import { Loading } from '~/shared/ui';
 
 import { Redirect } from 'expo-router';
-import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
 export function TabsRouter() {
   const { isAuthenticated, isInitialLoading } = useAuth();
@@ -32,29 +32,35 @@ export function TabsRouter() {
       tintColor={hexColors.primary}
     >
       <NativeTabs.Trigger name="index">
-        <Icon drawable="ic_menu_home" sf={{ default: 'star', selected: 'star.fill' }} />
-        <Label>별점 메모</Label>
+        <NativeTabs.Trigger.Icon
+          drawable="ic_menu_home"
+          sf={{ default: 'star', selected: 'star.fill' }}
+        />
+        <NativeTabs.Trigger.Label>별점 메모</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="todo">
-        <Icon
+        <NativeTabs.Trigger.Icon
           drawable="ic_menu_agenda"
           sf={{ default: 'checkmark.circle', selected: 'checkmark.circle.fill' }}
         />
-        <Label>할일 메모</Label>
+        <NativeTabs.Trigger.Label>할일 메모</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="stats">
-        <Icon drawable="ic_menu_agenda" sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }} />
-        <Label>통계</Label>
+        <NativeTabs.Trigger.Icon
+          drawable="ic_menu_agenda"
+          sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }}
+        />
+        <NativeTabs.Trigger.Label>통계</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="settings">
-        <Icon
+        <NativeTabs.Trigger.Icon
           drawable="ic_menu_preferences"
           sf={{ default: 'gearshape', selected: 'gearshape.fill' }}
         />
-        <Label>설정</Label>
+        <NativeTabs.Trigger.Label>설정</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );
