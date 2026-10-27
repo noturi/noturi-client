@@ -72,7 +72,7 @@
 - NativeWind에서 `rem`은 14px — `rounded-lg`·`text-sm` 같은 Tailwind 기본(rem) 클래스는 px 스케일과 다르다
 - ESLint가 UI 코드(`src/**/ui`, widgets, pages, app)의 hex 색상 리터럴을 막는다 (`no-restricted-syntax`)
 
-- **모션**: 애니메이션 시간·이징은 `~/shared/config`의 `DURATION`(d1~d6, 50ms 단위 — Seed Design 구조), `EASING`(standard/enter/out/outCubic), `BOUNCE_DURATION`만 사용 — `duration: 250` 같은 숫자 직접 사용 금지
+- **모션**: 애니메이션 시간·이징은 `~/shared/config`의 `DURATION`(d1~d6, 50ms 단위 — Seed Design 구조), `BOUNCE_DURATION`, 이징은 `~/shared/lib`의 `EASING`(standard/enter/out/outCubic, 곡선 값은 config의 `EASING_CURVE`)만 사용 — `duration: 250` 같은 숫자 직접 사용 금지
 
 ## ESLint / Prettier
 

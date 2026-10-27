@@ -4,7 +4,7 @@ import { useUserTheme } from '~/shared/lib/theme-context';
 import { Button } from '~/shared/ui';
 
 import { useRef, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { TextInput, type TextInputInstance, View } from 'react-native';
 
 import { useCreateTodoMutation } from '../api/mutations';
 import { TODO_INPUT_BASE_STYLE } from '../lib/todo-input-styles';
@@ -17,7 +17,7 @@ export function QuickTodoInput({ selectedDate }: QuickTodoInputProps) {
   const { hexColors } = useUserTheme();
   const [title, setTitle] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const createTodoMutation = useCreateTodoMutation();
 
   const handleSubmit = () => {

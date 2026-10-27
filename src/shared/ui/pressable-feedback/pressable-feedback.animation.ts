@@ -1,4 +1,5 @@
-import { DURATION, EASING } from '~/shared/config';
+import { DURATION } from '~/shared/config';
+import { EASING } from '~/shared/lib/easing';
 
 import type { GestureResponderEvent, LayoutChangeEvent } from 'react-native';
 import {

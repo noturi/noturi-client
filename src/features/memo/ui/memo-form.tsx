@@ -3,7 +3,7 @@ import { useGradualAnimation } from '~/shared/lib';
 import { Button, FloatingButton, Form, Loading, TextArea } from '~/shared/ui';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, type TextInputInstance, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
@@ -35,7 +35,7 @@ export const MemoForm = ({
   renderAddCategory,
 }: MemoFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
-  const titleInputRef = useRef<TextInput>(null);
+  const titleInputRef = useRef<TextInputInstance>(null);
   const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());

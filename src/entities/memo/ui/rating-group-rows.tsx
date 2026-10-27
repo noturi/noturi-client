@@ -1,4 +1,5 @@
-import { DURATION, EASING } from '~/shared/config';
+import { DURATION } from '~/shared/config';
+import { EASING } from '~/shared/lib';
 import { ChevronDown } from '~/shared/lib/icons';
 import { Card, RatingStars, Skeleton, Typography } from '~/shared/ui';
 

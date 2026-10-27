@@ -1,7 +1,7 @@
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { type Ref, useState } from 'react';
-import { TextInput, TextInputProps } from 'react-native';
+import { TextInput, type TextInputInstance, TextInputProps } from 'react-native';
 
 type FocusEvent = Parameters<NonNullable<TextInputProps['onFocus']>>[0];
 type BlurEvent = Parameters<NonNullable<TextInputProps['onBlur']>>[0];
@@ -20,7 +20,7 @@ export function TextArea({
   onFocus,
   onBlur,
   ...props
-}: TextAreaProps & { ref?: Ref<TextInput> }) {
+}: TextAreaProps & { ref?: Ref<TextInputInstance> }) {
   const [isFocused, setIsFocused] = useState(false);
   const placeholderColor = useThemeColor('textMuted');
 

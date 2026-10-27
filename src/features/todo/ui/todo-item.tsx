@@ -3,7 +3,7 @@ import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated from 'react-native-reanimated';
 
 import { useTodoItemActions } from '../model/use-todo-item-actions';

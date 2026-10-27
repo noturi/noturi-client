@@ -1,4 +1,5 @@
-import { BOUNCE_DURATION, DURATION, EASING } from '~/shared/config';
+import { BOUNCE_DURATION, DURATION } from '~/shared/config';
+import { EASING } from '~/shared/lib';
 
 import { ViewStyle } from 'react-native';
 import {

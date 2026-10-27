@@ -10,7 +10,7 @@ import { useToast } from '~/shared/lib';
 import { getHoursLater } from '~/shared/lib/format';
 
 import { useEffect, useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import { type TextInputInstance } from 'react-native';
 
 import {
   fromCalendarMemo,
@@ -55,7 +55,7 @@ export function useCalendarMemoForm({
    * 값은 이벤트 핸들러/이펙트에서만 읽고 쓴다 (렌더 중 접근 금지).
    */
   const titleRef = useRef('');
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
 
   const [startDateTime, setStartDateTime] = useState(() => new Date());
   const [endDateTime, setEndDateTime] = useState(() => getHoursLater(1));

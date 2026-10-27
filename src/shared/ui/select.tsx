@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  type ViewInstance,
   useWindowDimensions,
 } from 'react-native';
 
@@ -39,7 +40,7 @@ export function Select({
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<'bottom' | 'top'>('bottom');
-  const triggerRef = useRef<View>(null);
+  const triggerRef = useRef<ViewInstance>(null);
   const { height: screenHeight } = useWindowDimensions();
 
   const selectedOption = options.find((option) => option.value === value);

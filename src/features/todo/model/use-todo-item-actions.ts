@@ -3,7 +3,7 @@ import { useToast } from '~/shared/lib';
 
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import type { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 import {
   useDeleteTodoMutation,
@@ -18,7 +18,7 @@ import { useCheckAnimation } from '../lib/use-check-animation';
  */
 export function useTodoItemActions(todo: Todo) {
   const toast = useToast();
-  const swipeableRef = useRef<Swipeable>(null);
+  const swipeableRef = useRef<SwipeableMethods>(null);
 
   const [optimisticCompleted, setOptimisticCompleted] = useState(todo.isCompleted);
   const [isEditing, setIsEditing] = useState(false);

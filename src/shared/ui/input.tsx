@@ -2,7 +2,7 @@ import { FONT_SIZE } from '~/shared/config';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { type Ref, useState } from 'react';
-import { TextInput, TextInputProps } from 'react-native';
+import { TextInput, type TextInputInstance, TextInputProps } from 'react-native';
 
 type FocusEvent = Parameters<NonNullable<TextInputProps['onFocus']>>[0];
 type BlurEvent = Parameters<NonNullable<TextInputProps['onBlur']>>[0];
@@ -29,7 +29,7 @@ export function Input({
   onFocus,
   onBlur,
   ...props
-}: InputProps & { ref?: Ref<TextInput> }) {
+}: InputProps & { ref?: Ref<TextInputInstance> }) {
   const { hexColors } = useUserTheme();
   const [isFocused, setIsFocused] = useState(false);
 

@@ -1,7 +1,13 @@
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { type Ref, createContext, use } from 'react';
-import { type GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
+import {
+  type GestureResponderEvent,
+  Pressable,
+  StyleSheet,
+  View,
+  type ViewInstance,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import {
@@ -34,7 +40,7 @@ const usePressableFeedback = () => {
 const PressableFeedbackRoot = ({
   ref,
   ...props
-}: PressableFeedbackRootProps & { ref?: Ref<View> }) => {
+}: PressableFeedbackRootProps & { ref?: Ref<ViewInstance> }) => {
   const {
     children,
     className,

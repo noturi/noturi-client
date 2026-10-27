@@ -4,7 +4,7 @@ import { useThemeColor } from '~/shared/lib/theme-context';
 import { Card, Typography } from '~/shared/ui';
 
 import { useRef, useState } from 'react';
-import { Pressable, ScrollView, type ScrollView as ScrollViewType, View } from 'react-native';
+import { Pressable, ScrollView, type ScrollViewInstance, View } from 'react-native';
 
 import { GrassDay } from '../model/types';
 
@@ -89,7 +89,7 @@ export function GrassChart({ data }: GrassChartProps) {
 
   const columns = buildColumns(data);
 
-  const scrollRef = useRef<ScrollViewType>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
   const handleCellPress = (cell: GrassDay) => {
     setSelectedDay((prev) => (prev?.date === cell.date ? null : cell));

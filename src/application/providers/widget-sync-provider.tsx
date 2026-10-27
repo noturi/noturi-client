@@ -23,7 +23,7 @@ export function WidgetSyncProvider({ children }: { children: ReactNode }) {
   // 앱이 포그라운드로 돌아오면 투두 데이터를 다시 가져옴 (위젯에서 변경했을 수 있음)
   useEffect(() => {
     const sub = AppState.addEventListener('change', (nextState) => {
-      if (appState.current.match(/inactive|background/) && nextState === 'active') {
+      if (appState.current?.match(/inactive|background/) && nextState === 'active') {
         queryClient.invalidateQueries({ queryKey: ['todos'] });
       }
       appState.current = nextState;

@@ -1,4 +1,5 @@
-import { DURATION, EASING } from '~/shared/config';
+import { DURATION } from '~/shared/config';
+import { EASING } from '~/shared/lib/easing';
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { useEffect } from 'react';

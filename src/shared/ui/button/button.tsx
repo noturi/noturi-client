@@ -1,7 +1,7 @@
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { type Ref, createContext, use } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, type TextInstance, View, type ViewInstance } from 'react-native';
 
 import { PressableFeedback } from '../pressable-feedback';
 import {
@@ -28,7 +28,7 @@ const ButtonContext = createContext<ButtonContextValue>({
 const useButton = () => use(ButtonContext);
 
 // Root Component
-const ButtonRoot = ({ ref, ...props }: ButtonRootProps & { ref?: Ref<View> }) => {
+const ButtonRoot = ({ ref, ...props }: ButtonRootProps & { ref?: Ref<ViewInstance> }) => {
   const {
     children,
     variant = 'primary',
@@ -97,7 +97,7 @@ const ButtonRoot = ({ ref, ...props }: ButtonRootProps & { ref?: Ref<View> }) =>
 };
 
 // Label Component
-const ButtonLabel = ({ ref, ...props }: ButtonLabelProps & { ref?: Ref<Text> }) => {
+const ButtonLabel = ({ ref, ...props }: ButtonLabelProps & { ref?: Ref<TextInstance> }) => {
   const { children, className, style, ...restProps } = props;
   const { size, variant } = useButton();
   const { hexColors } = useUserTheme();
@@ -117,7 +117,7 @@ const ButtonLabel = ({ ref, ...props }: ButtonLabelProps & { ref?: Ref<Text> }) 
 };
 
 // Icon Component
-const ButtonIcon = ({ ref, ...props }: ButtonIconProps & { ref?: Ref<View> }) => {
+const ButtonIcon = ({ ref, ...props }: ButtonIconProps & { ref?: Ref<ViewInstance> }) => {
   const { children, className, style, position = 'left', ...restProps } = props;
 
   return (

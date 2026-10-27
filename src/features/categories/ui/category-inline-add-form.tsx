@@ -5,7 +5,7 @@ import { MESSAGES } from '~/shared/model';
 import { Button, Form, Input } from '~/shared/ui';
 
 import { useEffect, useRef } from 'react';
-import { TextInput, View } from 'react-native';
+import { type TextInputInstance, View } from 'react-native';
 
 import { useCreateCategoryMutation } from '../api/mutations';
 import { getCategoryCreateErrorMessage } from '../model/form-error-handler';
@@ -22,7 +22,7 @@ export function CategoryInlineAddForm({
   onCancel,
   autoFocus = true,
 }: CategoryInlineAddFormProps) {
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const toast = useToast();
 
   const form = useForm<CategoryFormData>({
