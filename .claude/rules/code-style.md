@@ -24,6 +24,11 @@
 
 - 터치는 `Pressable` (`Touchable*` 사용 금지)
 - 화면 크기는 `useWindowDimensions()` — 모듈 레벨 `Dimensions.get()` 금지 (회전/분할화면 미반영)
+- 길어질 수 있는 목록은 `FlashList`(v2, New Arch 전용) — 홈 메모 목록(`widgets/memo-rating-list`) 참고
+  - 그룹/카드 구조는 순수 함수로 행 배열로 평탄화(+ 테스트), `getItemType`/`keyExtractor` 필수
+  - 페이지네이션은 `onViewableItemsChanged`/`onEndReached` — 센티넬 `measureLayout` 금지
+  - 행 추가/제거 애니메이션은 `prepareForLayoutAnimationRender()` + `LayoutAnimation.configureNext()`
+    (재활용 셀에서 reanimated `entering`/`exiting`, 높이 clip 애니메이션 금지)
 
 ## Import
 
