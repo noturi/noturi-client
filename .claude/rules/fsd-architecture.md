@@ -59,8 +59,6 @@ src/
 ## 개선 검토 항목
 
 - 미사용 위젯: `widgets/calendar-view`, `widgets/calendar-memo-list` (라우트 없음, 위젯 내부 쿼리/뮤테이션 잔존) — 삭제 또는 재연결 결정 필요
-- `rating-group-card.tsx`의 무한스크롤 센티넬이 300ms `setInterval` 폴링 방식
-  - 스크롤 이벤트 기반(onScroll/onEndReached) 전환 권장 — 실기기 검증 필요
 
 ## 해결된 과거 위반 — 이 패턴으로 회귀 금지
 

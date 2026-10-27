@@ -5,8 +5,6 @@ import {
   toUIMemos,
 } from '~/entities/memo';
 
-import { useMemo } from 'react';
-
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const UNRATED = 0 as const;
@@ -46,7 +44,10 @@ function buildRatingGroup(
     isLoading: query.isLoading,
     hasNextPage: query.hasNextPage ?? false,
     isFetchingNextPage: query.isFetchingNextPage,
-    fetchNextPage: query.fetchNextPage,
+    // 스크롤 이벤트마다 호출될 수 있으므로 진행 중인 요청을 취소/재시작하지 않고 합류시킨다
+    fetchNextPage: () => {
+      void query.fetchNextPage({ cancelRefetch: false });
+    },
   };
 }
 
@@ -58,37 +59,6 @@ export function useRatingGroups(queryParams: Omit<MemoListParamsDto, 'page'>): R
   const r1 = useRatingQuery(queryParams, 1);
   const r0 = useRatingQuery(queryParams, UNRATED);
 
-  return useMemo(
-    () => {
-      const queries = [r5, r4, r3, r2, r1, r0];
-      return RATINGS.map((rating, i) => buildRatingGroup(rating, queries[i]));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      r5.data,
-      r5.hasNextPage,
-      r5.isFetchingNextPage,
-      r5.isLoading,
-      r4.data,
-      r4.hasNextPage,
-      r4.isFetchingNextPage,
-      r4.isLoading,
-      r3.data,
-      r3.hasNextPage,
-      r3.isFetchingNextPage,
-      r3.isLoading,
-      r2.data,
-      r2.hasNextPage,
-      r2.isFetchingNextPage,
-      r2.isLoading,
-      r1.data,
-      r1.hasNextPage,
-      r1.isFetchingNextPage,
-      r1.isLoading,
-      r0.data,
-      r0.hasNextPage,
-      r0.isFetchingNextPage,
-      r0.isLoading,
-    ],
-  );
+  const queries = [r5, r4, r3, r2, r1, r0];
+  return RATINGS.map((rating, i) => buildRatingGroup(rating, queries[i]));
 }
