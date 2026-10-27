@@ -16,6 +16,6 @@
       "@modules/*": ["./modules/*"]
     }
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", ".claude"],
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]
 }

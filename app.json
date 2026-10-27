@@ -75,7 +75,8 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": true
     },
     "modules": ["./modules/widget-bridge"],
     "extra": {

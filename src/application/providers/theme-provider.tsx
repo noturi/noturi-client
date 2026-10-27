@@ -45,15 +45,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, []);
 
   // 서버 설정이 로드되면 동기화
+  // (서버 테마 값이 바뀔 때만 실행 — 같은 값이면 setState는 no-op)
+  const serverTheme = serverSettings?.theme;
   useEffect(() => {
-    if (serverSettings?.theme && serverSettings.theme !== themeId) {
-      const safeId =
-        serverSettings.theme in PRESET_HEX_COLORS ? serverSettings.theme : DEFAULT_THEME_ID;
-      setThemeId(safeId);
-      themeStore.setThemeId(safeId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serverSettings?.theme]);
+    if (!serverTheme) return;
+    const safeId = serverTheme in PRESET_HEX_COLORS ? serverTheme : DEFAULT_THEME_ID;
+    setThemeId(safeId);
+    themeStore.setThemeId(safeId);
+  }, [serverTheme]);
 
   // 앱 테마에 맞게 시스템 appearance 동기화 (NativeTabs 색상 문제 해결)
   useEffect(() => {

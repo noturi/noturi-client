@@ -30,29 +30,35 @@ export function Accordion({ title, icon, children, defaultOpen = false }: Accord
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
 
-    rotation.value = withTiming(newIsOpen ? 180 : 0, {
-      duration: 250,
-      easing: Easing.bezier(0.4, 0, 0.2, 1),
-    });
+    rotation.set(
+      withTiming(newIsOpen ? 180 : 0, {
+        duration: 250,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+      }),
+    );
 
-    height.value = withTiming(newIsOpen ? 1 : 0, {
-      duration: 250,
-      easing: Easing.bezier(0.4, 0, 0.2, 1),
-    });
+    height.set(
+      withTiming(newIsOpen ? 1 : 0, {
+        duration: 250,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+      }),
+    );
 
-    opacity.value = withTiming(newIsOpen ? 1 : 0, {
-      duration: 200,
-      easing: Easing.bezier(0.4, 0, 0.2, 1),
-    });
+    opacity.set(
+      withTiming(newIsOpen ? 1 : 0, {
+        duration: 200,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+      }),
+    );
   };
 
   const chevronStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value}deg` }],
+    transform: [{ rotate: `${rotation.get()}deg` }],
   }));
 
   const contentStyle = useAnimatedStyle(() => ({
-    height: height.value * contentHeight,
-    opacity: opacity.value,
+    height: height.get() * contentHeight,
+    opacity: opacity.get(),
     overflow: 'hidden',
   }));
 
@@ -78,7 +84,7 @@ export function Accordion({ title, icon, children, defaultOpen = false }: Accord
             if (measuredHeight > 0 && contentHeight === 0) {
               setContentHeight(measuredHeight);
               if (defaultOpen) {
-                height.value = 1;
+                height.set(1);
               }
             }
           }}
@@ -97,7 +103,7 @@ export function Accordion({ title, icon, children, defaultOpen = false }: Accord
             if (measuredHeight > 0) {
               setContentHeight(measuredHeight);
               if (defaultOpen) {
-                height.value = 1;
+                height.set(1);
               }
             }
           }}

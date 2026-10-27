@@ -1,3 +1,4 @@
+import { RATING_INPUT_EMPTY_COLOR, RATING_INPUT_FILLED_COLOR } from '~/shared/config';
 import { Star } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
@@ -8,64 +9,50 @@ interface RatingSelectorProps {
   onRatingChange: (rating: number) => void;
 }
 
-export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) => {
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      const isFilled = rating >= i;
-      const isHalfFilled = rating === i - 0.5;
-      const isEmpty = rating < i - 0.5;
+const STAR_VALUES = [1, 2, 3, 4, 5] as const;
+const HALF_HIT_AREA = { position: 'absolute', width: 17, height: 34, zIndex: 2 } as const;
 
-      stars.push(
-        <View key={i} className="relative h-[34px] w-[34px] items-center justify-center">
-          {/* 왼쪽 반쪽 클릭 영역 */}
-          <Pressable
-            style={{
-              position: 'absolute',
-              left: 0,
-              width: 17,
-              height: 34,
-              zIndex: 2,
-            }}
-            onPress={() => onRatingChange(i - 0.5)}
-          />
+export const RatingSelector = ({ rating, onRatingChange }: RatingSelectorProps) => (
+  <View className="flex-row items-center gap-4">
+    <View className="flex-row">
+      {STAR_VALUES.map((value) => {
+        const isFilled = rating >= value;
+        const isHalfFilled = rating === value - 0.5;
 
-          {/* 오른쪽 반쪽 클릭 영역 */}
-          <Pressable
-            style={{
-              position: 'absolute',
-              right: 0,
-              width: 17,
-              height: 34,
-              zIndex: 2,
-            }}
-            onPress={() => onRatingChange(i)}
-          />
+        return (
+          <View key={value} className="relative h-[34px] w-[34px] items-center justify-center">
+            {/* 왼쪽 반쪽: 0.5점 단위 */}
+            <Pressable
+              style={[HALF_HIT_AREA, { left: 0 }]}
+              onPress={() => onRatingChange(value - 0.5)}
+            />
+            {/* 오른쪽 반쪽: 정수 점수 */}
+            <Pressable
+              style={[HALF_HIT_AREA, { right: 0 }]}
+              onPress={() => onRatingChange(value)}
+            />
 
-          {isFilled && <Star color="#f59e0b" fill="#f59e0b" size={28} />}
+            {isFilled ? (
+              <Star color={RATING_INPUT_FILLED_COLOR} fill={RATING_INPUT_FILLED_COLOR} size={28} />
+            ) : (
+              <Star color={RATING_INPUT_EMPTY_COLOR} fill={RATING_INPUT_EMPTY_COLOR} size={28} />
+            )}
 
-          {isHalfFilled && (
-            <>
-              <Star color="#fef3c7" fill="#fef3c7" size={28} />
+            {isHalfFilled && (
               <View className="absolute overflow-hidden" style={{ left: 3, width: 14, height: 28 }}>
-                <Star color="#f59e0b" fill="#f59e0b" size={28} />
+                <Star
+                  color={RATING_INPUT_FILLED_COLOR}
+                  fill={RATING_INPUT_FILLED_COLOR}
+                  size={28}
+                />
               </View>
-            </>
-          )}
-
-          {isEmpty && <Star color="#fef3c7" fill="#fef3c7" size={28} />}
-        </View>,
-      );
-    }
-    return stars;
-  };
-
-  return (
-    <View className="flex-row items-center gap-4">
-      <View className="flex-row">{renderStars()}</View>
-      <Typography className="text-text-muted" variant="caption1">
-        {rating > 0 ? `${rating} / 5` : '평점을 선택하세요'}
-      </Typography>
+            )}
+          </View>
+        );
+      })}
     </View>
-  );
-};
+    <Typography className="text-text-muted" variant="caption1">
+      {rating > 0 ? `${rating} / 5` : '평점을 선택하세요'}
+    </Typography>
+  </View>
+);

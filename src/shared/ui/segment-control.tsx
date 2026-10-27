@@ -1,6 +1,6 @@
 import { useThemeColor } from '~/shared/lib/theme-context';
 
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -31,21 +31,22 @@ export function SegmentControl<T extends string>({
   const innerWidth = useSharedValue(0);
   const translateX = useSharedValue(0);
 
-  const getSegmentWidth = useCallback((w: number) => w / options.length, [options.length]);
+  const segmentCount = options.length;
 
+  // 선택 변경 시 인디케이터 이동 (폭은 shared value라 렌더 중에 읽지 않고 effect 안에서 읽음)
   useEffect(() => {
-    const sw = getSegmentWidth(innerWidth.value);
-    translateX.value = withTiming(activeIndex * sw, { duration: 200 });
-  }, [activeIndex, innerWidth.value, translateX, getSegmentWidth]);
+    const segmentWidth = innerWidth.get() / segmentCount;
+    translateX.set(withTiming(activeIndex * segmentWidth, { duration: 200 }));
+  }, [activeIndex, segmentCount, innerWidth, translateX]);
 
   const handleInnerLayout = (e: LayoutChangeEvent) => {
     const width = e.nativeEvent.layout.width;
-    innerWidth.value = width;
-    translateX.value = activeIndex * getSegmentWidth(width);
+    innerWidth.set(width);
+    translateX.set((activeIndex * width) / segmentCount);
   };
 
   const indicatorStyle = useAnimatedStyle(() => {
-    const sw = innerWidth.value / options.length;
+    const sw = innerWidth.get() / options.length;
     return {
       position: 'absolute' as const,
       left: INDICATOR_MARGIN,
@@ -56,7 +57,7 @@ export function SegmentControl<T extends string>({
       borderWidth: 1,
       borderColor,
       backgroundColor: bgSecondaryColor,
-      transform: [{ translateX: translateX.value }],
+      transform: [{ translateX: translateX.get() }],
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 0.5 },
       shadowOpacity: 0.08,

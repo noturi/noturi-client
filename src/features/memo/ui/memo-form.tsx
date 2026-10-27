@@ -80,7 +80,7 @@ export const MemoForm = ({
 
   const floatingButtonPosition = useAnimatedStyle(() => {
     return {
-      bottom: height.value > 42 ? height.value + 10 : 140,
+      bottom: height.get() > 42 ? height.get() + 10 : 140,
     };
   }, []);
 

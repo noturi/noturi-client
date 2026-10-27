@@ -20,7 +20,8 @@
     "postinstall": "bash ./scripts/apply-patches.sh"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": ["/node_modules/", "/.claude/"]
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.2.8",

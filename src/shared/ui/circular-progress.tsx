@@ -38,14 +38,16 @@ export function CircularProgress({
   const animatedProgress = useSharedValue(clampedProgress);
 
   useEffect(() => {
-    animatedProgress.value = withTiming(clampedProgress, {
-      duration: 600,
-      easing: Easing.out(Easing.cubic),
-    });
+    animatedProgress.set(
+      withTiming(clampedProgress, {
+        duration: 600,
+        easing: Easing.out(Easing.cubic),
+      }),
+    );
   }, [clampedProgress, animatedProgress]);
 
   const animatedProps = useAnimatedProps(() => ({
-    strokeDashoffset: circumference - (animatedProgress.value / 100) * circumference,
+    strokeDashoffset: circumference - (animatedProgress.get() / 100) * circumference,
   }));
 
   return (

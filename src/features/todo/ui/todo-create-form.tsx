@@ -23,11 +23,11 @@ const RECURRENCE_OPTIONS: { type: CreateRecurrenceType; label: string }[] = [
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
-export function TodoCreateForm({ initialDate = new Date(), onSuccess }: TodoCreateFormProps) {
+export function TodoCreateForm({ initialDate, onSuccess }: TodoCreateFormProps) {
   const toast = useToast();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [date] = useState(initialDate);
+  const [date] = useState(() => initialDate ?? new Date());
   const [recurrenceType, setRecurrenceType] = useState<CreateRecurrenceType>('NONE');
   const [recurrenceDays, setRecurrenceDays] = useState<number[]>([]);
 

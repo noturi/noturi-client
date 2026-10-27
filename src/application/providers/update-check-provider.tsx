@@ -23,6 +23,26 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
   const [storeUrl, setStoreUrl] = useState<string>('');
 
   useEffect(() => {
+    const checkAppVersion = async () => {
+      try {
+        const versionInfo = await getAppVersion();
+        const currentVersion = Constants.expoConfig?.version || '1.0.0';
+        const platformInfo: PlatformVersion =
+          Platform.OS === 'ios' ? versionInfo.ios : versionInfo.android;
+
+        setStoreUrl(platformInfo.storeUrl);
+
+        if (needsForceUpdate(currentVersion, platformInfo.minVersion)) {
+          setUpdateType('force');
+        } else if (hasNewVersion(currentVersion, platformInfo.latestVersion)) {
+          setUpdateType('optional');
+        }
+      } catch (error) {
+        // 버전 체크 실패 시 무시 (앱 사용은 가능하게)
+        Logger.warn('앱 버전 체크 실패:', error);
+      }
+    };
+
     checkAppVersion();
 
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -35,26 +55,6 @@ export function UpdateCheckProvider({ children }: UpdateCheckProviderProps) {
       subscription.remove();
     };
   }, []);
-
-  const checkAppVersion = async () => {
-    try {
-      const versionInfo = await getAppVersion();
-      const currentVersion = Constants.expoConfig?.version || '1.0.0';
-      const platformInfo: PlatformVersion =
-        Platform.OS === 'ios' ? versionInfo.ios : versionInfo.android;
-
-      setStoreUrl(platformInfo.storeUrl);
-
-      if (needsForceUpdate(currentVersion, platformInfo.minVersion)) {
-        setUpdateType('force');
-      } else if (hasNewVersion(currentVersion, platformInfo.latestVersion)) {
-        setUpdateType('optional');
-      }
-    } catch (error) {
-      // 버전 체크 실패 시 무시 (앱 사용은 가능하게)
-      Logger.warn('앱 버전 체크 실패:', error);
-    }
-  };
 
   const handleUpdate = () => {
     if (storeUrl) {

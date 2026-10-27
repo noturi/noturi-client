@@ -13,17 +13,17 @@ export const useGradualAnimation = () => {
       onStart: (e) => {
         'worklet';
         if (e.height > 0) {
-          height.value = Math.max(e.height + OFFSET, totalOffset);
+          height.set(Math.max(e.height + OFFSET, totalOffset));
         }
       },
       onMove: (e) => {
         'worklet';
-        height.value = e.height > 0 ? Math.max(e.height + OFFSET, totalOffset) : totalOffset;
+        height.set(e.height > 0 ? Math.max(e.height + OFFSET, totalOffset) : totalOffset);
       },
       onEnd: (e) => {
         'worklet';
         if (e.height === 0) {
-          height.value = totalOffset;
+          height.set(totalOffset);
         }
       },
     },

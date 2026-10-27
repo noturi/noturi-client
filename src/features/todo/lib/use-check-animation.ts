@@ -31,40 +31,43 @@ export function useCheckAnimation(initialCompleted: boolean): UseCheckAnimationR
 
   const animate = (toCompleted: boolean) => {
     if (toCompleted) {
-      circleScale.value = withSequence(
-        withTiming(0.85, { duration: 80 }),
-        withTiming(1.08, { duration: 120 }),
-        withTiming(1, { duration: 100 }),
+      circleScale.set(
+        withSequence(
+          withTiming(0.85, { duration: 80 }),
+          withTiming(1.08, { duration: 120 }),
+          withTiming(1, { duration: 100 }),
+        ),
       );
-      checkScale.value = withSequence(
-        withTiming(0, { duration: 50 }),
-        withTiming(1.15, { duration: 150 }),
-        withTiming(1, { duration: 100 }),
+      checkScale.set(
+        withSequence(
+          withTiming(0, { duration: 50 }),
+          withTiming(1.15, { duration: 150 }),
+          withTiming(1, { duration: 100 }),
+        ),
       );
-      checkOpacity.value = withTiming(1, { duration: 150 });
-      contentOpacity.value = withTiming(1, { duration: 300, easing: Easing.out(Easing.ease) });
+      checkOpacity.set(withTiming(1, { duration: 150 }));
+      contentOpacity.set(withTiming(1, { duration: 300, easing: Easing.out(Easing.ease) }));
     } else {
-      circleScale.value = withSequence(
-        withTiming(1.08, { duration: 80 }),
-        withTiming(1, { duration: 100 }),
+      circleScale.set(
+        withSequence(withTiming(1.08, { duration: 80 }), withTiming(1, { duration: 100 })),
       );
-      checkScale.value = withTiming(0, { duration: 120 });
-      checkOpacity.value = withTiming(0, { duration: 100 });
-      contentOpacity.value = withTiming(0, { duration: 200 });
+      checkScale.set(withTiming(0, { duration: 120 }));
+      checkOpacity.set(withTiming(0, { duration: 100 }));
+      contentOpacity.set(withTiming(0, { duration: 200 }));
     }
   };
 
   const checkStyle = useAnimatedStyle<ViewStyle>(() => ({
-    transform: [{ scale: checkScale.value }],
-    opacity: checkOpacity.value,
+    transform: [{ scale: checkScale.get() }],
+    opacity: checkOpacity.get(),
   }));
 
   const circleStyle = useAnimatedStyle<ViewStyle>(() => ({
-    transform: [{ scale: circleScale.value }],
+    transform: [{ scale: circleScale.get() }],
   }));
 
   const contentStyle = useAnimatedStyle<ViewStyle>(() => ({
-    opacity: 0.4 + (1 - contentOpacity.value) * 0.6,
+    opacity: 0.4 + (1 - contentOpacity.get()) * 0.6,
   }));
 
   return { animate, checkStyle, circleStyle, contentStyle };

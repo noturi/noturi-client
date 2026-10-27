@@ -17,11 +17,11 @@ export function Skeleton({ width = '100%', height = 16, borderRadius = 8, circle
   const opacity = useSharedValue(0.5);
 
   useEffect(() => {
-    opacity.value = withRepeat(withTiming(1, { duration: 800 }), -1, true);
+    opacity.set(withRepeat(withTiming(1, { duration: 800 }), -1, true));
   }, [opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
+    opacity: opacity.get(),
   }));
 
   const size = circle ? height : undefined;

@@ -10,7 +10,7 @@ import {
 import { useForm, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
 
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -69,17 +69,19 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
     },
   });
 
-  // setValue는 폼 상태마다 새로 생성되므로 최신 참조만 ref로 보관 (effect는 memo 변경 시에만 실행)
-  const setValueRef = useRef(form.setValue);
-  setValueRef.current = form.setValue;
-
-  // 수정 모드: 서버 데이터로 폼 채우기
-  useEffect(() => {
-    if (!memo) return;
-    setValueRef.current('text', joinMemoText(memo));
-    setValueRef.current('rating', Number(memo.rating) || 0);
-    setValueRef.current('selectedCategory', memo.category?.name || '');
-  }, [memo]);
+  // 수정 모드: 서버 데이터가 도착/변경되면 폼을 그 값으로 초기화
+  // (effect 대신 렌더 중 상태 조정 — https://react.dev/learn/you-might-not-need-an-effect)
+  const [loadedMemo, setLoadedMemo] = useState(memo);
+  if (memo !== loadedMemo) {
+    setLoadedMemo(memo);
+    if (memo) {
+      form.reset({
+        text: joinMemoText(memo),
+        rating: Number(memo.rating) || 0,
+        selectedCategory: memo.category?.name || '',
+      });
+    }
+  }
 
   return {
     form,

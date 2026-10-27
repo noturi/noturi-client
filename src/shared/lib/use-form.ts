@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { useCallback, useMemo, useReducer } from 'react';
+import { useReducer } from 'react';
 
 import Logger from './logger';
 
@@ -9,9 +9,11 @@ export type FormFieldError = {
   type?: string;
 };
 
-export type FormState<T extends Record<string, any>> = {
+type FieldErrors<T> = Partial<Record<keyof T, FormFieldError>>;
+
+export type FormState<T extends Record<string, unknown>> = {
   values: T;
-  errors: Partial<Record<keyof T, FormFieldError>>;
+  errors: FieldErrors<T>;
   touched: Partial<Record<keyof T, boolean>>;
   isDirty: boolean;
   isSubmitted: boolean;
@@ -19,27 +21,53 @@ export type FormState<T extends Record<string, any>> = {
   isSubmitting: boolean;
 };
 
-type FormAction<T extends Record<string, any>> =
-  | { type: 'SET_VALUE'; name: keyof T; value: T[keyof T] }
+type Validate<T> = (values: T) => FieldErrors<T>;
+
+type FormAction<T extends Record<string, unknown>> =
+  | { type: 'SET_VALUE'; name: keyof T; value: T[keyof T]; validate: Validate<T> }
+  | { type: 'SET_TOUCHED'; name: keyof T; validate: Validate<T> }
   | { type: 'SET_ERROR'; name: keyof T; error: FormFieldError }
   | { type: 'CLEAR_ERROR'; name: keyof T }
-  | { type: 'SET_TOUCHED'; name: keyof T }
-  | { type: 'SET_SUBMITTED'; value: boolean }
-  | { type: 'SET_SUBMITTING'; value: boolean }
-  | { type: 'RESET'; values: T }
-  | { type: 'SET_ERRORS'; errors: Partial<Record<keyof T, FormFieldError>> };
+  | { type: 'SUBMIT_START'; errors: FieldErrors<T> }
+  | { type: 'SUBMIT_END' }
+  | { type: 'RESET'; values: T };
 
-function formReducer<T extends Record<string, any>>(
+const hasErrors = (errors: object) => Object.keys(errors).length > 0;
+
+/** 한 필드의 검증 결과만 errors에 반영 */
+function withFieldError<T extends Record<string, unknown>>(
+  errors: FieldErrors<T>,
+  name: keyof T,
+  fieldError: FormFieldError | undefined,
+): FieldErrors<T> {
+  const next = { ...errors };
+  if (fieldError) next[name] = fieldError;
+  else delete next[name];
+  return next;
+}
+
+// 검증을 reducer 안에서 수행 → setValue/setTouched가 최신 state에 의존하지 않아 참조가 안정적
+export function formReducer<T extends Record<string, unknown>>(
   state: FormState<T>,
   action: FormAction<T>,
 ): FormState<T> {
   switch (action.type) {
     case 'SET_VALUE': {
-      const newValues = { ...state.values, [action.name]: action.value };
+      const values = { ...state.values, [action.name]: action.value };
+      const shouldValidate = state.touched[action.name] || state.isSubmitted;
+      const errors = shouldValidate
+        ? withFieldError(state.errors, action.name, action.validate(values)[action.name])
+        : state.errors;
+      return { ...state, values, errors, isDirty: true, isValid: !hasErrors(errors) };
+    }
+    case 'SET_TOUCHED': {
+      const fieldError = action.validate(state.values)[action.name];
+      const errors = withFieldError(state.errors, action.name, fieldError);
       return {
         ...state,
-        values: newValues,
-        isDirty: true,
+        touched: { ...state.touched, [action.name]: true },
+        errors,
+        isValid: !hasErrors(errors),
       };
     }
     case 'SET_ERROR':
@@ -49,30 +77,19 @@ function formReducer<T extends Record<string, any>>(
         isValid: false,
       };
     case 'CLEAR_ERROR': {
-      const newErrors = { ...state.errors };
-      delete newErrors[action.name];
-      const hasErrors = Object.keys(newErrors).length > 0;
-      return {
-        ...state,
-        errors: newErrors,
-        isValid: !hasErrors,
-      };
+      const errors = withFieldError(state.errors, action.name, undefined);
+      return { ...state, errors, isValid: !hasErrors(errors) };
     }
-    case 'SET_TOUCHED':
+    case 'SUBMIT_START':
       return {
         ...state,
-        touched: { ...state.touched, [action.name]: true },
+        errors: action.errors,
+        isValid: !hasErrors(action.errors),
+        isSubmitted: true,
+        isSubmitting: true,
       };
-    case 'SET_SUBMITTED':
-      return {
-        ...state,
-        isSubmitted: action.value,
-      };
-    case 'SET_SUBMITTING':
-      return {
-        ...state,
-        isSubmitting: action.value,
-      };
+    case 'SUBMIT_END':
+      return { ...state, isSubmitting: false };
     case 'RESET':
       return {
         values: action.values,
@@ -83,26 +100,37 @@ function formReducer<T extends Record<string, any>>(
         isValid: false,
         isSubmitting: false,
       };
-    case 'SET_ERRORS': {
-      const hasErrors = Object.keys(action.errors).length > 0;
-      return {
-        ...state,
-        errors: action.errors,
-        isValid: !hasErrors,
-      };
-    }
     default:
       return state;
   }
 }
 
-export interface UseFormOptions<T extends Record<string, any>> {
+export function validateValues<T extends Record<string, unknown>>(
+  schema: z.ZodType<T> | undefined,
+  values: T,
+): FieldErrors<T> {
+  if (!schema) return {};
+  const result = schema.safeParse(values);
+  if (result.success) return {};
+
+  const errors: FieldErrors<T> = {};
+  for (const issue of result.error.issues) {
+    const fieldName = issue.path[0] as keyof T | undefined;
+    if (fieldName !== undefined && !errors[fieldName]) {
+      errors[fieldName] = { message: issue.message, type: issue.code };
+    }
+  }
+  return errors;
+}
+
+export interface UseFormOptions<T extends Record<string, unknown>> {
   initialValues: T;
-  validationSchema?: z.ZodSchema<T>;
+  validationSchema?: z.ZodType<T>;
   onSubmit?: (values: T) => Promise<void> | void;
 }
 
-export function useForm<T extends Record<string, any>>({
+// 메모이제이션은 React Compiler가 담당 (수동 useCallback/useMemo 없음)
+export function useForm<T extends Record<string, unknown>>({
   initialValues,
   validationSchema,
   onSubmit,
@@ -117,173 +145,57 @@ export function useForm<T extends Record<string, any>>({
     isSubmitting: false,
   });
 
-  // 공통 validation 로직
-  const parseZodErrors = useCallback(
-    (zodError: z.ZodError): Partial<Record<keyof T, FormFieldError>> => {
-      const errors: Partial<Record<keyof T, FormFieldError>> = {};
-      zodError.issues.forEach((issue) => {
-        const fieldName = issue.path[0] as keyof T;
-        if (fieldName) {
-          errors[fieldName] = { message: issue.message, type: issue.code };
-        }
-      });
-      return errors;
-    },
-    [],
-  );
+  const validate: Validate<T> = (values) => validateValues(validationSchema, values);
 
-  const validateWithValues = useCallback(
-    (values: T): { isValid: boolean; errors: Partial<Record<keyof T, FormFieldError>> } => {
-      if (!validationSchema) return { isValid: true, errors: {} };
+  const setValue = <K extends keyof T>(name: K, value: T[K]) => {
+    dispatch({ type: 'SET_VALUE', name, value, validate });
+  };
 
-      try {
-        validationSchema.parse(values);
-        return { isValid: true, errors: {} };
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          return { isValid: false, errors: parseZodErrors(error) };
-        }
-        return { isValid: false, errors: {} };
-      }
-    },
-    [validationSchema, parseZodErrors],
-  );
+  const setTouched = <K extends keyof T>(name: K) => {
+    dispatch({ type: 'SET_TOUCHED', name, validate });
+  };
 
-  const validateField = useCallback(
-    <K extends keyof T>(name: K, value: T[K]) => {
-      const updatedValues = { ...state.values, [name]: value };
-      const { errors } = validateWithValues(updatedValues);
+  const setError = <K extends keyof T>(name: K, error: FormFieldError) => {
+    dispatch({ type: 'SET_ERROR', name, error });
+  };
 
-      const fieldError = errors[name];
-      if (fieldError) {
-        dispatch({ type: 'SET_ERROR', name, error: fieldError });
-      } else {
-        dispatch({ type: 'CLEAR_ERROR', name });
-      }
-    },
-    [state.values, validateWithValues],
-  );
+  const clearError = <K extends keyof T>(name: K) => {
+    dispatch({ type: 'CLEAR_ERROR', name });
+  };
 
-  const validateAllFields = useCallback(() => {
-    const { isValid, errors } = validateWithValues(state.values);
-    dispatch({ type: 'SET_ERRORS', errors });
-    return isValid;
-  }, [state.values, validateWithValues]);
-
-  const setValue = useCallback(
-    <K extends keyof T>(name: K, value: T[K]) => {
-      dispatch({ type: 'SET_VALUE', name, value });
-      if (state.touched[name] || state.isSubmitted) {
-        validateField(name, value);
-      }
-    },
-    [state.touched, state.isSubmitted, validateField],
-  );
-
-  const setTouched = useCallback(
-    <K extends keyof T>(name: K) => {
-      dispatch({ type: 'SET_TOUCHED', name });
-      validateField(name, state.values[name]);
-    },
-    [state.values, validateField],
-  );
-
-  const onValueChange = useCallback(
-    <K extends keyof T>(event: { target: { name: K; value: T[K] } }) => {
-      const { name, value } = event.target;
-      setValue(name, value);
-    },
-    [setValue],
-  );
-
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (!onSubmit) return;
 
-    dispatch({ type: 'SET_SUBMITTED', value: true });
-    dispatch({ type: 'SET_SUBMITTING', value: true });
+    const errors = validate(state.values);
+    dispatch({ type: 'SUBMIT_START', errors });
 
-    try {
-      const isValid = validateAllFields();
-      if (isValid) {
-        await onSubmit(state.values);
-      }
-    } catch (error) {
-      Logger.error('Form submission error:', error);
-    } finally {
-      dispatch({ type: 'SET_SUBMITTING', value: false });
+    if (!hasErrors(errors)) {
+      await Promise.resolve()
+        .then(() => onSubmit(state.values))
+        .catch((error: unknown) => Logger.error('Form submission error:', error));
     }
-  }, [onSubmit, state.values, validateAllFields]);
+    dispatch({ type: 'SUBMIT_END' });
+  };
 
-  const reset = useCallback(
-    (values?: T) => {
-      const resetValues = values || initialValues;
-      dispatch({ type: 'RESET', values: resetValues });
-    },
-    [initialValues],
-  );
+  const reset = (values?: T) => {
+    dispatch({ type: 'RESET', values: values || initialValues });
+  };
 
-  const getFieldProps = useCallback(
-    <K extends keyof T>(name: K) => {
-      return {
-        name: name as string,
-        value: state.values[name],
-        error: state.errors[name],
-        touched: state.touched[name],
-        onChangeText: (value: T[K]) => setValue(name, value),
-        onBlur: () => setTouched(name),
-      };
-    },
-    [state.values, state.errors, state.touched, setValue, setTouched],
-  );
+  const shouldShowError = <K extends keyof T>(name: K) =>
+    !!(state.errors[name] && (state.touched[name] || state.isSubmitted));
 
-  const shouldShowError = useCallback(
-    <K extends keyof T>(name: K) => {
-      return !!(state.errors[name] && (state.touched[name] || state.isSubmitted));
-    },
-    [state.errors, state.touched, state.isSubmitted],
-  );
+  // 실시간 유효성 (에러 표시와는 별개)
+  const isValid = !hasErrors(validate(state.values));
 
-  const setError = useCallback(<K extends keyof T>(name: K, error: FormFieldError) => {
-    dispatch({ type: 'SET_ERROR', name, error });
-  }, []);
-
-  const clearError = useCallback(<K extends keyof T>(name: K) => {
-    dispatch({ type: 'CLEAR_ERROR', name });
-  }, []);
-
-  // 실시간으로 isValid 계산 (에러 표시와는 별개)
-  const isValid = useMemo(() => {
-    return validateWithValues(state.values).isValid;
-  }, [validateWithValues, state.values]);
-
-  const formProps = useMemo(
-    () => ({
-      ...state,
-      isValid,
-      setValue,
-      setTouched,
-      setError,
-      clearError,
-      onValueChange,
-      handleSubmit,
-      reset,
-      getFieldProps,
-      shouldShowError,
-    }),
-    [
-      state,
-      isValid,
-      setValue,
-      setTouched,
-      setError,
-      clearError,
-      onValueChange,
-      handleSubmit,
-      reset,
-      getFieldProps,
-      shouldShowError,
-    ],
-  );
-
-  return formProps;
+  return {
+    ...state,
+    isValid,
+    setValue,
+    setTouched,
+    setError,
+    clearError,
+    handleSubmit,
+    reset,
+    shouldShowError,
+  };
 }
