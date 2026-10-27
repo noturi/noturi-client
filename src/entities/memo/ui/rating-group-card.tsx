@@ -2,7 +2,7 @@ import { ChevronDown } from '~/shared/lib/icons';
 import { Card, RatingStars, Skeleton, Typography } from '~/shared/ui';
 
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Dimensions, Pressable, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -15,6 +15,13 @@ import type { RatingGroupData, UIMemo } from '../model/types';
 interface RatingGroupCardProps {
   group: RatingGroupData;
   isExpanded: boolean;
+  /**
+   * 목록 끝 센티넬 View. 펼쳐져 있고 다음 페이지가 있을 때만 렌더되며, 사라지면 null로 호출된다.
+   * 이 컴포넌트는 페이지를 직접 불러오지 않는다 — 스크롤 소유자가 위치를 재서 결정한다.
+   */
+  endSentinelRef?: (node: View | null) => void;
+  /** 센티넬 레이아웃 변경 (마운트, 메모 추가로 위치 이동) */
+  onEndSentinelLayout?: () => void;
   onToggle: () => void;
   onMemoPress?: (memo: UIMemo) => void;
 }
@@ -23,9 +30,6 @@ const TIMING_CONFIG = {
   duration: 250,
   easing: Easing.bezier(0, 0, 0.2, 1),
 };
-
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SENTINEL_THRESHOLD = 200;
 
 export function RatingGroupCardSkeleton() {
   return (
@@ -50,6 +54,8 @@ export function RatingGroupCardSkeleton() {
 export function RatingGroupCard({
   group,
   isExpanded,
+  endSentinelRef,
+  onEndSentinelLayout,
   onToggle,
   onMemoPress,
 }: RatingGroupCardProps) {
@@ -57,7 +63,6 @@ export function RatingGroupCard({
   const [isMeasured, setIsMeasured] = useState(false);
   const prevMemoCountRef = useRef(group.memos.length);
   const prevExpanded = useRef(isExpanded);
-  const sentinelRef = useRef<View>(null);
 
   const rotation = useSharedValue(isExpanded ? 180 : 0);
   const height = useSharedValue(isExpanded ? 1 : 0);
@@ -68,7 +73,7 @@ export function RatingGroupCard({
     if (prevMemoCountRef.current !== group.memos.length) {
       prevMemoCountRef.current = group.memos.length;
       setIsMeasured(false);
-      contentHeight.value = 0;
+      contentHeight.set(0);
     }
   }, [group.memos.length, contentHeight]);
 
@@ -76,45 +81,31 @@ export function RatingGroupCard({
   useEffect(() => {
     if (prevExpanded.current !== isExpanded) {
       prevExpanded.current = isExpanded;
-      rotation.value = withTiming(isExpanded ? 180 : 0, TIMING_CONFIG);
-      height.value = withTiming(isExpanded ? 1 : 0, TIMING_CONFIG);
-      opacity.value = withTiming(isExpanded ? 1 : 0, {
-        duration: 200,
-        easing: TIMING_CONFIG.easing,
-      });
+      rotation.set(withTiming(isExpanded ? 180 : 0, TIMING_CONFIG));
+      height.set(withTiming(isExpanded ? 1 : 0, TIMING_CONFIG));
+      opacity.set(
+        withTiming(isExpanded ? 1 : 0, {
+          duration: 200,
+          easing: TIMING_CONFIG.easing,
+        }),
+      );
     }
   }, [isExpanded, rotation, height, opacity]);
 
-  // 센티넬이 화면에 보이는지 주기적으로 확인하여 무한스크롤 트리거
-  useEffect(() => {
-    if (!group.hasNextPage || group.isFetchingNextPage || !isExpanded) return;
-
-    const interval = setInterval(() => {
-      sentinelRef.current?.measureInWindow((_x: number, y: number) => {
-        if (y > 0 && y < SCREEN_HEIGHT + SENTINEL_THRESHOLD) {
-          group.fetchNextPage();
-        }
-      });
-    }, 300);
-
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [group.hasNextPage, group.isFetchingNextPage, isExpanded, group.fetchNextPage]);
-
   const chevronStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value}deg` }],
+    transform: [{ rotate: `${rotation.get()}deg` }],
   }));
 
   const contentStyle = useAnimatedStyle(() => ({
-    height: contentHeight.value > 0 ? height.value * contentHeight.value : 0,
-    opacity: opacity.value,
+    height: contentHeight.get() > 0 ? height.get() * contentHeight.get() : 0,
+    opacity: opacity.get(),
     overflow: 'hidden' as const,
   }));
 
   const handleLayout = (e: { nativeEvent: { layout: { height: number } } }) => {
     const measuredHeight = e.nativeEvent.layout.height;
     if (measuredHeight > 0) {
-      contentHeight.value = measuredHeight;
+      contentHeight.set(measuredHeight);
       if (!isMeasured) setIsMeasured(true);
     }
   };
@@ -139,7 +130,9 @@ export function RatingGroupCard({
             <ActivityIndicator size="small" />
           </View>
         )}
-        {group.hasNextPage && <View ref={sentinelRef} />}
+        {isExpanded && group.hasNextPage && (
+          <View ref={endSentinelRef} collapsable={false} onLayout={onEndSentinelLayout} />
+        )}
       </View>
     </>
   );
