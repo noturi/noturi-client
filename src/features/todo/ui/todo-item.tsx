@@ -52,16 +52,19 @@ export function TodoItem({ todo, readonly = false }: TodoItemProps) {
       enabled={isSwipeEnabled}
       friction={2}
       overshootRight={false}
-      renderRightActions={() => <TodoSwipeActions onDelete={handleDelete} onEdit={handleEdit} />}
+      // 스와이프가 꺼진 항목(과거 날짜·편집 중)은 버튼을 아예 렌더링하지 않음
+      renderRightActions={
+        isSwipeEnabled
+          ? () => <TodoSwipeActions onDelete={handleDelete} onEdit={handleEdit} />
+          : undefined
+      }
       rightThreshold={40}
       onSwipeableClose={handleSwipeClose}
       onSwipeableWillOpen={handleSwipeOpen}
     >
-      <View>
-        <View
-          className="flex-row items-center gap-3 rounded-3 bg-surface px-3 py-3"
-          style={{ opacity: itemOpacity }}
-        >
+      {/* 배경은 불투명 유지 — 투명도를 배경까지 주면 뒤에 깔린 스와이프 버튼이 비쳐 보임 */}
+      <View className="rounded-3 bg-surface">
+        <View className="flex-row items-center gap-3 px-3 py-3" style={{ opacity: itemOpacity }}>
           <Pressable
             disabled={isInteractionDisabled}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
