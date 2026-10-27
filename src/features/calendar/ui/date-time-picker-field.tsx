@@ -4,13 +4,12 @@ import { formatDate, formatTime } from '~/shared/lib/format';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { Typography } from '~/shared/ui';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Platform, Pressable, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
-export type PickerType = 'date' | 'time' | null;
-export type ActivePicker = 'start-date' | 'start-time' | 'end-date' | 'end-time' | null;
+import type { PickerType } from '../model';
 
 interface DateTimePickerFieldProps {
   label: string;
@@ -40,7 +39,7 @@ export function DateTimePickerField({
   const setPicker = isControlled ? onPickerChange : setInternalPicker;
 
   const { hexColors } = useUserTheme();
-  const calendarTheme = useMemo(() => createCalendarTheme(hexColors), [hexColors]);
+  const calendarTheme = createCalendarTheme(hexColors);
 
   const handleDatePress = () => {
     setPicker(currentPicker === 'date' ? null : 'date');
