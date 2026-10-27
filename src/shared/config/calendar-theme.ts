@@ -1,4 +1,6 @@
-import type { HexColors } from '~/shared/config/theme';
+import { SCHEDULE_DENSITY_COLORS } from './colors';
+import type { HexColors } from './theme';
+import { FONT_SIZE } from './tokens';
 
 // 캘린더 테마 생성 함수
 export function createCalendarTheme(hexColors: HexColors) {
@@ -20,18 +22,18 @@ export function createCalendarTheme(hexColors: HexColors) {
     textDayFontWeight: '500' as const,
     textMonthFontWeight: '600' as const,
     textDayHeaderFontWeight: '500' as const,
-    textDayFontSize: 16,
-    textMonthFontSize: 18,
-    textDayHeaderFontSize: 14,
+    textDayFontSize: FONT_SIZE[4],
+    textMonthFontSize: FONT_SIZE[5],
+    textDayHeaderFontSize: FONT_SIZE[3],
   };
 }
 
 export function createCalendarColors(hexColors: HexColors) {
   return {
     SELECTION: hexColors.primary,
-    SCHEDULE_LIGHT: '#007AFF', // 1개 일정 (여유)
-    SCHEDULE_MODERATE: '#FFC107', // 2개 일정 (보통)
-    SCHEDULE_BUSY: '#FF9800', // 3개 일정 (바쁨)
-    SCHEDULE_OVERLOAD: '#FF5722', // 4개+ 일정 (과부하)
+    SCHEDULE_LIGHT: SCHEDULE_DENSITY_COLORS.LIGHT,
+    SCHEDULE_MODERATE: SCHEDULE_DENSITY_COLORS.MODERATE,
+    SCHEDULE_BUSY: SCHEDULE_DENSITY_COLORS.BUSY,
+    SCHEDULE_OVERLOAD: SCHEDULE_DENSITY_COLORS.OVERLOAD,
   } as const;
 }
