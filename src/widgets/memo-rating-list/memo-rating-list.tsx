@@ -98,16 +98,24 @@ export function MemoRatingList({
           />
         );
       case 'memo':
-        if (!onMemoEdit || !onMemoDelete) {
-          return <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />;
-        }
         return (
-          <MemoContextMenu
-            onDelete={() => onMemoDelete(row.memo)}
-            onEdit={() => onMemoEdit(row.memo)}
-          >
-            <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />
-          </MemoContextMenu>
+          <RatingGroupMemoRow
+            memo={row.memo}
+            // 메뉴는 제목만 감쌈 — 행 전체를 감싸면 네이티브 Host가 내용 폭으로 줄어 카드 배경이 끊김
+            wrapTitle={
+              onMemoEdit && onMemoDelete
+                ? (title) => (
+                    <MemoContextMenu
+                      onDelete={() => onMemoDelete(row.memo)}
+                      onEdit={() => onMemoEdit(row.memo)}
+                    >
+                      {title}
+                    </MemoContextMenu>
+                  )
+                : undefined
+            }
+            onPress={onMemoPress}
+          />
         );
       case 'footer':
         return <RatingGroupFooterRow isFetchingNextPage={row.isFetchingNextPage} />;

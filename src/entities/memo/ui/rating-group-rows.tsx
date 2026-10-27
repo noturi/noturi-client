@@ -3,7 +3,7 @@ import { EASING } from '~/shared/lib';
 import { ChevronDown } from '~/shared/lib/icons';
 import { Card, RatingStars, Skeleton, Typography } from '~/shared/ui';
 
-import { useEffect, useRef } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -85,18 +85,23 @@ export function RatingGroupHeaderRow({
 interface RatingGroupMemoRowProps {
   memo: UIMemo;
   onPress: (memo: UIMemo) => void;
+  /**
+   * 제목(누르는 영역)을 감쌀 래퍼 — 예: 길게 누르기 메뉴.
+   * 카드 배경 전체가 아닌 제목만 감싸야 배경 너비가 유지됨
+   */
+  wrapTitle?: (title: ReactNode) => ReactNode;
 }
 
-export function RatingGroupMemoRow({ memo, onPress }: RatingGroupMemoRowProps) {
-  return (
-    <View className="bg-surface px-6">
-      <Pressable className="self-start py-1 active:opacity-70" onPress={() => onPress(memo)}>
-        <Typography className="text-text-primary" variant="callout">
-          {memo.title}
-        </Typography>
-      </Pressable>
-    </View>
+export function RatingGroupMemoRow({ memo, onPress, wrapTitle }: RatingGroupMemoRowProps) {
+  const title = (
+    <Pressable className="self-start py-1 active:opacity-70" onPress={() => onPress(memo)}>
+      <Typography className="text-text-primary" variant="callout">
+        {memo.title}
+      </Typography>
+    </Pressable>
   );
+
+  return <View className="flex-row bg-surface px-6">{wrapTitle ? wrapTitle(title) : title}</View>;
 }
 
 interface RatingGroupFooterRowProps {
