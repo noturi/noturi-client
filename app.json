@@ -15,7 +15,14 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "appleTeamId": "3JAT5MMB44"
+      "appleTeamId": "3JAT5MMB44",
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "ko",
+        "CFBundleAllowMixedLocalizations": true
+      }
+    },
+    "locales": {
+      "ko": "./locales/ko.json"
     },
     "android": {
       "adaptiveIcon": {
@@ -47,7 +54,7 @@
         "expo-secure-store",
         {
           "configureAndroidBackup": true,
-          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+          "faceIDPermission": "Noturi가 Face ID로 저장된 정보를 보호하도록 허용합니다."
         }
       ],
       [
@@ -56,7 +63,9 @@
           "iosUrlScheme": "com.googleusercontent.apps.1037765933934-3v8f0acqqjkk2mtv4hsaqfpvvr2c8bsc"
         }
       ],
-      ["expo-apple-authentication"],
+      [
+        "expo-apple-authentication"
+      ],
       "expo-font",
       "@react-native-community/datetimepicker",
       [
@@ -104,8 +113,12 @@
                   "targetName": "NoturiWidget",
                   "bundleIdentifier": "com.noturi.app.widget",
                   "entitlements": {
-                    "com.apple.security.application-groups": ["group.com.noturi.app"],
-                    "keychain-access-groups": ["$(AppIdentifierPrefix)com.noturi.app.shared"]
+                    "com.apple.security.application-groups": [
+                      "group.com.noturi.app"
+                    ],
+                    "keychain-access-groups": [
+                      "$(AppIdentifierPrefix)com.noturi.app.shared"
+                    ]
                   }
                 }
               ]

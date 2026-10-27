@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Noturi",
+    "NSFaceIDUsageDescription": "Noturi가 Face ID로 저장된 정보를 보호하도록 허용합니다."
+  }
+}
