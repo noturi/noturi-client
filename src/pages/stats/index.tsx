@@ -10,7 +10,7 @@ import {
   todoOverviewStatsQuery,
   todoWeeklyStatsQuery,
 } from '~/entities/todo';
-import { Card, Loading, SegmentControl, Typography } from '~/shared/ui';
+import { Loading, SegmentControl, StatCard, Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -101,19 +101,12 @@ export function StatsPage() {
           <>
             {overviewStats && weeklyStats && (
               <View className="flex-row gap-4">
-                <Card>
-                  <View className="flex-row items-center flex-1 gap-2 px-2">
-                    <Typography variant="footnote">최다 연속</Typography>
-                    <Typography variant="number">{overviewStats.bestStreak}일</Typography>
-                  </View>
-                </Card>
-
-                <Card>
-                  <View className="flex-row items-center flex-1 gap-2 px-2">
-                    <Typography variant="footnote">이번 주 달성률</Typography>
-                    <Typography variant="number">{weeklyStats.rate}%</Typography>
-                  </View>
-                </Card>
+                <StatCard label="최다 연속">
+                  <Typography variant="number">{overviewStats.bestStreak}일</Typography>
+                </StatCard>
+                <StatCard label="이번 주 달성률">
+                  <Typography variant="number">{weeklyStats.rate}%</Typography>
+                </StatCard>
               </View>
             )}
 

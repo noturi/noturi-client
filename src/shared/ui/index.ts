@@ -17,6 +17,7 @@ export * from './segment-control';
 export * from './select';
 export * from './skeleton';
 export * from './star-rating';
+export * from './stat-card';
 export * from './submit-button';
 export * from './sheet';
 export * from './switch';
