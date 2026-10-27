@@ -1,8 +1,11 @@
 import SwiftUI
 import WidgetKit
 
-struct TodoWidgetMediumView: View {
+/// 할 일 목록 위젯 (중형·대형) — 행을 탭하면 위젯 안에서 바로 완료 처리 (iOS 17+)
+struct TodoWidgetListView: View {
     let entry: TodoEntry
+    /// 표시할 최대 개수 — 중형 4, 대형 10
+    let maxCount: Int
 
     private var displayDate: String {
         guard !entry.isPlaceholder else { return "3월 28일" }
@@ -15,7 +18,7 @@ struct TodoWidgetMediumView: View {
 
     private var displayTodos: [TodoItem] {
         let sorted = entry.todos.sorted { !$0.isCompleted && $1.isCompleted }
-        return Array(sorted.prefix(4))
+        return Array(sorted.prefix(maxCount))
     }
 
     var body: some View {
@@ -76,8 +79,8 @@ struct TodoWidgetMediumView: View {
                         }
                     }
                 }
-                if entry.totalCount > 4 {
-                    Text("+\(entry.totalCount - 4)개 더")
+                if entry.totalCount > maxCount {
+                    Text("+\(entry.totalCount - maxCount)개 더")
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                 }
@@ -103,5 +106,17 @@ struct TodoWidgetMediumView: View {
             Spacer()
         }
         .contentShape(Rectangle())
+        .modifier(PendingWhileToggling())
+    }
+}
+
+/// 탭 후 서버 반영 전까지 행을 흐리게 표시 (iOS 17+)
+private struct PendingWhileToggling: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.invalidatableContent()
+        } else {
+            content
+        }
     }
 }

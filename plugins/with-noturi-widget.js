@@ -19,7 +19,8 @@ const WIDGET_SWIFT_FILES = [
   'SharedKeychain.swift',
   'TodoWidgetService.swift',
   'TodoWidgetSmallView.swift',
-  'TodoWidgetMediumView.swift',
+  'TodoWidgetListView.swift',
+  'TodoWidgetAccessoryViews.swift',
   'ToggleTodoIntent.swift',
 ];
 

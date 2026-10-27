@@ -9,8 +9,11 @@ struct NoturiTodoWidget: Widget {
             NoturiWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Noturi 투두")
-        .description("오늘의 할 일 목록과 완료율을 확인하세요.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .description("오늘의 할 일을 확인하고 바로 체크하세요.")
+        .supportedFamilies([
+            .systemSmall, .systemMedium, .systemLarge,
+            .accessoryCircular, .accessoryRectangular, .accessoryInline,
+        ])
     }
 }
 
@@ -19,14 +22,22 @@ struct NoturiWidgetEntryView: View {
     let entry: TodoEntry
 
     var body: some View {
-        if entry.needsLogin {
-            SignedOutView()
-        } else {
-            switch family {
-            case .systemSmall:
-                TodoWidgetSmallView(entry: entry)
-            default:
-                TodoWidgetMediumView(entry: entry)
+        switch family {
+        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+            // 잠금화면은 공간이 작아 로그인 안내도 자체 처리
+            TodoWidgetAccessoryView(entry: entry)
+        default:
+            if entry.needsLogin {
+                SignedOutView()
+            } else {
+                switch family {
+                case .systemSmall:
+                    TodoWidgetSmallView(entry: entry)
+                case .systemLarge:
+                    TodoWidgetListView(entry: entry, maxCount: 10)
+                default:
+                    TodoWidgetListView(entry: entry, maxCount: 4)
+                }
             }
         }
     }
