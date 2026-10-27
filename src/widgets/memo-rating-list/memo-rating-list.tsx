@@ -1,32 +1,38 @@
+import { FlashList, type FlashListRef, type ViewToken } from '@shopify/flash-list';
 import type { UICategory } from '~/entities/category';
-import { CategoryFilterBar, MemoRatingGroupView } from '~/entities/memo';
-import type { RatingGroupData } from '~/entities/memo';
+import {
+  CategoryFilterBar,
+  RatingGroupCardSkeleton,
+  RatingGroupFooterRow,
+  RatingGroupHeaderRow,
+  RatingGroupMemoRow,
+  type UIMemo,
+} from '~/entities/memo';
+import { Typography } from '~/shared/ui';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
-import { useRef } from 'react';
-import {
-  type LayoutChangeEvent,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-  ScrollView,
-  View,
-} from 'react-native';
+import { useRef, useState } from 'react';
+import { LayoutAnimation, View } from 'react-native';
 
-import { router } from 'expo-router';
+import { buildMemoRatingRows, selectGroupsToFetch } from './memo-rating-rows';
+import type { MemoRatingRow, RatingGroup } from './types';
 
-import { type ScrollViewport, isSentinelInViewport } from './is-sentinel-in-viewport';
-
-/** 센티넬이 뷰포트 하단에서 이 거리(px) 안에 들어오면 다음 페이지를 요청 */
-const PAGINATION_THRESHOLD = 200;
-/** onScroll 이벤트 간격(ms) — 판정 범위(뷰포트 + threshold)가 넓어 100ms면 충분 */
-const SCROLL_EVENT_THROTTLE = 100;
+/** 행이 1px이라도 보이면 viewable — 끝 근처 메모 행이 화면에 들어오는 즉시 미리 요청 */
+const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 0 };
+/** 펼침/접힘: 기존 카드 높이 애니메이션(250ms, ease-out)과 비슷한 길이 */
+const TOGGLE_LAYOUT_ANIMATION = LayoutAnimation.create(
+  250,
+  LayoutAnimation.Types.easeOut,
+  LayoutAnimation.Properties.opacity,
+);
 
 interface MemoRatingListProps {
-  ratingGroups: RatingGroupData[];
+  ratingGroups: RatingGroup[];
   categories: UICategory[];
   selectedYear?: number;
   onCategoryChange: (category: string) => void;
   onPressYear: () => void;
+  onMemoPress: (memo: UIMemo) => void;
 }
 
 export function MemoRatingList({
@@ -35,68 +41,91 @@ export function MemoRatingList({
   selectedYear,
   onCategoryChange,
   onPressYear,
+  onMemoPress,
 }: MemoRatingListProps) {
-  // 스크롤 컨텐츠 루트 — 센티넬 위치를 이 뷰 기준(컨텐츠 좌표)으로 측정한다
-  const contentRef = useRef<View>(null);
-  // 펼쳐져 있고 다음 페이지가 있는 그룹의 끝 센티넬 (rating → View)
-  const sentinelsRef = useRef(new Map<number, View>());
-  const viewportRef = useRef<ScrollViewport>({ offsetY: 0, height: 0 });
+  const listRef = useRef<FlashListRef<MemoRatingRow>>(null);
+  // 그룹은 기본 펼침 — 사용자가 접은 그룹만 기록한다
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<number, boolean>>({});
 
-  // 스크롤/레이아웃 이벤트에서만 호출 — 타이머 없음
-  const loadVisibleGroups = () => {
-    const content = contentRef.current;
-    if (!content) return;
+  const rows = buildMemoRatingRows(ratingGroups, collapsedGroups);
 
-    for (const group of ratingGroups) {
-      if (!group.hasNextPage || group.isFetchingNextPage) continue;
-      const sentinel = sentinelsRef.current.get(group.rating);
-      if (!sentinel) continue;
-
-      // 매번 재측정: 위쪽 그룹의 펼침/접힘 애니메이션으로 위치가 바뀌어도 캐시가 낡지 않는다
-      sentinel.measureLayout(content, (_x, y) => {
-        if (isSentinelInViewport(y, viewportRef.current, PAGINATION_THRESHOLD)) {
-          group.fetchNextPage();
-        }
-      });
+  const fetchGroups = (visibleRows: MemoRatingRow[]) => {
+    for (const group of selectGroupsToFetch(visibleRows, ratingGroups)) {
+      group.fetchNextPage();
     }
   };
 
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { contentOffset, layoutMeasurement } = e.nativeEvent;
-    viewportRef.current = { offsetY: contentOffset.y, height: layoutMeasurement.height };
-    loadVisibleGroups();
+  const handleViewableItemsChanged = ({
+    viewableItems,
+  }: {
+    viewableItems: ViewToken<MemoRatingRow>[];
+  }) => {
+    fetchGroups(viewableItems.flatMap((token) => (token.item ? [token.item] : [])));
   };
 
-  const handleLayout = (e: LayoutChangeEvent) => {
-    viewportRef.current = { ...viewportRef.current, height: e.nativeEvent.layout.height };
-    loadVisibleGroups();
+  // 안전망: 마지막 카드가 펼쳐져 있으면 끝(footer) 근처에서 다음 페이지 요청
+  const handleEndReached = () => {
+    const lastRow = rows.at(-1);
+    if (lastRow) fetchGroups([lastRow]);
   };
 
-  const registerSentinel = (rating: number, node: View | null) => {
-    if (node) sentinelsRef.current.set(rating, node);
-    else sentinelsRef.current.delete(rating);
+  const handleToggle = (rating: number) => {
+    // 행이 추가/제거되는 다음 커밋을 LayoutAnimation으로 보간 — 재활용을 끄지 않으면
+    // 셀이 다른 행으로 바뀌며 엉뚱한 위치에서 애니메이션된다 (레이아웃 커밋 후 자동 복구)
+    listRef.current?.prepareForLayoutAnimationRender();
+    LayoutAnimation.configureNext(TOGGLE_LAYOUT_ANIMATION);
+    setCollapsedGroups((prev) => ({ ...prev, [rating]: !prev[rating] }));
+  };
+
+  const renderRow = (row: MemoRatingRow) => {
+    switch (row.type) {
+      case 'skeleton':
+        return <RatingGroupCardSkeleton />;
+      case 'header':
+        return (
+          <RatingGroupHeaderRow
+            isExpanded={row.isExpanded}
+            rating={row.rating}
+            total={row.total}
+            onToggle={() => handleToggle(row.rating)}
+          />
+        );
+      case 'memo':
+        return <RatingGroupMemoRow memo={row.memo} onPress={onMemoPress} />;
+      case 'footer':
+        return <RatingGroupFooterRow isFetchingNextPage={row.isFetchingNextPage} />;
+    }
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: 200 }}
-      scrollEventThrottle={SCROLL_EVENT_THROTTLE}
+    <FlashList
+      ref={listRef}
+      contentContainerStyle={{ paddingBottom: 220 }}
+      data={rows}
+      getItemType={(row) => row.type}
+      keyExtractor={(row) => row.key}
+      ListEmptyComponent={
+        <View className="flex-1 items-center justify-center">
+          <Typography className="text-text-muted" variant="callout">
+            작성된 메모가 없습니다
+          </Typography>
+        </View>
+      }
+      ListHeaderComponent={
+        <View className="gap-6 pb-3">
+          <CategoryFilterBar categories={categories} onPress={onCategoryChange} />
+          {rows.length > 0 && (
+            <MemoListHeader selectedYear={selectedYear} onPressYear={onPressYear} />
+          )}
+        </View>
+      }
+      renderItem={({ item }) => (
+        <View className={item.gapBefore ? 'pt-4' : undefined}>{renderRow(item)}</View>
+      )}
       showsVerticalScrollIndicator={false}
-      style={{ flex: 1 }}
-      onContentSizeChange={loadVisibleGroups}
-      onLayout={handleLayout}
-      onScroll={handleScroll}
-    >
-      <View ref={contentRef} className="gap-6" collapsable={false}>
-        <CategoryFilterBar categories={categories} onPress={onCategoryChange} />
-        <MemoRatingGroupView
-          endSentinelRef={registerSentinel}
-          header={<MemoListHeader selectedYear={selectedYear} onPressYear={onPressYear} />}
-          ratingGroups={ratingGroups}
-          onEndSentinelLayout={loadVisibleGroups}
-          onMemoPress={(memo) => router.push(`/memo/${memo.id}`)}
-        />
-      </View>
-    </ScrollView>
+      viewabilityConfig={VIEWABILITY_CONFIG}
+      onEndReached={handleEndReached}
+      onViewableItemsChanged={handleViewableItemsChanged}
+    />
   );
 }
