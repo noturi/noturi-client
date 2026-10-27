@@ -44,6 +44,7 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
       ratingGroups={ratingGroups}
       selectedYear={year}
       onCategoryChange={onCategoryChange}
+      onMemoPress={(memo) => router.push(HREFS.memoDetail(memo.id))}
       onPressYear={onPressYear}
     />
   );

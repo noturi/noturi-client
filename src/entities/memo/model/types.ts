@@ -85,17 +85,6 @@ export interface MemoStatsDto {
   recentMemosCount: number;
 }
 
-// 별점 그룹 데이터 (서버 페이지네이션 기반)
-export interface RatingGroupData {
-  rating: number;
-  memos: UIMemo[];
-  total: number;
-  isLoading: boolean;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
-  fetchNextPage: () => void;
-}
-
 // UI 메모 타입 정의
 export interface UIMemo {
   id: string; // UUID 형태로 변경

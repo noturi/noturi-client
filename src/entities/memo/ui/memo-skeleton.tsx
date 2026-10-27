@@ -2,7 +2,7 @@ import { Card, Skeleton } from '~/shared/ui';
 
 import { View } from 'react-native';
 
-import { RatingGroupCardSkeleton } from './rating-group-card';
+import { RatingGroupCardSkeleton } from './rating-group-rows';
 
 /**
  * 홈 메모 목록 로딩 스켈레톤

@@ -1,9 +1,5 @@
-import {
-  type MemoListParamsDto,
-  type RatingGroupData,
-  infiniteMemoListQuery,
-  toUIMemos,
-} from '~/entities/memo';
+import { type MemoListParamsDto, infiniteMemoListQuery, toUIMemos } from '~/entities/memo';
+import type { RatingGroup } from '~/widgets';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -25,10 +21,7 @@ function useRatingQuery(queryParams: Omit<MemoListParamsDto, 'page'>, rating: nu
   return useInfiniteQuery(infiniteMemoListQuery({ ...queryParams, ...RATING_FILTERS[rating] }));
 }
 
-function buildRatingGroup(
-  rating: number,
-  query: ReturnType<typeof useRatingQuery>,
-): RatingGroupData {
+function buildRatingGroup(rating: number, query: ReturnType<typeof useRatingQuery>): RatingGroup {
   const allMemos = query.data?.pages.flatMap((page) => page?.data || []) || [];
   const seen = new Set<string>();
   const memos = allMemos.filter((memo) => {
@@ -44,14 +37,14 @@ function buildRatingGroup(
     isLoading: query.isLoading,
     hasNextPage: query.hasNextPage ?? false,
     isFetchingNextPage: query.isFetchingNextPage,
-    // 스크롤 이벤트마다 호출될 수 있으므로 진행 중인 요청을 취소/재시작하지 않고 합류시킨다
+    // 뷰포트 변경(onViewableItemsChanged/onEndReached)마다 호출될 수 있으므로 진행 중인 요청을 취소/재시작하지 않고 합류시킨다
     fetchNextPage: () => {
       void query.fetchNextPage({ cancelRefetch: false });
     },
   };
 }
 
-export function useRatingGroups(queryParams: Omit<MemoListParamsDto, 'page'>): RatingGroupData[] {
+export function useRatingGroups(queryParams: Omit<MemoListParamsDto, 'page'>): RatingGroup[] {
   const r5 = useRatingQuery(queryParams, 5);
   const r4 = useRatingQuery(queryParams, 4);
   const r3 = useRatingQuery(queryParams, 3);
