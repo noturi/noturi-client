@@ -23,7 +23,7 @@
     "preset": "jest-expo",
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/.claude/"
+      "<rootDir>/.claude/"
     ]
   },
   "dependencies": {
