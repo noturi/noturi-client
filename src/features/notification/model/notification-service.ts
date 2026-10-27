@@ -139,6 +139,7 @@ class NotificationService {
         expoPushToken: token,
         deviceName,
         platform,
+        refreshOnly: true,
       });
 
       Logger.info('디바이스 토큰 silent 갱신 성공');

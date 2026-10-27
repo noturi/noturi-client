@@ -17,4 +17,6 @@ export interface RegisterDeviceDto {
   expoPushToken: string;
   deviceName: string;
   platform: DevicePlatform;
+  // 앱 실행 시 토큰 갱신용 — 서버가 알림이 꺼진 사용자를 다시 켜지 않음
+  refreshOnly?: boolean;
 }
