@@ -1,6 +1,6 @@
 import { useUserTheme } from '~/shared/lib/theme-context';
 
-import { createContext, forwardRef, useContext, useMemo } from 'react';
+import { type Ref, createContext, use, useMemo } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 import { PressableFeedback } from '../pressable-feedback';
@@ -25,10 +25,10 @@ const ButtonContext = createContext<ButtonContextValue>({
   isDisabled: false,
 });
 
-const useButton = () => useContext(ButtonContext);
+const useButton = () => use(ButtonContext);
 
 // Root Component
-const ButtonRoot = forwardRef<View, ButtonRootProps>((props, ref) => {
+const ButtonRoot = ({ ref, ...props }: ButtonRootProps & { ref?: Ref<View> }) => {
   const {
     children,
     variant = 'primary',
@@ -68,7 +68,7 @@ const ButtonRoot = forwardRef<View, ButtonRootProps>((props, ref) => {
   ];
 
   return (
-    <ButtonContext.Provider value={contextValue}>
+    <ButtonContext value={contextValue}>
       <PressableFeedback
         ref={ref}
         accessibilityRole={accessibilityRole}
@@ -95,12 +95,12 @@ const ButtonRoot = forwardRef<View, ButtonRootProps>((props, ref) => {
         )}
         {isLoading ? <ActivityIndicator color={variantStyles.text.color} size="small" /> : children}
       </PressableFeedback>
-    </ButtonContext.Provider>
+    </ButtonContext>
   );
-});
+};
 
 // Label Component
-const ButtonLabel = forwardRef<Text, ButtonLabelProps>((props, ref) => {
+const ButtonLabel = ({ ref, ...props }: ButtonLabelProps & { ref?: Ref<Text> }) => {
   const { children, className, style, ...restProps } = props;
   const { size, variant } = useButton();
   const { hexColors } = useUserTheme();
@@ -117,10 +117,10 @@ const ButtonLabel = forwardRef<Text, ButtonLabelProps>((props, ref) => {
       {children}
     </Text>
   );
-});
+};
 
 // Icon Component
-const ButtonIcon = forwardRef<View, ButtonIconProps>((props, ref) => {
+const ButtonIcon = ({ ref, ...props }: ButtonIconProps & { ref?: Ref<View> }) => {
   const { children, className, style, position = 'left', ...restProps } = props;
 
   return (
@@ -137,7 +137,7 @@ const ButtonIcon = forwardRef<View, ButtonIconProps>((props, ref) => {
       {children}
     </View>
   );
-});
+};
 
 ButtonRoot.displayName = 'Button';
 ButtonLabel.displayName = 'Button.Label';

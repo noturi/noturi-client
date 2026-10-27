@@ -1,6 +1,6 @@
 import { HexColors, ThemePreset } from '~/shared/config/theme';
 
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 // 색상 키 타입 정의 (useThemeColor 훅용)
 export type ThemeColorKey = keyof HexColors;
@@ -19,7 +19,7 @@ export interface ThemeContextValue {
 export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function useUserTheme() {
-  const context = useContext(ThemeContext);
+  const context = use(ThemeContext);
   if (!context) {
     throw new Error('useUserTheme must be used within ThemeProvider');
   }

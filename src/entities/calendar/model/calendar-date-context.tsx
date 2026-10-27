@@ -47,7 +47,5 @@ export function CalendarDateProvider({ children }: CalendarDateProviderProps) {
     [startDate, endDate, currentMonth],
   );
 
-  return (
-    <CalendarDateContext.Provider value={contextValue}>{children}</CalendarDateContext.Provider>
-  );
+  return <CalendarDateContext value={contextValue}>{children}</CalendarDateContext>;
 }

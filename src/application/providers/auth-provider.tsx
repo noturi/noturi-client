@@ -70,5 +70,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     clearError: authStore.clearError,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext value={value}>{children}</AuthContext>;
 };

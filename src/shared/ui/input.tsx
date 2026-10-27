@@ -1,6 +1,6 @@
 import { useUserTheme } from '~/shared/lib/theme-context';
 
-import { forwardRef, useState } from 'react';
+import { type Ref, useState } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
 type FocusEvent = Parameters<NonNullable<TextInputProps['onFocus']>>[0];
@@ -19,10 +19,16 @@ const sizeStyles = {
   lg: { height: 44, fontSize: 16 },
 };
 
-export const Input = forwardRef<TextInput, InputProps>(function Input(
-  { hasError = false, size = 'md', style, className, onFocus, onBlur, ...props },
+export function Input({
   ref,
-) {
+  hasError = false,
+  size = 'md',
+  style,
+  className,
+  onFocus,
+  onBlur,
+  ...props
+}: InputProps & { ref?: Ref<TextInput> }) {
   const { hexColors } = useUserTheme();
   const [isFocused, setIsFocused] = useState(false);
 
@@ -53,4 +59,4 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
       {...props}
     />
   );
-});
+}

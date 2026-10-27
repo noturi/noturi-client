@@ -109,10 +109,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   });
 
   return (
-    <ThemeContext.Provider value={contextValue}>
+    <ThemeContext value={contextValue}>
       <GestureHandlerRootView style={{ flex: 1, backgroundColor: hexColors.bgSecondary }}>
         <View style={[{ flex: 1 }, themeVars]}>{children}</View>
       </GestureHandlerRootView>
-    </ThemeContext.Provider>
+    </ThemeContext>
   );
 }

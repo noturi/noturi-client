@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useContext } from 'react';
+import { type Ref, createContext, use } from 'react';
 import { type GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
@@ -21,7 +21,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const PressableFeedbackContext = createContext<PressableFeedbackContextValue | null>(null);
 
 const usePressableFeedback = () => {
-  const context = useContext(PressableFeedbackContext);
+  const context = use(PressableFeedbackContext);
   if (!context) {
     throw new Error('PressableFeedback components must be used within PressableFeedback');
   }
@@ -29,7 +29,10 @@ const usePressableFeedback = () => {
 };
 
 // Root Component
-const PressableFeedbackRoot = forwardRef<View, PressableFeedbackRootProps>((props, ref) => {
+const PressableFeedbackRoot = ({
+  ref,
+  ...props
+}: PressableFeedbackRootProps & { ref?: Ref<View> }) => {
   const {
     children,
     className,
@@ -55,7 +58,7 @@ const PressableFeedbackRoot = forwardRef<View, PressableFeedbackRootProps>((prop
   };
 
   return (
-    <PressableFeedbackContext.Provider value={contextValue}>
+    <PressableFeedbackContext value={contextValue}>
       <AnimatedPressable
         ref={ref}
         className={className}
@@ -68,9 +71,9 @@ const PressableFeedbackRoot = forwardRef<View, PressableFeedbackRootProps>((prop
       >
         {children}
       </AnimatedPressable>
-    </PressableFeedbackContext.Provider>
+    </PressableFeedbackContext>
   );
-});
+};
 
 // Highlight Effect Component
 const PressableFeedbackHighlight = ({ animation, style }: PressableFeedbackHighlightProps) => {
