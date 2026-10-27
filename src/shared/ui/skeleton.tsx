@@ -1,3 +1,5 @@
+import { RADIUS } from '~/shared/config';
+
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -13,7 +15,12 @@ interface SkeletonProps {
   circle?: boolean;
 }
 
-export function Skeleton({ width = '100%', height = 16, borderRadius = 8, circle }: SkeletonProps) {
+export function Skeleton({
+  width = '100%',
+  height = 16,
+  borderRadius = RADIUS[4],
+  circle,
+}: SkeletonProps) {
   const opacity = useSharedValue(0.5);
 
   useEffect(() => {

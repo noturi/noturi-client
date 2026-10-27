@@ -1,3 +1,4 @@
+import { FALLBACK_CATEGORY_COLOR } from '~/shared/config';
 import { formatTimeAgo } from '~/shared/lib/format';
 
 import type { Memo, UIMemo } from '../model/types';
@@ -14,7 +15,7 @@ export function toUIMemos(backendMemos: Memo[] | undefined): UIMemo[] {
     category: memo.category || {
       id: 'default',
       name: '기타',
-      color: '#6b7280',
+      color: FALLBACK_CATEGORY_COLOR,
     },
     content: memo.content,
     rating: memo.rating,

@@ -18,6 +18,7 @@ function toLocalDateStr(d: Date): string {
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;
+const CELL_RADIUS = 3; // 14px 셀 전용 — RADIUS 스케일(2/4)에 없는 값
 
 // level(0~4)에 따른 opacity
 const LEVEL_OPACITY = [0, 0.25, 0.45, 0.7, 1.0];
@@ -126,7 +127,7 @@ export function GrassChart({ data }: GrassChartProps) {
                       style={{
                         width: CELL_SIZE,
                         height: CELL_SIZE,
-                        borderRadius: 3,
+                        borderRadius: CELL_RADIUS,
                         backgroundColor: accentColor + alphaHex(LEVEL_OPACITY[cell.level]),
                         borderWidth: isToday || isSelected ? 1 : 0,
                         borderColor: isToday
@@ -143,7 +144,7 @@ export function GrassChart({ data }: GrassChartProps) {
                     style={{
                       width: CELL_SIZE,
                       height: CELL_SIZE,
-                      borderRadius: 3,
+                      borderRadius: CELL_RADIUS,
                       backgroundColor: 'transparent',
                       borderWidth: 1,
                       borderColor: isToday ? textPrimaryColor : borderColor + '40',

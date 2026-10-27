@@ -1,3 +1,4 @@
+import { SHADOW_COLOR } from '~/shared/config';
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { useEffect } from 'react';
@@ -53,12 +54,12 @@ export function SegmentControl<T extends string>({
       top: INDICATOR_MARGIN,
       bottom: INDICATOR_MARGIN,
       width: sw - INDICATOR_MARGIN * 2,
-      borderRadius: 22,
+      borderRadius: 22, // 알약형 인디케이터 — RADIUS 스케일에 없는 전용 값
       borderWidth: 1,
       borderColor,
       backgroundColor: bgSecondaryColor,
       transform: [{ translateX: translateX.get() }],
-      shadowColor: '#000',
+      shadowColor: SHADOW_COLOR,
       shadowOffset: { width: 0, height: 0.5 },
       shadowOpacity: 0.08,
       shadowRadius: 1,

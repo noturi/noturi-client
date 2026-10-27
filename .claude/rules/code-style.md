@@ -50,7 +50,27 @@
 - 컴포넌트에 폼 상태·검증·저장 로직이 커지면 `model/use-*.ts` 훅으로 분리 (예: `useMemoForm`)
 - 정적 메서드만 있는 `*Service` 클래스 대신 순수 함수 (`lib/`) — 읽기 변환은 entities/{slice}/lib
 - 외부 라이브러리는 shared 파사드 경유: 토스트 `useToast`, 아이콘 `~/shared/lib/icons`
-- 색상 등 디자인 상수는 `shared/config` (예: `STAR_COLOR`) — 컴포넌트마다 하드코딩 금지
+- 색상·간격 등 디자인 값은 아래 '디자인 토큰' 규칙을 따른다 — 컴포넌트마다 하드코딩 금지
+
+## 디자인 토큰
+
+- **어디에 있나**
+  - 테마 색상: `shared/config/theme.ts` 프리셋(`colors`) → CSS 변수(`theme-provider`) → `tailwind.config.js` 색상
+  - 숫자 스케일: `tailwind.config.js`(`spacing` 0–11, `borderRadius` 0–8, `fontSize` 1–7) ↔ `shared/config/tokens.ts`
+    (`SPACING`/`RADIUS`/`FONT_SIZE`, 동기화는 `tokens.test.ts`가 검증)
+  - 테마 무관 고정 색상: `shared/config/colors.ts` (별점, 그림자, 일정 밀도 등). 브랜드/데이터 색상은 해당 파일의
+    명명된 상수 (`GOOGLE_LOGO_COLORS`, `CATEGORY_COLORS`)
+- **쓰는 순서**
+  1. className 우선 — `text-text-muted`, `bg-surface`, `p-5`, `rounded-5`, `text-4`
+  2. 아이콘(`~/shared/lib/icons`)도 className으로 색 지정 — `<Trash2 className="text-danger" />`
+  3. raw 값이 필요한 곳(placeholderTextColor, ActivityIndicator, SVG, reanimated 스타일, 서드파티 theme)만
+     `useThemeColor('textMuted')` / `useUserTheme().hexColors`, 숫자는 `SPACING[5]`·`RADIUS[5]`·`FONT_SIZE[4]`
+  4. 상수는 테마와 무관해야 하는 색상만 — 다크 모드에서 달라져야 하면 상수가 아니라 테마 토큰
+- **새 토큰**: 테마 색상은 `ThemePreset.colors`/`HexColors`/`convertColorsToHex`에 추가하고 **모든 프리셋**에 값 지정
+  (className으로 쓰려면 `theme-provider` vars + `tailwind.config.js` + `global.css` 기본값도 추가)
+- 스케일에 정확히 같은 값이 없으면 반올림하지 말고 값 그대로 두고 짧은 주석 (예: `rounded-[..]` 대신 `// 22px: 알약형`)
+- NativeWind에서 `rem`은 14px — `rounded-lg`·`text-sm` 같은 Tailwind 기본(rem) 클래스는 px 스케일과 다르다
+- ESLint가 UI 코드(`src/**/ui`, widgets, pages, app)의 hex 색상 리터럴을 막는다 (`no-restricted-syntax`)
 
 ## ESLint / Prettier
 

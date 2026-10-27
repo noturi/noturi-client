@@ -126,7 +126,7 @@ export const CalendarView = forwardRef<CalendarViewRef, CalendarViewProps>(
     return (
       <View className="flex-1 gap-4 pb-10 relative">
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 100 /* 스케일 외 값 */ }}
           showsVerticalScrollIndicator={false}
           style={{ flex: 1 }}
         >

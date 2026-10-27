@@ -1,3 +1,4 @@
+import { SHADOW_COLOR, SPACING } from '~/shared/config';
 import { ChevronDown } from '~/shared/lib/icons';
 
 import React, { useRef, useState } from 'react';
@@ -109,11 +110,12 @@ export function Select({
           style={[
             styles.dropdown,
             dropdownPosition === 'top'
-              ? { bottom: '100%', marginBottom: 4 }
-              : { top: '100%', marginTop: 4 },
+              ? { bottom: '100%', marginBottom: SPACING[2] }
+              : { top: '100%', marginTop: SPACING[2] },
           ]}
         >
           <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 200 }}>
+            {/* min-h 40px: 옵션 행 최소 높이 — 스케일(32/48)에 없는 값 */}
             {options.map((option) => (
               <Pressable
                 key={option.value}
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
   dropdown: {
     zIndex: 999999,
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: SHADOW_COLOR,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,

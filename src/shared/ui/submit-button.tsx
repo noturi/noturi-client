@@ -1,4 +1,6 @@
+import { SPACING } from '~/shared/config';
 import { useKeyboard } from '~/shared/lib';
+import { useThemeColor } from '~/shared/lib/theme-context';
 
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
@@ -28,6 +30,7 @@ export const SubmitButton = ({
   const { keyboardHeight } = useKeyboard();
 
   const isDisabled = disabled || isLoading;
+  const spinnerColor = useThemeColor('bgPrimary');
 
   const buttonContent = (
     <Pressable
@@ -38,7 +41,7 @@ export const SubmitButton = ({
     >
       {isLoading ? (
         <View className="flex-row items-center gap-2">
-          <ActivityIndicator color="white" size="small" />
+          <ActivityIndicator color={spinnerColor} size="small" />
           <Typography className="!text-bg-primary" variant="body">
             {loadingText}
           </Typography>
@@ -57,7 +60,7 @@ export const SubmitButton = ({
         className="absolute left-0 right-0 items-end bg-transparent px-6 pt-3"
         style={{
           bottom: followKeyboard ? keyboardHeight : 0,
-          paddingBottom: followKeyboard && keyboardHeight > 0 ? 12 : 24,
+          paddingBottom: followKeyboard && keyboardHeight > 0 ? SPACING[4] : SPACING[6],
           zIndex: 50,
         }}
       >

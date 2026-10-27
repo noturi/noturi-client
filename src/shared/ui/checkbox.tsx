@@ -23,7 +23,7 @@ export function Checkbox({ label, checked, onCheckedChange, disabled = false }: 
           checked ? 'bg-primary border-primary' : 'bg-transparent border-border'
         }`}
       >
-        {checked && <Check color="white" size={14} />}
+        {checked && <Check className="text-primary-text" size={14} />}
       </View>
       {label && (
         <Typography className="text-text-secondary" variant="footnote">

@@ -31,6 +31,9 @@ module.exports = {
         danger: 'rgb(var(--color-danger) / <alpha-value>)',
         'danger-text': 'rgb(var(--color-danger-text) / <alpha-value>)',
 
+        // 링크 (CSS 변수)
+        link: 'rgb(var(--color-link) / <alpha-value>)',
+
         // 하위 호환성 (기존 error → danger 매핑)
         error: 'rgb(var(--color-danger) / <alpha-value>)',
 

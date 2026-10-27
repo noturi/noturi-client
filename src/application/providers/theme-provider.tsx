@@ -100,6 +100,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     '--color-selection': currentTheme.colors.selection,
     '--color-danger': currentTheme.colors.danger,
     '--color-danger-text': currentTheme.colors.dangerText,
+    '--color-link': currentTheme.colors.link,
   });
 
   return (

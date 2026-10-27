@@ -1,4 +1,6 @@
+import { SHADOW_COLOR } from '~/shared/config';
 import { Plus } from '~/shared/lib/icons';
+import { useThemeColor } from '~/shared/lib/theme-context';
 
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 import { ActivityIndicator, Pressable, View } from 'react-native';
@@ -14,7 +16,7 @@ interface FloatingButtonProps extends PressableProps {
 }
 
 const shadowStyle = {
-  shadowColor: '#000',
+  shadowColor: SHADOW_COLOR,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.25,
   shadowRadius: 8,
@@ -31,7 +33,9 @@ export function FloatingButton({
   ...props
 }: FloatingButtonProps) {
   const isDisabled = disabled || isLoading;
+  const spinnerColor = useThemeColor('primaryText');
 
+  // 44px: iOS 최소 터치 영역 — 스페이싱 스케일(32/48)에 없는 값
   return (
     <Pressable
       className={`h-[44px] items-center justify-center rounded-full bg-primary ${children ? 'min-w-[44px] px-3' : 'w-[44px]'} ${isDisabled ? 'opacity-60' : ''} ${className ?? ''}`}
@@ -46,7 +50,7 @@ export function FloatingButton({
     >
       {isLoading ? (
         <View className="flex-row items-center gap-2">
-          <ActivityIndicator color="white" size="small" />
+          <ActivityIndicator color={spinnerColor} size="small" />
           {children && (
             <Typography className="text-primary-text" variant="body">
               {children}

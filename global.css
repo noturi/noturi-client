@@ -24,5 +24,8 @@
     /* 버튼 */
     --color-primary: 29 29 29;
     --color-primary-text: 255 255 255;
+
+    /* 링크 */
+    --color-link: 59 130 246;
   }
 }

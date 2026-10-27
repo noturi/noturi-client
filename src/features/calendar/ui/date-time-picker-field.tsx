@@ -1,5 +1,5 @@
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { createCalendarTheme } from '~/shared/config';
+import { FONT_SIZE, createCalendarTheme } from '~/shared/config';
 import { formatDate, formatTime } from '~/shared/lib/format';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { Typography } from '~/shared/ui';
@@ -79,10 +79,11 @@ export function DateTimePickerField({
     <View className="gap-2">
       <Typography variant="footnote">{label}</Typography>
       <View className="flex-row gap-3">
+        {/* height 44 / lineHeight 42 / min-w 80px: 입력 필드 높이·시간 칸 폭 — 스케일 외 전용 값 */}
         <Pressable className="flex-1" onPress={handleDatePress}>
           <Text
             className="rounded-5 border border-border bg-surface text-center text-text-primary"
-            style={{ height: 44, lineHeight: 42, fontSize: 16 }}
+            style={{ height: 44, lineHeight: 42, fontSize: FONT_SIZE[4] }}
           >
             {formatDate(dateTime)}
           </Text>
@@ -92,7 +93,7 @@ export function DateTimePickerField({
           <Pressable onPress={handleTimePress}>
             <Text
               className="min-w-[80px] rounded-5 border border-border bg-surface text-center text-text-primary"
-              style={{ height: 44, lineHeight: 42, fontSize: 16 }}
+              style={{ height: 44, lineHeight: 42, fontSize: FONT_SIZE[4] }}
             >
               {formatTime(dateTime)}
             </Text>

@@ -61,6 +61,27 @@ module.exports = defineConfig([
   },
   ...layerBoundaryConfigs,
   {
+    // 디자인 토큰: UI 코드에 hex 색상 리터럴 금지 — 테마 토큰(className / useThemeColor) 또는
+    // shared/config/colors.ts의 고정 색상 상수를 사용 (.claude/rules/code-style.md '디자인 토큰')
+    files: [
+      'src/**/ui/**/*.{ts,tsx}',
+      'src/widgets/**/*.{ts,tsx}',
+      'src/pages/**/*.{ts,tsx}',
+      'app/**/*.{ts,tsx}',
+    ],
+    ignores: ['src/features/auth/ui/google-icon.tsx'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/]',
+          message:
+            'hex 색상 하드코딩 금지 — 테마 색상(className, useThemeColor) 또는 ~/shared/config 색상 상수를 사용하세요.',
+        },
+      ],
+    },
+  },
+  {
     files: ['app/**/*.{ts,tsx}'],
     rules: { 'no-restricted-imports': ['error', { patterns: [DEEP_IMPORT_PATTERN] }] },
   },

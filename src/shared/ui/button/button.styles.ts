@@ -1,23 +1,25 @@
+import { RADIUS, SPACING } from '~/shared/config';
+
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import type { ButtonSize, ButtonVariant } from './button.types';
 
-// Size styles
+// Size styles — 스케일에 없는 값(md radius 10, lg padding 20)은 버튼 전용 값
 export const sizeStyles: Record<ButtonSize, ViewStyle> = {
   sm: {
     height: 32,
-    paddingHorizontal: 12,
-    borderRadius: 8,
+    paddingHorizontal: SPACING[4],
+    borderRadius: RADIUS[4],
   },
   md: {
     height: 44,
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING[5],
     borderRadius: 10,
   },
   lg: {
     minHeight: 56,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    borderRadius: RADIUS[5],
   },
 };
 
@@ -39,7 +41,7 @@ export const iconOnlySizeStyles: Record<ButtonSize, ViewStyle> = {
   },
 };
 
-// Label size styles
+// Label size styles — iOS 타이포 스케일(footnote 13 / subheadline 15 / body 17)을 따름
 export const labelSizeStyles: Record<ButtonSize, TextStyle> = {
   sm: {
     fontSize: 13,
@@ -84,6 +86,7 @@ export const styleSheet = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // 아이콘-라벨 간격 6px — 스케일(4/8)에 없는 값
   iconLeft: {
     marginRight: 6,
   },

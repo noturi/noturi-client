@@ -1,3 +1,4 @@
+import { FONT_SIZE } from '~/shared/config';
 import { useUserTheme } from '~/shared/lib/theme-context';
 
 import { type Ref, useState } from 'react';
@@ -14,9 +15,9 @@ export interface InputProps extends TextInputProps {
 }
 
 const sizeStyles = {
-  sm: { height: 28, fontSize: 12 },
-  md: { height: 36, fontSize: 14 },
-  lg: { height: 44, fontSize: 16 },
+  sm: { height: 28, fontSize: FONT_SIZE[2] },
+  md: { height: 36, fontSize: FONT_SIZE[3] },
+  lg: { height: 44, fontSize: FONT_SIZE[4] },
 };
 
 export function Input({

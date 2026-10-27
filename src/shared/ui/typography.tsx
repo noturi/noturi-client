@@ -17,6 +17,7 @@ export type TypographyVariant =
   | 'number';
 
 // iOS Typography Scale - https://developer.apple.com/design/human-interface-guidelines/typography
+// variant 자체가 타이포 토큰 — FONT_SIZE(text-1~7) 스케일과 별개로 iOS 값(fontSize/lineHeight)을 그대로 유지한다
 const variantStyles: Record<TypographyVariant, TextStyle> = {
   largeTitle: {
     fontSize: 34,

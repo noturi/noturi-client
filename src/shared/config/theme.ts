@@ -31,6 +31,10 @@ export interface ThemePreset {
     // 상태 색상 - Danger
     danger: string;
     dangerText: string;
+    // 링크 텍스트/아이콘
+    link: string;
+    // PressableFeedback 기본 하이라이트/리플 색상
+    pressHighlight: string;
   };
 }
 
@@ -57,6 +61,8 @@ export const THEME_PRESETS: ThemePreset[] = [
       selection: '29 29 29',
       danger: '239 68 68',
       dangerText: '255 255 255',
+      link: '59 130 246',
+      pressHighlight: '63 63 70',
     },
   },
   {
@@ -81,6 +87,8 @@ export const THEME_PRESETS: ThemePreset[] = [
       selection: '255 255 255',
       danger: '248 113 113',
       dangerText: '18 18 18',
+      link: '59 130 246',
+      pressHighlight: '212 212 216',
     },
   },
   // {
@@ -292,6 +300,8 @@ export type HexColors = {
   selection: string;
   danger: string;
   dangerText: string;
+  link: string;
+  pressHighlight: string;
 };
 
 function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
@@ -312,6 +322,8 @@ function convertColorsToHex(colors: ThemePreset['colors']): HexColors {
     selection: rgbToHex(colors.selection),
     danger: rgbToHex(colors.danger),
     dangerText: rgbToHex(colors.dangerText),
+    link: rgbToHex(colors.link),
+    pressHighlight: rgbToHex(colors.pressHighlight),
   };
 }
 

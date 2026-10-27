@@ -1,3 +1,5 @@
+import { useThemeColor } from '~/shared/lib/theme-context';
+
 import { type Ref, createContext, use } from 'react';
 import { type GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -78,7 +80,11 @@ const PressableFeedbackRoot = ({
 // Highlight Effect Component
 const PressableFeedbackHighlight = ({ animation, style }: PressableFeedbackHighlightProps) => {
   const context = usePressableFeedback();
-  const { overlayStyle } = usePressableFeedbackHighlightAnimation(context, { animation });
+  const defaultColor = useThemeColor('pressHighlight');
+  const { overlayStyle } = usePressableFeedbackHighlightAnimation(context, {
+    animation,
+    defaultColor,
+  });
 
   return <Animated.View pointerEvents="none" style={[styles.overlay, overlayStyle, style]} />;
 };
@@ -86,8 +92,10 @@ const PressableFeedbackHighlight = ({ animation, style }: PressableFeedbackHighl
 // Ripple Effect Component
 const PressableFeedbackRipple = ({ animation, style }: PressableFeedbackRippleProps) => {
   const context = usePressableFeedback();
+  const defaultColor = useThemeColor('pressHighlight');
   const { rippleStyle, backgroundColor } = usePressableFeedbackRippleAnimation(context, {
     animation,
+    defaultColor,
   });
 
   return (

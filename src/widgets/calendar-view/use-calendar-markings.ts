@@ -1,15 +1,8 @@
 import { CalendarMemo } from '~/entities/calendar';
+import { SCHEDULE_DENSITY_COLORS as SCHEDULE_COLORS, SPACING } from '~/shared/config';
 import type { HexColors } from '~/shared/config/theme';
 
 import { useMemo } from 'react';
-
-// 일정 밀도 색상 (고정 - 테마와 무관)
-const SCHEDULE_COLORS = {
-  LIGHT: '#007AFF',
-  MODERATE: '#FFC107',
-  BUSY: '#FF9800',
-  OVERLOAD: '#FF5722',
-} as const;
 
 const SCHEDULE_DENSITY_THRESHOLDS = {
   LIGHT: 1,
@@ -124,9 +117,9 @@ const createCalendarMarkingsWithSelection = (
       markings[date].customStyles = {
         text: {
           color: visualization.color,
-          fontSize: 8,
+          fontSize: 8, // 날짜 칸 안의 밀도 숫자 — FONT_SIZE 스케일보다 작은 전용 크기
           fontWeight: 'bold',
-          marginTop: 8,
+          marginTop: SPACING[3],
         },
       };
       markings[date].customText = visualization.text;

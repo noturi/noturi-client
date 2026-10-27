@@ -6,6 +6,7 @@ import {
   todosByDateQuery,
 } from '~/entities/todo';
 import { QuickTodoInput, TodoList } from '~/features/todo';
+import { RADIUS, SPACING } from '~/shared/config';
 import { useUserTheme } from '~/shared/lib/theme-context';
 import { CircularProgress, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
@@ -41,7 +42,7 @@ export function TodoPage() {
     <View className="flex-1 bg-bg-secondary">
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 160 }}
+        contentContainerStyle={{ paddingBottom: 160 /* 하단 입력창 영역 확보 — 스케일 외 값 */ }}
         showsVerticalScrollIndicator={false}
       >
         <View className="gap-4 px-4 pt-4">
@@ -60,9 +61,9 @@ export function TodoPage() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderRadius: 12,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
+              borderRadius: RADIUS[5],
+              paddingHorizontal: SPACING[5],
+              paddingVertical: SPACING[4],
             }}
           >
             <View>
