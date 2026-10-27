@@ -1,5 +1,5 @@
 import { useAuth } from '~/entities/auth';
-import type { LoginResponseDto } from '~/entities/user/model/types';
+import type { LoginResponseDto } from '~/entities/user';
 import { notificationService } from '~/features/notification';
 import { HREFS } from '~/shared/config';
 

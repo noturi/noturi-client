@@ -1,7 +1,6 @@
 import { useWidgetDeepLink } from '~/application/hooks/use-widget-deep-link';
 import { useAuth } from '~/entities/auth';
-import { todosByDateQuery } from '~/entities/todo/api/queries';
-import { formatDateString } from '~/entities/todo/lib/date-utils';
+import { formatDateString, todosByDateQuery } from '~/entities/todo';
 import Logger from '~/shared/lib/logger';
 
 import { type ReactNode, useEffect, useMemo, useRef } from 'react';

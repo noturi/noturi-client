@@ -1,4 +1,4 @@
-import { MemoForm } from '~/features/memo/ui';
+import { MemoForm } from '~/features/memo';
 
 import { View } from 'react-native';
 

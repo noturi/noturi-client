@@ -1,6 +1,5 @@
 import { addDays, startOfDay } from 'date-fns';
-import { todosByDateQuery } from '~/entities/todo/api/queries';
-import { formatDateString } from '~/entities/todo/lib/date-utils';
+import { formatDateString, todosByDateQuery } from '~/entities/todo';
 import { Skeleton, Typography } from '~/shared/ui';
 
 import { memo, useEffect, useMemo } from 'react';

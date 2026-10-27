@@ -1,6 +1,7 @@
 import { toast } from 'sonner-native';
-import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { Button } from '~/shared/ui';
+
+import { useCreateCategoryMutation } from '../api/mutations';
 
 interface CategoryCreateButtonProps {
   name: string;

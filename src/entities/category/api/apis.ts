@@ -1,11 +1,8 @@
 import { KyInstance } from 'ky';
-import {
-  Category,
-  CategoryListParamsDto,
-  CategoryListResponseDto,
-} from '~/entities/category/model/types';
 import { api } from '~/shared/api';
 import Logger from '~/shared/lib/logger';
+
+import { Category, CategoryListParamsDto, CategoryListResponseDto } from '../model/types';
 
 /**
  * Entity Layer - READ 전용 API

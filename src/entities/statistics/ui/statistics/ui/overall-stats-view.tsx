@@ -1,7 +1,8 @@
-import { OverallStatsResponseDto } from '~/entities/statistics';
 import { Card, StarRating, Typography } from '~/shared/ui';
 
 import { View } from 'react-native';
+
+import type { OverallStatsResponseDto } from '../../../model/types';
 
 interface OverallStatsViewProps {
   stats: OverallStatsResponseDto;

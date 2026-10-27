@@ -1,7 +1,8 @@
-import { CategoryStatsResponseDto } from '~/entities/statistics';
 import { Card, StarRating, Typography } from '~/shared/ui';
 
 import { View } from 'react-native';
+
+import type { CategoryStatsResponseDto } from '../../../model/types';
 
 interface CategoryStatsViewProps {
   categories?: CategoryStatsResponseDto[];

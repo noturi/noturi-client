@@ -1,7 +1,8 @@
-import type { UIMemo } from '~/entities/memo/model/types';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
+
+import type { UIMemo } from '../../../model/types';
 
 type MemoSimpleViewProps = {
   memos: UIMemo[];

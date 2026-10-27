@@ -1,4 +1,4 @@
-import { CreateCalendarMemoDto } from '~/entities/calendar/model/types';
+import { CreateCalendarMemoDto } from '~/entities/calendar';
 import Logger from '~/shared/lib/logger';
 import { SubmitButton } from '~/shared/ui';
 

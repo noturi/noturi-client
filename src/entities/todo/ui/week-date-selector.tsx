@@ -1,6 +1,6 @@
 import { addDays, format, getDay, isSameDay, isToday } from 'date-fns';
-import { useUserTheme } from '~/shared/lib/theme-context';
 import { createCalendarTheme } from '~/shared/config/calendar-theme';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { CircularProgress, ControlledSheet, Typography } from '~/shared/ui';
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';

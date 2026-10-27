@@ -1,4 +1,4 @@
-import { Category } from '~/entities/category/model/types';
+import { Category } from '~/entities/category';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { ScrollView, View } from 'react-native';

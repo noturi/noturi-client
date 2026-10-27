@@ -1,9 +1,10 @@
-import type { RatingGroupData, UIMemo } from '~/entities/memo/model/types';
-import { RatingGroupCard, RatingGroupCardSkeleton } from '~/entities/memo/ui/rating-group-card';
 import { Typography } from '~/shared/ui';
 
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+
+import type { RatingGroupData, UIMemo } from '../../../model/types';
+import { RatingGroupCard, RatingGroupCardSkeleton } from '../../rating-group-card';
 
 type MemoRatingGroupViewProps = {
   ratingGroups: RatingGroupData[];

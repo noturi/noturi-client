@@ -1,9 +1,4 @@
-import {
-  CreateTodoDto,
-  Todo,
-  TodoToggleResponseDto,
-  UpdateTodoDto,
-} from '~/entities/todo/model/types';
+import { CreateTodoDto, Todo, TodoToggleResponseDto, UpdateTodoDto } from '~/entities/todo';
 
 import {
   type DefaultError,

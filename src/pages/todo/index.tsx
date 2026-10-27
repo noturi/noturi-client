@@ -1,8 +1,7 @@
 import { startOfDay } from 'date-fns';
-import { useUserTheme } from '~/shared/lib/theme-context';
-import { todosByDateQuery } from '~/entities/todo/api/queries';
-import { formatDateString, formatDateWithDay } from '~/entities/todo/lib/date-utils';
+import { formatDateString, formatDateWithDay, todosByDateQuery } from '~/entities/todo';
 import { QuickTodoInput, TodoList } from '~/features/todo';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { CircularProgress, Typography } from '~/shared/ui';
 import { TodoWeeklyView } from '~/widgets/todo-weekly-view';
 

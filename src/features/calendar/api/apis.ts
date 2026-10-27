@@ -1,9 +1,5 @@
 import { KyInstance } from 'ky';
-import {
-  CalendarMemo,
-  CreateCalendarMemoDto,
-  UpdateCalendarMemoDto,
-} from '~/entities/calendar/model/types';
+import { CalendarMemo, CreateCalendarMemoDto, UpdateCalendarMemoDto } from '~/entities/calendar';
 import { api } from '~/shared/api';
 
 export class CalendarApi {

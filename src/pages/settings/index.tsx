@@ -1,6 +1,6 @@
 import { useAuth } from '~/entities/auth';
-import { DeleteAccountButton, LogoutButton } from '~/features/auth/ui';
-import { CategoryManageSheet } from '~/features/categories/ui/category-manage-sheet';
+import { DeleteAccountButton, LogoutButton } from '~/features/auth';
+import { CategoryManageSheet } from '~/features/categories';
 import { NotificationToggle } from '~/features/notification';
 import { ThemeSettings } from '~/features/user';
 import { EXTERNAL_LINKS } from '~/shared/config';

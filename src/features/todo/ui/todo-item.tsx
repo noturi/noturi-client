@@ -1,4 +1,4 @@
-import { Todo } from '~/entities/todo/model/types';
+import { Todo } from '~/entities/todo';
 import { Typography } from '~/shared/ui';
 
 import { useCallback, useState } from 'react';

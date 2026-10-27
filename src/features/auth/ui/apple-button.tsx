@@ -1,9 +1,9 @@
-import { useAppleLoginMutation } from '~/features/auth/api';
-import { useLoginHandler } from '~/features/auth/model/use-login-handler';
-
 import { Alert, Platform, View } from 'react-native';
 
 import * as AppleAuthentication from 'expo-apple-authentication';
+
+import { useAppleLoginMutation } from '../api';
+import { useLoginHandler } from '../model/use-login-handler';
 
 export function AppleButton() {
   const { handleLoginSuccess, clearError } = useLoginHandler();

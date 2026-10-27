@@ -1,9 +1,4 @@
-import {
-  BulkDeleteMemosDto,
-  CreateMemoDto,
-  Memo,
-  UpdateMemoDto,
-} from '~/entities/memo/model/types';
+import { BulkDeleteMemosDto, CreateMemoDto, Memo, UpdateMemoDto } from '~/entities/memo';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import {

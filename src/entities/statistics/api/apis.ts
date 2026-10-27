@@ -1,12 +1,13 @@
 import { KyInstance } from 'ky';
+import { api } from '~/shared/api';
+
 import {
   CategoryStatsResponseDto,
   OverallStatsParamsDto,
   OverallStatsResponseDto,
   TrendsParamsDto,
   TrendsResponseDto,
-} from '~/entities/statistics/model/types';
-import { api } from '~/shared/api';
+} from '../model/types';
 
 export class StatisticsApi {
   private api: KyInstance;

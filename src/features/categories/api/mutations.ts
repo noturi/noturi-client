@@ -4,7 +4,7 @@ import {
   MergeCategoriesDto,
   ReorderCategoriesDto,
   UpdateCategoryDto,
-} from '~/entities/category/model/types';
+} from '~/entities/category';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import {

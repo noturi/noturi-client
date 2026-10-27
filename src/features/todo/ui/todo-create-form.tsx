@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { formatDateString } from '~/entities/todo/lib/date-utils';
-import { CreateRecurrenceType } from '~/entities/todo/model/types';
+import { CreateRecurrenceType, formatDateString } from '~/entities/todo';
 import { useToast } from '~/shared/lib';
 import { Button, Card, Form, Input, TextArea, Typography } from '~/shared/ui';
 

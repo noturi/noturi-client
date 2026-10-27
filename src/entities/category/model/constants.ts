@@ -1,4 +1,4 @@
-import type { CreateCategoryDto } from '~/entities/category/model/types';
+import type { CreateCategoryDto } from './types';
 
 export const DEFAULT_CATEGORIES: CreateCategoryDto[] = [
   { name: '일상', color: '#3B82F6', icon: 'home' },

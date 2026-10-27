@@ -1,8 +1,9 @@
-import type { SortOption } from '~/entities/category/model/types';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
+
+import type { SortOption } from '../model/types';
 
 interface SortButtonProps {
   option: SortOption;

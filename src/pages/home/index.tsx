@@ -1,9 +1,12 @@
 import { activeCategoriesQuery } from '~/entities/category';
-import { infiniteMemoListQuery } from '~/entities/memo';
-import { MemoSkeleton } from '~/entities/memo';
-import type { MemoListParamsDto, RatingGroupData } from '~/entities/memo/model/types';
-import { CategoryService } from '~/features/categories/model';
-import { MemoService } from '~/features/memo/model';
+import {
+  type MemoListParamsDto,
+  MemoSkeleton,
+  type RatingGroupData,
+  infiniteMemoListQuery,
+} from '~/entities/memo';
+import { CategoryService } from '~/features/categories';
+import { MemoService } from '~/features/memo';
 import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
 import { MemoRatingList, YearSelectSheet } from '~/widgets';

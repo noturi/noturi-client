@@ -1,11 +1,15 @@
-import { categoryStatsQuery, overallStatsQuery } from '~/entities/statistics';
-import { CategoryStatsView, OverallStatsView } from '~/entities/statistics/ui/statistics/ui';
 import {
+  CategoryStatsView,
+  OverallStatsView,
+  categoryStatsQuery,
+  overallStatsQuery,
+} from '~/entities/statistics';
+import {
+  GrassChart,
   todoGrassStatsQuery,
   todoOverviewStatsQuery,
   todoWeeklyStatsQuery,
-} from '~/entities/todo/api/queries';
-import { GrassChart } from '~/entities/todo/ui';
+} from '~/entities/todo';
 import { Card, Loading, SegmentControl, Typography } from '~/shared/ui';
 
 import { useState } from 'react';

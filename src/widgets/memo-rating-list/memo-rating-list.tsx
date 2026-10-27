@@ -1,6 +1,6 @@
-import type { UICategory } from '~/entities/category/model/types';
+import type { UICategory } from '~/entities/category';
 import { CategoryFilterBar, MemoRatingGroupView } from '~/entities/memo';
-import type { RatingGroupData } from '~/entities/memo/model/types';
+import type { RatingGroupData } from '~/entities/memo';
 import { MemoListHeader } from '~/widgets/memo-list-with-year-filter';
 
 import { ScrollView, View } from 'react-native';

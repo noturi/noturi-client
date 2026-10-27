@@ -1,5 +1,4 @@
-import { todoMutationApi } from '~/features/todo/api/apis';
-import { invalidateTodoStats } from '~/features/todo/lib/invalidate-todo-cache';
+import { invalidateTodoStats, todoMutationApi } from '~/features/todo';
 
 import { useEffect } from 'react';
 

@@ -1,8 +1,4 @@
-import {
-  CalendarMemo,
-  CreateCalendarMemoDto,
-  UpdateCalendarMemoDto,
-} from '~/entities/calendar/model/types';
+import { CalendarMemo, CreateCalendarMemoDto, UpdateCalendarMemoDto } from '~/entities/calendar';
 import { QUERY_KEYS } from '~/shared/lib';
 import Logger from '~/shared/lib/logger';
 

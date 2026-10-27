@@ -1,11 +1,8 @@
-import {
-  CalendarMemoListParamsDto,
-  CalendarMemoMonthlyParamsDto,
-} from '~/entities/calendar/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
+import { CalendarMemoListParamsDto, CalendarMemoMonthlyParamsDto } from '../model/types';
 import { calendarMemoApi } from './apis';
 
 // 캘린더 메모 월별 조회 쿼리 (캘린더 뷰용)

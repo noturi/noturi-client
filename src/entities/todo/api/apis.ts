@@ -1,4 +1,6 @@
 import { KyInstance } from 'ky';
+import { api, toSearchParams } from '~/shared/api';
+
 import {
   TodoGrassStatsDto,
   TodoListParamsDto,
@@ -8,8 +10,7 @@ import {
   TodoOverviewStatsDto,
   TodoTemplateListResponseDto,
   TodoWeeklyStatsDto,
-} from '~/entities/todo/model/types';
-import { api, toSearchParams } from '~/shared/api';
+} from '../model/types';
 
 /**
  * Entity Layer - READ 전용 API

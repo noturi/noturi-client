@@ -1,9 +1,10 @@
 import { toast } from 'sonner-native';
-import { useDeleteCategoryMutation } from '~/features/categories/api/mutations';
 import { X } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { Alert, Pressable, View } from 'react-native';
+
+import { useDeleteCategoryMutation } from '../api/mutations';
 
 interface CategoryDeleteButtonProps {
   categoryId: string;

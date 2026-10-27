@@ -1,5 +1,5 @@
-import { useUserTheme } from '~/shared/lib/theme-context';
 import { ChevronDown } from '~/shared/lib/icons';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { ControlledSheet, Typography } from '~/shared/ui';
 
 import { useCallback, useMemo } from 'react';

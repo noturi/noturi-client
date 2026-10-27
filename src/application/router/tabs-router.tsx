@@ -1,6 +1,6 @@
-import { useUserTheme } from '~/shared/lib/theme-context';
 import { useAuth } from '~/entities/auth';
 import { HREFS } from '~/shared/config';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Loading } from '~/shared/ui';
 
 import { Redirect } from 'expo-router';

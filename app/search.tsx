@@ -1,13 +1,13 @@
 import { Search } from 'lucide-react-native';
-import { useUserTheme } from '~/application/providers/theme-provider';
-import { useMemoSearch } from '~/features/search/model';
 import {
   ActiveFilters,
   EmptyState,
   FilterOptions,
   MemoList,
   SearchInputBar,
-} from '~/features/search/ui';
+  useMemoSearch,
+} from '~/features/search';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { ControlledSheet } from '~/shared/ui';
 
 import { useCallback } from 'react';

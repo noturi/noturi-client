@@ -1,17 +1,14 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { toast } from 'sonner-native';
-import { useUserTheme } from '~/shared/lib/theme-context';
-import {
-  ALL_DAY_NOTIFICATION_OPTIONS,
-  NOTIFICATION_OPTIONS,
-} from '~/entities/calendar/model/constants';
+import { ALL_DAY_NOTIFICATION_OPTIONS, NOTIFICATION_OPTIONS } from '~/entities/calendar';
 import type {
   CalendarMemo,
   CreateCalendarMemoDto,
   NotifyBefore,
   UpdateCalendarMemoDto,
-} from '~/entities/calendar/model/types';
+} from '~/entities/calendar';
 import { formatDateTimeForApi, getHoursLater } from '~/shared/lib/format';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { FloatingButton, Form, Input, Select, Switch, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

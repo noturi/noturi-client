@@ -1,10 +1,5 @@
 import { KyInstance } from 'ky';
-import {
-  CreateTodoDto,
-  Todo,
-  TodoToggleResponseDto,
-  UpdateTodoDto,
-} from '~/entities/todo/model/types';
+import { CreateTodoDto, Todo, TodoToggleResponseDto, UpdateTodoDto } from '~/entities/todo';
 import { api } from '~/shared/api';
 
 /**

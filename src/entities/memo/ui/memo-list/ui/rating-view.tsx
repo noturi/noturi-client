@@ -1,8 +1,8 @@
 import type { UICategory } from '~/entities/category';
-import type { RatingGroupData, UIMemo } from '~/entities/memo/model/types';
 
 import { ScrollView, View } from 'react-native';
 
+import type { RatingGroupData, UIMemo } from '../../../model/types';
 import { CategoryFilterBar } from './category-filter-bar';
 import { MemoRatingGroupView } from './memo-rating-group-view';
 

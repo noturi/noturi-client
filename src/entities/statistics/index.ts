@@ -8,3 +8,4 @@ export type {
   TrendsParamsDto,
   TrendsResponseDto,
 } from './model/types';
+export * from './ui/statistics';

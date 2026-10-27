@@ -1,5 +1,5 @@
 import { memoDetailQuery } from '~/entities/memo';
-import { MemoDeleteButton } from '~/features/memo/ui';
+import { MemoDeleteButton } from '~/features/memo';
 import { HREFS } from '~/shared/config';
 import { FloatingButton, Loading, StarRating, Typography } from '~/shared/ui';
 

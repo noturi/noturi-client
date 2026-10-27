@@ -1,4 +1,4 @@
-import { AppleButton, GoogleButton } from '~/features/auth/ui';
+import { AppleButton, GoogleButton } from '~/features/auth';
 import { Typography } from '~/shared/ui';
 
 import { Image, Platform, View } from 'react-native';

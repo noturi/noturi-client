@@ -1,10 +1,11 @@
-import { useDeleteCalendarMemo } from '~/features/calendar/api';
 import { useToast } from '~/shared/lib';
 import { MoreVertical, Pencil, Trash2 } from '~/shared/lib/icons';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Alert, Pressable, TouchableOpacity, View } from 'react-native';
+
+import { useDeleteCalendarMemo } from '../api';
 
 interface CalendarMemoDeleteButtonProps {
   memoId: string;

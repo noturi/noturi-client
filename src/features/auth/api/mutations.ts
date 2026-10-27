@@ -1,8 +1,4 @@
-import {
-  type AppleLoginDto,
-  type GoogleLoginDto,
-  type LoginResponseDto,
-} from '~/entities/user/model/types';
+import { type AppleLoginDto, type GoogleLoginDto, type LoginResponseDto } from '~/entities/user';
 import { queryClient } from '~/shared/api/query-client';
 
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';

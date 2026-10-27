@@ -5,7 +5,7 @@ import {
   MergeCategoriesDto,
   ReorderCategoriesDto,
   UpdateCategoryDto,
-} from '~/entities/category/model/types';
+} from '~/entities/category';
 import { api } from '~/shared/api';
 import Logger from '~/shared/lib/logger';
 

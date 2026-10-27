@@ -1,5 +1,5 @@
-import type { UIMemo } from '~/entities/memo/model/types';
-import { MemoItem } from '~/entities/memo/ui/memo-item';
+import type { UIMemo } from '~/entities/memo';
+import { MemoItem } from '~/entities/memo';
 import { Loading } from '~/shared/ui';
 
 import { useCallback } from 'react';

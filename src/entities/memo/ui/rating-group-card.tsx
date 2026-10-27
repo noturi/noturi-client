@@ -1,4 +1,3 @@
-import type { RatingGroupData, UIMemo } from '~/entities/memo/model/types';
 import { ChevronDown } from '~/shared/lib/icons';
 import { Card, RatingStars, Skeleton, Typography } from '~/shared/ui';
 
@@ -10,6 +9,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import type { RatingGroupData, UIMemo } from '../model/types';
 
 interface RatingGroupCardProps {
   group: RatingGroupData;

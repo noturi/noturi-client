@@ -1,8 +1,9 @@
-import type { UICategory } from '~/entities/category/model/types';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
+
+import type { UICategory } from '../model/types';
 
 interface CategoryButtonProps {
   category: UICategory;

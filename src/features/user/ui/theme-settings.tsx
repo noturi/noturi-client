@@ -1,5 +1,5 @@
-import { useUserTheme } from '~/shared/lib/theme-context';
 import { Moon } from '~/shared/lib/icons';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Switch, Typography } from '~/shared/ui';
 
 import { View } from 'react-native';

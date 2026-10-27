@@ -1,4 +1,4 @@
-import type { CreateCalendarMemoDto, UpdateCalendarMemoDto } from '~/entities/calendar/model/types';
+import type { CreateCalendarMemoDto, UpdateCalendarMemoDto } from '~/entities/calendar';
 import { NativeCalendarService } from '~/shared/lib/calendar';
 import Logger from '~/shared/lib/logger';
 

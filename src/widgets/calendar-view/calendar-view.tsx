@@ -1,10 +1,8 @@
-import { useUserTheme } from '~/shared/lib/theme-context';
-import { calendarMemoMonthlyQuery } from '~/entities/calendar/api/queries';
-import { useCalendarDate } from '~/entities/calendar/model';
-import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar/model/types';
-import { useCreateCalendarMemo } from '~/features/calendar/api/mutations';
-import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
+import { calendarMemoMonthlyQuery, useCalendarDate } from '~/entities/calendar';
+import type { CalendarMemo, CreateCalendarMemoDto } from '~/entities/calendar';
+import { CalendarAddModal, useCreateCalendarMemo } from '~/features/calendar';
 import { setupKoreanLocale } from '~/shared/config/calendar-locale';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Card } from '~/shared/ui';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';

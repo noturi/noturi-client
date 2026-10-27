@@ -1,6 +1,7 @@
 import { KyInstance } from 'ky';
-import { Memo, MemoListParamsDto, MemoListResponseDto } from '~/entities/memo/model/types';
 import { api } from '~/shared/api';
+
+import { Memo, MemoListParamsDto, MemoListResponseDto } from '../model/types';
 
 /**
  * Entity Layer - READ 전용 API

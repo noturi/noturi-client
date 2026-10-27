@@ -1,8 +1,8 @@
-import { OverallStatsParamsDto, TrendsParamsDto } from '~/entities/statistics/model/types';
 import { QUERY_KEYS } from '~/shared/lib';
 
 import { queryOptions } from '@tanstack/react-query';
 
+import { OverallStatsParamsDto, TrendsParamsDto } from '../model/types';
 import { statisticsApi } from './apis';
 
 // 트렌드 분석 쿼리

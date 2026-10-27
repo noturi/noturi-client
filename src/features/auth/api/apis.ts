@@ -1,5 +1,5 @@
 import { KyInstance } from 'ky';
-import { AppleLoginDto, GoogleLoginDto, LoginResponseDto } from '~/entities/user/model/types';
+import { AppleLoginDto, GoogleLoginDto, LoginResponseDto } from '~/entities/user';
 import { api } from '~/shared/api';
 
 class AuthApi {

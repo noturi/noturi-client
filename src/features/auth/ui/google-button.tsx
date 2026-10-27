@@ -3,12 +3,12 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useGoogleLoginMutation } from '~/features/auth/api';
-import { useLoginHandler } from '~/features/auth/model/use-login-handler';
 
 import { useEffect } from 'react';
 import { Alert, Platform, Pressable } from 'react-native';
 
+import { useGoogleLoginMutation } from '../api';
+import { useLoginHandler } from '../model/use-login-handler';
 import { GoogleIcon } from './google-icon';
 
 const ERROR_MESSAGES: Record<string, string | null> = {

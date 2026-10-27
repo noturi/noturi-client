@@ -1,8 +1,10 @@
 import type { CalendarMemo, UpdateCalendarMemoDto } from '~/entities/calendar';
-import { NOTIFICATION_LABELS } from '~/entities/calendar/model/constants';
-import { useUpdateCalendarMemo } from '~/features/calendar/api';
-import { CalendarAddModal } from '~/features/calendar/ui/calendar-add-modal';
-import { CalendarMemoDeleteButton } from '~/features/calendar/ui/calendar-memo-delete-button';
+import { NOTIFICATION_LABELS } from '~/entities/calendar';
+import {
+  CalendarAddModal,
+  CalendarMemoDeleteButton,
+  useUpdateCalendarMemo,
+} from '~/features/calendar';
 import { formatTime, useToast } from '~/shared/lib';
 import { Bell } from '~/shared/lib/icons';
 import { Card, Typography } from '~/shared/ui';

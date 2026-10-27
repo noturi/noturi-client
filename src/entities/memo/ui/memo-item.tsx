@@ -1,10 +1,11 @@
-import type { UIMemo } from '~/entities/memo/model/types';
 import { HREFS } from '~/shared/config';
 import { StarRating, Typography } from '~/shared/ui';
 
 import { Pressable, View } from 'react-native';
 
 import { router } from 'expo-router';
+
+import type { UIMemo } from '../model/types';
 
 interface MemoItemProps {
   memo: UIMemo;

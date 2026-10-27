@@ -1,11 +1,12 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useUserTheme } from '~/shared/lib/theme-context';
-import { useCreateCategoryMutation } from '~/features/categories/api/mutations';
 import { X } from '~/shared/lib/icons';
+import { useUserTheme } from '~/shared/lib/theme-context';
 import { Button, Input, Typography } from '~/shared/ui';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
+
+import { useCreateCategoryMutation } from '../api/mutations';
 
 interface CategoryAddSheetProps {
   isOpen: boolean;
