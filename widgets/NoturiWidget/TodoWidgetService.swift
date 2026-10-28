@@ -115,6 +115,8 @@ enum TodoWidgetService {
         request.httpMethod = method
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        // 서버가 사용자별 "오늘"(자정 이월 등)을 계산하는 기준
+        request.setValue(TimeZone.current.identifier, forHTTPHeaderField: "X-Timezone")
         request.timeoutInterval = 10
 
         guard let (data, response) = try? await URLSession.shared.data(for: request),
