@@ -73,8 +73,16 @@ struct TodoWidgetAccessoryView: View {
                 Text("앱을 열어 로그인해 주세요").font(.caption)
             } else {
                 if pendingTodos.isEmpty {
-                    Text(entry.totalCount == 0 ? "오늘 할 일이 없어요" : "모두 완료했어요 🎉")
-                        .font(.footnote)
+                    // 잠금화면은 단색으로 렌더링 — 흰 몸·검은 눈이라 실루엣이 그대로 살아남
+                    HStack(spacing: 8) {
+                        Image("NoturiMark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 36, height: 36)
+                        Text(entry.totalCount == 0 ? "오늘 할 일이 없어요" : "모두 완료했어요")
+                            .font(.footnote.weight(.semibold))
+                    }
+                    .frame(maxHeight: .infinity)
                 } else {
                     // 높이가 3줄뿐이라 3개만 표시 — 나머지는 마지막 줄 끝에 개수로
                     let shown = Array(pendingTodos.prefix(3))
