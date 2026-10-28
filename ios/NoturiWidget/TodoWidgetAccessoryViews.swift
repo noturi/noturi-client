@@ -65,20 +65,19 @@ struct TodoWidgetAccessoryView: View {
         .widgetURL(URL(string: "noturiclient://todo"))
     }
 
-    /// 직사각형: 다음 할 일 2개 (더 있으면 +N) — 할 일 행은 탭하면 완료, 나머지 영역은 앱 열기
+    /// 직사각형: 다음 할 일 3개 (더 있으면 +N) — 할 일 행은 탭하면 완료, 나머지 영역은 앱 열기
     private var rectangular: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 3) {
             if entry.needsLogin {
                 Text("Noturi").font(.headline)
                 Text("앱을 열어 로그인해 주세요").font(.caption)
             } else {
-                Text("할 일").font(.headline)
                 if pendingTodos.isEmpty {
                     Text(entry.totalCount == 0 ? "오늘 할 일이 없어요" : "모두 완료했어요 🎉")
-                        .font(.caption)
+                        .font(.footnote)
                 } else {
-                    // 높이가 3줄뿐이라 2개만 표시 — 나머지는 마지막 줄 끝에 개수로
-                    let shown = Array(pendingTodos.prefix(2))
+                    // 높이가 3줄뿐이라 3개만 표시 — 나머지는 마지막 줄 끝에 개수로
+                    let shown = Array(pendingTodos.prefix(3))
                     let hiddenCount = pendingTodos.count - shown.count
                     ForEach(shown) { todo in
                         let row = HStack(spacing: 4) {
@@ -91,7 +90,7 @@ struct TodoWidgetAccessoryView: View {
                                     .layoutPriority(1)
                             }
                         }
-                        .font(.caption)
+                        .font(.footnote)
                         .contentShape(Rectangle())
 
                         if #available(iOS 17.0, *) {
