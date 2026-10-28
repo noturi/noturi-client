@@ -23,49 +23,39 @@ struct TodoWidgetListView: View {
 
     var body: some View {
         if #available(iOS 17.0, *) {
+            // widgetURL은 위젯 전체에 걸려 체크 버튼 주변을 탭해도 앱이 열림 → 헤더만 링크로
             content
                 .containerBackground(.fill.tertiary, for: .widget)
         } else {
             content
                 .padding()
                 .background(Color(.systemBackground))
+                .widgetURL(Self.todoURL)
         }
     }
 
+    private static let todoURL = URL(string: "noturiclient://todo")!
+
     private var content: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // Header
-            HStack {
-                Text("Noturi")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.primary)
-
-                Spacer()
-
-                Text("\(entry.completedCount)/\(entry.totalCount) 완료")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.secondary)
-
-                Text("\(Int(entry.rate))%")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(.blue)
+            // Header — 탭하면 앱의 할 일 탭
+            Link(destination: Self.todoURL) {
+                header
             }
 
             Divider()
 
             // Todo list
             if displayTodos.isEmpty {
-                Spacer()
-                HStack {
-                    Spacer()
+                Link(destination: Self.todoURL) {
                     Text("오늘의 할 일이 없습니다")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
-                    Spacer()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                Spacer()
             } else {
-                VStack(alignment: .leading, spacing: 4) {
+                // 행 사이 틈도 버튼이 받도록 간격 대신 행 패딩
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(displayTodos) { todo in
                         if #available(iOS 17.0, *) {
                             Button(intent: ToggleTodoIntent(todoId: todo.id)) {
@@ -88,7 +78,24 @@ struct TodoWidgetListView: View {
 
             Spacer(minLength: 0)
         }
-        .widgetURL(URL(string: "noturiclient://todo"))
+    }
+
+    private var header: some View {
+        HStack {
+            Text("Noturi")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            Text("\(entry.completedCount)/\(entry.totalCount) 완료")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.secondary)
+
+            Text("\(Int(entry.rate))%")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(.blue)
+        }
     }
 
     private func todoRow(_ todo: TodoItem) -> some View {
@@ -105,6 +112,7 @@ struct TodoWidgetListView: View {
 
             Spacer()
         }
+        .padding(.vertical, 2)
         .contentShape(Rectangle())
         .modifier(PendingWhileToggling())
     }
