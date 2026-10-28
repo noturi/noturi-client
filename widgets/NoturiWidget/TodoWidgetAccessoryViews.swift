@@ -65,7 +65,7 @@ struct TodoWidgetAccessoryView: View {
         .widgetURL(URL(string: "noturiclient://todo"))
     }
 
-    /// 직사각형: 남은 개수 + 다음 할 일 2개
+    /// 직사각형: 완료 개수 + 다음 할 일 2개 (더 있으면 +N) — 할 일 행은 탭하면 완료, 나머지 영역은 앱 열기
     private var rectangular: some View {
         VStack(alignment: .leading, spacing: 2) {
             if entry.needsLogin {
@@ -82,10 +82,31 @@ struct TodoWidgetAccessoryView: View {
                     Text(entry.totalCount == 0 ? "오늘 할 일이 없어요" : "모두 완료했어요 🎉")
                         .font(.caption)
                 } else {
-                    ForEach(pendingTodos.prefix(2)) { todo in
-                        Label(todo.title, systemImage: "circle")
-                            .font(.caption)
-                            .lineLimit(1)
+                    // 높이가 3줄뿐이라 2개만 표시 — 나머지는 마지막 줄 끝에 개수로
+                    let shown = Array(pendingTodos.prefix(2))
+                    let hiddenCount = pendingTodos.count - shown.count
+                    ForEach(shown) { todo in
+                        let row = HStack(spacing: 4) {
+                            Label(todo.title, systemImage: "circle")
+                                .lineLimit(1)
+                            Spacer(minLength: 0)
+                            if hiddenCount > 0, todo.id == shown.last?.id {
+                                Text("+\(hiddenCount)")
+                                    .fontWeight(.semibold)
+                                    .layoutPriority(1)
+                            }
+                        }
+                        .font(.caption)
+                        .contentShape(Rectangle())
+
+                        if #available(iOS 17.0, *) {
+                            // 행을 탭하면 잠금화면에서 바로 완료 — 완료된 할 일은 목록에서 빠짐
+                            Button(intent: ToggleTodoIntent(todoId: todo.id)) { row }
+                                .buttonStyle(.plain)
+                                .invalidatableContent()
+                        } else {
+                            row
+                        }
                     }
                 }
             }
