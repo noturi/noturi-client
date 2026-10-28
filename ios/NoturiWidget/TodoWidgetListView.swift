@@ -57,22 +57,21 @@ struct TodoWidgetListView: View {
                 // 행 사이 틈도 버튼이 받도록 간격 대신 행 패딩
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(displayTodos) { todo in
+                        // 더 있는 개수는 마지막 행 끝에 — 별도 줄을 두면 중형 높이를 넘쳐 체크 버튼이 탭되지 않음
+                        let hiddenCount = todo.id == displayTodos.last?.id ? entry.totalCount - displayTodos.count : 0
                         if #available(iOS 17.0, *) {
+                            // invalidatableContent는 버튼 바깥에 — 라벨 안에 두면 홈 화면에서 탭이 버튼으로 전달되지 않음
                             Button(intent: ToggleTodoIntent(todoId: todo.id)) {
-                                todoRow(todo)
+                                todoRow(todo, hiddenCount: hiddenCount)
                             }
                             .buttonStyle(.plain)
+                            .invalidatableContent()
                         } else {
                             // iOS 16: 위젯 안 체크 불가 — 탭하면 widgetURL로 앱의 할 일 탭이 열림
                             // (링크로 상태를 바꾸면 외부 앱·웹이 같은 링크로 할 일을 조작할 수 있어 사용하지 않음)
-                            todoRow(todo)
+                            todoRow(todo, hiddenCount: hiddenCount)
                         }
                     }
-                }
-                if entry.totalCount > maxCount {
-                    Text("+\(entry.totalCount - maxCount)개 더")
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
                 }
             }
 
@@ -98,7 +97,7 @@ struct TodoWidgetListView: View {
         }
     }
 
-    private func todoRow(_ todo: TodoItem) -> some View {
+    private func todoRow(_ todo: TodoItem, hiddenCount: Int) -> some View {
         HStack(spacing: 8) {
             Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: 16))
@@ -111,20 +110,14 @@ struct TodoWidgetListView: View {
                 .lineLimit(1)
 
             Spacer()
+
+            if hiddenCount > 0 {
+                Text("+\(hiddenCount)")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(.vertical, 2)
         .contentShape(Rectangle())
-        .modifier(PendingWhileToggling())
-    }
-}
-
-/// 탭 후 서버 반영 전까지 행을 흐리게 표시 (iOS 17+)
-private struct PendingWhileToggling: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 17.0, *) {
-            content.invalidatableContent()
-        } else {
-            content
-        }
     }
 }
