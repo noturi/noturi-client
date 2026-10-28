@@ -44,8 +44,10 @@ struct TodoWidgetAccessoryView: View {
             Image(systemName: "checkmark")
         } currentValueLabel: {
             Text("\(entry.completedCount)/\(entry.totalCount)")
+                .font(.system(size: 12, weight: .semibold))
         }
         .gaugeStyle(.accessoryCircularCapacity)
+        .padding(4)
         .widgetURL(URL(string: "noturiclient://todo"))
     }
 
