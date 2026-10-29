@@ -1,4 +1,9 @@
-import { activeCategoriesQuery, findCategoryIdByName, toUICategories } from '~/entities/category';
+import {
+  ALL_CATEGORY_NAME,
+  activeCategoriesQuery,
+  findCategoryIdByName,
+  toUICategories,
+} from '~/entities/category';
 import { MemoSkeleton } from '~/entities/memo';
 import { userSettingsQuery } from '~/entities/user';
 import { useConfirmDeleteMemo } from '~/features/memo';
@@ -17,7 +22,8 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useRatingSections } from './model/use-rating-sections';
 
 interface HomeContentProps {
-  category: string;
+  /** 사용자가 고른 탭 — 아직 고르지 않았으면 undefined(맨 앞 탭) */
+  category?: string;
   year?: number;
   onCategoryChange: (category: string) => void;
   onPressYear: () => void;
@@ -25,17 +31,22 @@ interface HomeContentProps {
 
 function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeContentProps) {
   const { data: categoriesData } = useSuspenseQuery(activeCategoriesQuery());
+  // 설정은 앱 시작 때(테마) 이미 받아 둔 캐시 — 추가 요청 없음
+  const { data: settings } = useQuery(userSettingsQuery());
 
-  const categoryId = findCategoryIdByName(category, categoriesData?.categories);
+  // 아직 고른 탭이 없으면 맨 앞 탭 — "전체"를 뒤로 옮겼으면 첫 카테고리
+  const firstTab =
+    toUICategories(categoriesData?.categories, '', settings?.allCategoryOrder)[0]?.name ??
+    ALL_CATEGORY_NAME;
+  const selectedCategory = category ?? firstTab;
+  const categoryId = findCategoryIdByName(selectedCategory, categoriesData?.categories);
 
   const { sections, isLoading, isError, refetch } = useRatingSections({ categoryId, year });
   const { confirmDelete } = useConfirmDeleteMemo();
 
-  // 설정은 앱 시작 때(테마) 이미 받아 둔 캐시 — 추가 요청 없음
-  const { data: settings } = useQuery(userSettingsQuery());
   const categories = toUICategories(
     categoriesData?.categories,
-    category,
+    selectedCategory,
     settings?.allCategoryOrder,
   );
 
@@ -59,7 +70,7 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
 
 export function HomePage() {
   const [year, setYear] = useState<number | undefined>(undefined);
-  const [category, setCategory] = useState('전체');
+  const [category, setCategory] = useState<string | undefined>(undefined);
   const [showYearSheet, setShowYearSheet] = useState(false);
   const insets = useSafeAreaInsets();
 
