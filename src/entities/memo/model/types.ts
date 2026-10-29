@@ -59,6 +59,24 @@ export interface MemoListParamsDto {
   sortOrder?: 'asc' | 'desc';
 }
 
+// 별점 그룹 요약 (홈) — rating 5~1, 0 = 별점 없음
+export interface RatingGroupSummary {
+  rating: number;
+  total: number;
+  /** 최근 작성한 메모 (limit개까지) */
+  memos: Memo[];
+}
+
+export interface RatingSummaryResponseDto {
+  groups: RatingGroupSummary[];
+}
+
+export interface RatingSummaryParamsDto {
+  categoryId?: string;
+  year?: number;
+  limit?: number;
+}
+
 // 카테고리 통계
 export interface CategoryStatsDto {
   name: string;

@@ -5,6 +5,8 @@ export const QUERY_KEYS = {
   memoDetails: ['memo'] as const,
   memo: (id: string) => ['memo', id] as const,
   memosInfinite: (params: Record<string, unknown>) => ['memos', 'infinite', params] as const,
+  memosRatingSummary: (params: Record<string, unknown>) =>
+    ['memos', 'rating-summary', params] as const,
 
   // 카테고리 관련
   categories: ['categories'] as const,

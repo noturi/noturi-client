@@ -2,19 +2,18 @@ import type { Category } from '~/entities/category';
 import {
   type CreateMemoDto,
   type MemoFormData,
-  joinMemoText,
   memoDetailQuery,
   memoFormSchema,
-  splitMemoText,
 } from '~/entities/memo';
 import { useForm, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { useCreateMemoMutation, useUpdateMemoMutation } from '../api';
+import { lastMemoCategory } from '../lib/last-category';
 
 interface UseMemoFormOptions {
   /** 있으면 수정 모드, 없으면 생성 모드 */
@@ -36,7 +35,7 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
       onSuccess?.();
     },
     onError: () => {
-      form.setError('text', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
+      form.setError('title', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
     },
   });
 
@@ -46,17 +45,18 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
       onSuccess?.();
     },
     onError: () => {
-      form.setError('text', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
+      form.setError('title', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
     },
   });
 
   const form = useForm<MemoFormData>({
-    initialValues: { text: '', rating: 0, selectedCategory: '' },
+    initialValues: { title: '', content: '', rating: 0, selectedCategory: '' },
     validationSchema: memoFormSchema,
     onSubmit: async (values) => {
       const selectedCategory = categories.find((cat) => cat.name === values.selectedCategory);
       const memoData: CreateMemoDto = {
-        ...splitMemoText(values.text),
+        title: values.title,
+        content: values.content,
         ...(selectedCategory && { categoryId: selectedCategory.id }),
         ...(values.rating > 0 && { rating: values.rating }),
       };
@@ -65,6 +65,7 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
         updateMutation.mutate({ ...memoData, id: memoId });
       } else {
         createMutation.mutate(memoData);
+        void lastMemoCategory.set(selectedCategory?.id);
       }
     },
   });
@@ -76,12 +77,31 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
     setLoadedMemo(memo);
     if (memo) {
       form.reset({
-        text: joinMemoText(memo),
+        title: memo.title,
+        content: memo.content ?? '',
         rating: Number(memo.rating) || 0,
         selectedCategory: memo.category?.name || '',
       });
     }
   }
+
+  // 생성 모드: 마지막으로 쓴 카테고리를 미리 선택 (아직 아무것도 고르지 않았을 때만)
+  const hasCategories = categories.length > 0;
+  useEffect(() => {
+    if (isEdit || !hasCategories) return;
+    let cancelled = false;
+    void lastMemoCategory.get().then((categoryId) => {
+      const last = categories.find((cat) => cat.id === categoryId);
+      if (!cancelled && last && !form.values.selectedCategory) {
+        form.setValue('selectedCategory', last.name);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+    // 카테고리 목록이 처음 도착했을 때 한 번만
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, hasCategories]);
 
   return {
     form,

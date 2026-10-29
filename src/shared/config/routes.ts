@@ -8,6 +8,15 @@ export const HREFS = {
   memoDetail: (id: string): Href => `/memo/${id}`,
   memoEdit: (id: string): Href => `/memo/edit/${id}`,
   memoCreate: (): Href => '/memo/create',
+  /** 한 별점의 메모 전체 (홈 구역의 "전체") */
+  memoRating: (rating: number, filter: { categoryId?: string; year?: number } = {}): Href => ({
+    pathname: '/memo/rating/[rating]',
+    params: {
+      rating: String(rating),
+      ...(filter.categoryId && { categoryId: filter.categoryId }),
+      ...(filter.year && { year: String(filter.year) }),
+    },
+  }),
   todoCreate: (date?: string): Href => (date ? `/todo/create?date=${date}` : '/todo/create'),
 } as const;
 
@@ -19,5 +28,6 @@ export const ROUTES = {
   memoEdit: { name: 'memo/edit/[id]', label: '메모 수정' },
   search: { name: 'search', label: '검색' },
   memoCreate: { name: 'memo/create/index', label: '메모 작성' },
+  memoRating: { name: 'memo/rating/[rating]', label: '별점별 메모' },
   todoCreate: { name: 'todo/create', label: '투두 생성' },
 } as const;

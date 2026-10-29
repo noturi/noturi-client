@@ -1,8 +1,14 @@
 import { KyInstance } from 'ky';
 import { api, parseResponse } from '~/shared/api';
 
-import { memoListResponseSchema, memoSchema } from '../model/schemas';
-import { Memo, MemoListParamsDto, MemoListResponseDto } from '../model/types';
+import { memoListResponseSchema, memoSchema, ratingSummaryResponseSchema } from '../model/schemas';
+import {
+  Memo,
+  MemoListParamsDto,
+  MemoListResponseDto,
+  RatingSummaryParamsDto,
+  RatingSummaryResponseDto,
+} from '../model/types';
 
 /**
  * Entity Layer - READ 전용 API
@@ -41,6 +47,18 @@ export class MemoApi {
 
     const data = await this.api.get(url).json();
     return parseResponse(memoListResponseSchema, data, 'GET memos');
+  }
+
+  // 별점별 개수 + 최근 메모 (홈 화면) — 요청 한 번으로 모든 별점 그룹
+  async getRatingSummary(params: RatingSummaryParamsDto = {}): Promise<RatingSummaryResponseDto> {
+    const searchParams = new URLSearchParams();
+
+    if (params.categoryId) searchParams.append('categoryId', params.categoryId);
+    if (params.year) searchParams.append('year', params.year.toString());
+    if (params.limit) searchParams.append('limit', params.limit.toString());
+
+    const data = await this.api.get(`memos/rating-summary?${searchParams.toString()}`).json();
+    return parseResponse(ratingSummaryResponseSchema, data, 'GET memos/rating-summary');
   }
 
   // 특정 메모 조회

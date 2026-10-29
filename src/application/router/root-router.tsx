@@ -53,6 +53,15 @@ export function RootRouter() {
         />
 
         <Stack.Screen
+          name={ROUTES.memoRating.name}
+          options={{
+            title: '',
+            headerBackTitle: '',
+            headerBackButtonMenuEnabled: false,
+          }}
+        />
+
+        <Stack.Screen
           name={ROUTES.search.name}
           options={{
             title: ROUTES.search.label,

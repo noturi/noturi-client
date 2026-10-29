@@ -1,39 +1,29 @@
-import { Card, Skeleton } from '~/shared/ui';
+import { Skeleton } from '~/shared/ui';
 
 import { View } from 'react-native';
 
-import { RatingGroupCardSkeleton } from './rating-group-rows';
+import { RatingSectionSkeleton } from './rating-section-rows';
 
 /**
  * 홈 메모 목록 로딩 스켈레톤
- * (카테고리 필터 바 + 헤더 + 별점 그룹 카드 3개)
+ * (카테고리 탭·연도 + 별점 구역 2개)
  */
 export function MemoSkeleton() {
   return (
-    <View className="gap-6">
-      {/* Category Filter Bar */}
-      <Card>
-        <View className="flex-row gap-4 px-3 py-3">
-          <Skeleton borderRadius={4} height={28} width={60} />
-          <Skeleton borderRadius={4} height={28} width={45} />
-          <Skeleton borderRadius={4} height={28} width={50} />
+    <View className="gap-5">
+      {/* 카테고리 탭 + 연도 */}
+      <View className="flex-row items-center justify-between">
+        <View className="flex-row gap-5">
+          <Skeleton borderRadius={4} height={18} width={32} />
+          <Skeleton borderRadius={4} height={18} width={28} />
+          <Skeleton borderRadius={4} height={18} width={36} />
         </View>
-      </Card>
-
-      {/* Header: "메모" + 년도 선택기 */}
-      <View className="flex-row items-center justify-between px-3">
-        <Skeleton borderRadius={4} height={22} width={40} />
-        <View className="flex-row items-center gap-2">
-          <Skeleton borderRadius={4} height={18} width={50} />
-          <Skeleton borderRadius={4} height={12} width={12} />
-        </View>
+        <Skeleton borderRadius={4} height={14} width={56} />
       </View>
 
-      {/* Rating Group Cards */}
-      <View className="mb-5 gap-4">
-        {[1, 2, 3].map((i) => (
-          <RatingGroupCardSkeleton key={i} />
-        ))}
+      <View className="gap-8">
+        <RatingSectionSkeleton />
+        <RatingSectionSkeleton />
       </View>
     </View>
   );

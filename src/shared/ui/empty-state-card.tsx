@@ -11,11 +11,11 @@ interface EmptyStateCardProps {
 export function EmptyStateCard({ title, description }: EmptyStateCardProps) {
   return (
     <View className="items-center justify-center rounded-4 bg-surface py-12">
-      <Typography className="text-text-muted" variant="body">
+      <Typography className="text-text-muted" variant="subheadline">
         {title}
       </Typography>
       {description ? (
-        <Typography className="mt-1 text-text-muted" variant="footnote">
+        <Typography className="mt-1 text-text-muted" variant="caption1">
           {description}
         </Typography>
       ) : null}

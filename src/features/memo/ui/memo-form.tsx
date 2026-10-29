@@ -1,6 +1,7 @@
 import { CategoryButton, activeCategoriesQuery } from '~/entities/category';
+import { MEMO_TITLE_MAX_LENGTH } from '~/entities/memo';
 import { useGradualAnimation } from '~/shared/lib';
-import { Button, FloatingButton, Form, Loading, TextArea } from '~/shared/ui';
+import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { ScrollView, type TextInputInstance, View } from 'react-native';
@@ -36,6 +37,7 @@ export const MemoForm = ({
 }: MemoFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<TextInputInstance>(null);
+  const contentInputRef = useRef<TextInputInstance>(null);
   const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -72,8 +74,9 @@ export const MemoForm = ({
     return () => clearTimeout(timer);
   }, [shouldAutoFocus]);
 
-  const shouldShowTextError = memoForm.shouldShowError('text');
-  const textError = shouldShowTextError ? memoForm.errors.text : undefined;
+  const shouldShowTitleError = memoForm.shouldShowError('title');
+  const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
+  const contentError = memoForm.shouldShowError('content') ? memoForm.errors.content : undefined;
   const selectedCategoryError = memoForm.shouldShowError('selectedCategory')
     ? memoForm.errors.selectedCategory
     : undefined;
@@ -96,24 +99,21 @@ export const MemoForm = ({
     <>
       <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+          {/* 순서: 가장 먼저 정하는 별점 → 카테고리 → 제목 → 메모 (키보드가 올라와도 별점이 가리지 않게 위쪽) */}
           <Form>
-            <Form.Field required error={textError} label="메모">
-              <TextArea
-                ref={titleInputRef}
-                multiline
-                autoFocus={isEdit}
-                hasError={!!shouldShowTextError}
-                minHeight={220}
-                placeholder="첫 번째 줄은 제목, 나머지는 내용이 됩니다"
-                value={memoForm.values.text}
-                onBlur={() => memoForm.setTouched('text')}
-                onChangeText={(text) => memoForm.setValue('text', text)}
-                onFocus={() => memoForm.clearError('text')}
+            <View className="py-1">
+              <RatingSelector
+                rating={Number(memoForm.values.rating)}
+                onRatingChange={(rating) => memoForm.setValue('rating', Number(rating))}
               />
-            </Form.Field>
+            </View>
 
-            <Form.Field error={selectedCategoryError} label="카테고리">
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Form.Field error={selectedCategoryError}>
+              <ScrollView
+                horizontal
+                keyboardShouldPersistTaps="handled"
+                showsHorizontalScrollIndicator={false}
+              >
                 <View className="flex-row gap-3">
                   {categories.map((category) => (
                     <CategoryButton
@@ -141,10 +141,31 @@ export const MemoForm = ({
                 })}
             </Form.Field>
 
-            <Form.Field label="평점">
-              <RatingSelector
-                rating={Number(memoForm.values.rating)}
-                onRatingChange={(rating) => memoForm.setValue('rating', Number(rating))}
+            <Form.Field error={titleError}>
+              <Input
+                ref={titleInputRef}
+                autoFocus={isEdit}
+                hasError={!!shouldShowTitleError}
+                maxLength={MEMO_TITLE_MAX_LENGTH}
+                placeholder="제목"
+                returnKeyType="next"
+                size="lg"
+                submitBehavior="submit"
+                value={memoForm.values.title}
+                onBlur={() => memoForm.setTouched('title')}
+                onChangeText={(title) => memoForm.setValue('title', title)}
+                onFocus={() => memoForm.clearError('title')}
+                onSubmitEditing={() => contentInputRef.current?.focus()}
+              />
+            </Form.Field>
+
+            <Form.Field error={contentError}>
+              <TextArea
+                ref={contentInputRef}
+                minHeight={180}
+                placeholder="메모 (선택)"
+                value={memoForm.values.content}
+                onChangeText={(content) => memoForm.setValue('content', content)}
               />
             </Form.Field>
           </Form>

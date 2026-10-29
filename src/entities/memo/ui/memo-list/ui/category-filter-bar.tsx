@@ -1,29 +1,40 @@
-import { CategoryButton, type UICategory } from '~/entities/category';
-import { Card } from '~/shared/ui';
+import type { UICategory } from '~/entities/category';
+import { Typography } from '~/shared/ui';
 
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 type CategoryFilterBarProps = {
   categories: UICategory[];
   onPress: (categoryName: string) => void;
 };
 
+/** 홈 상단 카테고리 탭 — 카드 대신 글자 한 줄로 가볍게, 선택된 탭만 굵게 + 밑줄 */
 export function CategoryFilterBar({ categories, onPress }: CategoryFilterBarProps) {
   return (
-    <Card>
-      <View className="justify-center">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View className="flex-row gap-4 px-3 py-3">
-            {categories.map((category) => (
-              <CategoryButton
-                key={category.name}
-                category={category}
-                onPress={() => onPress(category.name)}
-              />
-            ))}
-          </View>
-        </ScrollView>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View className="flex-row gap-5">
+        {categories.map((category) => (
+          <Pressable
+            key={category.name}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: category.active }}
+            className="active:opacity-60"
+            hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+            onPress={() => onPress(category.name)}
+          >
+            <Typography
+              className={category.active ? 'text-text-primary' : 'text-text-muted'}
+              variant="subheadline"
+              weight={category.active ? 'semibold' : 'regular'}
+            >
+              {category.name}
+            </Typography>
+            <View
+              className={`mt-1 h-0.5 rounded-full ${category.active ? 'bg-text-primary' : 'bg-transparent'}`}
+            />
+          </Pressable>
+        ))}
       </View>
-    </Card>
+    </ScrollView>
   );
 }

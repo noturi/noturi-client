@@ -1,12 +1,20 @@
 import { z } from 'zod';
 
-import type { Memo, MemoListResponseDto } from './types';
+import type { Memo, MemoListResponseDto, RatingSummaryResponseDto } from './types';
+
+/** 서버 제한과 같게 (CreateMemoDto @MaxLength) */
+export const MEMO_TITLE_MAX_LENGTH = 100;
+export const MEMO_CONTENT_MAX_LENGTH = 5000;
 
 export const memoFormSchema = z.object({
-  text: z
+  title: z
     .string()
-    .min(1, '내용을 입력해주세요')
-    .max(2100, '내용은 2100자 이하로 입력해주세요')
+    .trim()
+    .min(1, '제목을 입력해주세요')
+    .max(MEMO_TITLE_MAX_LENGTH, `제목은 ${MEMO_TITLE_MAX_LENGTH}자 이하로 입력해주세요`),
+  content: z
+    .string()
+    .max(MEMO_CONTENT_MAX_LENGTH, `메모는 ${MEMO_CONTENT_MAX_LENGTH}자 이하로 입력해주세요`)
     .transform((val) => val.trim()),
   selectedCategory: z.string().optional(),
   rating: z.number().min(0).max(5),
@@ -36,4 +44,14 @@ export const memoListResponseSchema: z.ZodType<MemoListResponseDto> = z.object({
   page: z.number(),
   limit: z.number(),
   totalPages: z.number(),
+});
+
+export const ratingSummaryResponseSchema: z.ZodType<RatingSummaryResponseDto> = z.object({
+  groups: z.array(
+    z.object({
+      rating: z.number(),
+      total: z.number(),
+      memos: z.array(memoSchema),
+    }),
+  ),
 });

@@ -1,5 +1,5 @@
 import { activeCategoriesQuery, findCategoryIdByName, toUICategories } from '~/entities/category';
-import { type MemoListParamsDto, MemoSkeleton } from '~/entities/memo';
+import { MemoSkeleton } from '~/entities/memo';
 import { useConfirmDeleteMemo } from '~/features/memo';
 import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
@@ -13,7 +13,7 @@ import { router } from 'expo-router';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { PAGE_LIMIT, SORT_BY, SORT_ORDER, useRatingGroups } from './model/use-rating-groups';
+import { useRatingSections } from './model/use-rating-sections';
 
 interface HomeContentProps {
   category: string;
@@ -27,15 +27,7 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
 
   const categoryId = findCategoryIdByName(category, categoriesData?.categories);
 
-  const queryParams: Omit<MemoListParamsDto, 'page'> = {
-    limit: PAGE_LIMIT,
-    year,
-    categoryId,
-    sortBy: SORT_BY,
-    sortOrder: SORT_ORDER,
-  };
-
-  const ratingGroups = useRatingGroups(queryParams);
+  const { sections, isLoading, isError, refetch } = useRatingSections({ categoryId, year });
   const { confirmDelete } = useConfirmDeleteMemo();
 
   const categories = toUICategories(categoriesData?.categories, category);
@@ -43,13 +35,17 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
   return (
     <MemoRatingList
       categories={categories}
-      ratingGroups={ratingGroups}
+      isError={isError}
+      isLoading={isLoading}
+      sections={sections}
       selectedYear={year}
       onCategoryChange={onCategoryChange}
       onMemoDelete={(memo) => confirmDelete(memo)}
       onMemoEdit={(memo) => router.push(HREFS.memoEdit(memo.id))}
       onMemoPress={(memo) => router.push(HREFS.memoDetail(memo.id))}
+      onPressMore={(rating) => router.push(HREFS.memoRating(rating, { categoryId, year }))}
       onPressYear={onPressYear}
+      onRetry={() => void refetch()}
     />
   );
 }

@@ -20,24 +20,27 @@ function getYearOptions(): { value: number | undefined; label: string }[] {
   return years;
 }
 
-interface MemoListHeaderProps {
+interface YearFilterButtonProps {
   selectedYear: number | undefined;
   onPressYear: () => void;
 }
 
-export function MemoListHeader({ selectedYear, onPressYear }: MemoListHeaderProps) {
-  const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체';
+/** 홈 카테고리 탭 줄 오른쪽 끝의 연도 선택 */
+export function YearFilterButton({ selectedYear, onPressYear }: YearFilterButtonProps) {
+  const selectedYearLabel = selectedYear ? `${selectedYear}년` : '전체 연도';
 
   return (
-    <View className="flex-row items-center justify-between px-3">
-      <Typography variant="headline">메모</Typography>
-      <Pressable className="flex-row items-center gap-2 active:opacity-70" onPress={onPressYear}>
-        <Typography className="text-text-muted" variant="callout">
-          {selectedYearLabel}
-        </Typography>
-        <ChevronDown className="text-text-muted" size={12} />
-      </Pressable>
-    </View>
+    <Pressable
+      accessibilityLabel={`연도 선택, ${selectedYearLabel}`}
+      className="flex-row items-center gap-1 active:opacity-60"
+      hitSlop={8}
+      onPress={onPressYear}
+    >
+      <Typography className="text-text-muted" variant="footnote">
+        {selectedYearLabel}
+      </Typography>
+      <ChevronDown className="text-text-muted" size={12} />
+    </Pressable>
   );
 }
 
