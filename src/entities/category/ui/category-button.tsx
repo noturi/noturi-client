@@ -1,4 +1,3 @@
-import { useUserTheme } from '~/shared/lib/theme-context';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';
@@ -14,11 +13,7 @@ interface CategoryButtonProps {
 export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
-  const { hexColors } = useUserTheme();
-
   const isActive = category.active;
-  // Typography 기본 글자색 class와 겹치면 어느 쪽이 이길지 보장되지 않아 색을 직접 지정
-  const textColor = { color: isActive ? hexColors.primaryText : hexColors.textPrimary };
 
   return (
     <Pressable
@@ -38,12 +33,16 @@ export const CategoryButton = ({ category, onPress }: CategoryButtonProps) => {
         }`}
         style={{ opacity: isPressed ? 0.8 : 1 }}
       >
-        <Typography style={textColor} variant="caption1" weight={isActive ? 'semibold' : undefined}>
+        <Typography
+          className={isActive ? 'text-primary-text' : 'text-text-primary'}
+          variant="caption1"
+          weight={isActive ? 'semibold' : undefined}
+        >
           {category.name}
         </Typography>
         {category.count > 0 && (
           <Typography
-            style={isActive ? textColor : { color: hexColors.textMuted }}
+            className={isActive ? 'text-primary-text' : 'text-text-muted'}
             variant="caption1"
           >
             {category.count}

@@ -1,7 +1,8 @@
-import type { UICategory } from '~/entities/category';
 import { Typography } from '~/shared/ui';
 
 import { Pressable, ScrollView, View } from 'react-native';
+
+import type { UICategory } from '../model/types';
 
 type CategoryFilterBarProps = {
   categories: UICategory[];

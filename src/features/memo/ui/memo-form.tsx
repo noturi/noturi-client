@@ -45,7 +45,7 @@ export const MemoForm = ({
   renderAddCategory,
 }: MemoFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
-  const titleInputRef = useRef<TextInputInstance>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -75,7 +75,7 @@ export const MemoForm = ({
   const isTransitionDone = useScreenTransitionEnd();
   const shouldFocus = (shouldAutoFocus || isEdit) && !isLoadingMemo;
   useEffect(() => {
-    if (isTransitionDone && shouldFocus) titleInputRef.current?.focus();
+    if (isTransitionDone && shouldFocus) inputRef.current?.focus();
   }, [isTransitionDone, shouldFocus]);
 
   const shouldShowTextError = memoForm.shouldShowError('text');
@@ -158,7 +158,7 @@ export const MemoForm = ({
 
             <Form.Field error={textError}>
               <TextArea
-                ref={titleInputRef}
+                ref={inputRef}
                 multiline
                 hasError={!!shouldShowTextError}
                 minHeight={220}

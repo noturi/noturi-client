@@ -1,14 +1,13 @@
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
-import type { UICategory } from '~/entities/category';
+import { CategoryFilterBar, type UICategory } from '~/entities/category';
 import {
-  CategoryFilterBar,
   RatingSectionHeader,
   RatingSectionMemoRow,
   RatingSectionSkeleton,
   type UIMemo,
 } from '~/entities/memo';
 import { EmptyStateCard } from '~/shared/ui';
-import { YearFilterButton } from '~/widgets/memo-list-with-year-filter';
+import { YearFilterButton } from '~/widgets/year-filter';
 
 import { useEffect, useRef } from 'react';
 import { Pressable, View } from 'react-native';

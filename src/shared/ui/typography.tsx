@@ -126,6 +126,17 @@ const variantColorClass: Record<TypographyVariant, string> = {
   number: 'text-text-primary',
 };
 
+/**
+ * className에 글자색 class(text-text-muted, text-primary-text 등)가 있는지.
+ * 글자 크기(text-1~7, text-base 등)·정렬(text-center 등)은 색이 아니므로 제외
+ */
+const TEXT_COLOR_CLASS =
+  /(^|\s)!?text-(?!\d|xs\b|sm\b|base\b|lg\b|[2-9]?xl\b|left\b|right\b|center\b|justify\b)[\w-]+/;
+
+export function hasTextColorClass(className: string | undefined): boolean {
+  return !!className && TEXT_COLOR_CLASS.test(className);
+}
+
 export type FontWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
 const fontFamilyMap: Record<FontWeight, string> = {
@@ -150,12 +161,13 @@ export function Typography({
   ...props
 }: TypographyProps) {
   const baseStyle = variantStyles[variant];
-  const colorClass = variantColorClass[variant];
+  // 기본 색과 넘겨받은 색 class가 함께 있으면 어느 쪽이 이길지 보장되지 않음 → 넘겨받은 색이 있으면 기본 색을 뺌
+  const colorClass = hasTextColorClass(className) ? '' : variantColorClass[variant];
   const fontFamily = weight ? fontFamilyMap[weight] : undefined;
 
   return (
     <Text
-      className={`${colorClass} ${className ?? ''}`}
+      className={`${colorClass} ${className ?? ''}`.trim()}
       style={[baseStyle, fontFamily && { fontFamily }, style] as StyleProp<TextStyle>}
       {...props}
     >

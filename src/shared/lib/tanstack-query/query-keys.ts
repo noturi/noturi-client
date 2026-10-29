@@ -26,7 +26,6 @@ export const QUERY_KEYS = {
   statistics: ['statistics'] as const,
   statisticsMemos: ['statistics', 'memos'] as const,
   statisticsCategories: ['statistics', 'categories'] as const,
-  statisticsCategoryDistribution: ['statistics', 'category-distribution'] as const,
   statisticsTrends: (params: Record<string, unknown>) => ['statistics', 'trends', params] as const,
   statisticsOverall: (params: Record<string, unknown>) =>
     ['statistics', 'overall', params] as const,
