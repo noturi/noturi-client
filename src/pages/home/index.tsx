@@ -1,5 +1,6 @@
 import { activeCategoriesQuery, findCategoryIdByName, toUICategories } from '~/entities/category';
 import { MemoSkeleton } from '~/entities/memo';
+import { userSettingsQuery } from '~/entities/user';
 import { useConfirmDeleteMemo } from '~/features/memo';
 import { HREFS } from '~/shared/config/routes';
 import { FloatingButton } from '~/shared/ui';
@@ -11,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { router } from 'expo-router';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { useRatingSections } from './model/use-rating-sections';
 
@@ -30,7 +31,13 @@ function HomeContent({ category, year, onCategoryChange, onPressYear }: HomeCont
   const { sections, isLoading, isError, refetch } = useRatingSections({ categoryId, year });
   const { confirmDelete } = useConfirmDeleteMemo();
 
-  const categories = toUICategories(categoriesData?.categories, category);
+  // 설정은 앱 시작 때(테마) 이미 받아 둔 캐시 — 추가 요청 없음
+  const { data: settings } = useQuery(userSettingsQuery());
+  const categories = toUICategories(
+    categoriesData?.categories,
+    category,
+    settings?.allCategoryOrder,
+  );
 
   return (
     <MemoRatingList

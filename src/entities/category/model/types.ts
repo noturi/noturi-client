@@ -51,6 +51,8 @@ export interface ReorderCategoriesDto {
     id: string;
     sortOrder: number;
   }[];
+  /** "전체"의 위치 (0 = 맨 앞) — 카테고리가 아니라 사용자 설정에 저장됨 */
+  allCategoryOrder?: number;
 }
 
 // 카테고리별 메모 분포

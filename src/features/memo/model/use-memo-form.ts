@@ -2,8 +2,10 @@ import type { Category } from '~/entities/category';
 import {
   type CreateMemoDto,
   type MemoFormData,
+  joinMemoText,
   memoDetailQuery,
   memoFormSchema,
+  splitMemoText,
 } from '~/entities/memo';
 import { useForm, useToast } from '~/shared/lib';
 import { MESSAGES } from '~/shared/model';
@@ -35,7 +37,7 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
       onSuccess?.();
     },
     onError: () => {
-      form.setError('title', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
+      form.setError('text', { message: '메모 등록 중 오류가 발생했습니다.', type: 'server' });
     },
   });
 
@@ -45,18 +47,17 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
       onSuccess?.();
     },
     onError: () => {
-      form.setError('title', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
+      form.setError('text', { message: '메모 수정 중 오류가 발생했습니다.', type: 'server' });
     },
   });
 
   const form = useForm<MemoFormData>({
-    initialValues: { title: '', content: '', rating: 0, selectedCategory: '' },
+    initialValues: { text: '', rating: 0, selectedCategory: '' },
     validationSchema: memoFormSchema,
     onSubmit: async (values) => {
       const selectedCategory = categories.find((cat) => cat.name === values.selectedCategory);
       const memoData: CreateMemoDto = {
-        title: values.title,
-        content: values.content,
+        ...splitMemoText(values.text),
         ...(selectedCategory && { categoryId: selectedCategory.id }),
         ...(values.rating > 0 && { rating: values.rating }),
       };
@@ -77,8 +78,7 @@ export function useMemoForm({ memoId, categories, onSuccess }: UseMemoFormOption
     setLoadedMemo(memo);
     if (memo) {
       form.reset({
-        title: memo.title,
-        content: memo.content ?? '',
+        text: joinMemoText(memo),
         rating: Number(memo.rating) || 0,
         selectedCategory: memo.category?.name || '',
       });

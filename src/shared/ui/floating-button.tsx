@@ -1,5 +1,5 @@
 import { SHADOW_COLOR } from '~/shared/config';
-import { Plus } from '~/shared/lib/icons';
+import { Check, Plus } from '~/shared/lib/icons';
 import { useThemeColor } from '~/shared/lib/theme-context';
 
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
@@ -12,6 +12,8 @@ import { Typography } from './typography';
 interface FloatingButtonProps extends PressableProps {
   onPress: () => void;
   isLoading?: boolean;
+  /** 아이콘 — 추가(+, 기본) / 저장·완료(✓) */
+  icon?: 'plus' | 'check';
   children?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   className?: string;
@@ -32,6 +34,7 @@ export function FloatingButton({
   onPress,
   disabled = false,
   isLoading = false,
+  icon = 'plus',
   children,
   style,
   className,
@@ -76,6 +79,8 @@ export function FloatingButton({
         <Typography className="text-primary-text" variant="body">
           {children}
         </Typography>
+      ) : icon === 'check' ? (
+        <Check className="text-primary-text" size={24} />
       ) : (
         <Plus className="text-primary-text" size={24} />
       )}

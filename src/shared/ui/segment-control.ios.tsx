@@ -1,4 +1,5 @@
-import { SegmentedControl } from '@expo/ui/community/segmented-control';
+import { Host, Picker, Text } from '@expo/ui/swift-ui';
+import { controlSize, pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
 
 import { View } from 'react-native';
 
@@ -32,14 +33,24 @@ export function SegmentControl<T extends string>({
 
   return (
     <View style={{ width: options.length * SEGMENT_WIDTH }}>
-      <SegmentedControl
-        selectedIndex={selectedIndex}
-        values={options.map((option) => option.label)}
-        onChange={({ nativeEvent }) => {
-          const option = options[nativeEvent.selectedSegmentIndex];
-          if (option) onChange(option.value);
-        }}
-      />
+      <Host matchContents={{ vertical: true }}>
+        {/* large: 통계 카드(StatCard)와 높이를 맞추기 위해 기본보다 한 단계 크게 */}
+        <Picker
+          label=""
+          modifiers={[pickerStyle('segmented'), controlSize('large')]}
+          selection={selectedIndex}
+          onSelectionChange={(index) => {
+            const option = options[index as number];
+            if (option) onChange(option.value);
+          }}
+        >
+          {options.map((option, index) => (
+            <Text key={option.value} modifiers={[tag(index)]}>
+              {option.label}
+            </Text>
+          ))}
+        </Picker>
+      </Host>
     </View>
   );
 }

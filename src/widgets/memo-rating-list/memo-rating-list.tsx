@@ -1,4 +1,4 @@
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import type { UICategory } from '~/entities/category';
 import {
   CategoryFilterBar,
@@ -10,6 +10,7 @@ import {
 import { EmptyStateCard } from '~/shared/ui';
 import { YearFilterButton } from '~/widgets/memo-list-with-year-filter';
 
+import { useEffect, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { MemoContextMenu } from './memo-context-menu';
@@ -48,7 +49,14 @@ export function MemoRatingList({
   onMemoEdit,
   onMemoDelete,
 }: MemoRatingListProps) {
+  const listRef = useRef<FlashListRef<MemoRatingRow>>(null);
   const rows = buildMemoRatingRows(sections);
+
+  // 카테고리·연도를 바꾸면 항상 맨 위(별 5개)부터
+  const activeCategory = categories.find((category) => category.active)?.name;
+  useEffect(() => {
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+  }, [activeCategory, selectedYear]);
 
   const renderRow = (row: MemoRatingRow) => {
     switch (row.type) {
@@ -82,8 +90,11 @@ export function MemoRatingList({
     }
   };
 
+  // maintainVisibleContentPosition: 기본값(켜짐)이면 필터를 바꿀 때 보고 있던 구역(예: 별 1개)을
+  // 화면에 붙잡아 두어 목록이 그 위치로 내려감 → 끄고 맨 위로
   return (
     <FlashList
+      ref={listRef}
       contentContainerStyle={{ paddingBottom: 220 }}
       data={rows}
       getItemType={(row) => row.type}
@@ -117,6 +128,7 @@ export function MemoRatingList({
           <YearFilterButton selectedYear={selectedYear} onPressYear={onPressYear} />
         </View>
       }
+      maintainVisibleContentPosition={{ disabled: true }}
       renderItem={({ item }) => (
         <View className={item.gapBefore ? 'pt-5' : undefined}>{renderRow(item)}</View>
       )}

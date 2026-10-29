@@ -10,6 +10,8 @@ export type UserSettings = {
   theme: ThemeId;
   language: Language;
   notification: boolean;
+  /** 홈 카테고리 탭에서 "전체"의 위치 (0 = 맨 앞) — 구버전 서버는 내려주지 않음 */
+  allCategoryOrder?: number;
 };
 
 // 설정 업데이트 DTO (부분 업데이트)

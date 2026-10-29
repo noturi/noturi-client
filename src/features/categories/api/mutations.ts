@@ -32,8 +32,8 @@ export function useCreateCategoryMutation(
     onSuccess: async (newCategory, createData, onMutateResult, context) => {
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
       await queryClient.setQueryData(QUERY_KEYS.category(newCategory.id), newCategory);
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
+      // 통계 전체 — 요약(카테고리 수)까지 갱신 (카테고리별 통계만 갱신하면 요약이 최대 5분간 예전 값)
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statistics });
       await onSuccess?.(newCategory, createData, onMutateResult, context);
     },
     onError,
@@ -58,7 +58,8 @@ export function useUpdateCategoryMutation(
     onSuccess: async (updatedCategory, updateData, onMutateResult, context) => {
       await queryClient.setQueryData(QUERY_KEYS.category(updatedCategory.id), updatedCategory);
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
+      // 통계 전체 — 요약(카테고리 수)까지 갱신
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statistics });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
       await onSuccess?.(updatedCategory, updateData, onMutateResult, context);
     },
@@ -84,8 +85,8 @@ export function useDeleteCategoryMutation(
     onSuccess: async (_, deletedId, onMutateResult, context) => {
       await queryClient.removeQueries({ queryKey: QUERY_KEYS.category(deletedId) });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.categories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategories });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statisticsCategoryDistribution });
+      // 통계 전체 — 요약(카테고리 수)까지 갱신 (카테고리별 통계만 갱신하면 요약이 최대 5분간 예전 값)
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.statistics });
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memos });
       // 소속 메모가 미분류가 되므로 열어 본 메모 상세의 카테고리 표시도 갱신
       await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memoDetails });

@@ -1,16 +1,25 @@
 import { CategoryButton, activeCategoriesQuery } from '~/entities/category';
-import { MEMO_TITLE_MAX_LENGTH } from '~/entities/memo';
-import { useGradualAnimation } from '~/shared/lib';
-import { Button, FloatingButton, Form, Input, Loading, TextArea } from '~/shared/ui';
+import { useGradualAnimation, useScreenTransitionEnd } from '~/shared/lib';
+import { FloatingButton, Form, Loading, TextArea, Typography } from '~/shared/ui';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-import { ScrollView, type TextInputInstance, View } from 'react-native';
+import { Pressable, ScrollView, type TextInputInstance, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { useMemoForm } from '../model';
 import { RatingSelector } from './rating-selector';
+
+const BORDERLESS_TEXT_AREA = {
+  borderWidth: 0,
+  backgroundColor: 'transparent',
+  paddingHorizontal: 0,
+  // iOS 여러 줄 입력의 기본 글자 안쪽 여백(약 5pt)만큼 당겨 칩·별점과 같은 왼쪽 줄에 맞춤
+  marginLeft: -5,
+  fontSize: 15,
+  lineHeight: 22,
+} as const;
 
 export interface AddCategorySlotProps {
   onCreated: (category: { name: string }) => void;
@@ -37,7 +46,6 @@ export const MemoForm = ({
 }: MemoFormProps) => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const titleInputRef = useRef<TextInputInstance>(null);
-  const contentInputRef = useRef<TextInputInstance>(null);
   const { height } = useGradualAnimation();
 
   const { data: categoriesData } = useQuery(activeCategoriesQuery());
@@ -63,20 +71,15 @@ export const MemoForm = ({
     setShowAddCategory(false);
   };
 
-  // 생성 모드: 지연 포커스 (바텀시트 애니메이션 후)
+  // 화면이 다 들어온 뒤 포커스 — 전환 중에 포커스하면 키보드가 화면과 함께 옆에서 밀려 들어옴
+  const isTransitionDone = useScreenTransitionEnd();
+  const shouldFocus = (shouldAutoFocus || isEdit) && !isLoadingMemo;
   useEffect(() => {
-    if (!shouldAutoFocus) return;
+    if (isTransitionDone && shouldFocus) titleInputRef.current?.focus();
+  }, [isTransitionDone, shouldFocus]);
 
-    const timer = setTimeout(() => {
-      titleInputRef.current?.focus();
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [shouldAutoFocus]);
-
-  const shouldShowTitleError = memoForm.shouldShowError('title');
-  const titleError = shouldShowTitleError ? memoForm.errors.title : undefined;
-  const contentError = memoForm.shouldShowError('content') ? memoForm.errors.content : undefined;
+  const shouldShowTextError = memoForm.shouldShowError('text');
+  const textError = shouldShowTextError ? memoForm.errors.text : undefined;
   const selectedCategoryError = memoForm.shouldShowError('selectedCategory')
     ? memoForm.errors.selectedCategory
     : undefined;
@@ -99,73 +102,73 @@ export const MemoForm = ({
     <>
       <View className="flex-1 p-4" onStartShouldSetResponder={() => true}>
         <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-          {/* 순서: 가장 먼저 정하는 별점 → 카테고리 → 제목 → 메모 (키보드가 올라와도 별점이 가리지 않게 위쪽) */}
-          <Form>
-            <View className="py-1">
-              <RatingSelector
-                rating={Number(memoForm.values.rating)}
-                onRatingChange={(rating) => memoForm.setValue('rating', Number(rating))}
-              />
+          {/* 순서: 가장 먼저 정하는 별점 → 카테고리 → 메모 (키보드가 올라와도 별점이 가리지 않게 위쪽) */}
+          <Form className="gap-5 pt-2">
+            {/* 메모 정보(별점·카테고리)는 한 묶음으로 붙이고, 구분선 아래가 본문 */}
+            <View className="gap-4">
+              <View className="py-1">
+                <RatingSelector
+                  rating={Number(memoForm.values.rating)}
+                  onRatingChange={(rating) => memoForm.setValue('rating', Number(rating))}
+                />
+              </View>
+
+              <Form.Field error={selectedCategoryError}>
+                <ScrollView
+                  horizontal
+                  keyboardShouldPersistTaps="handled"
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <View className="flex-row gap-3">
+                    {categories.map((category) => (
+                      <CategoryButton
+                        key={category.id}
+                        category={{
+                          ...category,
+                          active: memoForm.values.selectedCategory === category.name,
+                          count: 0,
+                        }}
+                        onPress={() => handleCategorySelect(category.name)}
+                      />
+                    ))}
+                    {renderAddCategory && !showAddCategory && (
+                      // 카테고리 칩(CategoryButton)과 같은 크기·모양 — 테두리만 점선으로 "추가"임을 구분
+                      <Pressable
+                        className="justify-center rounded-4 border border-dashed border-border px-3 py-2 active:opacity-70"
+                        hitSlop={2}
+                        onPress={() => setShowAddCategory(true)}
+                      >
+                        <Typography className="text-text-secondary" variant="caption1">
+                          + 추가
+                        </Typography>
+                      </Pressable>
+                    )}
+                  </View>
+                </ScrollView>
+
+                {showAddCategory &&
+                  renderAddCategory?.({
+                    onCreated: handleCategoryCreated,
+                    onCancel: () => setShowAddCategory(false),
+                  })}
+              </Form.Field>
             </View>
 
-            <Form.Field error={selectedCategoryError}>
-              <ScrollView
-                horizontal
-                keyboardShouldPersistTaps="handled"
-                showsHorizontalScrollIndicator={false}
-              >
-                <View className="flex-row gap-3">
-                  {categories.map((category) => (
-                    <CategoryButton
-                      key={category.id}
-                      category={{
-                        ...category,
-                        active: memoForm.values.selectedCategory === category.name,
-                        count: 0,
-                      }}
-                      onPress={() => handleCategorySelect(category.name)}
-                    />
-                  ))}
-                  {renderAddCategory && !showAddCategory && (
-                    <Button size="sm" variant="ghost" onPress={() => setShowAddCategory(true)}>
-                      <Button.Label>+ 추가</Button.Label>
-                    </Button>
-                  )}
-                </View>
-              </ScrollView>
+            <View className="h-px bg-border" />
 
-              {showAddCategory &&
-                renderAddCategory?.({
-                  onCreated: handleCategoryCreated,
-                  onCancel: () => setShowAddCategory(false),
-                })}
-            </Form.Field>
-
-            <Form.Field error={titleError}>
-              <Input
-                ref={titleInputRef}
-                autoFocus={isEdit}
-                hasError={!!shouldShowTitleError}
-                maxLength={MEMO_TITLE_MAX_LENGTH}
-                placeholder="제목"
-                returnKeyType="next"
-                size="lg"
-                submitBehavior="submit"
-                value={memoForm.values.title}
-                onBlur={() => memoForm.setTouched('title')}
-                onChangeText={(title) => memoForm.setValue('title', title)}
-                onFocus={() => memoForm.clearError('title')}
-                onSubmitEditing={() => contentInputRef.current?.focus()}
-              />
-            </Form.Field>
-
-            <Form.Field error={contentError}>
+            <Form.Field error={textError}>
               <TextArea
-                ref={contentInputRef}
-                minHeight={180}
-                placeholder="메모 (선택)"
-                value={memoForm.values.content}
-                onChangeText={(content) => memoForm.setValue('content', content)}
+                ref={titleInputRef}
+                multiline
+                hasError={!!shouldShowTextError}
+                minHeight={220}
+                placeholder="제목"
+                // 박스 없이 화면에 바로 쓰는 메모 앱 느낌 — 홈의 카드 없는 목록과 맞춤
+                style={BORDERLESS_TEXT_AREA}
+                value={memoForm.values.text}
+                onBlur={() => memoForm.setTouched('text')}
+                onChangeText={(text) => memoForm.setValue('text', text)}
+                onFocus={() => memoForm.clearError('text')}
               />
             </Form.Field>
           </Form>
@@ -184,6 +187,7 @@ export const MemoForm = ({
       >
         <FloatingButton
           disabled={!memoForm.isValid}
+          icon="check"
           isLoading={isSubmitting}
           onPress={memoForm.handleSubmit}
         />
