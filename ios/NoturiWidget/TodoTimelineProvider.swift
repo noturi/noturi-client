@@ -31,7 +31,12 @@ struct TodoTimelineProvider: TimelineProvider {
                 entry = cachedEntry(for: today) ?? TodoEntry.empty
             }
 
-            completion(Timeline(entries: [entry], policy: .after(Self.nextRefreshDate())))
+            // 자정 화면을 미리 넣어 둠 — 자정 갱신이 늦어져도 어제 목록이 남아 체크되지 않게
+            var entries = [entry]
+            if !entry.needsLogin, let midnight = Self.nextMidnight() {
+                entries.append(TodoEntry.newDay(at: midnight))
+            }
+            completion(Timeline(entries: entries, policy: .after(Self.nextRefreshDate())))
         }
     }
 
@@ -64,6 +69,11 @@ struct TodoTimelineProvider: TimelineProvider {
             return regular
         }
         return min(regular, midnight)
+    }
+
+    private static func nextMidnight(now: Date = Date()) -> Date? {
+        let calendar = Calendar.current
+        return calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))
     }
 
     static func todayString() -> String {

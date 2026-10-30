@@ -43,7 +43,7 @@ struct TodoWidgetAccessoryView: View {
         Gauge(value: progressValue) {
             Image(systemName: "checkmark")
         } currentValueLabel: {
-            Text("\(entry.completedCount)/\(entry.totalCount)")
+            Text(entry.isLoadingNewDay ? "–" : "\(entry.completedCount)/\(entry.totalCount)")
                 .font(.system(size: 12, weight: .semibold))
         }
         .gaugeStyle(.accessoryCircularCapacity)
@@ -56,6 +56,8 @@ struct TodoWidgetAccessoryView: View {
         Group {
             if entry.needsLogin {
                 Text("Noturi 로그인 필요")
+            } else if entry.isLoadingNewDay {
+                Text("오늘 할 일 불러오는 중")
             } else if entry.totalCount == 0 {
                 Text("오늘 할 일 없음")
             } else if remainingCount == 0 {
@@ -73,6 +75,9 @@ struct TodoWidgetAccessoryView: View {
             if entry.needsLogin {
                 Text("Noturi").font(.headline)
                 Text("앱을 열어 로그인해 주세요").font(.caption)
+            } else if entry.isLoadingNewDay {
+                Text("Noturi").font(.headline)
+                Text("오늘 할 일을 불러오는 중이에요").font(.caption)
             } else {
                 if pendingTodos.isEmpty {
                     // 잠금화면은 단색으로 렌더링 — 흰 몸·검은 눈이라 실루엣이 그대로 살아남

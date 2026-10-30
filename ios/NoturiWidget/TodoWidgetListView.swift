@@ -48,7 +48,7 @@ struct TodoWidgetListView: View {
             // Todo list
             if displayTodos.isEmpty {
                 Link(destination: Self.todoURL) {
-                    Text("오늘의 할 일이 없습니다")
+                    Text(entry.isLoadingNewDay ? "오늘 할 일을 불러오는 중이에요" : "오늘의 할 일이 없습니다")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)

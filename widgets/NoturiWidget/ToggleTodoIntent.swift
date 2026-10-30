@@ -18,12 +18,16 @@ struct ToggleTodoIntent: AppIntent {
     func perform() async throws -> some IntentResult {
         // 낙관적 업데이트 — perform이 끝나면 위젯이 다시 그려지며 getTimeline이 서버 기준으로 재조회
         // (여기서 재조회까지 기다리면 탭 후 반영이 요청 2번만큼 늦어짐)
-        let previous = SharedDataManager.getTodoData()
-        if let previous {
-            SharedDataManager.saveTodoData(Self.toggled(previous, id: todoId))
+        // 자정이 지나도 위젯이 어제 목록을 보여주고 있을 수 있음 — 어제 할 일(이월 전 원본)을 완료하면
+        // 앱의 오늘 할 일(이월된 복사본)은 체크되지 않으므로, 완료하지 않고 오늘 목록을 다시 불러옴
+        guard let previous = SharedDataManager.getTodoData(),
+              previous.date == TodoTimelineProvider.todayString() else {
+            WidgetCenter.shared.reloadAllTimelines()
+            return .result()
         }
+        SharedDataManager.saveTodoData(Self.toggled(previous, id: todoId))
 
-        if await !TodoWidgetService.toggleTodo(id: todoId), let previous {
+        if await !TodoWidgetService.toggleTodo(id: todoId) {
             // 실패하면 되돌림 — 네트워크 실패 시 getTimeline이 캐시를 쓰므로 거짓 완료가 남지 않게
             SharedDataManager.saveTodoData(previous)
         }
