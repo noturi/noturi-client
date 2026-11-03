@@ -1,7 +1,7 @@
 {
   "name": "noturi-client",
   "main": "expo-router/entry",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "scripts": {
     "start": "expo start",
     "start:expo-go": "expo start",
