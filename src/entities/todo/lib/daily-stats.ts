@@ -1,4 +1,4 @@
-import { DailyStat } from '../model/types';
+import { DailyStat, TodoMonthlyStatsParamsDto } from '../model/types';
 import { formatDateString } from './date-utils';
 
 /**
@@ -7,4 +7,14 @@ import { formatDateString } from './date-utils';
 export function getDailyRate(dailyStats: DailyStat[], date: Date): number {
   const dateString = formatDateString(date);
   return dailyStats.find((stat) => stat.date === dateString)?.rate ?? 0;
+}
+
+/**
+ * 날짜 스트립에 필요한 월간 통계 범위 — 선택 날짜가 가운데라 월 경계 근처면 앞뒤 달 날짜도 보임
+ */
+export function getStatsMonths(date: Date): TodoMonthlyStatsParamsDto[] {
+  return [-1, 0, 1].map((offset) => {
+    const month = new Date(date.getFullYear(), date.getMonth() + offset, 1);
+    return { year: month.getFullYear(), month: month.getMonth() + 1 };
+  });
 }

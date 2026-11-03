@@ -2,6 +2,7 @@ import { startOfDay } from 'date-fns';
 import {
   formatDateString,
   formatDateWithDay,
+  getStatsMonths,
   todoMonthlyStatsQuery,
   todosByDateQuery,
 } from '~/entities/todo';
@@ -16,7 +17,7 @@ import { ScrollView, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 
 export function TodoPage() {
   const { hexColors } = useUserTheme();
@@ -25,9 +26,11 @@ export function TodoPage() {
   const dateString = formatDateString(selectedDate);
   const isPast = startOfDay(selectedDate) < startOfDay(new Date());
   const { data: todosData } = useQuery(todosByDateQuery(dateString));
-  const { data: monthlyStats } = useQuery(
-    todoMonthlyStatsQuery({ year: selectedDate.getFullYear(), month: selectedDate.getMonth() + 1 }),
-  );
+  // 선택 날짜가 월 경계 근처면 스트립에 앞뒤 달 날짜도 보이므로 세 달 통계를 합침
+  const dailyStats = useQueries({
+    queries: getStatsMonths(selectedDate).map(todoMonthlyStatsQuery),
+    combine: (results) => results.flatMap((result) => result.data?.dailyStats ?? []),
+  });
 
   const selectedDateProgress = todosData?.rate ?? 0;
 
@@ -47,7 +50,7 @@ export function TodoPage() {
       >
         <View className="gap-4 px-4 pt-4">
           <TodoWeeklyView
-            dailyStats={monthlyStats?.dailyStats}
+            dailyStats={dailyStats}
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
           />
