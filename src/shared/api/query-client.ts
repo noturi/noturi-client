@@ -3,10 +3,18 @@ import { HTTPError } from 'ky';
 
 import { Alert } from 'react-native';
 
-import { QueryClient, onlineManager } from '@tanstack/react-query';
+import { MutationCache, QueryClient, onlineManager } from '@tanstack/react-query';
 
 import { ERROR_MESSAGES, getErrorBody } from './errors';
 import { QUERY_CACHE_MAX_AGE } from './query-persister';
+import { type CriticalFlow, captureCriticalError } from './sentry-capture';
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    // 핵심 기능 표시 — 실패 시 Sentry에 critical.flow 태그로 기록 (sentry-capture.ts)
+    mutationMeta: { critical?: boolean; flow?: CriticalFlow };
+  }
+}
 
 // 네트워크 상태를 React Query에 연결 — 오프라인이면 쿼리는 오류 대신 일시정지(캐시 유지), 복귀 시 재개
 onlineManager.setEventListener((setOnline) =>
@@ -14,6 +22,12 @@ onlineManager.setEventListener((setOnline) =>
 );
 
 export const queryClient = new QueryClient({
+  // 훅에서 onError를 넘겨도 항상 실행됨 (defaultOptions.mutations.onError는 대체됨)
+  mutationCache: new MutationCache({
+    onError: (error, _variables, _onMutateResult, mutation) => {
+      if (mutation.meta?.critical) captureCriticalError(error, mutation.meta.flow);
+    },
+  }),
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60, // 1분

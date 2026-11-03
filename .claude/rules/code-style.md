@@ -8,6 +8,12 @@
 - catch 절은 `unknown` — `getErrorCode`/`getErrorMessage`(`~/shared/lib`)로 값 추출
 - API 응답은 `parseResponse(schema, data, label)`(`~/shared/api`)로 검증 — 스키마는 `z.ZodType<T>`로 타입과 고정
 - 로그는 `console.*` 대신 `Logger`(`~/shared/lib/logger`) — 운영 빌드는 ERROR만 출력
+- **Sentry 정책** (`shared/api/sentry-policy.ts`): 고칠 책임이 있는 쪽이 이슈로 받는다
+  - API: 처리 안 된 4xx만 앱 이슈, 5xx는 서버 Sentry 담당(앱은 breadcrumb), 401·안내 문구 있는 비즈니스 코드는 breadcrumb
+  - 앱이 처리하는 새 4xx는 `SKIP_API_ERRORS`에 추가 (기본은 수집 — 화이트리스트로 바꾸지 말 것)
+  - 에러 없이 앞뒤가 안 맞는 상태(예: 토큰은 있는데 사용자 정보 없음)는 `Logger.error`로 남긴다
+  - 핵심 기능 mutation은 `meta: { critical: true, flow }` — 5xx 실패 시 fatal
+  - Sentry로 요청 본문·이메일을 보내지 않는다 (메모 내용 등 사용자 데이터)
 - reanimated 4: `Animated.AnimateStyle` 제거됨 — `useAnimatedStyle<ViewStyle>(...)` 제네릭과 `ViewStyle` 사용
 
 ## React 19 / React Compiler

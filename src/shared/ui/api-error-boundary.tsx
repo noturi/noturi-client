@@ -1,3 +1,4 @@
+import { captureRenderError } from '~/shared/api/sentry-capture';
 import Logger from '~/shared/lib/logger';
 
 import React, { Component, ReactNode } from 'react';
@@ -27,7 +28,9 @@ export class ApiErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    Logger.error('ApiErrorBoundary caught an error:', error, errorInfo);
+    // Sentry 전송은 captureRenderError가 원인별 level로 — Logger.error는 쓰지 않음(중복 이슈 방지)
+    Logger.debug('ApiErrorBoundary caught an error:', error);
+    captureRenderError(error, errorInfo.componentStack);
   }
 
   handleRetry = () => {

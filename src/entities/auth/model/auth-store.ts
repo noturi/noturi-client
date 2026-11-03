@@ -1,6 +1,7 @@
 import { User, parseUser } from '~/entities/user';
 import { authTokenCache } from '~/shared/lib/cache';
 import Logger from '~/shared/lib/logger';
+import { setSentryUser } from '~/shared/lib/sentry';
 
 import type { AuthState } from './types';
 
@@ -24,8 +25,28 @@ class AuthStore {
   getServerSnapshot = () => this.state;
 
   private setState = (newState: Partial<AuthState>) => {
+    const prevUserId = this.state.user?.id;
     this.state = { ...this.state, ...newState };
+    if (this.state.user?.id !== prevUserId) setSentryUser(this.state.user?.id);
     this.listeners.forEach((listener) => listener());
+  };
+
+  /**
+   * 토큰은 있는데 저장된 사용자 정보를 읽지 못한 상태 — 에러는 안 나지만 계정 기준 기능(테마 등)이 깨짐
+   * (1.4.1~1.5.1 다크모드 초기화 버그가 이 상태로 리뷰 전까지 드러나지 않았음)
+   */
+  private reportUnreadableUser = (tokens: { accessToken: string | null; user: string | null }) => {
+    if (tokens.accessToken && tokens.user) {
+      Logger.error('[auth] 저장된 사용자 정보를 읽지 못함 (토큰은 있음)', {
+        keys: (() => {
+          try {
+            return Object.keys(JSON.parse(tokens.user));
+          } catch {
+            return 'invalid-json';
+          }
+        })(),
+      });
+    }
   };
 
   saveAuthTokens = async (tokens: { accessToken: string; refreshToken: string; user: User }) => {
@@ -59,6 +80,7 @@ class AuthStore {
       const tokens = await authTokenCache.getAuthTokens();
       const user = parseUser(tokens.user);
       const isAuthenticated = !!(tokens.accessToken && tokens.user);
+      if (!user) this.reportUnreadableUser(tokens);
 
       this.setState({
         isAuthenticated,

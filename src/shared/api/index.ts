@@ -2,11 +2,12 @@ import ky from 'ky';
 import Logger from '~/shared/lib/logger';
 
 import { requestInterceptor, retryInterceptor } from './interceptors';
+import { captureApiResponse } from './sentry-capture';
 
 export { ENDPOINTS } from './endpoints';
 
 // 정상 요청/응답 로그는 EXPO_PUBLIC_LOG_API=1일 때만 출력 (기본은 조용히)
-// 실패 응답(4xx/5xx)은 설정과 무관하게 항상 경고 — 404 같은 계약 불일치를 놓치지 않도록
+// 실패 응답(4xx/5xx)은 Sentry 정책(sentry-policy.ts)에 따라 이슈 또는 breadcrumb로 기록
 const LOG_ALL_API = process.env.EXPO_PUBLIC_LOG_API === '1';
 
 function logRequest(request: Request) {
@@ -16,7 +17,7 @@ function logRequest(request: Request) {
 
 function logResponse(request: Request, _options: unknown, response: Response) {
   if (!response.ok) {
-    Logger.warn(`[API] ← ${response.status} ${request.method} ${request.url}`);
+    void captureApiResponse(request, response);
     return;
   }
   if (!LOG_ALL_API) return;

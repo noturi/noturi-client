@@ -31,6 +31,7 @@ export function useCreateMemoMutation(
 
   return useMutation({
     mutationKey: ['memo', 'create', ...mutationKey],
+    meta: { critical: true, flow: 'memo-save' },
     mutationFn: (data: CreateMemoDto) => memoMutationApi.createMemo(data),
     onMutate,
     onSuccess: async (newMemo, createData, onMutateResult, context) => {
@@ -58,6 +59,7 @@ export function useUpdateMemoMutation(
 
   return useMutation({
     mutationKey: ['memo', 'update', ...mutationKey],
+    meta: { critical: true, flow: 'memo-save' },
     mutationFn: (data: UpdateMemoDto) => memoMutationApi.updateMemo(data),
     onMutate,
     onSuccess: async (updatedMemo, updateData, onMutateResult, context) => {

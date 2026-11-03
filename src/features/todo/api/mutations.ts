@@ -31,6 +31,7 @@ export function useCreateTodoMutation(options: MutationCallbacks<Todo, CreateTod
 
   return useMutation({
     mutationKey: ['todo', 'create'],
+    meta: { critical: true, flow: 'todo-save' },
     mutationFn: (data: CreateTodoDto) => todoMutationApi.createTodo(data),
     onSuccess: async (newTodo, createData, onMutateResult, context) => {
       await invalidateTodoByDate(queryClient, createData.date);
@@ -90,6 +91,7 @@ export function useToggleTodoMutation(
 
   return useMutation({
     mutationKey: ['todo', 'toggle'],
+    meta: { critical: true, flow: 'todo-toggle' },
     mutationFn: (id: string) => todoMutationApi.toggleTodo(id),
     onSuccess: async (response, id, onMutateResult, context) => {
       // 활성화된 모든 todosByDate 쿼리 무효화 (이월 투두의 rate 동기화)

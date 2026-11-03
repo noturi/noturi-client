@@ -15,6 +15,7 @@ export function useGoogleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'google-login', ...mutationKey],
+    meta: { critical: true, flow: 'login' },
     mutationFn: (dto: GoogleLoginDto) => authApi.googleLogin(dto),
     onMutate,
     onSuccess: async (loginResponse, loginData, onMutateResult, context) => {
@@ -39,6 +40,7 @@ export function useAppleLoginMutation(
 
   return useMutation({
     mutationKey: ['auth', 'apple-login', ...mutationKey],
+    meta: { critical: true, flow: 'login' },
     mutationFn: (dto: AppleLoginDto) => authApi.appleLogin(dto),
     onMutate,
     onSuccess: async (loginResponse, loginData, onMutateResult, context) => {
