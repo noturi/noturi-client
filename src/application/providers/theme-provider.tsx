@@ -17,6 +17,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { getThemeAccountKey } from './theme-account-key';
+
 interface ThemeProviderProps {
   children: ReactNode;
 }
@@ -28,10 +30,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // 테마는 계정 설정 — 로그인한 계정의 서버 설정에서 가져옴
   // (ThemeProvider는 로그인 화면도 감싸야 해서 AuthProvider 바깥에 있으므로 authStore를 직접 구독)
   const auth = useSyncExternalStore(authStore.subscribe, authStore.getSnapshot);
-  const accountId = auth.isAuthenticated ? auth.user?.id : undefined;
+  // 로그인 여부는 토큰으로만 판단 — 사용자 정보를 못 읽어도 로그아웃으로 보지 않음 (1.4.1~1.5.1 버그)
+  const accountKey = getThemeAccountKey(auth);
   const { data: serverSettings } = useQuery({
     ...userSettingsQuery(),
-    enabled: Boolean(accountId),
+    // 설정 API는 토큰만으로 동작하므로 사용자 정보가 없어도 조회
+    enabled: Boolean(accountKey),
   });
   const updateSettingsMutation = useUpdateSettingsMutation();
 
@@ -53,11 +57,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   // 계정 전환 감지 (렌더 중 상태 조정) — 로그아웃하면 기본 테마, 다른 계정이면 그 계정 테마를 새로 적용
   const [appliedServerThemeId, setAppliedServerThemeId] = useState<string | undefined>(undefined);
-  const [currentAccountId, setCurrentAccountId] = useState<string | undefined>(undefined);
-  if (!auth.isInitialLoading && accountId !== currentAccountId) {
-    setCurrentAccountId(accountId);
+  const [currentAccountKey, setCurrentAccountKey] = useState<string | undefined>(undefined);
+  if (!auth.isInitialLoading && accountKey !== currentAccountKey) {
+    setCurrentAccountKey(accountKey);
     setAppliedServerThemeId(undefined);
-    if (!accountId) setThemeId(DEFAULT_THEME_ID);
+    if (!accountKey) setThemeId(DEFAULT_THEME_ID);
   }
 
   // 계정의 서버 테마 적용 — 상태는 렌더 중 조정, 로컬 캐시 저장만 effect에서
@@ -66,13 +70,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       ? serverSettings.theme
       : DEFAULT_THEME_ID
     : undefined;
-  if (accountId && serverThemeId && serverThemeId !== appliedServerThemeId) {
+  if (accountKey && serverThemeId && serverThemeId !== appliedServerThemeId) {
     setAppliedServerThemeId(serverThemeId);
     setThemeId(serverThemeId);
   }
 
   // 로컬 저장은 앱 시작 시 깜빡임 방지용 캐시 — 현재 계정의 테마(로그아웃이면 기본값)를 저장
-  const isLoggedOut = !auth.isInitialLoading && !accountId;
+  const isLoggedOut = !auth.isInitialLoading && !accountKey;
   useEffect(() => {
     if (isLoggedOut) themeStore.setThemeId(DEFAULT_THEME_ID);
     else if (serverThemeId) themeStore.setThemeId(serverThemeId);

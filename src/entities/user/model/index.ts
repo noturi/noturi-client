@@ -25,4 +25,4 @@ export type {
   UserSettingsResponseDto,
 } from './settings-types';
 
-export { parseUser } from './auth';
+export { parseUser, toUser } from './auth';

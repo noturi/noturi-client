@@ -1,5 +1,5 @@
 import { User, parseUser } from '~/entities/user';
-import { authTokenCache } from '~/shared/lib/cache';
+import { authTokenCache, tokenCache } from '~/shared/lib/cache';
 import Logger from '~/shared/lib/logger';
 import { setSentryUser } from '~/shared/lib/sentry';
 
@@ -62,6 +62,17 @@ class AuthStore {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
     });
+  };
+
+  /**
+   * 서버에서 받은 최신 사용자 정보로 기기 저장값을 갱신
+   * 사용자 정보는 로그인할 때만 저장되므로, 그대로 두면 예전 서버 형식의 값이 몇 달씩 남는다
+   * (1.4.1~1.5.1 다크모드 초기화 버그의 근본 원인) — 앱 시작마다 한 번 갱신해 스스로 복구되게 한다
+   */
+  updateUser = async (user: User) => {
+    if (!this.state.isAuthenticated) return;
+    await tokenCache.saveToken('user', JSON.stringify(user));
+    this.setState({ user });
   };
 
   clearAuthTokens = async () => {

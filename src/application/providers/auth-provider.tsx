@@ -1,6 +1,6 @@
 import { clearAuthTokens as clearWidgetTokens } from '@modules/widget-bridge';
 import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
-import { User } from '~/entities/user';
+import { User, fetchMyProfile } from '~/entities/user';
 import { authApi } from '~/features/auth';
 import { queryClient } from '~/shared/api/query-client';
 import { queryPersister } from '~/shared/api/query-persister';
@@ -20,6 +20,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     authStore.initializeAuth();
   }, []);
+
+  // 로그인 상태로 시작하면 사용자 정보를 서버 값으로 한 번 갱신 (기기에 남은 오래된 값 복구)
+  // 실패해도(오프라인 등) 저장된 값으로 계속 동작 — API 에러는 ky 훅이 Sentry 정책대로 기록
+  const shouldRefreshUser = !authState.isInitialLoading && authState.isAuthenticated;
+  const hasRefreshedUserRef = useRef(false);
+  useEffect(() => {
+    if (!shouldRefreshUser || hasRefreshedUserRef.current) return;
+    hasRefreshedUserRef.current = true;
+    fetchMyProfile()
+      .then((user) => (user ? authStore.updateUser(user) : undefined))
+      .catch((e) => Logger.debug('사용자 정보 갱신 실패:', e));
+  }, [shouldRefreshUser]);
 
   const saveAuthTokens = useCallback(
     async (tokens: { accessToken: string; refreshToken: string; user: User }) => {

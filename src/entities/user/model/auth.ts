@@ -21,7 +21,7 @@ const isOptionalString = (value: unknown) => value == null || typeof value === '
  * - 2026-04-30 이전 서버는 name/avatarUrl을 null로 내려줬고(Apple 로그인 등), 그때 저장된 값이 기기에 남아 있음
  * - 이를 거부하면 로그인 상태인데 user가 null이 되어 계정 기준 설정(테마 등)이 매 실행마다 기본값으로 초기화됨
  */
-const toUser = (obj: unknown): User | null => {
+export const toUser = (obj: unknown): User | null => {
   if (!obj || typeof obj !== 'object') return null;
   const record = obj as Record<string, unknown>;
   if (
