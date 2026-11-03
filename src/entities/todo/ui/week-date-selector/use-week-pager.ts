@@ -1,4 +1,4 @@
-import { isSameDay } from 'date-fns';
+import { isSameDay } from 'date-fns/isSameDay';
 
 import { useEffect, useRef, useState } from 'react';
 import {

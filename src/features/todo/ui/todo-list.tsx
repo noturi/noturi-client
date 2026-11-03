@@ -1,4 +1,5 @@
-import { addDays, startOfDay } from 'date-fns';
+import { addDays } from 'date-fns/addDays';
+import { startOfDay } from 'date-fns/startOfDay';
 import { formatDateString, todosByDateQuery } from '~/entities/todo';
 import { EmptyStateCard, Skeleton, Typography } from '~/shared/ui';
 

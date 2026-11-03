@@ -143,7 +143,8 @@ const fontFamilyMap: Record<FontWeight, string> = {
   regular: 'Pretendard-Regular',
   medium: 'Pretendard-Medium',
   semibold: 'Pretendard-SemiBold',
-  bold: 'Pretendard-Bold',
+  // Bold 글꼴(2.5MB)은 앱 용량 때문에 넣지 않음 — 쓰는 곳이 적어 SemiBold로 표시
+  bold: 'Pretendard-SemiBold',
 };
 
 export interface TypographyProps extends TextProps {

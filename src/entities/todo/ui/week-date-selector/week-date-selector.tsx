@@ -1,4 +1,4 @@
-import { isSameDay } from 'date-fns';
+import { isSameDay } from 'date-fns/isSameDay';
 import { Typography } from '~/shared/ui';
 
 import { useState } from 'react';

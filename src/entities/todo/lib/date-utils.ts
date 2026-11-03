@@ -1,5 +1,10 @@
-import { addDays, addWeeks, format, isSameDay, startOfWeek, subWeeks } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { addDays } from 'date-fns/addDays';
+import { addWeeks } from 'date-fns/addWeeks';
+import { format } from 'date-fns/format';
+import { isSameDay } from 'date-fns/isSameDay';
+import { ko } from 'date-fns/locale/ko';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { subWeeks } from 'date-fns/subWeeks';
 
 /**
  * 주어진 날짜가 속한 주의 시작일(월요일)을 반환

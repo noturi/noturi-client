@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { format } from 'date-fns/format';
+import { ko } from 'date-fns/locale/ko';
 import { useThemeColor } from '~/shared/lib/theme-context';
 import { Card, Typography } from '~/shared/ui';
 

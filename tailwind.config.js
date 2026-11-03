@@ -99,7 +99,7 @@ module.exports = {
         'sans-light': ['Pretendard-Light'],
         'sans-medium': ['Pretendard-Medium'],
         'sans-semibold': ['Pretendard-SemiBold'],
-        'sans-bold': ['Pretendard-Bold'],
+        'sans-bold': ['Pretendard-SemiBold'], // Bold 글꼴은 용량 때문에 제외 (typography.tsx 참고)
         'sans-extrabold': ['Pretendard-ExtraBold'],
         'sans-black': ['Pretendard-Black'],
       },

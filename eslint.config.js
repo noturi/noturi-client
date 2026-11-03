@@ -48,6 +48,8 @@ module.exports = defineConfig([
       },
     },
     rules: {
+      // 개별 아이콘 경로는 metro.config.js에서만 연결됨 (shared/lib/icons.ts 참고) — 존재 여부는 Metro가 빌드 시 검사
+      'import/no-unresolved': ['error', { ignore: ['^lucide-react-native/icon/'] }],
       'react/jsx-sort-props': [
         'error',
         {

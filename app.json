@@ -49,7 +49,6 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-web-browser",
       [
         "expo-secure-store",
         {
@@ -76,7 +75,6 @@
           "sounds": []
         }
       ],
-      "expo-image",
       "expo-status-bar",
       [
         "expo-build-properties",

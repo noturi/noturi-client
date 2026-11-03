@@ -1,4 +1,5 @@
-import { getDay, isToday } from 'date-fns';
+import { getDay } from 'date-fns/getDay';
+import { isToday } from 'date-fns/isToday';
 import { BOUNCE_DURATION } from '~/shared/config';
 import { CircularProgress, Typography } from '~/shared/ui';
 
