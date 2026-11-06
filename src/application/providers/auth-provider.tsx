@@ -2,6 +2,7 @@ import { clearAuthTokens as clearWidgetTokens } from '@modules/widget-bridge';
 import { AuthContext, type AuthContextType, authStore } from '~/entities/auth';
 import { User, fetchMyProfile } from '~/entities/user';
 import { authApi } from '~/features/auth';
+import { notificationService } from '~/features/notification';
 import { queryClient } from '~/shared/api/query-client';
 import { queryPersister } from '~/shared/api/query-persister';
 import { HREFS } from '~/shared/config';
@@ -49,9 +50,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       authStore.setError(null);
+      notificationService.forgetRegistration();
       if (revokeSession) {
         // 실패해도 로컬 로그아웃은 진행 (오프라인 등) — 세션은 만료 시 자연 소멸
-        await authApi.logout().catch((e) => Logger.warn('서버 로그아웃 실패:', e));
+        // 이 기기 푸시 토큰을 같이 보내 로그아웃한 기기로 이 계정 알림이 계속 가지 않게
+        const expoPushToken = await notificationService.getThisDeviceToken().catch(() => null);
+        await authApi.logout(expoPushToken).catch((e) => Logger.warn('서버 로그아웃 실패:', e));
       }
       await clearWidgetTokens().catch(() => {});
       await authStore.clearAuthTokens();

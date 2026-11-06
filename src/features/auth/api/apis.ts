@@ -19,9 +19,12 @@ class AuthApi {
     return response.json<LoginResponseDto>();
   }
 
-  /** 서버 로그아웃 — 현재 세션(리프레시 토큰)과 그 위젯 세션 폐기 */
-  async logout(): Promise<void> {
-    await this.api.post('auth/logout', { json: {} });
+  /**
+   * 서버 로그아웃 — 현재 세션(리프레시 토큰)과 그 위젯 세션 폐기
+   * @param expoPushToken 이 기기 푸시 토큰 — 넘기면 이 기기만 알림 대상에서 빠짐 (계정 알림 설정은 그대로)
+   */
+  async logout(expoPushToken?: string | null): Promise<void> {
+    await this.api.post('auth/logout', { json: expoPushToken ? { expoPushToken } : {} });
   }
 
   /** 위젯 전용 세션 발급 — 앱 세션과 독립적으로 회전하는 토큰 쌍 */
