@@ -16,9 +16,16 @@ struct TodoWidgetListView: View {
         return formatter.string(from: date)
     }
 
+    /// 오늘 할 일을 모두 완료 — 목록 위에 캐릭터 축하 줄 표시
+    private var isAllDone: Bool {
+        !entry.isLoadingNewDay && entry.totalCount > 0 && entry.completedCount == entry.totalCount
+    }
+
     private var displayTodos: [TodoItem] {
         let sorted = entry.todos.sorted { !$0.isCompleted && $1.isCompleted }
-        return Array(sorted.prefix(maxCount))
+        // 축하 줄이 행 2개 높이를 차지 — 중형 높이를 넘치지 않도록 그만큼 덜 보여줌 (나머지는 +N)
+        let limit = isAllDone ? max(maxCount - 2, 1) : maxCount
+        return Array(sorted.prefix(limit))
     }
 
     var body: some View {
@@ -48,12 +55,34 @@ struct TodoWidgetListView: View {
             // Todo list
             if displayTodos.isEmpty {
                 Link(destination: Self.todoURL) {
-                    Text(entry.isLoadingNewDay ? "오늘 할 일을 불러오는 중이에요" : "오늘의 할 일이 없습니다")
-                        .font(.system(size: 13))
-                        .foregroundColor(.secondary)
+                    if entry.isLoadingNewDay {
+                        Text("오늘 할 일을 불러오는 중이에요")
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        HStack(spacing: 8) {
+                            NoturiMarkImage(name: "NoturiMark", size: 32)
+                            Text("오늘의 할 일이 없습니다")
+                                .font(.system(size: 13))
+                                .foregroundColor(.secondary)
+                        }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 }
             } else {
+                if isAllDone {
+                    Link(destination: Self.todoURL) {
+                        HStack(spacing: 8) {
+                            NoturiMarkImage(name: "NoturiMarkDone", size: 32)
+                            Text("오늘 할 일 끝!")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.primary)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+
                 // 행 사이 틈도 버튼이 받도록 간격 대신 행 패딩
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(displayTodos) { todo in
@@ -119,5 +148,28 @@ struct TodoWidgetListView: View {
         }
         .padding(.vertical, 2)
         .contentShape(Rectangle())
+    }
+}
+
+/// 노트리 캐릭터 — 홈 화면 색조(틴트) 모드에서는 단색 실루엣 대신 흑백으로 보이게
+struct NoturiMarkImage: View {
+    let name: String
+    let size: CGFloat
+
+    var body: some View {
+        accented
+            .scaledToFit()
+            .frame(width: size, height: size)
+    }
+
+    /// widgetAccentedRenderingMode는 Image에만 붙고 View를 돌려줌 — resizable 바로 뒤에 적용
+    @ViewBuilder
+    private var accented: some View {
+        let image = Image(name).resizable()
+        if #available(iOS 18.0, *) {
+            image.widgetAccentedRenderingMode(.desaturated)
+        } else {
+            image
+        }
     }
 }
