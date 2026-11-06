@@ -16,7 +16,7 @@ struct TodoWidgetListView: View {
         return formatter.string(from: date)
     }
 
-    /// 오늘 할 일을 모두 완료 — 목록 위에 캐릭터 축하 줄 표시
+    /// 오늘 할 일을 모두 완료 — 목록 위에 캐릭터와 "모두 완료했어요" 표시
     private var isAllDone: Bool {
         !entry.isLoadingNewDay && entry.totalCount > 0 && entry.completedCount == entry.totalCount
     }
@@ -75,8 +75,8 @@ struct TodoWidgetListView: View {
                     Link(destination: Self.todoURL) {
                         HStack(spacing: 8) {
                             NoturiMarkImage(name: "NoturiMarkDone", size: 32)
-                            Text("오늘 할 일 끝!")
-                                .font(.system(size: 14, weight: .semibold))
+                            Text("모두 완료했어요")
+                                .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(.primary)
                             Spacer(minLength: 0)
                         }
