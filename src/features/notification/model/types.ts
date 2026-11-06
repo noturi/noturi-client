@@ -17,6 +17,8 @@ export interface RegisterDeviceDto {
   expoPushToken: string;
   deviceName: string;
   platform: DevicePlatform;
-  // 앱 실행 시 토큰 갱신용 — 서버가 알림이 꺼진 사용자를 다시 켜지 않음
-  refreshOnly?: boolean;
+  // 계정 알림 설정과 무관하게 기기만 등록 — 설정은 users/me/settings로 따로 변경
+  registerOnly: true;
+  // registerOnly를 모르는 옛 서버용 — 설정을 켜지 않는 갱신 등록으로 처리됨 (새 서버는 registerOnly 우선)
+  refreshOnly: true;
 }

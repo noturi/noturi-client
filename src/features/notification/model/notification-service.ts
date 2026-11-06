@@ -3,7 +3,7 @@ import Logger from '~/shared/lib/logger';
 
 import { Platform } from 'react-native';
 
-import Constants, { ExecutionEnvironment } from 'expo-constants';
+import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 
 import { deviceApi } from '../api/apis';
@@ -20,15 +20,19 @@ Notifications.setNotificationHandler({
   }),
 });
 
+/**
+ * 알림은 계정 설정(UserSettings.notification)을 따른다 — 켜고 끄면 같은 계정의 모든 기기에 적용.
+ * 기기 등록은 "이 기기로 받을 수 있다"는 뜻만 가지며 설정과 무관하게 유지하고, 발송 여부는 서버가 계정 설정으로 거른다.
+ */
 class NotificationService {
   private expoPushToken: string | null = null;
+  /** 이번 로그인 세션에서 서버 등록을 마친 토큰 — 포그라운드 복귀마다 다시 등록하지 않도록 */
+  private registeredToken: string | null = null;
 
-  // 실제 기기인지 확인 (시뮬레이터/에뮬레이터가 아닌지)
-  private isPhysicalDevice(): boolean {
-    // 개발 빌드에서 시뮬레이터인 경우 false 반환
-    // bare 또는 storeClient 환경에서만 true
-    const executionEnvironment = Constants.executionEnvironment;
-    return executionEnvironment === ExecutionEnvironment.Bare;
+  // 이 기기의 OS 알림 권한
+  async getPermissionStatus(): Promise<'granted' | 'denied' | 'undetermined'> {
+    const { status } = await Notifications.getPermissionsAsync();
+    return status;
   }
 
   // 푸시 알림 권한 요청
@@ -89,101 +93,65 @@ class NotificationService {
     return 'Unknown Device';
   }
 
-  // 디바이스 등록 (권한 요청 → 토큰 획득 → 서버 등록)
-  async registerDevice(): Promise<boolean> {
-    try {
-      const hasPermission = await this.requestPermissions();
-      if (!hasPermission) {
-        return false;
-      }
-
-      const token = await this.getExpoPushToken();
-      if (!token) {
-        return false;
-      }
-
-      const deviceName = this.getDeviceName();
-      const platform: DevicePlatform = Platform.OS as DevicePlatform;
-
-      await deviceApi.registerDevice({
-        expoPushToken: token,
-        deviceName,
-        platform,
-      });
-
-      Logger.info('디바이스 등록 성공');
-      return true;
-    } catch (error) {
-      Logger.error('디바이스 등록 실패:', error);
+  // 이 기기를 계정의 알림 대상으로 등록 — 계정 알림 설정은 바꾸지 않음 (설정은 users/me/settings로 따로)
+  async registerThisDevice(): Promise<boolean> {
+    const token = await this.getExpoPushToken();
+    if (!token) {
       return false;
     }
+
+    await deviceApi.registerDevice({
+      expoPushToken: token,
+      deviceName: this.getDeviceName(),
+      platform: Platform.OS as DevicePlatform,
+      registerOnly: true,
+      refreshOnly: true,
+    });
+
+    this.registeredToken = token;
+    Logger.info('디바이스 등록 성공');
+    return true;
   }
 
-  // 권한이 이미 허용된 경우에만 토큰 갱신 + 서버 등록 (프롬프트 없음)
-  async refreshDeviceTokenSilently(): Promise<void> {
-    try {
-      const { status } = await Notifications.getPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-
-      const token = await this.getExpoPushToken();
-      if (!token) {
-        return;
-      }
-
-      const deviceName = this.getDeviceName();
-      const platform: DevicePlatform = Platform.OS as DevicePlatform;
-
-      await deviceApi.registerDevice({
-        expoPushToken: token,
-        deviceName,
-        platform,
-        refreshOnly: true,
-      });
-
-      Logger.info('디바이스 토큰 silent 갱신 성공');
-    } catch (error) {
-      Logger.warn('디바이스 토큰 silent 갱신 실패:', error);
-    }
-  }
-
-  // 모든 디바이스 삭제 (로그아웃 시 사용)
-  async unregisterAllDevices(): Promise<void> {
-    try {
-      await deviceApi.deleteAllDevices();
-      this.expoPushToken = null;
-      Logger.info('모든 디바이스 등록 해제 성공');
-    } catch (error) {
-      Logger.error('디바이스 등록 해제 실패:', error);
-    }
-  }
-
-  // 현재 저장된 토큰 반환
-  getStoredToken(): string | null {
-    return this.expoPushToken;
-  }
-
-  // 현재 알림 권한 상태 확인
-  async getPermissionStatus(): Promise<'granted' | 'denied' | 'undetermined'> {
-    const { status } = await Notifications.getPermissionsAsync();
-    return status;
-  }
-
-  // 알림이 활성화되어 있는지 확인 (서버에 등록된 디바이스가 있는지)
-  async isNotificationEnabled(): Promise<boolean> {
+  /**
+   * 로그인 후·앱 포그라운드마다 이 기기 등록을 맞춘다
+   * - 권한 허용: 계정 설정과 무관하게 등록 (발송 여부는 서버가 계정 설정으로 거름)
+   * - 권한 미결정 + 계정 알림 켜짐: 권한을 물어보고 등록 (알림을 켜둔 계정으로 새 기기에 로그인한 경우)
+   * - 권한 거부: 아무것도 하지 않음 (설정 화면에서 안내)
+   */
+  async syncThisDevice({ accountNotificationEnabled }: { accountNotificationEnabled: boolean }) {
     try {
       const status = await this.getPermissionStatus();
-      if (status !== 'granted') {
-        return false;
+      if (status === 'granted') {
+        if (!this.registeredToken) {
+          await this.registerThisDevice();
+        }
+        return;
       }
-
-      // 서버에서 디바이스 목록 조회
-      const devices = await deviceApi.getMyDevices();
-      return devices.length > 0;
-    } catch {
-      return false;
+      if (
+        status === 'undetermined' &&
+        accountNotificationEnabled &&
+        (await this.requestPermissions())
+      ) {
+        await this.registerThisDevice();
+      }
+    } catch (error) {
+      Logger.warn('디바이스 등록 동기화 실패:', error);
     }
+  }
+
+  /** 로그아웃(자동 로그아웃 포함) 시 호출 — 다음에 로그인하는 계정에 이 기기를 다시 등록하도록 */
+  forgetRegistration() {
+    this.registeredToken = null;
+  }
+
+  /** 로그아웃 시 서버에 넘길 이 기기 토큰 — 서버가 이 기기만 알림 대상에서 뺀다. 오프라인에서 로그아웃이 멈추지 않게 3초 제한 */
+  async getThisDeviceToken(): Promise<string | null> {
+    if (this.expoPushToken) {
+      return this.expoPushToken;
+    }
+    const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
+    return Promise.race([this.getExpoPushToken(), timeout]);
   }
 }
 

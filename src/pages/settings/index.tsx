@@ -1,8 +1,9 @@
 import { useAuth } from '~/entities/auth';
+import { userSettingsQuery } from '~/entities/user';
 import { DeleteAccountButton, LogoutButton } from '~/features/auth';
 import { CategoryManageSheet } from '~/features/categories';
 import { NotificationToggle } from '~/features/notification';
-import { ThemeSettings } from '~/features/user';
+import { ThemeSettings, useUpdateSettingsMutation } from '~/features/user';
 import { EXTERNAL_LINKS } from '~/shared/config';
 import { FileText, Info, Settings, User } from '~/shared/lib/icons';
 import { Accordion, Card, Typography } from '~/shared/ui';
@@ -12,11 +13,15 @@ import { Linking, Pressable, View } from 'react-native';
 
 import Constants from 'expo-constants';
 
+import { useQuery } from '@tanstack/react-query';
+
 const appVersion = Constants.expoConfig?.version;
 
 export function SettingsPage() {
   const [openManage, setOpenManage] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { data: settings } = useQuery({ ...userSettingsQuery(), enabled: isAuthenticated });
+  const updateSettingsMutation = useUpdateSettingsMutation();
 
   const handlePrivacyPolicy = () => {
     Linking.openURL(EXTERNAL_LINKS.PRIVACY_POLICY);
@@ -46,7 +51,12 @@ export function SettingsPage() {
               </Pressable>
 
               <View className="h-px bg-border" />
-              <NotificationToggle />
+              <NotificationToggle
+                enabled={settings?.notification ?? false}
+                onEnabledChange={(notification) =>
+                  updateSettingsMutation.mutateAsync({ notification })
+                }
+              />
               <View className="h-px bg-border" />
               <LogoutButton />
             </View>
