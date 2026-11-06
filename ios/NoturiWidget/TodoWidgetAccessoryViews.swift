@@ -82,7 +82,8 @@ struct TodoWidgetAccessoryView: View {
                 if pendingTodos.isEmpty {
                     // 잠금화면은 단색으로 렌더링 — 흰 몸·검은 눈이라 실루엣이 그대로 살아남
                     HStack(spacing: 8) {
-                        Image("NoturiMark")
+                        // 할 일을 모두 끝냈을 때는 미소 짓는 마크, 할 일이 없을 때는 기본 마크
+                        Image(entry.totalCount == 0 ? "NoturiMark" : "NoturiMarkDone")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 36, height: 36)
